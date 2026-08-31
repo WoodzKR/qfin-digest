@@ -372,8 +372,10 @@ def build_report(entry: dict, body: str, source: str, lang: str = "ko",
         raise SummarizerError(f"{pid}: report body came back empty.")
 
     # Korean long-form gets a second pass through the humanize-korean skill.
+    # It runs last, so it is the step that gets starved when a --review chain has
+    # already been going for twenty minutes. Give it its own, larger budget.
     if polish and lang == "ko":
-        fragment = polish_korean(fragment, exe, timeout)
+        fragment = polish_korean(fragment, exe, max(timeout, 1800))
 
     one_liner = summary_text(entry, lang).get("one_liner", "")
     tags = ", ".join(entry.get("categories") or entry.get("src_cats") or [])

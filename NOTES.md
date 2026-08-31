@@ -48,6 +48,36 @@ of the paper's own framing.
 Behind `--review` because it adds a call per report. The full deep-report chain
 is then **analyze → write → polish**, three calls.
 
+**It earns its cost.** First run on `2608.28399`: 10,241 characters of reviewer
+notes, and the report's results and limitations sections stopped paraphrasing the
+paper. Things the critique pass caught that the plain prompt had not:
+
+- The same-day shuffle control is 0 by construction, yet reads −8.7bp with CI
+  [−10.4, −7.1] — nine standard errors out. The null distribution the paper leans
+  on does not hold, so every timing level carries an unknown offset.
+- Scoring sample sizes that must be identical are not: 13,710 / 13,716 / 13,717.
+- Look-ahead in three of fourteen headline rows: chart and multimodal features are
+  "reconstructed from overlapping forward return labels", including the largest cell.
+- Selection on the dependent variable — roughly 54% of stock-days survive the
+  constant-action filter, and the survivors skew toward exactly the choppy paths
+  where short-term reversal is strongest.
+- The 20-minute condition's prompt says 10 minutes.
+
+That is referee-grade reading, not summary.
+
+Cost, measured: about 27 minutes for the chain, and **the polish step timed out**
+at its 900s budget because it runs last. Fixed by giving polish its own larger
+budget (`max(timeout, 1800)`) — it is non-fatal either way, but silently shipping
+an unpolished report is the wrong default.
+
+Batched polish on short summaries was measured and **rejected**: 10 summaries in
+one call takes 199s, so 80 would be 8 calls and ~27 minutes — affordable — but 8
+of 10 one-liners came back unchanged, and the two that changed were lateral
+("비교한" → "견준", which is less common, not clearer). The inline rules already do
+the work at that length; a 40-character line has nowhere to accumulate
+translationese. Short text also has no slack: one shifted word is a larger share
+of the meaning. Long form is where the patterns pile up and the pass pays off.
+
 Note the skill dirs in that repo's `skills/` are git symlinks that Windows
 checks out as 0-byte files; the real directories are at the repo root and they
 reference `shared/` by relative path. Installing it properly means the plugin
