@@ -522,7 +522,7 @@ h2.sec{{font-size:15px;color:var(--muted);margin:0 0 12px;letter-spacing:.02em}}
   <header class="top">
     <h1>{_bi("퀀트 논문 다이제스트", "Quant Paper Digest")}</h1>
     <p class="sub">arXiv q-fin.PM/ST/TR · SSRN {len(SSRN_JOURNALS)} eJournals ·
-       {QUANTPEDIA_LABEL} · {MAN_LABEL} ·
+       {_bi(f"블로그 {len(BLOG_LABELS)}곳", f"{len(BLOG_LABELS)} blogs")} ·
        {_bi("갱신", "updated")} {now:%Y-%m-%d %H:%M}</p>
     <div class="stats">
       <div class="stat"><b>{len(digests)}</b>{_bi("개 다이제스트", " digests")}</div>
@@ -615,7 +615,15 @@ def build(seen: dict[str, dict], days: list[str] | None = None,
                      f' — {len(by_day[day])}{_bi("편", "")}</h2>'
                      f'<div class="list">{cards}</div></section>')
 
-    day_line = " · ".join(sorted(by_day, reverse=True)) or "-"
+    # A range, not a list: the store spans many dates and enumerating them all
+    # made the header unreadable.
+    ordered_days = sorted(by_day)
+    if not ordered_days:
+        day_line = "-"
+    elif len(ordered_days) == 1:
+        day_line = ordered_days[0]
+    else:
+        day_line = f"{ordered_days[0]} ~ {ordered_days[-1]}"
     out = out_path or (REPORT_DIR / f"qfin-digest-{now:%Y%m%d}.html")
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(f"""<!doctype html>
@@ -632,7 +640,8 @@ def build(seen: dict[str, dict], days: list[str] | None = None,
   <h1>{_bi("퀀트 논문 다이제스트", "Quant Paper Digest")}</h1>
   <p class="sub">{_bi("대상 날짜", "Dates")} {_esc(day_line)} ·
      {_bi("생성", "built")} {now:%Y-%m-%d %H:%M}<br>
-     arXiv q-fin.PM/ST/TR · SSRN {len(SSRN_JOURNALS)} eJournals · {QUANTPEDIA_LABEL} · {MAN_LABEL}<br>
+     arXiv q-fin.PM/ST/TR · SSRN {len(SSRN_JOURNALS)} eJournals ·
+     {_bi(f"블로그 {len(BLOG_LABELS)}곳", f"{len(BLOG_LABELS)} blogs")}<br>
      {_bi("★ = 시스템 트레이딩 구현 가능성 (표준 데이터로 규칙을 코딩해 자동매매로 돌릴 수 있는가)",
           "★ = systematic-trading implementability (can it be coded into rules on standard data?)")}</p>
   <div class="stats">{stats}</div>
