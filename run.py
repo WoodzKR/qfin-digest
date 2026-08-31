@@ -247,7 +247,9 @@ def cmd_deep(args, day_filter: list[str] | None = None) -> None:
                     continue
                 try:
                     out = paper.build_paper_report(entry, session=_session(), timeout=args.timeout,
-                                                   ssrn_browser=browser, lang=lang)
+                                                   ssrn_browser=browser, lang=lang,
+                                                   polish=not args.no_polish,
+                                                   review=args.review)
                     entry.setdefault("report_paths", {})[lang] = out.name
                     print(f"      {lang}: {out.name}")
                 except Exception as exc:  # noqa: BLE001
@@ -304,7 +306,9 @@ def cmd_paper(args) -> None:
             for lang in langs:
                 try:
                     out = paper.build_paper_report(entry, session=sess, timeout=args.timeout,
-                                                   ssrn_browser=browser, lang=lang)
+                                                   ssrn_browser=browser, lang=lang,
+                                                   polish=not args.no_polish,
+                                                   review=args.review)
                 except Exception as exc:  # noqa: BLE001
                     print(f"! {pid} ({lang}) failed: {exc}", file=sys.stderr)
                     continue
@@ -419,6 +423,11 @@ def main() -> None:
     ap.add_argument("--deep", type=int, default=0, metavar="N",
                     help="pre-build deep reports for the top N papers")
     ap.add_argument("--port", type=int, default=8765, help="serve port (default 8765)")
+    ap.add_argument("--no-polish", action="store_true",
+                    help="skip the humanize-korean pass on Korean deep reports")
+    ap.add_argument("--review", action="store_true",
+                    help="run a critique pass (academic-paper-reviewer) before writing "
+                         "a deep report; adds one call per report")
     ap.add_argument("--push", action="store_true", help="publish after `all`")
     ap.add_argument("-m", "--message", default=None, help="commit message for publish")
     args = ap.parse_args()

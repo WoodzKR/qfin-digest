@@ -1,5 +1,99 @@
 # Working notes
 
+## 2026-08-31 — Two external skills: one wired in, one kept optional
+
+Installed both under `~/.claude/skills`, cloned to `~/.claude/vendor` so updates
+are a `git pull`.
+
+### humanize-korean — wired into every Korean deep report
+
+[epoko77-ai/im-not-ai](https://github.com/epoko77-ai/im-not-ai). Used two ways,
+which is the pattern worth repeating:
+
+1. **Distilled into the prompt.** The high-signal patterns from its taxonomy are
+   inline rules in `summarize.py` and `paper.py`, so the *first* draft avoids
+   them. Costs nothing per call.
+2. **As a second pass.** `paper.polish_korean()` runs the actual skill over the
+   finished Korean fragment. Only for `lang="ko"`, only for deep reports — 80
+   short summaries a day do not justify doubling the calls.
+
+Guardrails, because a rewriter can quietly wreck a document: the result is
+rejected and the original kept if the size moves more than ±30% or the `<h2>`
+count changes. Failures are non-fatal.
+
+Measured on one arXiv paper (two independent generations, so this mixes
+generation variance with the polish effect — treat the direction, not the
+magnitude, as the finding):
+
+| | no polish | polished |
+|---|---|---|
+| AI tells | 3 | **0** |
+| comma after connective ending | 12 | **4** |
+| `<h2>` sections | 8 | 8 |
+| display math | 5 | 5 |
+
+### academic-research-skills — opt-in only
+
+[imbad0202/academic-research-skills](https://github.com/imbad0202/academic-research-skills),
+CC-BY-NC-4.0. Four skills, but they are built for *writing and peer-reviewing
+manuscripts* with 5-seat and 13-agent panels. Running that per item, 80 times a
+day, is the wrong shape.
+
+What is useful is the review *lens*. `paper.review_paper()` runs one critique
+pass — claims, identifying assumption, validity threats, counterargument,
+numbers not to trust, what a practitioner needs that is missing — and feeds it
+into sections 5 and 6 of the Korean report so the analysis is not a paraphrase
+of the paper's own framing.
+
+Behind `--review` because it adds a call per report. The full deep-report chain
+is then **analyze → write → polish**, three calls.
+
+Note the skill dirs in that repo's `skills/` are git symlinks that Windows
+checks out as 0-byte files; the real directories are at the repo root and they
+reference `shared/` by relative path. Installing it properly means the plugin
+marketplace route, not copying folders.
+
+## 2026-08-31 — Korean style rules, rebuilt from a real taxonomy
+
+The earlier style block was a handful of guesses ("no passive voice", "no
+translationese particles"). Replaced with rules taken from
+[epoko77-ai/im-not-ai](https://github.com/epoko77-ai/im-not-ai), a Claude skill
+that classifies AI tells in Korean writing — 10 categories, 70+ patterns, graded
+S1/S2/S3 against a measured human corpus.
+
+Folded in the high-signal items and skipped the rest, since the prompt ships on
+every call:
+
+| Pattern | Rule now given |
+|---|---|
+| C-11 | **No comma directly after a connective ending** (-고, -며, -지만…). Their strongest single discriminator — 4.84× separation. |
+| A-8, A-9 | No double passive; `~에 의해` becomes an actor subject |
+| A-7 | `~을 가지고 있다` → `~이 있다 / ~이 강하다` |
+| A-15, D-2 | Banned all-purpose verbs 보여준다/제공한다/시사한다 — use a concrete verb and a number |
+| D-4 | Banned hype words 혁신적/획기적/압도적/전례 없는 |
+| D-14 | Banned dead metaphors 잠식/청사진/적신호/신호탄 — **measured 0 occurrences in human writing** |
+| A-21, D-7 | Banned escalation formulas `단순한 X를 넘어 Y`, `X에서 Y로` |
+| D-8, I-2 | Banned cleft `핵심은 ~이다` / `주목할 점은` |
+| D-10 | Banned inverted closer `~하는 이유다` |
+| D-1, D-9, H-1 | Closing lexicon (결론적으로/따라서/이를 통해/결국) capped at two per report; no three fronted connectives in one paragraph |
+| E-1, E-2 | Vary sentence length deliberately; no more than three or four identical endings in a row |
+| F-4, F-5 | No stacked -적/-성/-화 |
+
+Also kept their **modality-preservation** rule, which matters here: a paper's
+hedged claim (`~할 수 있다`) must not harden into an assertion. Summaries make
+factual claims about someone else's work, so shifting confidence is a real error,
+not just a style issue.
+
+A/B on one SSRN paper, before and after:
+
+> before: 폭락 다음날 반등 효과는 대부분 집계 오류이고, 지수 -7% 이하만 살아남는다.
+> after : 급락 후 반등 효과는 대부분 중복 집계가 만든 착시다.
+
+> before: 날짜 단위 집계, 중첩 임계값, 다중검정, 부트스트랩 보정
+> after : 날짜 단위 집계, 중첩 임계값, FWER, 블록 부트스트랩 보정
+
+Noun stacking drops and verbs come back. All 80 summaries were regenerated.
+
 ## 2026-08-31 — A narrow run deleted the published digest
 
 First real Actions run (`--source arxiv --days 1`) committed

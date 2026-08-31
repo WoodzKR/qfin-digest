@@ -9,6 +9,7 @@
   --bg:#f6f7f9; --panel:#ffffff; --panel-2:#fbfcfd; --ink:#16191d; --muted:#5c6672;
   --line:#e2e6ea; --accent:#3b6ef0; --accent-soft:#eaf0fe;
   --pm:#3b6ef0; --st:#0f9d76; --tr:#d4791f; --ssrn:#8b5cf6; --other:#7a68c9;
+  --qp:#c0392b; --man:#0f766e; --aa:#1d4ed8; --ms:#a16207; --qc:#6d28d9;
   --star:#f0a91b; --shadow:0 1px 2px rgba(16,24,40,.06),0 4px 14px rgba(16,24,40,.05);
 }
 @media (prefers-color-scheme:dark){
@@ -16,6 +17,7 @@
     --bg:#101317; --panel:#181c22; --panel-2:#1e232a; --ink:#e7ebf0; --muted:#98a3b0;
     --line:#2a3038; --accent:#7ea3ff; --accent-soft:#1d2637;
     --pm:#7ea3ff; --st:#4bd6a8; --tr:#f0ad5e; --ssrn:#b18cff; --other:#b0a0f0;
+    --qp:#f08a7c; --man:#3fc4b4; --aa:#8fb2ff; --ms:#e3b341; --qc:#c4a6ff;
     --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.25);
   }
 }
@@ -25,6 +27,11 @@ body{margin:0;background:var(--bg);color:var(--ink);
   -webkit-font-smoothing:antialiased}
 .wrap{max-width:1000px;margin:0 auto;padding:32px 20px 140px}
 a{color:var(--accent)}
+
+/* language switching: only the active language is displayed */
+[data-l]{display:none}
+html[data-lang="ko"] [data-l="ko"]{display:revert}
+html[data-lang="en"] [data-l="en"]{display:revert}
 
 header.top{margin-bottom:24px}
 h1{font-size:26px;margin:0 0 6px;letter-spacing:-.02em}
@@ -38,14 +45,17 @@ h1{font-size:26px;margin:0 0 6px;letter-spacing:-.02em}
   padding:12px 0 10px;margin:20px 0 8px;border-bottom:1px solid var(--line)}
 .row{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:7px}
 .row:last-child{margin-bottom:0}
-.rowlabel{font-size:11.5px;color:var(--muted);font-weight:700;letter-spacing:.06em;
-  min-width:38px}
+.rowlabel{font-size:11.5px;color:var(--muted);font-weight:700;letter-spacing:.06em;min-width:38px}
 .chip{border:1px solid var(--line);background:var(--panel);color:var(--muted);
   border-radius:999px;padding:5px 12px;font-size:12.5px;cursor:pointer;
   font-family:inherit;transition:.12s;white-space:nowrap}
 .chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);
   color:var(--accent);font-weight:600}
 .chip:hover{border-color:var(--accent)}
+.langsel{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.langsel button{border:0;background:var(--panel);color:var(--muted);padding:5px 13px;
+  font:inherit;font-size:12.5px;cursor:pointer;transition:.12s}
+.langsel button[aria-pressed="true"]{background:var(--accent);color:#fff;font-weight:700}
 #q{flex:1;min-width:180px;padding:7px 12px;border:1px solid var(--line);border-radius:8px;
   background:var(--panel);color:var(--ink);font:inherit;font-size:13.5px}
 #q:focus{outline:2px solid var(--accent);outline-offset:-1px}
@@ -55,7 +65,7 @@ select{padding:7px 10px;border:1px solid var(--line);border-radius:8px;
 
 h2.day{font-size:15px;margin:30px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--line);
   color:var(--muted);font-weight:600;letter-spacing:.02em}
-h2.day span{color:var(--ink)}
+h2.day span.d{color:var(--ink)}
 
 .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;
   padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow)}
@@ -64,7 +74,9 @@ h2.day span{color:var(--ink)}
 .badge{font-size:11px;font-weight:700;letter-spacing:.04em;padding:2.5px 8px;
   border-radius:5px;color:#fff}
 .b-PM{background:var(--pm)} .b-ST{background:var(--st)} .b-TR{background:var(--tr)}
-.b-ssrn{background:var(--ssrn)} .b-XX{background:var(--other)}
+.b-ssrn{background:var(--ssrn)} .b-qp{background:var(--qp)} .b-man{background:var(--man)}
+.b-aa{background:var(--aa)} .b-ms{background:var(--ms)} .b-qc{background:var(--qc)}
+.b-XX{background:var(--other)}
 .badge.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);font-weight:600}
 .stars{color:var(--star);font-size:12.5px;letter-spacing:1px;margin-left:auto}
 .stars i{color:var(--line);font-style:normal}
@@ -80,7 +92,7 @@ h2.day span{color:var(--ink)}
 .detail[hidden]{display:none}
 .detail ul{margin:0 0 12px;padding-left:19px}
 .detail li{margin-bottom:4px}
-.kv{display:grid;grid-template-columns:76px 1fr;gap:5px 10px;font-size:13.5px;margin-bottom:12px}
+.kv{display:grid;grid-template-columns:92px 1fr;gap:5px 10px;font-size:13.5px;margin-bottom:12px}
 .kv dt{color:var(--muted);font-weight:600}
 .kv dd{margin:0}
 .keys{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
@@ -90,23 +102,32 @@ h2.day span{color:var(--ink)}
   padding:11px 13px;font-size:13px;color:var(--muted);line-height:1.7}
 .abs b{color:var(--ink);display:block;margin-bottom:4px;font-size:12px;letter-spacing:.03em}
 
-.actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;align-items:center}
+.actions .sep{width:1px;height:18px;background:var(--line);margin:0 2px}
 .btn{border:1px solid var(--line);background:var(--panel);color:var(--muted);
   border-radius:7px;padding:5.5px 12px;font-size:12.5px;cursor:pointer;
   font-family:inherit;text-decoration:none;display:inline-block;transition:.12s}
 .btn:hover{border-color:var(--accent);color:var(--accent)}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
 .btn.primary:hover{filter:brightness(1.08);color:#fff}
-.btn.queued{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:600}
+.btn.queued{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);
+  font-weight:600}
 .btn.done{border-color:var(--st);color:var(--st)}
+.btn.failed{border-color:var(--tr);color:var(--tr)}
+#livebadge{font-size:11.5px;color:var(--st);font-weight:700;letter-spacing:.03em;
+  display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+#livebadge::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--st);
+  animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 
 .bar{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--panel);
   border-top:1px solid var(--line);box-shadow:0 -4px 20px rgba(0,0,0,.10);
   padding:12px 20px;display:none}
 .bar.on{display:block}
 .bar-in{max-width:1000px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-.bar code{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;
-  padding:4px 8px;font-size:12px;flex:1;min-width:200px;overflow:auto;white-space:nowrap}
+.bar pre{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;
+  padding:6px 9px;font-size:12px;flex:1;min-width:200px;overflow:auto;margin:0;
+  white-space:pre;line-height:1.5}
 .empty{color:var(--muted);text-align:center;padding:50px 0}
 footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);
   color:var(--muted);font-size:12px}
@@ -134,6 +155,7 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);
 .doc .meta-head{background:var(--panel);border:1px solid var(--line);border-radius:12px;
   padding:16px 18px;margin:18px 0 26px;box-shadow:var(--shadow)}
 .doc .meta-head .sub{margin-bottom:4px}
+.doc .langlinks{float:right;font-size:12.5px}
 </style>
 
 <script>
@@ -148,328 +170,266 @@ window.MathJax={
 </head>
 <body>
 <div class="wrap doc">
-  <p class="sub"><a href="javascript:history.back()">← 돌아가기</a></p>
+  <p class="sub"><span class="langlinks"></span>
+     <a href="javascript:history.back()">← 돌아가기</a></p>
   <h1>RetailAgent: Structured Adverse Timing in Self-Conditioned Multimodal LLM Trading Agents</h1>
   <div class="meta-head">
     <p class="sub">Yupeng Zhang, Liuyuan Jiang, Hongyi Huang, Bingheng Li, Lisha Chen</p>
     <p class="sub">arXiv:2608.28399 · cs.AI, q-fin.TR</p>
-    <p class="sub">본문 출처: arXiv HTML 전문</p>
+    <p class="sub">본문 출처: arXiv HTML full text</p>
     <div class="actions">
       <a class="btn" href="https://arxiv.org/abs/2608.28399" target="_blank" rel="noopener">원문 페이지</a>
       <a class="btn" href="https://arxiv.org/pdf/2608.28399" target="_blank" rel="noopener">원문 PDF</a>
     </div>
   </div>
-  <blockquote><p>LLM 트레이딩 에이전트의 체계적 역타이밍(negative timing) 구조를 실험으로 규명</p></blockquote>
-  <h2>1. 한눈에 보기</h2>
+  <blockquote><p>LLM 매매 에이전트가 구조적으로 나쁜 타이밍을 반복한다는 사실을 밝힌다.</p></blockquote>
+  스킬 스크립트 디렉터리(`C:\Users\260165\.claude\skills\humanize-korean\scripts`, `references`)가 이 세션의 샌드박스 밖이라 정량 shim(`prepare_monolith_input.py`)과 구조 게이트(`verify_gates.py`)를 실행하지 못했습니다. 스킬 규정에 따라 shim·게이트 없이 light 강도(보수)로 직접 윤문했고, 변경률은 계측값이 아닌 육안 추정(대략 7% 내외)입니다.
 
-<blockquote>
-<p>LLM 트레이딩 에이전트에게 익명화된 장중 가격 경로만 주고 롱/플랫을 반복해서 고르게 하면, 노출도를 보정한 종목 내 타이밍이 일관되게 마이너스로 나온다. 이 마이너스는 무작위 잡음이 아니라 행동 순서에 담긴 구조이며, 에이전트가 자기 메모를 다시 읽는 자기조건화를 넣으면 포지션 전환은 줄고 타이밍은 더 나빠진다.</p>
-</blockquote>
+<h2>1. 한눈에 보기</h2>
+
+<blockquote>LLM 에이전트에게 익명화된 장중 가격 경로만 보여주고 매 구간 롱/플랫을 고르게 하면, 노출도(long 비중)를 제거한 종목 내 타이밍이 14개 설정 전부에서 음(-)으로 나온다. 행동 순서를 섞으면 이 음수가 대부분 사라진다. 손실이 무작위 잡음이 아니라 행동과 다음 구간 수익률 사이의 순차적 정렬에서 나온다는 뜻이다.</blockquote>
 
 <ul>
-<li>저자들은 <strong>RetailAgent</strong>라는 통제된 실험 틀을 만들었다. 종목명·날짜·절대가격·뉴스를 모두 가린 채, 에이전트는 롱(보유) 또는 플랫(관망)만 고른다.</li>
-<li>평가지표는 <strong>타이밍 알파(timing alpha)</strong>다. 하루 평균 노출도를 뺀 뒤, 같은 종목의 같은 날 경로 위에서 진입·청산 품질만 뽑아낸다.</li>
-<li>모달리티(숫자·차트·복합), 의사결정 주기(5·10·20분), 계좌 상태, 모델 계열까지 <strong>표준 14개 설정 전부</strong>에서 부호가 음수다. 10분 텍스트 조건은 종목-일당 \(-45.7\)bp다.</li>
-<li>저장된 행동열을 무작위로 섞으면 효과가 \(-3.5\)bp까지 줄어든다. 즉 마이너스는 노출도가 아니라 <strong>행동과 이후 수익의 시간적 정렬</strong>에서 나온다.</li>
-<li>직전 메모 하나를 더 보여주면(\(w=0\to1\)) 타이밍은 \(-62.8\)에서 \(-74.1\)bp로 악화하고, 하루 포지션 전환은 2.5회에서 1.7회로 줄어든다.</li>
+<li>핵심 지표는 노출도 매칭 타이밍 알파다. 항상 롱인 궤적은 0점이라 방향성 성분만 남는다. 주력 10분 텍스트 조건에서 종목-일당 \(-45.7\) bp, 차트 \(-29.9\), 멀티모달 \(-48.9\)로 나왔다.</li>
+<li>행동 시퀀스를 전역 셔플하면 \(-3.5\) bp, 같은 날 안에서만 셔플하면 \(-8.7\) bp로 줄어든다. 음수의 대부분은 원래 궤적에 담긴 순차 구조에서 나온다.</li>
+<li>롱/플랫을 뒤집은 반전 스케줄을 GRU·GBDT·1기 리버설에 종목 내 선형 투영해 제거해도 잔차 타이밍이 \(+43.9\), \(+40.4\), \(+38.9\) bp 남는다. 기존 가격 신호로 설명되지 않는 성분이 상당하다.</li>
+<li>자기 작성 메모를 하나 더 보여주면(\(w=0\to w=1\)) 종목-일당 포지션 전환이 2.5회에서 1.7회로 줄고 타이밍은 \(-62.8\)에서 \(-74.1\) bp로 더 나빠진다. 언어적 자기 확증이 잘못된 포지션을 오래 붙들게 한다.</li>
 </ul>
 
 <h2>2. 문제의식과 배경</h2>
 
-<p>시장 이론은 가격이 흩어진 정보를 모으고, 주문 흐름이 다른 참가자에게 정보를 흘린다고 말한다. Grossman-Stiglitz(1980)와 Kyle(1985)이 그 뼈대다. 여기서 따라 나오는 함의가 이 논문의 출발점이다. 가격 움직임에 체계적으로 반응하는 정책은, 개별 판단이 각각 그럴듯해 보여도 전체로는 예측당한다.</p>
+<p>가격에 체계적으로 반응하는 정책은 판단 하나하나가 그럴듯해 보여도 전체 흐름은 예측 가능해진다. Grossman–Stiglitz와 Kyle이 다룬 주문 흐름의 정보 전달이 그 배경이다. 개인 투자자 연구도 같은 자리를 짚는다. 주의(attention), 과거 수익률, 화면 표시, 과신, 과도한 회전이 반복되는 매매 패턴을 만들고, 소액 주문이 몰린 종목은 이후 부진했다는 기록이 있다.</p>
 
-<p>개인투자자 연구는 이 예측 가능성의 실증 사례를 쌓아 왔다. Barber-Odean은 잦은 거래가 수익을 갉아먹는다고 보고했다. 관심 종목 쏠림, 과신, 화면 표시 방식, 무의미한 피드백이 모두 거래 행태를 흔든다는 결과도 있다. Hvidkjaer(2008)는 소액 거래가 몰린 종목의 이후 성과가 부진했다고 보고했다.</p>
+<p>LLM 트레이딩 에이전트 쪽 연구는 대체로 벤치마크 점수나 포트폴리오 수익으로 평가해 왔다. 그런데 총점 하나에는 산발적 실수와 "매번 반대편에 서는 성향"이 뒤섞인다. 저자들은 이 둘을 분리하려 한다.</p>
 
-<p>기존 금융 LLM 연구는 다른 곳을 본다. 도메인 특화 모델, 벤치마크, 뉴스 기반 등락 예측, 다중 에이전트 트레이딩 프레임워크가 주류다. 이들은 대체로 <strong>총합 성과</strong>를 본다. 누적 수익률이나 샤프비율이 그 예다.</p>
-
-<p>문제는 총합 성과가 두 가지를 섞어 버린다는 점이다. 하나는 산발적인 실수이고, 다른 하나는 이후 수익의 반대편을 반복해서 고르는 성향이다. 이 논문은 두 번째만 떼어낸다. 정보 경계를 고정한 상태에서, 행동열 자체에 방향성 구조가 남는지를 묻는다.</p>
+<p>그 분리 장치가 정보 경계와 노출도 매칭이다. 에이전트는 종목명, 날짜, 절대 가격, 뉴스, 펀더멘털, 횡단면 순위, 미래 결과를 전혀 못 본다. 지수화된 가격 이력과 자기 행동이 만든 상태만 받는다. 평가 지표에서는 평균 노출도를 빼버려 "그냥 계속 롱이라 벌었다"는 성분을 0으로 만든다. 남는 건 언제 들어가고 나왔는가뿐이다.</p>
 
 <h2>3. 방법론</h2>
 
-<h3>3.1 의사결정 루프</h3>
+<h3>3.1 실험 단위와 행동</h3>
 
-<p>실험 단위는 종목-일 쌍 \((i,d)\)다. 하루는 \(T\)개의 순차적 의사결정 구간으로 나뉜다. 구간 \(t\)의 시작 시점에 에이전트는 조건별 관측치를 받고, 이진 행동 \(p_{idt}\in\{0,1\}\)를 고른다. 1은 롱(다음 구간 보유), 0은 플랫(관망)이다.</p>
+<p>실험 단위는 종목-일 쌍 \((i,d)\)다. 하루를 \(T\)개 의사결정 구간으로 나누고 구간 \(t\) 시작 시점에 에이전트가 이진 행동 \(p_{idt}\in\{0,1\}\)를 고른다. 1이 롱(다음 구간 보유), 0이 플랫(관망)이다. 행동을 낸 뒤에야 그 구간의 리서치 수익률 라벨 \(r_{idt}\)가 공개된다.</p>
 
-<p>행동을 낸 뒤에야 다음 구간의 리서치 수익률 \(r_{idt}\)가 공개된다. 미래를 미리 볼 수 없다. 프로토콜은 종목 정체, 달력 날짜, 절대가격 수준, 뉴스, 펀더멘털, 횡단면 순위를 모두 가린다.</p>
+<h3>3.2 타이밍 알파</h3>
 
-<h3>3.2 핵심 지표: 타이밍 알파</h3>
+<p>노출도 \(\bar{p}_{id}\)는 하루 중 롱이었던 구간의 비율이다. 핵심 지표는</p>
 
-<p>하루 노출도 \(\bar{p}_{id}\)는 롱이었던 구간의 비율이다. 타이밍 알파는 이 노출도를 뺀 잔차와 수익률의 내적이다.</p>
+\[A_{id}(p,r)=\sum_{t}\left(p_{idt}-\bar{p}_{id}\right)r_{idt},\qquad\bar{p}_{id}=T^{-1}\sum_{t}p_{idt}.\]
 
-<p>\[A_{id}(p,r)=\sum_{t}\left(p_{idt}-\bar{p}_{id}\right)r_{idt},\qquad\bar{p}_{id}=T^{-1}\sum_{t}p_{idt}.\]</p>
+<p>\(A_{id}\)는 종목-일 타이밍 알파, \(p_{idt}\)는 롱/플랫 행동, \(\bar{p}_{id}\)는 그날의 평균 노출도, \(r_{idt}\)는 행동 직후 구간의 수익률이다. 형태상 \(T\times\mathrm{Cov}(p,r)\)이라 Grinblatt–Titman 계열의 공분산형 타이밍 측도와 같은 구조다.</p>
 
-<p>\(p_{idt}\)는 구간 \(t\)의 포지션, \(r_{idt}\)는 그 직후 구간의 수익률, \(\bar{p}_{id}\)는 하루 평균 노출도다. 즉 평균 노출을 제거한 뒤 "상대적으로 좋은 구간에 롱이었는가"만 남긴다.</p>
+<p>이 정의에서 다음 분해가 나온다.</p>
 
-<p>이 정의에서 다음 분해가 곧바로 나온다.</p>
+\[\sum_{t}p_{idt}\,r_{idt}=\bar{p}_{id}\sum_{t}r_{idt}+A_{id}(p,r),\]
 
-<p>\[\sum_{t}p_{idt}\,r_{idt}=\bar{p}_{id}\sum_{t}r_{idt}+A_{id}(p,r),\]</p>
+<p>좌변은 롱온리 누적 수익, 우변 첫 항은 평균 노출도로 경로 전체를 수동적으로 먹은 몫, 둘째 항이 타이밍이다. 그래서 하루 손익은 플러스인데 타이밍이 크게 마이너스인 상황이 얼마든지 나온다. 논문의 예시 궤적이 그렇다. 롱 구간 수익 \(+359.4\) bp, 플랫 구간 수익 \(+1{,}404.0\) bp, 타이밍 알파 \(-867.3\) bp. 상승의 대부분을 관망으로 흘려보내고 약한 구간 직전에 들어갔다.</p>
 
-<p>좌변은 롱온리 누적수익, 우변 첫 항은 경로에 대한 수동적 노출, 둘째 항이 타이밍이다. 이 분해가 논문의 핵심 논리다. <strong>플러스 수익과 마이너스 타이밍은 동시에 성립한다.</strong> 상승장에서 대충 보유만 해도 수익은 나기 때문이다.</p>
+<p>부호 진단용으로 반전 스케줄 \(q_{idt}=1-p_{idt}\)를 쓴다. 정의상 \(A_{id}(q,r)=-A_{id}(p,r)\)이다. 항상 롱이거나 항상 플랫인 궤적은 0점이므로 채점 대상에서 빠진다.</p>
 
-<p>부호 해석은 단순하다. 양수는 방향이 맞은 타이밍, 0 근처는 잡음, 음수는 반대편을 고른 타이밍이다. 항상 롱인 정책은 정의상 0점이다.</p>
+<h3>3.3 횡단면 IC</h3>
 
-<h3>3.3 부호 진단과 대조군</h3>
+<p>타이밍과 별개로 같은 시각에 종목을 고르는 능력은 횡단면 정보계수로 잰다.</p>
+
+\[\mathrm{IC}_{dt}=\operatorname{Corr}_{i\in S_{dt}}(p_{idt},r_{idt}).\]
+
+<p>\(S_{dt}\)는 그 시각 해당 조건에서 이용 가능한 종목 집합이다. 타이밍이 "언제 들고 있었나"라면 IC는 "어떤 종목을 골랐나"를 잰다.</p>
+
+<h3>3.4 조건화 채널 세 갈래</h3>
 
 <ul>
-<li><strong>상보 스케줄</strong>: \(q_{idt}=1-p_{idt}\)로 롱과 플랫을 맞바꾼다. 정의상 \(A_{id}(q,r)=-A_{id}(p,r)\)이 되어 부호가 뒤집힌다.</li>
-<li><strong>궤적 셔플</strong>: 하루 롱 비율은 유지한 채 행동 순서만 무작위로 섞는다. 시간 정렬만 깨는 대조군이다.</li>
-<li><strong>노출도 일치 랜덤 스케줄</strong>: 주된 귀무가설이다. 설계상 타이밍이 0 근처가 된다.</li>
+<li><strong>관측 표현</strong> — 숫자 텍스트(완료된 구간을 직렬화), 차트 단독(기울기·곡률·극값이 시각적으로 부각), 둘을 함께 넣은 멀티모달.</li>
+<li><strong>계정 상태</strong> — 현재 포지션과 진입가, 최근 청산 8건 거래 원장, 누적 손익 요약을 단계적으로 덧붙인다. 이 값들이 과거 행동에서 나오므로 정책이 재귀 구조를 띤다.</li>
+<li><strong>서사적·잠재 상태</strong> — 2패스 프로토콜을 쓴다. 1패스에서 "미래의 나에게" 짧은 메모를 쓰고, 2패스에서 현재 관측 + 방금 쓴 메모 + 이전 메모 최대 \(w\)개를 보고 롱/플랫을 고른다. \(w\in\{0,1,5,12\}\), 지시문은 없음/확신 강조/일관성 요구 세 종류다.</li>
 </ul>
 
-<h3>3.4 횡단면 IC</h3>
+<p>잠재 채널은 다음 경로로 연속 상태를 주입한다.</p>
 
-<p>타이밍이 "언제 들고 있었나"를 본다면, 정보계수는 "어떤 종목을 골랐나"를 본다.</p>
+\[x_{id,1:t}\xrightarrow{f_{\theta}}h_{idt}\xrightarrow{g_{\phi}}(e_{1},\ldots,e_{k})\longrightarrow\text{frozen LLM}\longrightarrow p_{idt}.\]
 
-<p>\[\mathrm{IC}_{dt}=\operatorname{Corr}_{i\in S_{dt}}(p_{idt},r_{idt}).\]</p>
-
-<p>\(S_{dt}\)는 같은 의사결정 시점에 해당 조건이 다룬 종목 집합이다. 두 지표는 서로 다른 축을 잰다.</p>
-
-<h3>3.5 조건화 개입 세 갈래</h3>
-
-<p><strong>(1) 관측 표현</strong>. 숫자 텍스트는 완료된 구간을 나열해 국소 차분과 순서를 언어적 추론에 직접 노출한다. 차트는 기울기·곡률·극값·시각적 군집을 한꺼번에 드러낸다. 복합 조건은 둘 다 준다.</p>
-
-<p><strong>(2) 계좌 상태</strong>. 현재 포지션과 진입가, 최근 청산 거래 원장, 누적 손익 요약을 단계적으로 붙인다. 이 변수들은 앞선 행동에서 생기므로, 각 결정이 다음 결정의 조건을 바꾸는 재귀적 정책이 된다.</p>
-
-<p><strong>(3) 서사적 자기조건화</strong>. 두 번의 호출을 쓴다. 1차 호출에서 미래의 자신에게 보내는 짧은 메모를 쓴다. 2차 호출은 현재 관측, 방금 쓴 메모, 그리고 이전 메모 최대 \(w\)개를 함께 보고 롱/플랫을 고른다. \(w\in\{0,1,5,12\}\)를 시험한다. 지시문은 없음, 확신 강조, 일관성 요구 세 가지다.</p>
-
-<h3>3.6 잠재 채널(선택)</h3>
-
-<p>가격에서 유도한 연속 상태를 소프트 토큰으로 넣는 경로도 붙였다.</p>
-
-<p>\[x_{id,1:t}\xrightarrow{f_{\theta}}h_{idt}\xrightarrow{g_{\phi}}(e_{1},\ldots,e_{k})\longrightarrow\text{frozen LLM}\longrightarrow p_{idt}.\]</p>
-
-<p>\(f_{\theta}\)는 GRU 가격 인코더, \(h_{idt}\)는 은닉 상태, \(g_{\phi}\)는 랭크 64 저차원 변환, \(e_k\)는 소프트 토큰 임베딩이다. GRU는 VICReg 자기지도 목적으로 사전학습한다. 7개 가격 특징을 \(k=2\)개 임베딩으로 사상하며, 각 임베딩은 92개 고정 시장 관련 단어 임베딩의 가중합으로 만든다.</p>
+<p>\(f_{\theta}\)는 GRU 가격 인코더(2층, 256유닛, 120분 룩백, 7개 채널), \(h_{idt}\)는 은닉 상태, \(g_{\phi}\)는 랭크 64 저차원 변환, \(e_k\)는 소프트 토큰 임베딩이다. GRU는 VICReg 자기지도 목적으로 사전학습했고 소프트 토큰 \(k{=}2\)개는 각각 92개 고정 시장 관련 단어 임베딩의 가중합으로 만든다. 학습 시 행동은 하드 이진값을 쓰되 역전파는 스트레이트-스루 추정기로 흘린다.</p>
 
 <h2>4. 데이터와 실험 설계</h2>
 
 <table>
-<thead>
-<tr><th>항목</th><th>내용</th></tr>
-</thead>
+<thead><tr><th>항목</th><th>내용</th></tr></thead>
 <tbody>
-<tr><td>유니버스</td><td>CSI-500 (중국 중형주 지수), 익명화 처리</td></tr>
+<tr><td>유니버스</td><td>CSI-500(중국 중형주 지수), 종목명·날짜 익명화</td></tr>
 <tr><td>원자료 격자</td><td>종목-일당 239분 장중 격자</td></tr>
-<tr><td>주 패널</td><td>10분 간격 23회 의사결정</td></tr>
-<tr><td>보조 패널</td><td>5분 47회, 20분 11회 (각각 잔여 4·9·19분은 채점 제외)</td></tr>
-<tr><td>주 모델</td><td>Qwen3.5-9B (vLLM, bfloat16, thinking 비활성)</td></tr>
-<tr><td>교차 모델 확인</td><td>Claude Haiku 4.5, Granite-4.0-H-Small, Qwen3-VL(거친 이미지 아카이브)</td></tr>
-<tr><td>샘플링</td><td>주 패널 150일 × 일별 최대 200종목, 시드 4242</td></tr>
-<tr><td>서사 조건 표본</td><td>조건당 1,500 종목-일 시도(150일), 시드 0</td></tr>
-<tr><td>주 지표</td><td>타이밍 알파 (bp/종목-일), 횡단면 IC</td></tr>
-<tr><td>신뢰구간</td><td>날짜 군집 백분위 부트스트랩 (표준 3,000회, 서사 2,000회, 호스티드 5,000회)</td></tr>
-<tr><td>학습 분할</td><td>해당 패널의 앞 3/5를 학습 구간으로 사용</td></tr>
+<tr><td>주력 패널</td><td>10분 간격 23개 결정 구간, 150일 × 일별 최대 200종목(시드 4242)</td></tr>
+<tr><td>호라이즌 점검</td><td>5분 47구간, 20분 11구간(잔여 4·9·19분은 채점 격자 밖)</td></tr>
+<tr><td>가격 표시</td><td>지수 100 기준, 최근 20개 값까지 제시. 절대가 은폐</td></tr>
+<tr><td>주 모델</td><td>Qwen3.5-9B, vLLM, bfloat16, thinking 비활성, 온도 0.7 / top-p 0.95</td></tr>
+<tr><td>부호 교차검증</td><td>Claude Haiku 4.5, Granite-4.0-H-Small, 조악 이미지 조건은 Qwen3-VL로 기록</td></tr>
+<tr><td>서사 조건 표본</td><td>조건당 1,500 종목-일 × 150일 시도(시드 0)</td></tr>
+<tr><td>토큰 예산</td><td>텍스트·상태 160, 차트·결합 320, 호스티드 350, 메모 220 후 그리디 24</td></tr>
+<tr><td>주 지표</td><td>종목-일당 타이밍 알파(bp), 횡단면 IC, 종목-일당 포지션 전환 횟수</td></tr>
+<tr><td>신뢰구간</td><td>날짜 클러스터 백분위 부트스트랩(표준 3,000 / 서사 2,000 / 호스티드 5,000회)</td></tr>
+<tr><td>귀무 벤치마크</td><td>노출도를 맞춘 무작위 스케줄. 구성상 타이밍이 0 근처</td></tr>
 </tbody>
 </table>
 
-<p>생성 설정도 조건별로 다르다. 숫자·상태 조건은 온도 0.7, top-p 0.95, 출력 160토큰이다. 차트·복합은 320토큰, 호스티드 모델은 350토큰을 쓴다. 서사 조건은 메모 220토큰을 쓴 뒤, 결정은 greedy 24토큰으로 뽑는다.</p>
+<p>채점 규칙 두 가지는 짚어둬야 한다. 첫째, 타이밍 평균은 롱과 플랫이 모두 등장한 궤적만 대상으로 한다. 항상 롱/항상 플랫은 정의상 0이라 제외한다. 둘째, 서사 조건은 실패한 구간을 제거한 뒤 노출도 중심화를 하고 유효 결정이 5개 이상이어야 채점한다. 조건당 34,500개 시도 결정 중 실제 채점된 종목-일은 1,011~1,289개 범위다.</p>
 
-<p>채점 규칙에 주의할 지점이 있다. 식 (1)은 하루 내내 롱이거나 하루 내내 플랫인 궤적에 0점을 준다. 그래서 저자들은 <strong>두 행동이 모두 나온 종목-일만 남겨</strong> 평균을 낸다. 서사 조건에서는 34,500회 시도 중 실패 구간과 상수 경로를 걷어낸 뒤 1,000~1,300개가 채점에 들어간다.</p>
+<p>입력 출처도 조건마다 다르다. 숫자 텍스트 조건은 이미 완료된 비중첩 구간만으로 이력을 구성하므로 정보 경계가 깨끗하다. 반면 고해상 차트와 인코더 피처는 중첩된 선행 수익률 라벨 행에서 역산한 1분 시계열을 쓴다. 저자들도 이 재구성이 나중 라벨 행에 의존한다고 명시했다.</p>
 
 <h2>5. 주요 결과</h2>
 
-<h3>5.1 표준 14개 설정: 전부 음수</h3>
+<h3>5.1 14개 표준 설정 전부 음수</h3>
 
 <table>
-<thead>
-<tr><th>모델 / 조건</th><th>주기</th><th>종목-일</th><th>타이밍 알파 (bp, 95% CI)</th></tr>
-</thead>
+<thead><tr><th>모델 / 조건</th><th>간격</th><th>종목-일</th><th>타이밍 알파 (bp, 95% CI)</th></tr></thead>
 <tbody>
-<tr><td>Qwen3.5, 가격 텍스트</td><td>10분</td><td>13,710</td><td>\(-45.7\;[-49.4,-41.8]\)</td></tr>
-<tr><td>Qwen3.5, 차트</td><td>10분</td><td>14,937</td><td>\(-29.9\;[-33.7,-26.2]\)</td></tr>
-<tr><td>Qwen3.5, 복합</td><td>10분</td><td>14,438</td><td>\(-48.9\;[-52.7,-45.0]\)</td></tr>
-<tr><td>Qwen3.5, 가격 텍스트</td><td>20분</td><td>23,594</td><td>\(-56.7\;[-59.8,-53.6]\)</td></tr>
-<tr><td>Qwen3.5, +포지션</td><td>20분</td><td>25,410</td><td>\(-54.7\;[-58.2,-51.0]\)</td></tr>
-<tr><td>Qwen3.5, +원장</td><td>20분</td><td>25,718</td><td>\(-43.9\;[-47.0,-40.8]\)</td></tr>
-<tr><td>Qwen3.5, +계좌요약</td><td>20분</td><td>22,013</td><td>\(-51.1\;[-55.0,-46.7]\)</td></tr>
-<tr><td>Qwen3.5, 가격 텍스트</td><td>5분</td><td>9,937</td><td>\(-38.8\;[-42.9,-34.6]\)</td></tr>
-<tr><td>Qwen3.5, +포지션</td><td>5분</td><td>9,961</td><td>\(-44.8\;[-49.3,-40.4]\)</td></tr>
-<tr><td>Qwen3.5, +원장</td><td>5분</td><td>9,966</td><td>\(-30.5\;[-33.5,-27.2]\)</td></tr>
-<tr><td>Qwen3.5, +계좌요약</td><td>5분</td><td>9,052</td><td>\(-53.2\;[-56.2,-50.1]\)</td></tr>
-<tr><td>Claude Haiku, 가격 텍스트</td><td>5분</td><td>827</td><td>\(-38.8\;[-52.9,-22.5]\)</td></tr>
-<tr><td>Claude Haiku, 가격 텍스트</td><td>10분</td><td>165</td><td>\(-42.9\;[-62.0,-24.8]\)</td></tr>
-<tr><td>Qwen3-VL, 거친 이미지</td><td>20분</td><td>28,387</td><td>\(-32.7\;[-35.7,-29.8]\)</td></tr>
+<tr><td>Qwen3.5 · 가격 텍스트</td><td>10분</td><td>13,710</td><td>\(-45.7\ [-49.4,-41.8]\)</td></tr>
+<tr><td>Qwen3.5 · 차트</td><td>10분</td><td>14,937</td><td>\(-29.9\ [-33.7,-26.2]\)</td></tr>
+<tr><td>Qwen3.5 · 멀티모달</td><td>10분</td><td>14,438</td><td>\(-48.9\ [-52.7,-45.0]\)</td></tr>
+<tr><td>Qwen3.5 · 가격 텍스트</td><td>20분</td><td>23,594</td><td>\(-56.7\ [-59.8,-53.6]\)</td></tr>
+<tr><td>Qwen3.5 · +원장</td><td>20분</td><td>25,718</td><td>\(-43.9\ [-47.0,-40.8]\)</td></tr>
+<tr><td>Qwen3.5 · +계정요약</td><td>5분</td><td>9,052</td><td>\(-53.2\ [-56.2,-50.1]\)</td></tr>
+<tr><td>Qwen3.5 · +원장</td><td>5분</td><td>9,966</td><td>\(-30.5\ [-33.5,-27.2]\)</td></tr>
+<tr><td>Claude Haiku · 가격 텍스트</td><td>5분</td><td>827</td><td>\(-38.8\ [-52.9,-22.5]\)</td></tr>
+<tr><td>Claude Haiku · 가격 텍스트</td><td>10분</td><td>165</td><td>\(-42.9\ [-62.0,-24.8]\)</td></tr>
+<tr><td>Qwen3-VL · 조악 이미지</td><td>20분</td><td>28,387</td><td>\(-32.7\ [-35.7,-29.8]\)</td></tr>
+<tr><td>Granite · 가격 텍스트 / +계정요약</td><td>10분</td><td>각 600</td><td>\(-36.3\) / \(-8.2\) (점추정)</td></tr>
 </tbody>
 </table>
 
-<p>14개 신뢰구간이 모두 0 아래에 있다. Granite 4.0도 4개 상태 프롬프트에서 \(-8.2\)부터 \(-36.3\)bp까지 음수 점추정을 낸다. 다만 각 행의 표본 프레임이 달라, 저자들은 <strong>부호의 반복</strong>만 강한 주장으로 삼는다. 크기 비교는 서술적이라고 못 박는다.</p>
+<p>20분 상태 조건은 \(-43.9 \sim -56.7\), 5분은 \(-30.5 \sim -53.2\) 범위다. 계정 정보를 더하면 순위가 뒤바뀌는데, 한 번에 여러 상태 입력이 동시에 변하는 탓이다. 표본 프레임이 조건마다 달라 크기 비교는 서술적 수준에 머문다. 강한 주장은 반복되는 부호 쪽이다.</p>
 
-<p>주 텍스트 표본에서 LLM 스케줄과 노출도 일치 랜덤 스케줄의 차이는 \(-46.2\)bp, 95% 신뢰구간 \([-50.5,-41.8]\)이다.</p>
+<p>주력 텍스트 표본에서 LLM 스케줄과 노출도 매칭 무작위 스케줄의 차이는 \(-46.2\) bp, 95% CI \([-50.5,-41.8]\)이다.</p>
 
-<h3>5.2 셔플 대조군: 마이너스는 순서에서 온다</h3>
+<h3>5.2 셔플 대조 — 순차 정렬이 원인</h3>
 
 <table>
-<thead>
-<tr><th>스케줄</th><th>타이밍 알파 (bp)</th></tr>
-</thead>
+<thead><tr><th>스케줄</th><th>타이밍 알파 (bp)</th><th>해석</th></tr></thead>
 <tbody>
-<tr><td>원본 궤적 (10분 텍스트)</td><td>\(-45.7\)</td></tr>
-<tr><td>전역 셔플</td><td>\(-3.5\;[-5.4,-1.7]\)</td></tr>
-<tr><td>같은 날 내 셔플</td><td>\(-8.7\;[-10.4,-7.1]\)</td></tr>
+<tr><td>원래 궤적</td><td>\(-45.7\)</td><td>기준</td></tr>
+<tr><td>전역 셔플</td><td>\(-3.5\ [-5.4,-1.7]\)</td><td>롱 비중은 유지, 시점 정렬 파괴</td></tr>
+<tr><td>같은 날 내 셔플</td><td>\(-8.7\ [-10.4,-7.1]\)</td><td>일중 구성은 유지, 순서만 파괴</td></tr>
 </tbody>
 </table>
 
-<p>셔플은 하루 롱 비율을 그대로 두고 순서만 흩는다. 그런데 효과의 대부분이 사라진다. 결론은 명확하다. 마이너스 타이밍은 "롱을 얼마나 했는가"가 아니라 "언제 롱이었는가"에서 나온다.</p>
+<p>롱 비중을 그대로 두고 순서만 흩뜨리면 효과의 8할 이상이 증발한다. 손실이 "롱을 너무 많이/적게 해서"가 아니라 "언제 롱이었는지" 때문이라는 뜻이다.</p>
 
-<h3>5.3 가격 시그널과의 중첩: 잔차가 남는다</h3>
-
-<p>상보 스케줄(롱↔플랫을 뒤집은 것)을 세 가지 전통적 가격 시그널에 종목 내 선형 사영한 뒤, 설명되지 않은 잔차를 다시 채점했다.</p>
+<h3>5.3 기존 가격 신호와의 중복</h3>
 
 <table>
-<thead>
-<tr><th>비교 시그널</th><th>종목-일</th><th>\(q\)와의 상관</th><th>반전 스케줄</th><th>잔차 타이밍 (95% CI)</th></tr>
-</thead>
+<thead><tr><th>비교 신호</th><th>종목-일</th><th>\(q\)와의 상관</th><th>반전 스케줄</th><th>투영 후 잔차 타이밍 (95% CI)</th></tr></thead>
 <tbody>
-<tr><td>GRU 가격 모형</td><td>2,519</td><td>\(+0.114\)</td><td>\(+46.8\)</td><td>\(+43.9\;[38.1,49.5]\)</td></tr>
-<tr><td>GBDT-38 (가격 특징 38개)</td><td>13,717</td><td>\(+0.132\)</td><td>\(+45.7\)</td><td>\(+40.4\;[37.0,43.8]\)</td></tr>
-<tr><td>1기간 리버설</td><td>13,717</td><td>\(+0.286\)</td><td>\(+45.7\)</td><td>\(+38.9\;[36.0,41.8]\)</td></tr>
+<tr><td>GRU 가격 모델</td><td>2,519</td><td>\(+0.114\)</td><td>\(+46.8\)</td><td>\(+43.9\ [38.1,49.5]\)</td></tr>
+<tr><td>GBDT-38</td><td>13,717</td><td>\(+0.132\)</td><td>\(+45.7\)</td><td>\(+40.4\ [37.0,43.8]\)</td></tr>
+<tr><td>1기 리버설</td><td>13,717</td><td>\(+0.286\)</td><td>\(+45.7\)</td><td>\(+38.9\ [36.0,41.8]\)</td></tr>
 </tbody>
 </table>
 
-<p>상관은 모두 \(+0.3\) 미만이다. 사영 뒤에도 46.8 중 43.9, 45.7 중 40.4와 38.9가 남는다. 즉 에이전트의 행동열은 단순 리버설이나 통상적 가격 모형으로 환원되지 않는다. 리서치 수익률 라벨 기준으로, 되찾을 수 있는 방향성 구조가 별도로 존재한다.</p>
+<p>세 비교 신호 모두 반전 스케줄과의 상관이 0.3 미만이다. 종목 내 선형 성분을 걷어내도 원래 값의 83~94%가 남는다. 에이전트의 행동 구조가 단순 리버설의 재현이 아니라는 근거다.</p>
 
-<h3>5.4 자기조건화: 고집은 늘고 타이밍은 나빠진다</h3>
+<h3>5.4 자기 조건화 — 지속성이 오르고 타이밍이 나빠진다</h3>
 
 <table>
-<thead>
-<tr><th>자기조건화 조건</th><th>채점 N</th><th>타이밍 알파 (95% CI)</th><th>IC (95% CI)</th></tr>
-</thead>
+<thead><tr><th>자기 조건화 조건</th><th>채점 N</th><th>타이밍 알파 (95% CI)</th><th>IC (95% CI)</th></tr></thead>
 <tbody>
-<tr><td>지시문 없음, \(w=5\)</td><td>1,289</td><td>\(-59.9\;[-67.1,-53.0]\)</td><td>\(-0.0105\;[-0.0233,0.0017]\)</td></tr>
-<tr><td>확신 강조, \(w=5\)</td><td>1,011</td><td>\(-58.1\;[-67.6,-48.6]\)</td><td>\(+0.0028\;[-0.0082,0.0128]\)</td></tr>
-<tr><td>일관성, \(w=0\)</td><td>1,194</td><td>\(-62.8\;[-69.7,-56.0]\)</td><td>\(-0.0134\;[-0.0278,0.0009]\)</td></tr>
-<tr><td>일관성, \(w=1\)</td><td>1,054</td><td>\(-74.1\;[-81.5,-66.6]\)</td><td>\(-0.0125\;[-0.0260,0.0011]\)</td></tr>
-<tr><td>일관성, \(w=5\)</td><td>1,154</td><td>\(-66.7\;[-73.9,-59.7]\)</td><td>\(-0.0087\;[-0.0212,0.0036]\)</td></tr>
-<tr><td>일관성, \(w=12\)</td><td>1,184</td><td>\(-67.1\;[-75.0,-59.6]\)</td><td>\(-0.0076\;[-0.0190,0.0039]\)</td></tr>
-<tr><td>복합 + 일관성</td><td>1,169</td><td>\(-64.8\;[-73.6,-56.0]\)</td><td>\(+0.0002\;[-0.0130,0.0134]\)</td></tr>
-<tr><td>복합, 지시문 없음</td><td>1,274</td><td>\(-55.1\;[-62.4,-48.0]\)</td><td>\(-0.0137\;[-0.0261,-0.0021]\)</td></tr>
-<tr><td>인코더 off 복제</td><td>1,049</td><td>\(-70.2\;[-77.9,-62.5]\)</td><td>\(-0.0042\;[-0.0165,0.0081]\)</td></tr>
-<tr><td>인코더 단어 직접 주입</td><td>1,019</td><td>\(-51.5\;[-58.8,-44.5]\)</td><td>\(-0.0110\;[-0.0227,0.0011]\)</td></tr>
+<tr><td>지시문 없음, \(w=5\)</td><td>1,289</td><td>\(-59.9\ [-67.1,-53.0]\)</td><td>\(-0.0105\ [-0.0233,0.0017]\)</td></tr>
+<tr><td>확신 강조, \(w=5\)</td><td>1,011</td><td>\(-58.1\ [-67.6,-48.6]\)</td><td>\(+0.0028\ [-0.0082,0.0128]\)</td></tr>
+<tr><td>일관성, \(w=0\)</td><td>1,194</td><td>\(-62.8\ [-69.7,-56.0]\)</td><td>\(-0.0134\ [-0.0278,0.0009]\)</td></tr>
+<tr><td>일관성, \(w=1\)</td><td>1,054</td><td>\(-74.1\ [-81.5,-66.6]\)</td><td>\(-0.0125\ [-0.0260,0.0011]\)</td></tr>
+<tr><td>일관성, \(w=5\)</td><td>1,154</td><td>\(-66.7\ [-73.9,-59.7]\)</td><td>\(-0.0087\ [-0.0212,0.0036]\)</td></tr>
+<tr><td>일관성, \(w=12\)</td><td>1,184</td><td>\(-67.1\ [-75.0,-59.6]\)</td><td>\(-0.0076\ [-0.0190,0.0039]\)</td></tr>
+<tr><td>멀티모달 일관성</td><td>1,169</td><td>\(-64.8\ [-73.6,-56.0]\)</td><td>\(+0.0002\ [-0.0130,0.0134]\)</td></tr>
+<tr><td>멀티모달 지시문 없음</td><td>1,274</td><td>\(-55.1\ [-62.4,-48.0]\)</td><td>\(-0.0137\ [-0.0261,-0.0021]\)</td></tr>
+<tr><td>인코더 비활성 복제</td><td>1,049</td><td>\(-70.2\ [-77.9,-62.5]\)</td><td>\(-0.0042\ [-0.0165,0.0081]\)</td></tr>
+<tr><td>인코더 단어 문자 주입</td><td>1,019</td><td>\(-51.5\ [-58.8,-44.5]\)</td><td>\(-0.0110\ [-0.0227,0.0011]\)</td></tr>
 </tbody>
 </table>
 
-<p>열 개 조건 모두 신뢰구간이 0 아래다. 반면 IC는 열 중 아홉이 0을 포함한다. 종목 선택 능력은 사실상 없고, 경로 위 타이밍만 체계적으로 나쁘다는 뜻이다.</p>
+<p>메모 창을 \(w=0\)에서 \(w=1\)로 늘리면 타이밍이 \(-62.8\)에서 \(-74.1\) bp로 내려가고 포지션 전환은 2.5회에서 1.7회로 줄어든다. 후기 구간(날짜 296~354)에서도 같은 순서가 유지된다. \(w=0\) \(-68.3\), \(w=1\) \(-85.6\), \(w=5\) \(-82.9\), \(w=12\) \(-79.3\)이다. 창을 더 늘리면 지속성은 \(w=0\)보다 높게 유지되지만 타이밍은 \(w=1\)만큼 나쁘지 않다.</p>
 
-<p>지속성 결과가 특히 흥미롭다. 후반 기간 패널에서 \(w=0\)은 하루 전환 2.5회에 타이밍 \(-68.3\)bp다. \(w=1\)은 전환 1.7회에 \(-85.6\)bp다. 이전 메모를 하나 보여주는 것만으로 포지션을 덜 바꾸고, 그 덜 바꾼 결과가 더 나쁘다.</p>
-
-<p>흥미롭게도 \(w\)를 5, 12로 더 늘리면 전환은 1.8, 1.9회로 소폭 늘고 타이밍도 \(-82.9\), \(-79.3\)으로 \(w=0\) 쪽으로 되돌아온다. 메모 하나가 주는 앵커링이 가장 강하다는 해석이 가능하다.</p>
-
-<h3>5.5 지표 간 결합 구조가 바뀐다</h3>
+<p>IC는 10개 조건 중 9개의 신뢰구간이 0을 포함한다. 종목 선택 능력은 사실상 없다는 얘기다. 조건 수준 상관도 이를 뒷받침한다.</p>
 
 <table>
-<thead>
-<tr><th>지표 쌍</th><th>표준 12조건 Pearson</th><th>표준 Spearman</th><th>자기조건화 10조건 Pearson</th><th>자기조건화 Spearman</th></tr>
-</thead>
+<thead><tr><th>지표 쌍</th><th>표준 12조건 (Pearson / Spearman)</th><th>메모 10조건 (Pearson / Spearman)</th></tr></thead>
 <tbody>
-<tr><td>타이밍 vs 포트폴리오 수익</td><td>\(+0.355\)</td><td>\(+0.392\)</td><td>\(-0.066\)</td><td>\(+0.018\)</td></tr>
-<tr><td>타이밍 vs 횡단면 IC</td><td>\(+0.684\)</td><td>\(+0.399\)</td><td>\(-0.075\)</td><td>\(-0.212\)</td></tr>
-<tr><td>포트폴리오 수익 vs IC</td><td>\(+0.859\)</td><td>\(+0.881\)</td><td>\(+0.920\)</td><td>\(+0.867\)</td></tr>
+<tr><td>타이밍 vs 포트폴리오 수익</td><td>\(+0.355\) / \(+0.392\)</td><td>\(-0.066\) / \(+0.018\)</td></tr>
+<tr><td>타이밍 vs 횡단면 IC</td><td>\(+0.684\) / \(+0.399\)</td><td>\(-0.075\) / \(-0.212\)</td></tr>
+<tr><td>포트폴리오 수익 vs IC</td><td>\(+0.859\) / \(+0.881\)</td><td>\(+0.920\) / \(+0.867\)</td></tr>
 </tbody>
 </table>
 
-<p>표준 조건에서는 타이밍과 IC가 \(+0.684\)로 함께 움직인다. 메모를 넣으면 이 결합이 \(-0.075\)로 끊긴다. 반면 포트폴리오 수익과 IC의 관계는 두 경우 모두 강하게 유지된다. 자기조건화가 <strong>횡단면 선택과 무관한 별도의 축</strong>에서 경로 타이밍을 바꾼다는 증거다.</p>
+<p>표준 조건에서는 타이밍과 IC가 함께 움직이는데 메모 조건에서는 그 연결이 끊긴다. 자기 서사가 경로상 타이밍만 따로 밀어낸다.</p>
 
-<h3>5.6 궤적 사례</h3>
+<h3>5.5 잠재 상태 절제 실험</h3>
 
-<table>
-<thead>
-<tr><th>조건</th><th>롱 구간</th><th>노출도</th><th>롱 수익</th><th>플랫 수익</th><th>타이밍 알파</th></tr>
-</thead>
-<tbody>
-<tr><td>가격 텍스트</td><td>7/23</td><td>0.304</td><td>\(-576.7\)</td><td>\(+575.9\)</td><td>\(-576.4\)</td></tr>
-<tr><td>일관성, \(w=1\)</td><td>16/23</td><td>0.696</td><td>\(+359.4\)</td><td>\(+1{,}404.0\)</td><td>\(-867.3\)</td></tr>
-</tbody>
-</table>
+<p>공통 중심화 목적을 공유하는 그룹에서 소프트 토큰을 끄면 \(-21.0\) bp, 2토큰·92단어 기저는 \(-33.7\), 8토큰 \(-32.3\), 16토큰 \(-29.2\), 492단어 기저 \(-33.8\)이다. 별도 목적·평가틀 그룹에서는 학습 가능 인코더 \(-38.4\), 동결 인코더 \(-39.7\), 자유 임베딩 벡터 \(-2.1\ [-6.5,+2.6]\), 결합 변환 \(-28.7\), 2패스 메모 조건 체크포인트 \(-15.4\ [-24.6,-5.1]\)를 기록했다. 어휘 제약을 푼 자유 벡터만 0과 구분되지 않는다.</p>
 
-<p>두 번째 사례가 논문의 메시지를 압축한다. 에이전트는 1~7번 결정에서 관망하다 8번에서 롱으로 바꾸고 23번까지 유지한다. 직전 메모는 이렇게 적혀 있다. "내 강세 논지는 온전히 유효하다. 108.71 돌파는 확인되었고, 114.39로의 최근 되돌림은 건전한 조정일 뿐이다."</p>
-
-<p>결과적으로 롱 구간에서 \(+359.4\)bp를 벌었다. 롱온리 관점에서는 성공이다. 그러나 관망하던 구간이 \(+1{,}404.0\)bp의 상승을 담고 있었다. 노출도 보정 후 타이닝은 \(-867.3\)bp다. 하루 종일 강세 서사를 유지하면서 포지션은 단 한 번만 바꿨고, 그 한 번이 늦었다.</p>
-
-<h3>5.7 잠재 상태 제거 실험</h3>
-
-<p>소프트 토큰 실험에서 눈에 띄는 값은 <strong>자유 임베딩 벡터</strong> 조건이다. 어휘 제약을 없앤 이 조건은 \(-2.1\)bp \([-6.5,+2.6]\)로 0과 구분되지 않는다. 반면 92단어 기저의 2토큰 조건은 \(-33.7\)bp, 학습 가능 인코더는 \(-38.4\)bp다. 메모 조건부 체크포인트는 \(-15.4\)bp \([-24.6,-5.1]\), 노출도 0.397, 하루 전환 6.71회다.</p>
-
-<p>또 하나의 대비가 있다. 인코더가 가장 높게 가중한 단어를 문자 그대로 프롬프트에 넣으면 \(-51.5\)bp, 인코더를 끈 복제 조건은 \(-70.2\)bp다. 어휘적 렌더링과 임베딩 공간 조향이 서로 다른 효과를 낸다는 뜻이다.</p>
+<p>인코더가 뽑은 최고 가중치 단어를 문자 그대로 프롬프트에 넣으면 \(-51.5\), 인코더를 끈 복제 조건은 \(-70.2\)다. 어휘로 렌더링하는 것과 임베딩 공간에서 조향하는 것은 결과가 다르다.</p>
 
 <h2>6. 한계와 주의점</h2>
 
-<h3>6.1 저자가 명시한 한계</h3>
-
 <ul>
-<li><strong>리서치 수익률 라벨</strong>이지 체결 가능한 수익이 아니다. 거래비용, 차입 제약, 지연, 시장충격, 캐파시티가 전부 빠져 있다.</li>
-<li>상호작용 시장이 아니다. 주문 흐름의 내생성과 가격 피드백이 없다. Kyle 모형식 확장은 향후 과제로 남긴다.</li>
-<li><strong>사람과의 매칭 비교가 없다.</strong> 논문은 이 결과가 개인투자자 집단 행태의 실증이 아니라 "통제된 정책 프록시"라고 반복해 선을 긋는다.</li>
-<li>여러 조건이 서로 다른 표본 프레임, 프롬프트 문구, 평가 절차를 쓴다. 부호 반복만 설정 수준 증거로 삼고, 크기 비교는 프롬프트·표본·보상·추론 절차가 일치할 때만 한다.</li>
-<li>설계와 선택에서 분리된 별도 기간을 남겨두지 않았다. 백테스트 과적합 위험을 정량화하는 절차도 적용하지 않았다.</li>
+<li><strong>리서치 라벨이지 체결 가격이 아니다.</strong> 저자들이 명시한 최대 한계다. 거래비용, 시장충격, 지연, 차입 제약, 캐파시티가 전부 빠져 있다. \(-45\) bp가 실전에서 얼마나 남는지는 이 실험으로 답할 수 없다.</li>
+<li><strong>일부 조건에 선행 정보 냄새가 있다.</strong> 고해상 차트와 인코더 피처는 중첩 선행 수익률 라벨에서 역산한 1분 시계열을 쓴다. 정보 경계가 확실한 근거는 숫자 텍스트 조건뿐이다. 재현할 때는 텍스트 행을 기준으로 잡는 편이 안전하다.</li>
+<li><strong>채점 표본이 스위칭 부분집합이다.</strong> 항상 롱/항상 플랫 궤적은 0점이라 제외된다. 서사 조건에서 상수 경로가 211~489개씩 빠진다. 평균값은 "행동이 바뀐 날들"의 평균이지 전체 시도의 평균이 아니다.</li>
+<li><strong>프롬프트 호라이즌 표기가 어긋난다.</strong> 20분 상태 조건 프롬프트가 10분이라고 적혀 있고 시각 생성기는 \(239/T\)로 계산해 11봉 패널에 21분이라고 표시한다. 호스티드 프롬프트는 5분 Haiku 조건에도 10분 문구를 쓴다. 채점 간격 자체는 안 바뀌지만 호라이즌 간 비교의 해석이 흐려진다.</li>
+<li><strong>교차 모델 근거가 약하다.</strong> Haiku 10분 행은 165 종목-일에 불과하다. Granite 점추정치는 캐시 마이그레이션 후 셀 단위 기록에서 복구한 값이라 신뢰구간이 없다. 조악 이미지 행은 아카이브 라벨이 Qwen3-VL인데 런처 기본값은 Qwen3.5-9B라 체크포인트 확인이 미완이다.</li>
+<li><strong>후기 구간은 진짜 홀드아웃이 아니다.</strong> 일관성 지시문을 고를 때 쓴 넓은 패널에 후기 날짜가 포함돼 있다. 시간 확장일 뿐 선택 독립 검증은 아니라고 저자들이 적어뒀다.</li>
+<li><strong>표본 프레임이 제각각이다.</strong> 텍스트 13,710, 차트 14,937, 멀티모달 14,438처럼 종목-일 수가 다르다. 모달리티별 크기 차이를 인과로 읽으면 안 된다.</li>
+<li><strong>메모 조건 체크포인트의 학습 종료 시점이 불명이다.</strong> 실행 설정은 12스텝인데 진행 로그는 8스텝까지만 남았고 체크포인트에 스텝 필드가 없다.</li>
+<li><strong>단일 지역·단일 자산군이다.</strong> CSI-500 중형주 장중 경로 하나다. 미국 주식이나 다른 변동성 체제로 옮겼을 때 부호가 유지되는지는 본문에 없다.</li>
 </ul>
 
-<h3>6.2 재현·해석에서 걸릴 지점</h3>
+<h2>7. 시스템 트레이딩 적용 아이디어</h2>
+
+<h3>7.1 반전 스케줄을 후보 알파로 검증</h3>
+
+<p>가장 직접적인 활용은 \(q=1-p\)를 신호로 보고 실체결 프레임에서 재검증하는 것이다. 파이프라인은 이렇게 짠다.</p>
 
 <ul>
-<li><strong>채점 표본이 선택된 부분집합이다.</strong> 항상 롱이거나 항상 플랫인 궤적은 정의상 0점이라 제외한다. 즉 보고된 평균은 "전환을 한 궤적"만의 평균이다. 서사 조건은 1,500회 시도 중 상수 경로가 조건당 211~489개 발생한다.</li>
-<li><strong>실패 파싱 처리 규칙이 조건마다 다르다.</strong> 로컬 숫자·상태 조건의 실패는 플랫으로 매핑한다. 호스티드 모델의 실패는 직전 포지션을 유지한다. 이 차이가 교차 모델 비교를 오염시킬 여지가 있다.</li>
-<li><strong>프롬프트 문구와 채점 주기가 어긋난 행이 있다.</strong> 저자 본인이 부록에서 밝힌다. 로컬 상태 생성기는 20분 패널에 10분 문구를 표시하고, 시각 생성기는 11바 패널에 21분 문구를 낸다. 호스티드 프롬프트는 5분 Haiku 조건에도 10분 문구를 쓴다. 채점 구간 자체는 유지되지만 조건 간 비교는 흐려진다.</li>
-<li><strong>정밀 차트와 인코더 특징은 미래 라벨에 의존한다.</strong> 1분 시계열을 중첩 선행수익 라벨에서 역구성했기 때문이다. 저자들은 이를 인정하고, 순수한 정보 경계 증거는 숫자 텍스트 조건이라고 못 박는다. 차트·복합 결과를 룩어헤드 없는 결과로 읽으면 안 된다.</li>
-<li><strong>Granite 행은 캐시 마이그레이션 후 복구한 점추정</strong>이라 신뢰구간이 없다. 거친 이미지 행은 아카이브가 Qwen3-VL로 라벨링됐지만 런처 기본값은 Qwen3.5-9B였고, 체크포인트 식별자가 저장돼 있지 않다. 저자들이 미확인 항목으로 남겨 뒀다.</li>
-<li><strong>후반 기간 패널이 홀드아웃이 아니다.</strong> 일관성 지시문을 고를 때 그 날짜들을 포함한 넓은 패널을 썼다. 저자들은 이를 "선택 독립적 검증이 아니라 시계열적 연장"이라고 표현한다.</li>
-<li>메모 조건부 체크포인트는 설정상 12스텝이지만 진행 로그는 1~8스텝만 남았고, 체크포인트에 스텝 필드가 없다. 정지 시점이 불확정이다.</li>
-<li>단일 시장(중국 중형주)이다. 다른 시장·자산군으로의 일반화는 검증되지 않았다.</li>
+<li><strong>입력</strong> — 1분봉을 10분 비중첩 구간으로 집계하고 첫 봉을 100으로 지수화한 최근 20개 값. 종목 코드·날짜·절대가는 제거한다. 논문의 숫자 텍스트 조건과 동일한 구성이라 선행 정보가 섞이지 않는다.</li>
+<li><strong>주기</strong> — 10분. 5분은 회전이 늘고 20분은 논문 프롬프트 표기 문제가 있다.</li>
+<li><strong>출력</strong> — 구간별 \(p_{idt}\), 그리고 반전값 \(1-p_{idt}\)를 진입 신호로.</li>
+<li><strong>메모 창</strong> — \(w=1\), 일관성 지시문. 이 조합이 타이밍 \(-74.1\) bp에 전환 1.7회로 회전 대비 신호 강도가 가장 높다.</li>
 </ul>
 
-<h3>6.3 한 가지 개념적 주의</h3>
+<p>비용 감내 여부를 대충 재보면 이렇다. 종목-일당 45 bp를 23구간으로 나누면 구간당 평균 약 2 bp다. 전환 2.5회는 왕복 1.25회 남짓이고 A주 매도 인지세·수수료·스프레드를 왕복 10~15 bp로 잡으면 여유가 크지 않다. 이 산술은 본문에 없는 자체 추정이므로 실제 체결가 백테스트로 갈아엎어야 한다. 전환이 1.7회로 더 적은 \(w=1\) 조건이 비용 쪽에서는 유리하다.</p>
 
-<p>타이밍 알파가 음수라는 사실이 곧 "이 에이전트를 반대로 매매하면 돈이 된다"를 뜻하지 않는다. 상보 스케줄은 정의상 부호를 뒤집을 뿐이다. 논문도 이를 "부호 진단"이라 부른다. 반전 전략의 실효성은 거래비용과 시장충격을 넣어야 판정할 수 있고, 그건 향후 과제로 남았다.</p>
+<h3>7.2 LLM을 리테일 흐름 프록시로 쓰기</h3>
 
-<h2>7. 실무 적용 아이디어</h2>
+<p>에이전트를 알파 생성기가 아니라 "예측 가능한 참가자의 시뮬레이터"로 돌리는 쪽이 더 방어적이다. 매 10분 종목별로 \(p_{idt}\)를 뽑아 횡단면 롱 비중을 집계하면 가격 반응형 수요의 대리 지표가 된다. 이 지표가 급등하는 종목·시간대를 유동성 공급 기회로 보거나, 자기 주문의 체결 스케줄을 그 반대편에 배치하는 식이다. IC가 0 근처라 종목 선택 신호로는 쓸 수 없고 시점 신호로만 의미가 있다.</p>
 
-<h3>7.1 LLM 에이전트를 평가할 때 지표를 분해하라</h3>
+<h3>7.3 자체 LLM 트레이딩 스택의 진단 도구</h3>
 
-<p>사내에서 LLM 트레이딩 에이전트를 시험한다면 누적수익만 보면 안 된다. 식 (2)의 분해를 그대로 계산기로 쓰면 된다. 종목-일마다 노출도 \(\bar{p}\)와 타이밍 \(A\)를 따로 뽑는다. 상승장에서 그냥 오래 들고 있어 난 수익과, 진입·청산 실력에서 난 수익을 분리하는 데 걸리는 시간은 몇 시간이면 충분하다.</p>
+<p>식 (2)의 분해를 운영 대시보드에 그대로 넣는 방식은 비용이 거의 안 든다. 어떤 LLM 에이전트든 일별 손익을 노출도 항과 타이밍 항으로 쪼개 놓으면, 상승장에서 수익이 나는 동안에도 타이밍 항이 음수로 누적되는지 감시할 수 있다. 이 값이 계속 음수면 그 에이전트의 진입·청산 판단은 잡음이 아니라 체계적 역방향이고, 시장이 횡보로 바뀌는 순간 손실로 드러난다.</p>
 
-<p>필요한 데이터는 단순하다. 에이전트의 시점별 포지션 이력과, 각 시점 직후의 구간 수익률이면 된다. 체결가 대신 미드프라이스로 시작해도 진단 목적에는 충분하다.</p>
+<h3>7.4 프롬프트 설계 규칙</h3>
 
-<h3>7.2 셔플 대조군을 표준 절차로 넣어라</h3>
+<ul>
+<li>메모·일관성 요구는 회전을 줄이는 대신 잘못된 방향을 고착시킨다. 회전 억제가 목적이라면 프롬프트 대신 별도 히스테리시스 레이어로 처리하고 판단 컨텍스트에는 자기 서사를 넣지 않는 편이 낫다.</li>
+<li>계정 요약(누적 손익, 미실현 수익)을 넣은 조건이 5분에서 \(-53.2\)로 가장 나빴다. 손익 피드백이 판단을 개선하지 않는다는 신호라 자기 성과를 프롬프트에 넣기 전에 A/B로 확인해야 한다.</li>
+<li>차트 단독(\(-29.9\))이 텍스트(\(-45.7\))나 멀티모달(\(-48.9\))보다 덜 나쁘다. 다만 표본 프레임이 다르고 차트 조건에 재구성 입력 문제가 있어 확정적 결론으로 쓰긴 이르다.</li>
+</ul>
 
-<p>이 논문에서 가장 재사용 가치가 높은 도구다. 저장된 행동열을 (a) 전역 셔플, (b) 같은 날 내 셔플로 두 번 섞은 뒤 같은 지표를 계산한다. 원본과 셔플의 차이가 곧 "시간 정렬에서 온 성분"이다.</p>
+<h3>7.5 검증 순서 제안</h3>
 
-<p>이 절차는 LLM 에이전트에만 쓸 이유가 없다. 룰 기반 전략이든 ML 시그널이든 똑같이 적용된다. 노출도 편향과 타이밍 기여를 자동으로 갈라 준다.</p>
-
-<h3>7.3 자기조건화 메모리를 성능 개선책으로 가정하지 말라</h3>
-
-<p>실무에서 흔한 설계가 "직전 판단을 컨텍스트에 넣어 일관성을 높이자"다. 이 논문은 그 설계가 회전율을 낮추는 동시에 타이밍을 악화시킨다고 보고한다. \(w=0\to1\)에서 전환 2.5→1.7회, 타이밍 \(-62.8\to-74.1\)bp다.</p>
-
-<p>따라서 메모리 윈도우 \(w\)를 <strong>튜닝 대상 하이퍼파라미터</strong>로 다뤄야 한다. 기본값으로 켜 두면 안 된다. 최소한 \(w\in\{0,1,5\}\)를 나란히 돌려 회전율과 타이밍을 함께 보는 절차를 붙이자.</p>
-
-<p>메모리 조건에서 IC는 거의 변하지 않는다는 점도 실무적으로 중요하다. 종목 선택 모듈과 타이밍 모듈을 분리 설계해야 할 근거가 된다. 서사적 자기조건화는 타이밍 축만 건드린다.</p>
-
-<h3>7.4 기존 시그널과의 중첩을 반드시 재라</h3>
-
-<p>새 시그널을 얻었다면 5.3절의 절차를 그대로 쓴다. 종목 내에서 중심화한 뒤 기존 시그널(리버설, GBDT, RNN 등)에 선형 사영하고, 잔차를 다시 채점한다. 상관이 낮아도 잔차 성과가 남는지가 핵심이다.</p>
-
-<p>이 논문의 경우 1기간 리버설과의 상관이 \(+0.286\)인데도 잔차가 45.7 중 38.9로 남았다. 상관만 보고 "이건 그냥 리버설"이라고 결론 내렸다면 놓쳤을 정보다.</p>
-
-<h3>7.5 리스크 관리 관점의 활용</h3>
-
-<p>자동화된 LLM 실행 에이전트를 운용한다면, 이 논문은 감사 도구를 제공한다. 에이전트의 행동열은 고정 경로에서 진단 가능한 구조를 남긴다. 즉 <strong>외부 참가자도 같은 진단을 할 수 있다</strong>는 뜻이다. 예측 가능한 정책은 대응당한다.</p>
-
-<p>실무 조치로는 세 가지를 제안할 수 있다. 진입 타이밍에 무작위 지연을 넣기, 노출도 목표를 외생적으로 고정해 타이밍 자유도를 줄이기, 그리고 행동열의 자기상관을 상시 모니터링하기다. 논문 자체가 이 조치들을 검증한 것은 아니므로, 여기까지는 응용 제안이다.</p>
-
-<h3>7.6 실행 전 반드시 확인할 것</h3>
-
-<p>논문 수치는 거래비용 이전이다. 10분 주기에 하루 2~7회 전환이면 회전율이 상당하다. 중국 중형주 왕복 비용을 20~30bp로 잡으면, \(-45\)bp 수준의 타이밍 신호는 비용 안에서 사라질 수 있다. 반전 전략을 검토한다면 Almgren-Chriss류 실행 비용 모형을 먼저 붙여야 한다.</p>
+<ol>
+<li>숫자 텍스트 10분 조건만으로 국내 또는 미국 유니버스에 부호 재현을 확인한다. 셔플 대조를 반드시 같이 돌려 순차 정렬 기여분을 분리한다.</li>
+<li>반전 스케줄에서 1기 리버설·모멘텀·일중 계절성을 종목 내 선형 투영으로 제거하고 잔차 타이밍이 남는지 본다. 논문 기준으로는 83~94%가 남았다.</li>
+<li>잔차가 남으면 그때 체결가·인지세·스프레드·충격을 얹은 실행 시뮬레이션으로 넘어간다. 이 단계에서 대부분 죽을 가능성이 크다.</li>
+<li>설계에서 완전히 배제한 기간을 따로 남겨 선택 독립 평가를 한 번 더 한다. 논문의 후기 구간은 이 조건을 만족하지 않는다.</li>
+</ol>
 
 <h2>8. 함께 볼 만한 개념</h2>
 
 <ul>
-<li><strong>타이밍 vs 셀렉션 분해</strong> — Brinson류 성과귀속, 그리고 이 논문의 식 (2) 분해</li>
-<li><strong>시장미시구조 기본서</strong> — Kyle(1985) 연속 경매와 내부자 거래, Grossman-Stiglitz(1980) 정보 효율성의 불가능성</li>
-<li><strong>개인투자자 행태금융</strong> — Barber-Odean의 과잉거래·관심 효과, Hvidkjaer(2008) 소액 거래와 횡단면 수익, Ben-David et al.(2018) 무의미한 피드백과 위험 감수</li>
-<li><strong>LLM 트레이딩 에이전트 프레임워크</strong> — FinMem(계층적 메모리), FinCon(개념적 언어 강화학습), TradingAgents(다중 역할 에이전트)</li>
-<li><strong>금융 LLM 벤치마크</strong> — FinBen, BizBench, FinSearchComp, FinanceMath</li>
-<li><strong>동결 모델 조건화</strong> — Prefix-Tuning(Li-Liang, 2021), Prompt Tuning(Lester et al., 2021), 소프트 토큰과 저차원 어댑터</li>
-<li><strong>자기지도 시계열 표현</strong> — VICReg(분산-불변성-공분산 정규화), GRU 인코더</li>
-<li><strong>LLM을 실험 피험자로 쓰는 연구</strong> — Generative Agents(Park et al., 2023), SimBench, AgentBench</li>
-<li><strong>백테스트 신뢰성</strong> — Bailey et al.(2017) 백테스트 과적합 확률, Almgren-Chriss(2001) 최적 실행</li>
-<li><strong>이산 행동의 미분 가능 학습</strong> — Straight-Through Estimator(Bengio et al., 2013)</li>
+<li>Grinblatt–Titman 공분산형 포트폴리오 성과 측도 — 이 논문의 타이밍 알파와 같은 \(\mathrm{Cov}(w_t, r_{t+1})\) 구조</li>
+<li>Treynor–Mazuy, Henriksson–Merton 마켓 타이밍 회귀 — 노출도와 타이밍을 분리하는 고전적 대안</li>
+<li>Kyle (1985) 연속 경매와 인사이더 트레이딩, Grossman–Stiglitz (1980) 정보 효율성 불가능성 — 주문 흐름의 정보 전달</li>
+<li>Hvidkjaer (2008) 소액 거래와 횡단면 수익률, Barber–Odean (2000, 2008) 개인 투자자 매매 성과와 주의 효과</li>
+<li>Ben-David 외 (2018) 무정보 피드백과 리스크 테이킹, Benamar (2019) 시장 데이터 동시 표시 효과</li>
+<li>Almgren–Chriss 최적 집행, Bailey 외 백테스트 과적합 확률 — 이 결과를 실전으로 옮길 때 반드시 통과해야 할 관문</li>
+<li>Prefix-tuning(Li–Liang), Prompt tuning(Lester 외) — 동결 LLM에 연속 상태를 주입하는 소프트 토큰 기법</li>
+<li>VICReg 자기지도 학습, 스트레이트-스루 추정기(Bengio 외) — 인코더 사전학습과 이산 행동 역전파</li>
+<li>FinMem, FinCon, TradingAgents — 메모리·반성·역할 분담을 갖춘 LLM 트레이딩 에이전트 계열</li>
+<li>SimBench, AgentBench, Generative Agents — LLM을 실험 피험자로 쓰는 행동 시뮬레이션 프레임</li>
+<li>키워드: exposure-matched timing, self-conditioning, action trajectory shuffling, signal orthogonalization, order flow toxicity(VPIN), adverse selection</li>
 </ul>
   <div class="abs" style="margin-top:32px"><b>ORIGINAL ABSTRACT</b>In financial markets, a sequential policy that reacts systematically to price movements may become predictable to other market participants. This paper studies whether large language model (LLM) agents exhibit such directional structure through RetailAgent, an experimental framework in which an LLM observes anonymized intraday equity price histories and permitted state, then repeatedly chooses long (hold the stock) or flat (stay out) before the subsequent interval return is revealed. We compare returns during long and flat intervals along the same stock&#x27;s intraday path after removing the overall fraction of long decisions. This exposure-matched measure reveals persistent negative timing across modality, horizon, state, and model family. Shuffling saved action sequences substantially attenuates the effect, showing that alignment between actions and subsequent returns drives the negative score. Feeding self-authored memories into decisions further increases policy persistence, while timing becomes more negative among stock-days on which the agent uses both actions. These results reveal stable, recoverable directional structure in sequential LLM financial decisions and a behavioral signal for studying how another participant could respond to a predictable policy.</div>
   <footer><p>로컬 Claude Code 로 생성한 요약 리포트입니다. 인용 전 반드시 원문을 확인하세요.</p></footer>

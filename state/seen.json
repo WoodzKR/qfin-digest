@@ -836,6 +836,9 @@
     "primary": "cs.AI",
     "published": "2026-08-28T14:53:08Z",
     "report_path": "2608.28399.html",
+    "report_paths": {
+      "ko": "2608.28399.ko.html"
+    },
     "src": "arxiv",
     "src_cats": [
       "q-fin.TR"
