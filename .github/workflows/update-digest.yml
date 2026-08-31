@@ -1,0 +1,115 @@
+name: Update digest
+
+# Runs the whole pipeline on GitHub's servers, so the digest refreshes whether or
+# not any particular machine is switched on.
+#
+#   - "Run workflow" on the Actions tab triggers it by hand (works from a phone).
+#   - The schedule below runs it on weekday mornings, Seoul time.
+#
+# Requires an ANTHROPIC_API_KEY repository secret: the summarizer is the Claude
+# Code CLI, and a CI runner has no interactive login to fall back on.
+#
+# SSRN is best-effort here. Its Cloudflare challenge is usually refused from
+# datacentre IPs, so the default source list leaves it out; the run does not fail
+# if you opt in and it gets blocked.
+
+on:
+  workflow_dispatch:
+    inputs:
+      source:
+        description: "Sources (all, or a comma-separated list)"
+        default: "arxiv,quantpedia,man"
+        type: string
+      days:
+        description: "Recent listing dates per paper source"
+        default: "2"
+        type: string
+      deep:
+        description: "Pre-build deep reports for the top N (0 to skip)"
+        default: "0"
+        type: string
+      lang:
+        description: "Deep report language"
+        default: "both"
+        type: choice
+        options: [ko, en, both]
+  schedule:
+    # 21:00 UTC = 06:00 KST, Monday to Friday
+    - cron: "0 21 * * 1-5"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-digest
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pypdf playwright
+          npm i -g @anthropic-ai/claude-code
+          claude --version
+
+      - name: Install Chrome and Xvfb (SSRN only)
+        if: contains(inputs.source, 'ssrn') || inputs.source == 'all'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+          google-chrome --version || true
+
+      - name: Run the pipeline
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SOURCE: ${{ inputs.source || 'arxiv,quantpedia,man' }}
+          DAYS: ${{ inputs.days || '2' }}
+          DEEP: ${{ inputs.deep || '0' }}
+          LANG_OPT: ${{ inputs.lang || 'both' }}
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "::error::ANTHROPIC_API_KEY secret is not set."
+            echo "Add it under Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+          RUN="python run.py all --source $SOURCE --days $DAYS --deep $DEEP \
+               --lang $LANG_OPT --no-open --workers 3"
+          if echo "$SOURCE" | grep -qE 'ssrn|all'; then
+            xvfb-run -a --server-args="-screen 0 1280x900x24" \
+              $RUN --show-browser --chrome /usr/bin/google-chrome
+          else
+            $RUN
+          fi
+
+      - name: Commit and push
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nothing changed."
+            exit 0
+          fi
+          git commit -m "digest $(date -u +%Y-%m-%d) — automated update"
+          git push
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "### Digest run" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          python run.py status >> $GITHUB_STEP_SUMMARY 2>&1 || true

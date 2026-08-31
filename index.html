@@ -1,14 +1,15 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" data-lang="ko">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>퀀트 논문 다이제스트</title>
+<title>Quant Paper Digest</title>
 <style>
 :root{
   --bg:#f6f7f9; --panel:#ffffff; --panel-2:#fbfcfd; --ink:#16191d; --muted:#5c6672;
   --line:#e2e6ea; --accent:#3b6ef0; --accent-soft:#eaf0fe;
   --pm:#3b6ef0; --st:#0f9d76; --tr:#d4791f; --ssrn:#8b5cf6; --other:#7a68c9;
+  --qp:#c0392b; --man:#0f766e; --aa:#1d4ed8; --ms:#a16207; --qc:#6d28d9;
   --star:#f0a91b; --shadow:0 1px 2px rgba(16,24,40,.06),0 4px 14px rgba(16,24,40,.05);
 }
 @media (prefers-color-scheme:dark){
@@ -16,6 +17,7 @@
     --bg:#101317; --panel:#181c22; --panel-2:#1e232a; --ink:#e7ebf0; --muted:#98a3b0;
     --line:#2a3038; --accent:#7ea3ff; --accent-soft:#1d2637;
     --pm:#7ea3ff; --st:#4bd6a8; --tr:#f0ad5e; --ssrn:#b18cff; --other:#b0a0f0;
+    --qp:#f08a7c; --man:#3fc4b4; --aa:#8fb2ff; --ms:#e3b341; --qc:#c4a6ff;
     --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.25);
   }
 }
@@ -25,6 +27,11 @@ body{margin:0;background:var(--bg);color:var(--ink);
   -webkit-font-smoothing:antialiased}
 .wrap{max-width:1000px;margin:0 auto;padding:32px 20px 140px}
 a{color:var(--accent)}
+
+/* language switching: only the active language is displayed */
+[data-l]{display:none}
+html[data-lang="ko"] [data-l="ko"]{display:revert}
+html[data-lang="en"] [data-l="en"]{display:revert}
 
 header.top{margin-bottom:24px}
 h1{font-size:26px;margin:0 0 6px;letter-spacing:-.02em}
@@ -38,14 +45,17 @@ h1{font-size:26px;margin:0 0 6px;letter-spacing:-.02em}
   padding:12px 0 10px;margin:20px 0 8px;border-bottom:1px solid var(--line)}
 .row{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:7px}
 .row:last-child{margin-bottom:0}
-.rowlabel{font-size:11.5px;color:var(--muted);font-weight:700;letter-spacing:.06em;
-  min-width:38px}
+.rowlabel{font-size:11.5px;color:var(--muted);font-weight:700;letter-spacing:.06em;min-width:38px}
 .chip{border:1px solid var(--line);background:var(--panel);color:var(--muted);
   border-radius:999px;padding:5px 12px;font-size:12.5px;cursor:pointer;
   font-family:inherit;transition:.12s;white-space:nowrap}
 .chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);
   color:var(--accent);font-weight:600}
 .chip:hover{border-color:var(--accent)}
+.langsel{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.langsel button{border:0;background:var(--panel);color:var(--muted);padding:5px 13px;
+  font:inherit;font-size:12.5px;cursor:pointer;transition:.12s}
+.langsel button[aria-pressed="true"]{background:var(--accent);color:#fff;font-weight:700}
 #q{flex:1;min-width:180px;padding:7px 12px;border:1px solid var(--line);border-radius:8px;
   background:var(--panel);color:var(--ink);font:inherit;font-size:13.5px}
 #q:focus{outline:2px solid var(--accent);outline-offset:-1px}
@@ -55,7 +65,7 @@ select{padding:7px 10px;border:1px solid var(--line);border-radius:8px;
 
 h2.day{font-size:15px;margin:30px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--line);
   color:var(--muted);font-weight:600;letter-spacing:.02em}
-h2.day span{color:var(--ink)}
+h2.day span.d{color:var(--ink)}
 
 .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;
   padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow)}
@@ -64,7 +74,9 @@ h2.day span{color:var(--ink)}
 .badge{font-size:11px;font-weight:700;letter-spacing:.04em;padding:2.5px 8px;
   border-radius:5px;color:#fff}
 .b-PM{background:var(--pm)} .b-ST{background:var(--st)} .b-TR{background:var(--tr)}
-.b-ssrn{background:var(--ssrn)} .b-XX{background:var(--other)}
+.b-ssrn{background:var(--ssrn)} .b-qp{background:var(--qp)} .b-man{background:var(--man)}
+.b-aa{background:var(--aa)} .b-ms{background:var(--ms)} .b-qc{background:var(--qc)}
+.b-XX{background:var(--other)}
 .badge.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);font-weight:600}
 .stars{color:var(--star);font-size:12.5px;letter-spacing:1px;margin-left:auto}
 .stars i{color:var(--line);font-style:normal}
@@ -80,7 +92,7 @@ h2.day span{color:var(--ink)}
 .detail[hidden]{display:none}
 .detail ul{margin:0 0 12px;padding-left:19px}
 .detail li{margin-bottom:4px}
-.kv{display:grid;grid-template-columns:76px 1fr;gap:5px 10px;font-size:13.5px;margin-bottom:12px}
+.kv{display:grid;grid-template-columns:92px 1fr;gap:5px 10px;font-size:13.5px;margin-bottom:12px}
 .kv dt{color:var(--muted);font-weight:600}
 .kv dd{margin:0}
 .keys{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
@@ -90,14 +102,16 @@ h2.day span{color:var(--ink)}
   padding:11px 13px;font-size:13px;color:var(--muted);line-height:1.7}
 .abs b{color:var(--ink);display:block;margin-bottom:4px;font-size:12px;letter-spacing:.03em}
 
-.actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;align-items:center}
+.actions .sep{width:1px;height:18px;background:var(--line);margin:0 2px}
 .btn{border:1px solid var(--line);background:var(--panel);color:var(--muted);
   border-radius:7px;padding:5.5px 12px;font-size:12.5px;cursor:pointer;
   font-family:inherit;text-decoration:none;display:inline-block;transition:.12s}
 .btn:hover{border-color:var(--accent);color:var(--accent)}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
 .btn.primary:hover{filter:brightness(1.08);color:#fff}
-.btn.queued{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:600}
+.btn.queued{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);
+  font-weight:600}
 .btn.done{border-color:var(--st);color:var(--st)}
 .btn.failed{border-color:var(--tr);color:var(--tr)}
 #livebadge{font-size:11.5px;color:var(--st);font-weight:700;letter-spacing:.03em;
@@ -111,8 +125,9 @@ h2.day span{color:var(--ink)}
   padding:12px 20px;display:none}
 .bar.on{display:block}
 .bar-in{max-width:1000px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-.bar code{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;
-  padding:4px 8px;font-size:12px;flex:1;min-width:200px;overflow:auto;white-space:nowrap}
+.bar pre{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;
+  padding:6px 9px;font-size:12px;flex:1;min-width:200px;overflow:auto;margin:0;
+  white-space:pre;line-height:1.5}
 .empty{color:var(--muted);text-align:center;padding:50px 0}
 footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);
   color:var(--muted);font-size:12px}
@@ -132,22 +147,38 @@ h2.sec{font-size:15px;color:var(--muted);margin:0 0 12px;letter-spacing:.02em}
 <body>
 <div class="wrap">
   <header class="top">
-    <h1>퀀트 논문 다이제스트</h1>
-    <p class="sub">arXiv q-fin.PM/ST/TR · SSRN 7개 eJournal ·
-       갱신 2026-08-31 15:16</p>
+    <h1><span data-l="ko">퀀트 논문 다이제스트</span><span data-l="en">Quant Paper Digest</span></h1>
+    <p class="sub">arXiv q-fin.PM/ST/TR · SSRN 7 eJournals ·
+       Quantpedia · Man Group ·
+       <span data-l="ko">갱신</span><span data-l="en">updated</span> 2026-08-31 15:58</p>
     <div class="stats">
-      <div class="stat"><b>1</b>개 다이제스트</div>
-      <div class="stat"><b>3</b>편 상세 리포트</div>
+      <div class="stat"><b>1</b><span data-l="ko">개 다이제스트</span><span data-l="en"> digests</span></div>
+      <div class="stat"><b>7</b><span data-l="ko">편 상세 리포트</span><span data-l="en"> deep reports</span></div>
     </div>
+    <div class="row" style="margin-top:14px"><div class="langsel"><button data-act="lang" data-val="ko" aria-pressed="true">한국어</button><button data-act="lang" data-val="en" aria-pressed="false">English</button></div></div>
   </header>
 
-  <h2 class="sec">날짜별 다이제스트</h2>
-  <ul class="idx"><li><a href="report/qfin-digest-20260831.html">2026년 08월 31일 다이제스트</a> <span class="badge b-ssrn">최신</span></li></ul>
+  <h2 class="sec"><span data-l="ko">날짜별 다이제스트</span><span data-l="en">Daily digests</span></h2>
+  <ul class="idx"><li><a href="report/qfin-digest-20260831.html"><span data-l="ko">2026년 08월 31일 다이제스트</span><span data-l="en">31 Aug 2026 digest</span></a> <span class="badge b-ssrn"><span data-l="ko">최신</span><span data-l="en">latest</span></span></li></ul>
 
-  <h2 class="sec">상세 리포트</h2>
-  <ul class="idx"><li><a href="report/paper/ssrn-7375498.html">Identifying and Forecasting US Equity Market Regimes: An Unsupervised and Supervised Machine Learning Analysis of Bull and Bear Market States, 2010-2025 A Research Paper on Quantitative Finance and Market Regime Classification</a> <span class="key">ssrn-7375498</span></li><li><a href="report/paper/ssrn-7363482.html">The Tail Is the Only Signal: Flush Reversion in Equity Indices and Crypto Perpetual Futures</a> <span class="key">ssrn-7363482</span></li><li><a href="report/paper/2608.28399.html">RetailAgent: Structured Adverse Timing in Self-Conditioned Multimodal LLM Trading Agents</a> <span class="key">2608.28399</span></li></ul>
+  <h2 class="sec"><span data-l="ko">상세 리포트</span><span data-l="en">Deep reports</span></h2>
+  <ul class="idx"><li><a href="report/paper/man-views-from-the-floor-2026-28-July.en.html">The Yield Trap Hiding in Junior Bank Bonds</a> <span class="key">English</span></li><li><a href="report/paper/man-views-from-the-floor-2026-28-July.ko.html">The Yield Trap Hiding in Junior Bank Bonds</a> <span class="key">한국어</span></li><li><a href="report/paper/qp-boundaries-of-time-series-momentum.en.html">Boundaries of Time Series Momentum</a> <span class="key">English</span></li><li><a href="report/paper/qp-boundaries-of-time-series-momentum.ko.html">Boundaries of Time Series Momentum</a> <span class="key">한국어</span></li><li><a href="report/paper/ssrn-7375498.ko.html">Identifying and Forecasting US Equity Market Regimes: An Unsupervised and Supervised Machine Learning Analysis of Bull and Bear Market States, 2010-2025 A Research Paper on Quantitative Finance and Market Regime Classification</a> <span class="key">한국어</span></li><li><a href="report/paper/ssrn-7363482.ko.html">The Tail Is the Only Signal: Flush Reversion in Equity Indices and Crypto Perpetual Futures</a> <span class="key">한국어</span></li><li><a href="report/paper/2608.28399.ko.html">RetailAgent: Structured Adverse Timing in Self-Conditioned Multimodal LLM Trading Agents</a> <span class="key">한국어</span></li></ul>
 
-  <footer><p>로컬 Claude Code 로 생성한 요약입니다. 원문 저작권은 각 저자에게 있습니다.</p></footer>
+  <footer><p><span data-l="ko">로컬 Claude Code 로 생성한 요약입니다. 원문 저작권은 각 저자에게 있습니다.</span><span data-l="en">Summaries generated locally with Claude Code. Papers remain their authors’ copyright.</span></p></footer>
 </div>
+<script>
+(function(){
+  const K='qfin-digest-lang';
+  let l='ko'; try{l=localStorage.getItem(K)||'ko'}catch(e){}
+  const set=v=>{l=v;document.documentElement.setAttribute('data-lang',v);
+    document.documentElement.setAttribute('lang',v);
+    try{localStorage.setItem(K,v)}catch(e){}
+    document.querySelectorAll('.langsel button').forEach(b=>
+      b.setAttribute('aria-pressed',String(b.dataset.val===v)));};
+  document.addEventListener('click',e=>{
+    const t=e.target.closest('[data-act="lang"]'); if(t)set(t.dataset.val);});
+  set(l);
+})();
+</script>
 </body>
 </html>

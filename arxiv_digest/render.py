@@ -1,4 +1,9 @@
-"""seen.json → 단일 HTML 리포트 (MathJax 외에는 외부 의존 없음)."""
+"""Render ``seen.json`` into a single self-contained HTML digest.
+
+The page carries both languages at once. Everything language-specific is tagged
+``data-l="ko"`` / ``data-l="en"`` and CSS shows only the one matching
+``<html data-lang>``, so switching is instant and needs no rebuild.
+"""
 
 from __future__ import annotations
 
@@ -7,23 +12,40 @@ from collections import Counter
 from datetime import datetime
 from pathlib import Path
 
-from .config import (ABS_URL, CATEGORIES, PAPER_DIR, PDF_URL, REPORT_DIR, SSRN_ABS_URL,
-                     SSRN_JOURNALS, SSRN_PDF_URL, ensure_dirs)
+from .config import (ABS_URL, ALPHAARCH_LABEL, BLOG_LABELS, BLOG_SOURCES, CATEGORIES, LANGS,
+                     MACROSYNERGY_LABEL, MAN_LABEL, PAPER_DIR, PDF_URL, QUANTOCRACY_LABEL,
+                     QUANTPEDIA_LABEL, REPORT_DIR, SOURCES, SSRN_ABS_URL, SSRN_JOURNALS,
+                     SSRN_PDF_URL, ensure_dirs, report_name)
+from .store import text as summary_text
 
 CAT_SHORT = {"q-fin.PM": "PM", "q-fin.ST": "ST", "q-fin.TR": "TR"}
 SSRN_SHORTS = {short: name for short, name in SSRN_JOURNALS.values()}
-SRC_LABEL = {"arxiv": "arXiv", "ssrn": "SSRN"}
+BLOG_SHORTS = dict(BLOG_LABELS)
+SRC_LABEL = {"arxiv": "arXiv", "ssrn": "SSRN", "quantpedia": QUANTPEDIA_LABEL,
+             "man": MAN_LABEL, "alphaarchitect": ALPHAARCH_LABEL,
+             "macrosynergy": MACROSYNERGY_LABEL, "quantocracy": QUANTOCRACY_LABEL}
+SRC_BADGE_CLASS = {"ssrn": "b-ssrn", "quantpedia": "b-qp", "man": "b-man",
+                   "alphaarchitect": "b-aa", "macrosynergy": "b-ms",
+                   "quantocracy": "b-qc"}
+LANG_BUTTON = {"ko": "한국어", "en": "English"}
 
 
 def abs_url(entry: dict) -> str:
-    if entry.get("src") == "ssrn":
+    src = entry.get("src", "arxiv")
+    if src == "ssrn":
         return entry.get("abs_url") or SSRN_ABS_URL.format(id=entry.get("ext_id", ""))
+    if src in BLOG_SOURCES:
+        return entry.get("abs_url", "")
     return ABS_URL.format(id=entry.get("ext_id") or entry.get("id", ""))
 
 
 def pdf_url(entry: dict) -> str:
-    if entry.get("src") == "ssrn":
+    """Empty string when the source has no PDF (blog posts)."""
+    src = entry.get("src", "arxiv")
+    if src == "ssrn":
         return entry.get("pdf_url") or SSRN_PDF_URL.format(id=entry.get("ext_id", ""))
+    if src in BLOG_SOURCES:
+        return entry.get("pdf_url", "")
     return PDF_URL.format(id=entry.get("ext_id") or entry.get("id", ""))
 
 
@@ -32,6 +54,7 @@ CSS = """
   --bg:#f6f7f9; --panel:#ffffff; --panel-2:#fbfcfd; --ink:#16191d; --muted:#5c6672;
   --line:#e2e6ea; --accent:#3b6ef0; --accent-soft:#eaf0fe;
   --pm:#3b6ef0; --st:#0f9d76; --tr:#d4791f; --ssrn:#8b5cf6; --other:#7a68c9;
+  --qp:#c0392b; --man:#0f766e; --aa:#1d4ed8; --ms:#a16207; --qc:#6d28d9;
   --star:#f0a91b; --shadow:0 1px 2px rgba(16,24,40,.06),0 4px 14px rgba(16,24,40,.05);
 }
 @media (prefers-color-scheme:dark){
@@ -39,6 +62,7 @@ CSS = """
     --bg:#101317; --panel:#181c22; --panel-2:#1e232a; --ink:#e7ebf0; --muted:#98a3b0;
     --line:#2a3038; --accent:#7ea3ff; --accent-soft:#1d2637;
     --pm:#7ea3ff; --st:#4bd6a8; --tr:#f0ad5e; --ssrn:#b18cff; --other:#b0a0f0;
+    --qp:#f08a7c; --man:#3fc4b4; --aa:#8fb2ff; --ms:#e3b341; --qc:#c4a6ff;
     --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.25);
   }
 }
@@ -48,6 +72,11 @@ body{margin:0;background:var(--bg);color:var(--ink);
   -webkit-font-smoothing:antialiased}
 .wrap{max-width:1000px;margin:0 auto;padding:32px 20px 140px}
 a{color:var(--accent)}
+
+/* language switching: only the active language is displayed */
+[data-l]{display:none}
+html[data-lang="ko"] [data-l="ko"]{display:revert}
+html[data-lang="en"] [data-l="en"]{display:revert}
 
 header.top{margin-bottom:24px}
 h1{font-size:26px;margin:0 0 6px;letter-spacing:-.02em}
@@ -61,14 +90,17 @@ h1{font-size:26px;margin:0 0 6px;letter-spacing:-.02em}
   padding:12px 0 10px;margin:20px 0 8px;border-bottom:1px solid var(--line)}
 .row{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:7px}
 .row:last-child{margin-bottom:0}
-.rowlabel{font-size:11.5px;color:var(--muted);font-weight:700;letter-spacing:.06em;
-  min-width:38px}
+.rowlabel{font-size:11.5px;color:var(--muted);font-weight:700;letter-spacing:.06em;min-width:38px}
 .chip{border:1px solid var(--line);background:var(--panel);color:var(--muted);
   border-radius:999px;padding:5px 12px;font-size:12.5px;cursor:pointer;
   font-family:inherit;transition:.12s;white-space:nowrap}
 .chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);
   color:var(--accent);font-weight:600}
 .chip:hover{border-color:var(--accent)}
+.langsel{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.langsel button{border:0;background:var(--panel);color:var(--muted);padding:5px 13px;
+  font:inherit;font-size:12.5px;cursor:pointer;transition:.12s}
+.langsel button[aria-pressed="true"]{background:var(--accent);color:#fff;font-weight:700}
 #q{flex:1;min-width:180px;padding:7px 12px;border:1px solid var(--line);border-radius:8px;
   background:var(--panel);color:var(--ink);font:inherit;font-size:13.5px}
 #q:focus{outline:2px solid var(--accent);outline-offset:-1px}
@@ -78,7 +110,7 @@ select{padding:7px 10px;border:1px solid var(--line);border-radius:8px;
 
 h2.day{font-size:15px;margin:30px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--line);
   color:var(--muted);font-weight:600;letter-spacing:.02em}
-h2.day span{color:var(--ink)}
+h2.day span.d{color:var(--ink)}
 
 .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;
   padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow)}
@@ -87,7 +119,9 @@ h2.day span{color:var(--ink)}
 .badge{font-size:11px;font-weight:700;letter-spacing:.04em;padding:2.5px 8px;
   border-radius:5px;color:#fff}
 .b-PM{background:var(--pm)} .b-ST{background:var(--st)} .b-TR{background:var(--tr)}
-.b-ssrn{background:var(--ssrn)} .b-XX{background:var(--other)}
+.b-ssrn{background:var(--ssrn)} .b-qp{background:var(--qp)} .b-man{background:var(--man)}
+.b-aa{background:var(--aa)} .b-ms{background:var(--ms)} .b-qc{background:var(--qc)}
+.b-XX{background:var(--other)}
 .badge.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);font-weight:600}
 .stars{color:var(--star);font-size:12.5px;letter-spacing:1px;margin-left:auto}
 .stars i{color:var(--line);font-style:normal}
@@ -103,7 +137,7 @@ h2.day span{color:var(--ink)}
 .detail[hidden]{display:none}
 .detail ul{margin:0 0 12px;padding-left:19px}
 .detail li{margin-bottom:4px}
-.kv{display:grid;grid-template-columns:76px 1fr;gap:5px 10px;font-size:13.5px;margin-bottom:12px}
+.kv{display:grid;grid-template-columns:92px 1fr;gap:5px 10px;font-size:13.5px;margin-bottom:12px}
 .kv dt{color:var(--muted);font-weight:600}
 .kv dd{margin:0}
 .keys{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
@@ -113,14 +147,16 @@ h2.day span{color:var(--ink)}
   padding:11px 13px;font-size:13px;color:var(--muted);line-height:1.7}
 .abs b{color:var(--ink);display:block;margin-bottom:4px;font-size:12px;letter-spacing:.03em}
 
-.actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;align-items:center}
+.actions .sep{width:1px;height:18px;background:var(--line);margin:0 2px}
 .btn{border:1px solid var(--line);background:var(--panel);color:var(--muted);
   border-radius:7px;padding:5.5px 12px;font-size:12.5px;cursor:pointer;
   font-family:inherit;text-decoration:none;display:inline-block;transition:.12s}
 .btn:hover{border-color:var(--accent);color:var(--accent)}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
 .btn.primary:hover{filter:brightness(1.08);color:#fff}
-.btn.queued{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:600}
+.btn.queued{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);
+  font-weight:600}
 .btn.done{border-color:var(--st);color:var(--st)}
 .btn.failed{border-color:var(--tr);color:var(--tr)}
 #livebadge{font-size:11.5px;color:var(--st);font-weight:700;letter-spacing:.03em;
@@ -134,8 +170,9 @@ h2.day span{color:var(--ink)}
   padding:12px 20px;display:none}
 .bar.on{display:block}
 .bar-in{max-width:1000px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-.bar code{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;
-  padding:4px 8px;font-size:12px;flex:1;min-width:200px;overflow:auto;white-space:nowrap}
+.bar pre{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;
+  padding:6px 9px;font-size:12px;flex:1;min-width:200px;overflow:auto;margin:0;
+  white-space:pre;line-height:1.5}
 .empty{color:var(--muted);text-align:center;padding:50px 0}
 footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);
   color:var(--muted);font-size:12px}
@@ -143,13 +180,38 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);
   .card{break-inside:avoid;box-shadow:none}}
 """
 
-JS = """
-const KEY='arxiv-qfin-report-queue';
-const load=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return []}};
-const save=v=>{try{localStorage.setItem(KEY,JSON.stringify(v))}catch(e){}};
+JS = r"""
+const LKEY='qfin-digest-lang', QKEY='qfin-digest-queue';
+const I18N={
+  ko:{search:'제목·요약·저자·키워드 검색',rel:'★ 구현 가능성 순',orig:'기본 순서',
+      expand:'전체 펼치기',collapse:'전체 접기',shown:'편 표시',more:'▾ 자세히',
+      less:'▴ 접기',copy:'요청 목록 복사',copied:'✓ 복사됨',
+      queuedFor:'편 대기 중',waiting:'대기 중',failed:'⚠ 실패 — 다시 시도'},
+  en:{search:'Search title, summary, author, keyword',rel:'★ Implementability',orig:'Listed order',
+      expand:'Expand all',collapse:'Collapse all',shown:'shown',more:'▾ Details',
+      less:'▴ Hide',copy:'Copy commands',copied:'✓ Copied',
+      queuedFor:'queued',waiting:'queued',failed:'⚠ Failed — retry'}};
+let LANG=(()=>{try{return localStorage.getItem(LKEY)||'ko'}catch(e){return 'ko'}})();
+const T=k=>I18N[LANG][k];
 
-// 로컬 서버(run.py serve)가 뒤에 있으면 버튼 한 번으로 바로 생성한다.
-// 서버가 없으면(파일 열기 / GitHub Pages) 예전처럼 명령어 복사 방식으로 되돌아간다.
+function applyLang(){
+  document.documentElement.setAttribute('data-lang',LANG);
+  document.documentElement.setAttribute('lang',LANG);
+  try{localStorage.setItem(LKEY,LANG)}catch(e){}
+  document.querySelectorAll('.langsel button').forEach(b=>
+    b.setAttribute('aria-pressed',String(b.dataset.val===LANG)));
+  document.getElementById('q').placeholder=T('search');
+  const s=document.getElementById('sort');
+  s.options[0].textContent=T('rel'); s.options[1].textContent=T('orig');
+  document.querySelectorAll('[data-act="toggle"]').forEach(b=>{
+    b.textContent=b.closest('.card').querySelector('.detail').hidden?T('more'):T('less');});
+  document.querySelector('[data-act="copy"]').textContent=T('copy');
+  syncExpandLabel(); filter(); paint();
+}
+
+const loadQ=()=>{try{return JSON.parse(localStorage.getItem(QKEY)||'[]')}catch(e){return []}};
+const saveQ=v=>{try{localStorage.setItem(QKEY,JSON.stringify(v))}catch(e){}};
+
 let LIVE=false;
 async function detectLive(){
   try{const r=await fetch('api/ping',{cache:'no-store'});LIVE=r.ok;}catch(e){LIVE=false;}
@@ -158,58 +220,61 @@ async function detectLive(){
 }
 
 function paint(){
-  const q=LIVE?[]:load();
+  const q=LIVE?[]:loadQ();
   document.querySelectorAll('.js-req').forEach(b=>{
     if(b.dataset.busy)return;
-    const on=q.includes(b.dataset.id);
+    const on=q.includes(b.dataset.id+'|'+b.dataset.lang);
     b.classList.toggle('queued',on);
-    b.textContent=on?'\\u2713 요청됨':'\\ud83d\\udcc4 보고서 생성';
+    b.textContent=(on?'✓ ':'📄 ')+b.dataset.label;
   });
   document.getElementById('bar').classList.toggle('on',q.length>0);
   document.getElementById('qn').textContent=q.length;
-  document.getElementById('qcmd').textContent='python run.py paper '+q.join(' ');
+  const byLang={};
+  q.forEach(item=>{const [id,lang]=item.split('|');(byLang[lang]=byLang[lang]||[]).push(id);});
+  document.getElementById('qcmd').textContent=
+    Object.entries(byLang).map(([l,ids])=>'python run.py paper --lang '+l+' '+ids.join(' '))
+      .join('\n');
+}
+function toggleReq(id,lang){
+  const key=id+'|'+lang, q=loadQ(), i=q.indexOf(key);
+  if(i<0)q.push(key); else q.splice(i,1);
+  saveQ(q); paint();
 }
 
 async function genReport(btn){
   if(btn.dataset.busy)return;
-  const id=btn.dataset.id;
-  btn.dataset.busy='1'; btn.classList.add('queued'); btn.textContent='\\u23f3 대기 중…';
+  const id=btn.dataset.id, lang=btn.dataset.lang;
+  btn.dataset.busy='1'; btn.classList.add('queued');
+  btn.textContent='⏳ '+T('waiting')+'…';
   const fail=msg=>{btn.classList.remove('queued');btn.classList.add('failed');
-    btn.textContent='\\u26a0 실패 — 다시 시도';btn.title=msg||'';delete btn.dataset.busy;};
+    btn.textContent=T('failed');btn.title=msg||'';delete btn.dataset.busy;};
   try{
     const r=await fetch('api/report',{method:'POST',
-      headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
-    if(!r.ok){return fail('요청이 거부되었습니다 ('+r.status+')');}
+      headers:{'Content-Type':'application/json'},body:JSON.stringify({id,lang})});
+    if(!r.ok)return fail('request rejected ('+r.status+')');
     for(;;){
       await new Promise(res=>setTimeout(res,2000));
-      const s=await (await fetch('api/status?id='+encodeURIComponent(id),
+      const s=await (await fetch('api/status?id='+encodeURIComponent(id)+'&lang='+lang,
         {cache:'no-store'})).json();
       if(s.state==='done'){
         const a=document.createElement('a');
         a.className='btn done'; a.href=s.url; a.target='_blank'; a.rel='noopener';
-        a.textContent='\\ud83d\\udcc4 상세 리포트 보기';
+        a.textContent='📄 '+btn.dataset.label;
         btn.replaceWith(a); a.click(); return;
       }
       if(s.state==='error')return fail(s.error);
-      if(s.note)btn.textContent='\\u23f3 '+s.note+'…';
+      if(s.note)btn.textContent='⏳ '+s.note+'…';
     }
   }catch(e){fail(String(e));}
-}
-function toggleReq(id){
-  const q=load(); const i=q.indexOf(id);
-  if(i<0)q.push(id); else q.splice(i,1);
-  save(q); paint();
 }
 
 const cards=[...document.querySelectorAll('.card')];
 const pressed=sel=>[...document.querySelectorAll(sel)]
   .filter(c=>c.getAttribute('aria-pressed')==='true').map(c=>c.dataset.val);
-
-// 보이는 카드 중 접혀 있는 게 하나라도 있으면 다음 동작은 '펼치기'
 const visible=()=>[...document.querySelectorAll('.card:not(.hide)')];
 const anyCollapsed=()=>visible().some(c=>c.querySelector('.detail').hidden);
 function syncExpandLabel(){
-  document.getElementById('expandBtn').textContent=anyCollapsed()?'전체 펼치기':'전체 접기';
+  document.getElementById('expandBtn').textContent=anyCollapsed()?T('expand'):T('collapse');
 }
 function filter(){
   const srcs=pressed('.chip[data-kind="src"]');
@@ -225,19 +290,16 @@ function filter(){
     if(show)n++;
   });
   document.querySelectorAll('section.day').forEach(s=>{
-    s.style.display=s.querySelectorAll('.card:not(.hide)').length?'':'none';
-  });
-  document.getElementById('count').textContent=n+' / '+cards.length+'편 표시';
+    s.style.display=s.querySelectorAll('.card:not(.hide)').length?'':'none';});
+  document.getElementById('count').textContent=n+' / '+cards.length+' '+T('shown');
   document.getElementById('none').hidden=n>0;
   syncExpandLabel();
 }
 function sortBy(mode){
   document.querySelectorAll('section.day .list').forEach(list=>{
-    [...list.children]
-      .sort((a,b)=>mode==='rel'
-        ? (+b.dataset.rel)-(+a.dataset.rel)||a.dataset.title.localeCompare(b.dataset.title)
-        : (+a.dataset.idx)-(+b.dataset.idx))
-      .forEach(el=>list.appendChild(el));
+    [...list.children].sort((a,b)=>mode==='rel'
+      ? (+b.dataset.rel)-(+a.dataset.rel)||a.dataset.title.localeCompare(b.dataset.title)
+      : (+a.dataset.idx)-(+b.dataset.idx)).forEach(el=>list.appendChild(el));
   });
 }
 
@@ -245,11 +307,11 @@ document.addEventListener('click',e=>{
   const t=e.target.closest('[data-act]');
   if(!t)return;
   const act=t.dataset.act;
-  if(act==='req'){ if(LIVE)genReport(t); else toggleReq(t.dataset.id); }
+  if(act==='lang'){LANG=t.dataset.val;applyLang();}
+  else if(act==='req'){ if(LIVE)genReport(t); else toggleReq(t.dataset.id,t.dataset.lang); }
   else if(act==='toggle'){
     const d=t.closest('.card').querySelector('.detail');
-    d.hidden=!d.hidden; t.textContent=d.hidden?'\\u25be 자세히':'\\u25b4 접기';
-    syncExpandLabel();
+    d.hidden=!d.hidden; t.textContent=d.hidden?T('more'):T('less'); syncExpandLabel();
   }
   else if(act==='chip'){
     t.setAttribute('aria-pressed',t.getAttribute('aria-pressed')==='true'?'false':'true');
@@ -260,24 +322,23 @@ document.addEventListener('click',e=>{
     document.getElementById('q').value=''; filter();
   }
   else if(act==='copy'){
-    const txt=document.getElementById('qcmd').textContent;
-    navigator.clipboard.writeText(txt).then(()=>{t.textContent='\\u2713 복사됨';
-      setTimeout(()=>t.textContent='요청 목록 복사',1400);});
+    navigator.clipboard.writeText(document.getElementById('qcmd').textContent)
+      .then(()=>{t.textContent=T('copied');setTimeout(()=>t.textContent=T('copy'),1400);});
   }
-  else if(act==='clear'){save([]);paint();}
+  else if(act==='clear'){saveQ([]);paint();}
   else if(act==='expand'){
     const open=anyCollapsed();
     visible().forEach(c=>{
       c.querySelector('.detail').hidden=!open;
       const b=c.querySelector('[data-act="toggle"]');
-      if(b)b.textContent=open?'\\u25b4 접기':'\\u25be 자세히';
+      if(b)b.textContent=open?T('less'):T('more');
     });
     syncExpandLabel();
   }
 });
 document.getElementById('q').addEventListener('input',filter);
 document.getElementById('sort').addEventListener('change',e=>sortBy(e.target.value));
-paint();filter();detectLive();
+applyLang();detectLive();
 """
 
 
@@ -291,12 +352,35 @@ def _stars(n: int) -> str:
 
 
 def _badge(cat: str, src: str) -> str:
-    if src == "ssrn":
-        return f'<span class="badge b-ssrn" title="{_esc(SSRN_SHORTS.get(cat, cat))}">{_esc(cat)}</span>'
+    cls = SRC_BADGE_CLASS.get(src)
+    if cls:
+        title = SSRN_SHORTS.get(cat) or BLOG_SHORTS.get(cat) or cat
+        return f'<span class="badge {cls}" title="{_esc(title)}">{_esc(cat)}</span>'
     short = CAT_SHORT.get(cat)
     if short:
         return f'<span class="badge b-{short}">{short}</span>'
     return f'<span class="badge ghost">{_esc(cat)}</span>'
+
+
+DETAIL_LABELS = {
+    "ko": {"method": "방법", "data": "데이터", "takeaway": "시사점", "why": "적용도"},
+    "en": {"method": "Method", "data": "Data", "takeaway": "Use", "why": "Score"},
+}
+
+
+def _detail_block(entry: dict, lang: str, rel: int) -> str:
+    body = summary_text(entry, lang)
+    labels = DETAIL_LABELS[lang]
+    bullets = "".join(f"<li>{_esc(b)}</li>" for b in (body.get("bullets") or []))
+    kv = "".join(
+        f"<dt>{labels[key]}{f' {rel}/5' if key == 'why' else ''}</dt><dd>{_esc(value)}</dd>"
+        for key, value in (("method", body.get("method")), ("data", body.get("data")),
+                           ("takeaway", body.get("takeaway")),
+                           ("why", body.get("relevance_why"))) if value)
+    return (f'<div data-l="{lang}">'
+            f'{f"<ul>{bullets}</ul>" if bullets else ""}'
+            f'{f"<dl class=\'kv\'>{kv}</dl>" if kv else ""}'
+            f'</div>')
 
 
 def _card(entry: dict, idx: int) -> str:
@@ -306,14 +390,15 @@ def _card(entry: dict, idx: int) -> str:
     src_cats = entry.get("src_cats") or []
     rel = int(summary.get("relevance", 3) or 3)
     authors = entry.get("authors") or []
-    author_line = ", ".join(authors[:5]) + (f" 외 {len(authors) - 5}명" if len(authors) > 5 else "")
+    author_line = ", ".join(authors[:5]) + (f" +{len(authors) - 5}" if len(authors) > 5 else "")
     if src == "ssrn" and entry.get("affiliations"):
         author_line += f" · {entry['affiliations']}"
 
     searchable = " ".join(
-        [entry.get("title", ""), summary.get("one_liner", ""), summary.get("takeaway", "")]
-        + list(summary.get("keywords") or []) + authors
-        + list(entry.get("journals") or []) + [entry.get("abstract", "")]
+        [entry.get("title", ""), entry.get("abstract", "")]
+        + [v for lang in LANGS for k, v in summary_text(entry, lang).items()
+           if isinstance(v, str) and k != "bullets"]
+        + list(summary.get("keywords") or []) + authors + list(entry.get("journals") or [])
     ).lower()
 
     badges = (f'<span class="badge ghost">{SRC_LABEL.get(src, src)}</span>'
@@ -324,23 +409,27 @@ def _card(entry: dict, idx: int) -> str:
         badges += "".join(f'<span class="badge ghost">{_esc(c)}</span>' for c in extra)
         if entry.get("cross_from"):
             badges += '<span class="badge ghost">cross-list</span>'
-    elif entry.get("page_count"):
+    elif src == "ssrn" and entry.get("page_count"):
         badges += f'<span class="badge ghost">{entry["page_count"]}p</span>'
+    elif src in BLOG_SOURCES:
+        badges += "".join(f'<span class="badge ghost">{_esc(c)}</span>'
+                          for c in (entry.get("categories") or [])[:2])
 
-    bullets = "".join(f"<li>{_esc(b)}</li>" for b in (summary.get("bullets") or []))
+    one_liners = "".join(
+        f'<p class="oneliner" data-l="{lang}">{_esc(summary_text(entry, lang).get("one_liner", ""))}</p>'
+        for lang in LANGS)
+    details = "".join(_detail_block(entry, lang, rel) for lang in LANGS)
     keys = "".join(f'<span class="key">{_esc(k)}</span>' for k in (summary.get("keywords") or []))
-    kv = "".join(f"<dt>{label}</dt><dd>{_esc(value)}</dd>"
-                 for label, value in (("방법", summary.get("method")),
-                                      ("데이터", summary.get("data")),
-                                      ("시사점", summary.get("takeaway")),
-                                      (f"적용도 {rel}/5", summary.get("relevance_why"))) if value)
 
-    if (PAPER_DIR / f"{pid}.html").exists():
-        req_btn = (f'<a class="btn done" href="paper/{_esc(pid)}.html" target="_blank">'
-                   f'📄 상세 리포트 보기</a>')
-    else:
-        req_btn = (f'<button class="btn js-req" data-act="req" data-id="{_esc(pid)}">'
-                   f'📄 보고서 생성</button>')
+    report_btns = ""
+    for lang in LANGS:
+        label = LANG_BUTTON[lang]
+        if (PAPER_DIR / report_name(pid, lang)).exists():
+            report_btns += (f'<a class="btn done" href="paper/{_esc(report_name(pid, lang))}"'
+                            f' target="_blank" rel="noopener">📄 {label}</a>')
+        else:
+            report_btns += (f'<button class="btn js-req" data-act="req" data-id="{_esc(pid)}"'
+                            f' data-lang="{lang}" data-label="{label}">📄 {label}</button>')
 
     return f"""
 <article class="card" data-src="{_esc(src)}" data-cats="{_esc('|'.join(src_cats))}"
@@ -348,61 +437,75 @@ def _card(entry: dict, idx: int) -> str:
          data-text="{_esc(searchable)}">
   <div class="badges">{badges}
     <span class="badge ghost">{_esc(entry.get('ext_id', pid))}</span>
-    <span class="stars" title="{_esc(f'시스템 트레이딩 구현 가능성 {rel}/5' + (' — ' + summary['relevance_why'] if summary.get('relevance_why') else ''))}">{_stars(rel)}</span>
+    <span class="stars" title="systematic-trading implementability {rel}/5">{_stars(rel)}</span>
   </div>
   <h3 class="title"><a href="{_esc(abs_url(entry))}" target="_blank"
       rel="noopener">{_esc(entry.get('title', pid))}</a></h3>
-  <p class="oneliner">{_esc(summary.get('one_liner', '(요약 없음)'))}</p>
+  {one_liners}
   <p class="authors">{_esc(author_line)}</p>
   <div class="detail" hidden>
-    {f'<ul>{bullets}</ul>' if bullets else ''}
-    {f'<dl class="kv">{kv}</dl>' if kv else ''}
+    {details}
     {f'<div class="keys">{keys}</div>' if keys else ''}
     <div class="abs"><b>ORIGINAL ABSTRACT</b>{_esc(entry.get('abstract', ''))}</div>
   </div>
   <div class="actions">
-    <button class="btn" data-act="toggle">▾ 자세히</button>
-    <a class="btn" href="{_esc(abs_url(entry))}" target="_blank" rel="noopener">원문</a>
-    <a class="btn" href="{_esc(pdf_url(entry))}" target="_blank" rel="noopener">PDF</a>
-    {req_btn}
+    <button class="btn" data-act="toggle">▾</button>
+    <a class="btn" href="{_esc(abs_url(entry))}" target="_blank" rel="noopener">{
+      'source' if src in BLOG_SOURCES else 'abs'}</a>
+    {f'<a class="btn" href="{_esc(pdf_url(entry))}" target="_blank" rel="noopener">PDF</a>'
+     if pdf_url(entry) else ''}
+    <span class="sep"></span>{report_btns}
   </div>
 </article>"""
 
 
+def _bi(ko: str, en: str) -> str:
+    """Inline pair of language spans."""
+    return f'<span data-l="ko">{ko}</span><span data-l="en">{en}</span>'
+
+
+LANG_SELECTOR = ('<div class="langsel">'
+                 '<button data-act="lang" data-val="ko" aria-pressed="true">한국어</button>'
+                 '<button data-act="lang" data-val="en" aria-pressed="false">English</button>'
+                 '</div>')
+
+
 def build_index(seen: dict[str, dict] | None = None) -> Path:
-    """저장소 루트 index.html — GitHub Pages 진입점 겸 리포트 목록."""
+    """Repository-root index.html — the GitHub Pages entry point."""
     from .config import ROOT
 
     ensure_dirs()
     digests = sorted(REPORT_DIR.glob("qfin-digest-*.html"), reverse=True)
-    papers = sorted(PAPER_DIR.glob("*.html"))
-    titles = {}
-    if seen:
-        titles = {e["id"]: e.get("title", e["id"]) for e in seen.values()}
-
+    papers = sorted(PAPER_DIR.glob("*.html"), key=lambda p: p.stat().st_mtime, reverse=True)
+    titles = {e["id"]: e.get("title", e["id"]) for e in (seen or {}).values()}
     now = datetime.now()
+
     rows = ""
     for i, path in enumerate(digests):
         stamp = path.stem.replace("qfin-digest-", "")
         try:
-            label = datetime.strptime(stamp, "%Y%m%d").strftime("%Y년 %m월 %d일")
+            day = datetime.strptime(stamp, "%Y%m%d")
+            label = _bi(day.strftime("%Y년 %m월 %d일 다이제스트"), day.strftime("%d %b %Y digest"))
         except ValueError:
-            label = stamp
-        tag = ' <span class="badge b-ssrn">최신</span>' if i == 0 else ""
-        rows += (f'<li><a href="report/{path.name}">{_esc(label)} 다이제스트</a>{tag}</li>')
+            label = _esc(stamp)
+        tag = f' <span class="badge b-ssrn">{_bi("최신", "latest")}</span>' if i == 0 else ""
+        rows += f'<li><a href="report/{path.name}">{label}</a>{tag}</li>'
 
-    plist = "".join(
-        f'<li><a href="report/paper/{p.name}">{_esc(titles.get(p.stem, p.stem))}</a>'
-        f' <span class="key">{_esc(p.stem)}</span></li>'
-        for p in sorted(papers, key=lambda x: x.stat().st_mtime, reverse=True))
+    plist = ""
+    for path in papers:
+        pid, _, lang = path.stem.rpartition(".")
+        if lang not in LANGS:
+            pid, lang = path.stem, "ko"
+        plist += (f'<li><a href="report/paper/{path.name}">{_esc(titles.get(pid, pid))}</a>'
+                  f' <span class="key">{LANG_BUTTON.get(lang, lang)}</span></li>')
 
     out = ROOT / "index.html"
     out.write_text(f"""<!doctype html>
-<html lang="ko">
+<html lang="ko" data-lang="ko">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>퀀트 논문 다이제스트</title>
+<title>Quant Paper Digest</title>
 <style>{CSS}
 .wrap{{max-width:760px}}
 ul.idx{{list-style:none;padding:0;margin:0 0 28px}}
@@ -417,23 +520,40 @@ h2.sec{{font-size:15px;color:var(--muted);margin:0 0 12px;letter-spacing:.02em}}
 <body>
 <div class="wrap">
   <header class="top">
-    <h1>퀀트 논문 다이제스트</h1>
-    <p class="sub">arXiv q-fin.PM/ST/TR · SSRN {len(SSRN_JOURNALS)}개 eJournal ·
-       갱신 {now:%Y-%m-%d %H:%M}</p>
+    <h1>{_bi("퀀트 논문 다이제스트", "Quant Paper Digest")}</h1>
+    <p class="sub">arXiv q-fin.PM/ST/TR · SSRN {len(SSRN_JOURNALS)} eJournals ·
+       {QUANTPEDIA_LABEL} · {MAN_LABEL} ·
+       {_bi("갱신", "updated")} {now:%Y-%m-%d %H:%M}</p>
     <div class="stats">
-      <div class="stat"><b>{len(digests)}</b>개 다이제스트</div>
-      <div class="stat"><b>{len(papers)}</b>편 상세 리포트</div>
+      <div class="stat"><b>{len(digests)}</b>{_bi("개 다이제스트", " digests")}</div>
+      <div class="stat"><b>{len(papers)}</b>{_bi("편 상세 리포트", " deep reports")}</div>
     </div>
+    <div class="row" style="margin-top:14px">{LANG_SELECTOR}</div>
   </header>
 
-  <h2 class="sec">날짜별 다이제스트</h2>
-  <ul class="idx">{rows or '<li>아직 생성된 리포트가 없습니다.</li>'}</ul>
+  <h2 class="sec">{_bi("날짜별 다이제스트", "Daily digests")}</h2>
+  <ul class="idx">{rows or f'<li>{_bi("아직 없습니다.", "Nothing yet.")}</li>'}</ul>
 
-  <h2 class="sec">상세 리포트</h2>
-  <ul class="idx">{plist or '<li>아직 생성된 상세 리포트가 없습니다.</li>'}</ul>
+  <h2 class="sec">{_bi("상세 리포트", "Deep reports")}</h2>
+  <ul class="idx">{plist or f'<li>{_bi("아직 없습니다.", "Nothing yet.")}</li>'}</ul>
 
-  <footer><p>로컬 Claude Code 로 생성한 요약입니다. 원문 저작권은 각 저자에게 있습니다.</p></footer>
+  <footer><p>{_bi("로컬 Claude Code 로 생성한 요약입니다. 원문 저작권은 각 저자에게 있습니다.",
+                  "Summaries generated locally with Claude Code. Papers remain their authors’ copyright.")}</p></footer>
 </div>
+<script>
+(function(){{
+  const K='qfin-digest-lang';
+  let l='ko'; try{{l=localStorage.getItem(K)||'ko'}}catch(e){{}}
+  const set=v=>{{l=v;document.documentElement.setAttribute('data-lang',v);
+    document.documentElement.setAttribute('lang',v);
+    try{{localStorage.setItem(K,v)}}catch(e){{}}
+    document.querySelectorAll('.langsel button').forEach(b=>
+      b.setAttribute('aria-pressed',String(b.dataset.val===v)));}};
+  document.addEventListener('click',e=>{{
+    const t=e.target.closest('[data-act="lang"]'); if(t)set(t.dataset.val);}});
+  set(l);
+}})();
+</script>
 </body>
 </html>
 """, encoding="utf-8")
@@ -442,9 +562,10 @@ h2.sec{{font-size:15px;color:var(--muted);margin:0 0 12px;letter-spacing:.02em}}
 
 def build(seen: dict[str, dict], days: list[str] | None = None,
           sources: list[str] | None = None, out_path: Path | None = None) -> Path:
-    """요약이 끝난 논문들로 HTML 리포트를 만든다."""
+    """Render every summarized paper into one digest page."""
     ensure_dirs()
-    entries = [e for e in seen.values() if (e.get("summary") or {}).get("one_liner")]
+    entries = [e for e in seen.values()
+               if any((e.get("summary") or {}).get(lang, {}).get("one_liner") for lang in LANGS)]
     if sources:
         entries = [e for e in entries if e.get("src", "arxiv") in set(sources)]
     if days:
@@ -463,20 +584,21 @@ def build(seen: dict[str, dict], days: list[str] | None = None,
     src_chips = "".join(
         f'<button class="chip" data-act="chip" data-kind="src" data-val="{s}" '
         f'aria-pressed="false">{SRC_LABEL[s]} ({src_counts.get(s, 0)})</button>'
-        for s in ("arxiv", "ssrn") if src_counts.get(s))
-    arxiv_chips = "".join(
+        for s in SOURCES if src_counts.get(s))
+    cat_chips = "".join(
         f'<button class="chip" data-act="chip" data-kind="cat" data-val="{c}" '
         f'aria-pressed="false" title="{_esc(name)}">{CAT_SHORT[c]} ({cat_counts.get(c, 0)})</button>'
         for c, name in CATEGORIES.items() if cat_counts.get(c))
-    ssrn_chips = "".join(
+    cat_chips += "".join(
         f'<button class="chip" data-act="chip" data-kind="cat" data-val="{short}" '
         f'aria-pressed="false" title="{_esc(name)}">{short} ({cat_counts.get(short, 0)})</button>'
-        for short, name in SSRN_JOURNALS.values() if cat_counts.get(short))
+        for short, name in list(SSRN_JOURNALS.values()) + list(BLOG_SHORTS.items())
+        if cat_counts.get(short))
 
-    stats = (f'<div class="stat"><b>{len(entries)}</b>편</div>'
-             f'<div class="stat"><b>{len(by_day)}</b>개 날짜</div>'
+    stats = (f'<div class="stat"><b>{len(entries)}</b>{_bi("건", " items")}</div>'
+             f'<div class="stat"><b>{len(by_day)}</b>{_bi("개 날짜", " dates")}</div>'
              + "".join(f'<div class="stat"><b>{src_counts.get(s, 0)}</b>{SRC_LABEL[s]}</div>'
-                       for s in ("arxiv", "ssrn") if src_counts.get(s)))
+                       for s in SOURCES if src_counts.get(s)))
 
     sections, idx = "", 0
     for day in sorted(by_day, reverse=True):
@@ -485,63 +607,67 @@ def build(seen: dict[str, dict], days: list[str] | None = None,
             cards += _card(entry, idx)
             idx += 1
         try:
-            label = datetime.strptime(day, "%Y-%m-%d").strftime("%Y년 %m월 %d일 (%a)")
+            parsed = datetime.strptime(day, "%Y-%m-%d")
+            label = _bi(parsed.strftime("%Y년 %m월 %d일"), parsed.strftime("%A, %d %b %Y"))
         except ValueError:
-            label = day
-        sections += (f'<section class="day"><h2 class="day"><span>{_esc(label)}</span>'
-                     f' — {len(by_day[day])}편</h2><div class="list">{cards}</div></section>')
+            label = _esc(day)
+        sections += (f'<section class="day"><h2 class="day"><span class="d">{label}</span>'
+                     f' — {len(by_day[day])}{_bi("편", "")}</h2>'
+                     f'<div class="list">{cards}</div></section>')
 
-    day_line = " · ".join(sorted(by_day, reverse=True)) or "대상 없음"
+    day_line = " · ".join(sorted(by_day, reverse=True)) or "-"
     out = out_path or (REPORT_DIR / f"qfin-digest-{now:%Y%m%d}.html")
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(f"""<!doctype html>
-<html lang="ko">
+<html lang="ko" data-lang="ko">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>퀀트 논문 다이제스트 {now:%Y-%m-%d}</title>
+<title>Quant Paper Digest {now:%Y-%m-%d}</title>
 <style>{CSS}</style>
 </head>
 <body>
 <div class="wrap">
 <header class="top">
-  <h1>퀀트 논문 다이제스트</h1>
-  <p class="sub">대상 날짜 {_esc(day_line)} · 생성 {now:%Y-%m-%d %H:%M}<br>
-     arXiv q-fin.PM/ST/TR · SSRN {len(SSRN_JOURNALS)}개 eJournal<br>
-     ★ = 시스템 트레이딩 구현 가능성 (표준 데이터로 규칙을 코딩해 자동매매로 돌릴 수 있는가)</p>
+  <h1>{_bi("퀀트 논문 다이제스트", "Quant Paper Digest")}</h1>
+  <p class="sub">{_bi("대상 날짜", "Dates")} {_esc(day_line)} ·
+     {_bi("생성", "built")} {now:%Y-%m-%d %H:%M}<br>
+     arXiv q-fin.PM/ST/TR · SSRN {len(SSRN_JOURNALS)} eJournals · {QUANTPEDIA_LABEL} · {MAN_LABEL}<br>
+     {_bi("★ = 시스템 트레이딩 구현 가능성 (표준 데이터로 규칙을 코딩해 자동매매로 돌릴 수 있는가)",
+          "★ = systematic-trading implementability (can it be coded into rules on standard data?)")}</p>
   <div class="stats">{stats}</div>
 </header>
 
 <div class="controls">
-  <div class="row"><span class="rowlabel">출처</span>{src_chips}
-    <input id="q" type="search" placeholder="제목·요약·저자·키워드 검색">
-    <select id="sort" title="★ = 시스템 트레이딩 구현 가능성">
-      <option value="rel">★ 구현 가능성 순</option>
-      <option value="orig">기본 순서</option>
-    </select>
+  <div class="row">{LANG_SELECTOR}
+    <span class="rowlabel">{_bi("출처", "Source")}</span>{src_chips}
+    <input id="q" type="search">
+    <select id="sort"><option value="rel"></option><option value="orig"></option></select>
   </div>
-  <div class="row"><span class="rowlabel">분야</span>{arxiv_chips}{ssrn_chips}
-    <button class="chip" data-act="reset">필터 해제</button>
-    <button class="chip" id="expandBtn" data-act="expand">전체 펼치기</button>
+  <div class="row"><span class="rowlabel">{_bi("분야", "Field")}</span>{cat_chips}
+    <button class="chip" data-act="reset">{_bi("필터 해제", "Clear")}</button>
+    <button class="chip" id="expandBtn" data-act="expand"></button>
     <span class="count" id="count"></span>
-    <span id="livebadge" hidden title="보고서 생성 버튼을 누르면 바로 만들어집니다">로컬 서버 연결됨</span>
+    <span id="livebadge" hidden>{_bi("로컬 서버 연결됨", "local server connected")}</span>
   </div>
 </div>
 
 {sections}
-<p class="empty" id="none" hidden>조건에 맞는 논문이 없습니다.</p>
+<p class="empty" id="none" hidden>{_bi("조건에 맞는 논문이 없습니다.", "No papers match.")}</p>
 
 <footer>
-  <p>초록 출처: arXiv Atom API · SSRN abstract 페이지 · 요약: 로컬 Claude Code ·
-     원문 저작권은 각 저자에게 있습니다.</p>
+  <p>{_bi("초록 출처: arXiv Atom API · SSRN abstract 페이지 · 요약: 로컬 Claude Code",
+          "Abstracts: arXiv Atom API and SSRN abstract pages. Summaries generated locally with Claude Code.")}
+     {_bi("원문 저작권은 각 저자에게 있습니다.", "Papers remain their authors’ copyright.")}</p>
 </footer>
 </div>
 
 <div class="bar" id="bar"><div class="bar-in">
-  <strong><span id="qn">0</span>편</strong> 상세 리포트 요청 대기
-  <code id="qcmd"></code>
-  <button class="btn primary" data-act="copy">요청 목록 복사</button>
-  <button class="btn" data-act="clear">비우기</button>
+  <strong><span id="qn">0</span></strong>
+  {_bi("편 상세 리포트 요청 대기", "deep reports queued")}
+  <pre id="qcmd"></pre>
+  <button class="btn primary" data-act="copy"></button>
+  <button class="btn" data-act="clear">{_bi("비우기", "Clear")}</button>
 </div></div>
 
 <script>{JS}</script>

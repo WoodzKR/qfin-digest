@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Boundaries of Time Series Momentum — 상세 리포트</title>
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --panel-2:#fbfcfd; --ink:#16191d; --muted:#5c6672;
+  --line:#e2e6ea; --accent:#3b6ef0; --accent-soft:#eaf0fe;
+  --pm:#3b6ef0; --st:#0f9d76; --tr:#d4791f; --ssrn:#8b5cf6; --other:#7a68c9;
+  --qp:#c0392b; --man:#0f766e;
+  --star:#f0a91b; --shadow:0 1px 2px rgba(16,24,40,.06),0 4px 14px rgba(16,24,40,.05);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#101317; --panel:#181c22; --panel-2:#1e232a; --ink:#e7ebf0; --muted:#98a3b0;
+    --line:#2a3038; --accent:#7ea3ff; --accent-soft:#1d2637;
+    --pm:#7ea3ff; --st:#4bd6a8; --tr:#f0ad5e; --ssrn:#b18cff; --other:#b0a0f0;
+    --qp:#f08a7c; --man:#3fc4b4;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.25);
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:15px/1.65 -apple-system,"Segoe UI","Malgun Gothic",Roboto,"Helvetica Neue",sans-serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:32px 20px 140px}
+a{color:var(--accent)}
+
+/* language switching: only the active language is displayed */
+[data-l]{display:none}
+html[data-lang="ko"] [data-l="ko"]{display:revert}
+html[data-lang="en"] [data-l="en"]{display:revert}
+
+header.top{margin-bottom:24px}
+h1{font-size:26px;margin:0 0 6px;letter-spacing:-.02em}
+.sub{color:var(--muted);font-size:13.5px;margin:0}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:9px 13px;font-size:13px;box-shadow:var(--shadow)}
+.stat b{font-size:16px;margin-right:5px}
+
+.controls{position:sticky;top:0;z-index:20;background:var(--bg);
+  padding:12px 0 10px;margin:20px 0 8px;border-bottom:1px solid var(--line)}
+.row{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:7px}
+.row:last-child{margin-bottom:0}
+.rowlabel{font-size:11.5px;color:var(--muted);font-weight:700;letter-spacing:.06em;min-width:38px}
+.chip{border:1px solid var(--line);background:var(--panel);color:var(--muted);
+  border-radius:999px;padding:5px 12px;font-size:12.5px;cursor:pointer;
+  font-family:inherit;transition:.12s;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);
+  color:var(--accent);font-weight:600}
+.chip:hover{border-color:var(--accent)}
+.langsel{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.langsel button{border:0;background:var(--panel);color:var(--muted);padding:5px 13px;
+  font:inherit;font-size:12.5px;cursor:pointer;transition:.12s}
+.langsel button[aria-pressed="true"]{background:var(--accent);color:#fff;font-weight:700}
+#q{flex:1;min-width:180px;padding:7px 12px;border:1px solid var(--line);border-radius:8px;
+  background:var(--panel);color:var(--ink);font:inherit;font-size:13.5px}
+#q:focus{outline:2px solid var(--accent);outline-offset:-1px}
+select{padding:7px 10px;border:1px solid var(--line);border-radius:8px;
+  background:var(--panel);color:var(--ink);font:inherit;font-size:13.5px}
+.count{color:var(--muted);font-size:12.5px;margin-left:auto}
+
+h2.day{font-size:15px;margin:30px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--line);
+  color:var(--muted);font-weight:600;letter-spacing:.02em}
+h2.day span.d{color:var(--ink)}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow)}
+.card.hide{display:none}
+.badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+.badge{font-size:11px;font-weight:700;letter-spacing:.04em;padding:2.5px 8px;
+  border-radius:5px;color:#fff}
+.b-PM{background:var(--pm)} .b-ST{background:var(--st)} .b-TR{background:var(--tr)}
+.b-ssrn{background:var(--ssrn)} .b-qp{background:var(--qp)} .b-man{background:var(--man)}
+.b-XX{background:var(--other)}
+.badge.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);font-weight:600}
+.stars{color:var(--star);font-size:12.5px;letter-spacing:1px;margin-left:auto}
+.stars i{color:var(--line);font-style:normal}
+
+.title{font-size:16.5px;font-weight:650;line-height:1.4;margin:0 0 6px;letter-spacing:-.01em}
+.title a{color:var(--ink);text-decoration:none}
+.title a:hover{color:var(--accent)}
+.oneliner{margin:0 0 8px;font-size:14.5px;color:var(--ink)}
+.oneliner::before{content:"\25B8 ";color:var(--accent)}
+.authors{margin:0;color:var(--muted);font-size:12.5px}
+
+.detail{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+.detail[hidden]{display:none}
+.detail ul{margin:0 0 12px;padding-left:19px}
+.detail li{margin-bottom:4px}
+.kv{display:grid;grid-template-columns:92px 1fr;gap:5px 10px;font-size:13.5px;margin-bottom:12px}
+.kv dt{color:var(--muted);font-weight:600}
+.kv dd{margin:0}
+.keys{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.key{font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);
+  border-radius:5px;padding:2px 7px;color:var(--muted)}
+.abs{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;
+  padding:11px 13px;font-size:13px;color:var(--muted);line-height:1.7}
+.abs b{color:var(--ink);display:block;margin-bottom:4px;font-size:12px;letter-spacing:.03em}
+
+.actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;align-items:center}
+.actions .sep{width:1px;height:18px;background:var(--line);margin:0 2px}
+.btn{border:1px solid var(--line);background:var(--panel);color:var(--muted);
+  border-radius:7px;padding:5.5px 12px;font-size:12.5px;cursor:pointer;
+  font-family:inherit;text-decoration:none;display:inline-block;transition:.12s}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{filter:brightness(1.08);color:#fff}
+.btn.queued{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);
+  font-weight:600}
+.btn.done{border-color:var(--st);color:var(--st)}
+.btn.failed{border-color:var(--tr);color:var(--tr)}
+#livebadge{font-size:11.5px;color:var(--st);font-weight:700;letter-spacing:.03em;
+  display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+#livebadge::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--st);
+  animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--panel);
+  border-top:1px solid var(--line);box-shadow:0 -4px 20px rgba(0,0,0,.10);
+  padding:12px 20px;display:none}
+.bar.on{display:block}
+.bar-in{max-width:1000px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.bar pre{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;
+  padding:6px 9px;font-size:12px;flex:1;min-width:200px;overflow:auto;margin:0;
+  white-space:pre;line-height:1.5}
+.empty{color:var(--muted);text-align:center;padding:50px 0}
+footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);
+  color:var(--muted);font-size:12px}
+@media print{.controls,.bar,.actions{display:none!important}.detail{display:block!important}
+  .card{break-inside:avoid;box-shadow:none}}
+
+.doc{max-width:780px}
+.doc h1{font-size:24px;line-height:1.35;margin:0 0 10px}
+.doc h2{font-size:19px;margin:38px 0 12px;padding-bottom:7px;border-bottom:2px solid var(--accent);
+  letter-spacing:-.01em}
+.doc h3{font-size:15.5px;margin:22px 0 8px;color:var(--accent)}
+.doc p{margin:0 0 14px}
+.doc ul,.doc ol{margin:0 0 16px;padding-left:22px}
+.doc li{margin-bottom:7px}
+.doc blockquote{margin:0 0 18px;padding:14px 18px;border-left:3px solid var(--accent);
+  background:var(--accent-soft);border-radius:0 8px 8px 0;font-size:15.5px}
+.doc blockquote p:last-child{margin-bottom:0}
+.doc table{width:100%;border-collapse:collapse;margin:0 0 18px;font-size:13.5px;
+  display:block;overflow-x:auto}
+.doc th,.doc td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+.doc th{background:var(--panel-2);font-weight:650;white-space:nowrap}
+.doc code{background:var(--panel-2);border:1px solid var(--line);border-radius:4px;
+  padding:1px 5px;font-size:13px}
+.doc mjx-container[display="true"]{margin:16px 0;overflow-x:auto;overflow-y:hidden;padding:2px 0}
+.doc .meta-head{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;margin:18px 0 26px;box-shadow:var(--shadow)}
+.doc .meta-head .sub{margin-bottom:4px}
+.doc .langlinks{float:right;font-size:12.5px}
+</style>
+
+<script>
+window.MathJax={
+  tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]'],['$$','$$']],processEscapes:true},
+  options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']},
+  chtml:{scale:0.98}
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+</head>
+<body>
+<div class="wrap doc">
+  <p class="sub"><span class="langlinks"></span>
+     <a href="javascript:history.back()">← 돌아가기</a></p>
+  <h1>Boundaries of Time Series Momentum</h1>
+  <div class="meta-head">
+    <p class="sub">Quantpedia</p>
+    <p class="sub">quantpedia · https://quantpedia.com/boundaries-of-time-series-momentum/ · Uncategorized, CAPE, index valuation, managed futures</p>
+    <p class="sub">본문 출처: Quantpedia article</p>
+    <div class="actions">
+      <a class="btn" href="https://quantpedia.com/boundaries-of-time-series-momentum/" target="_blank" rel="noopener">원문 페이지</a>
+      
+    </div>
+  </div>
+  <blockquote><p>밸류에이션 극단 구간에서 시계열 모멘텀이 무너진다고 밝힌다.</p></blockquote>
+  <h2>1. 한눈에 보기</h2>
+
+<blockquote>주가지수의 시계열 모멘텀(time-series momentum)은 밸류에이션이 중간 구간에 머무는 평상시 국면에서만 안정적으로 작동한다. 경기조정 주가수익비율(CAPE), 배당수익률, 장단기 금리차가 10년·20년 역사적 극단에 닿으면 추세는 끊기고 오히려 반전이 나타난다.</blockquote>
+
+<ul>
+<li><strong>핵심 주장</strong>: 모멘텀은 순수한 행태적 현상이 아니다. 밸류에이션이라는 펀더멘털 앵커와 거시 국면에 묶여 있다.</li>
+<li><strong>정량 효과</strong>: 극단 국면의 반전을 통제하면 주식시장 수익률 예측회귀의 \(R^2\)가 최대 110% 늘고, 시계열 모멘텀 수익률 예측회귀의 \(R^2\)는 최대 550% 늘어난다. 각각 약 2.1배, 6.5배다.</li>
+<li><strong>대칭성</strong>: 고평가든 저평가든, 모멘텀 신호가 매수든 매도든 상관없이 붕괴가 일어난다. 방향이 아니라 <em>극단 여부</em>가 문제다.</li>
+<li><strong>메커니즘</strong>: 극단 국면에서는 성장률, 침체 위험, 통화정책, 장기금리가 과거 주가 수익률에 훨씬 민감하게 반응한다. 이 되먹임이 추세의 연속성을 끊는다.</li>
+<li><strong>실무 함의</strong>: 추세추종에 밸류에이션 필터를 얹어, 경계 구간에서 위험 노출을 줄이거나 반전에 대비하는 국면 조건부 오버레이를 권한다.</li>
+</ul>
+
+<p><em>자료 한계 고지</em>: 이 리포트가 근거로 삼은 텍스트는 Quantpedia 요약 기사와 논문 초록, 발췌 인용문이다. 원논문의 표·그림·표본 구간·구체적 회귀식은 확인하지 못했다. 아래에서 원문에 없는 대목은 <strong>추정</strong> 또는 <strong>재구성</strong>으로 표시한다.</p>
+
+<h2>2. 문제의식과 배경</h2>
+
+<p>시계열 모멘텀은 지난 12개월 수익률의 부호를 그대로 다음 달 포지션 방향으로 쓰는 전략이다. 주식, 채권, 통화, 원자재를 가리지 않고 작동한다는 증거가 쌓였다. 매니지드 퓨처스와 추세추종 펀드의 알파 원천이 대체로 여기서 나온다.</p>
+
+<p>문제는 이 전략이 가끔 대형 손실을 낸다는 점이다. 시장이 방향을 바꾸는 순간 추세추종은 반대 방향에 최대 포지션을 잡고 있다. 기존 연구는 이 손실을 주로 변동성으로 관리했다. 변동성이 튀면 레버리지를 줄이는 방식이다.</p>
+
+<p>Suominen과 Hjalmarsson은 다른 축을 본다. 붕괴 시점을 <em>가격 변동성</em>이 아니라 <em>가치 수준</em>으로 예측할 수 있다는 주장이다. 즉 모멘텀 실패는 무작위 사고가 아니라 거시 국면의 함수다.</p>
+
+<p>또 하나의 배경은 주식 수익률 예측 문헌이다. CAPE와 배당수익률은 장기 수익률을 예측한다고 알려져 있다. 다만 표본 외 성과가 약하다는 비판이 오래 이어졌다. 저자들은 장단기 금리차의 이동평균을 함께 쓰면 12개월 시계에서 성장률과 주식 수익률을 동시에 예측한다고 본다.</p>
+
+<p>이 논문의 고유한 기여는 두 문헌을 잇는 데 있다. 밸류에이션 지표를 <em>수익률 수준</em>의 예측 변수가 아니라 <em>모멘텀의 작동 여부</em>를 가르는 스위치로 쓴다. 예측 대상 자체를 바꾼 셈이다.</p>
+
+<h2>3. 방법론</h2>
+
+<h3>3.1 기준이 되는 시계열 모멘텀</h3>
+
+<p>출발점은 표준적인 12개월 시계열 모멘텀이다.</p>
+
+\[ s_t = \operatorname{sign}\!\big(r_{t-12,\,t}\big), \qquad r^{\mathrm{TSMOM}}_{t+1} = s_t \cdot r_{t+1} \]
+
+<p>\(r_{t-12,t}\)는 최근 12개월 누적 수익률, \(s_t\)는 그 부호로 정한 포지션 방향이다. \(r_{t+1}\)은 다음 기 주가지수 수익률이고, \(r^{\mathrm{TSMOM}}_{t+1}\)은 전략 수익률이다.</p>
+
+<h3>3.2 가치 지표 세 개</h3>
+
+<p>저자들이 쓰는 앵커는 셋이다.</p>
+
+<ul>
+<li><strong>CAPE</strong>: 10년 평균 실질이익 대비 주가. 주식시장의 절대 가치 수준을 잡는다.</li>
+<li><strong>배당수익률</strong>: 주가 대비 배당. CAPE의 대안 지표로 병렬 사용한다.</li>
+<li><strong>장단기 금리차</strong>: 국채 수익률곡선 기울기. 채권시장의 가치이자 경기 선행 지표다.</li>
+</ul>
+
+<p>인용문에 따르면 저자들은 원계열이 아니라 <strong>이동평균</strong>을 쓴다. 단기 잡음을 걷어내고 국면을 잡으려는 처리로 보인다.</p>
+
+<h3>3.3 Boundaries 변수</h3>
+
+<p>핵심 장치는 <code>Boundaries</code>라는 단일 변수다. 금리차 이동평균과 CAPE(또는 배당수익률) 이동평균을 결합해 만든다. 이 값이 낮으면 모멘텀이 작동하고, 높으면 무너진다.</p>
+
+<p>정확한 함수 형태는 원문에서 확인하지 못했다. 다만 "10년 또는 20년 역사적 극단에 가까울 때"라는 서술을 그대로 옮기면, 롤링 분위수 기반 극단도로 재구성할 수 있다. 아래는 <strong>재구성(추정)</strong>이다.</p>
+
+\[ p^{(x)}_t = \frac{1}{L}\sum_{j=0}^{L-1}\mathbf{1}\!\left\{\bar{x}_{t-j} \le \bar{x}_t\right\}, \qquad e^{(x)}_t = \left|\,2p^{(x)}_t - 1\,\right| \]
+
+<p>\(\bar{x}_t\)는 가치 지표의 이동평균, \(L\)은 롤링 창 길이(120개월 또는 240개월), \(p^{(x)}_t\)는 그 창 안에서의 백분위, \(e^{(x)}_t\)는 0(중앙)에서 1(극단)로 가는 극단도다. 절댓값을 씌우므로 고평가와 저평가를 똑같이 극단으로 취급한다.</p>
+
+\[ B_t = g\!\left(e^{(\mathrm{CAPE})}_t,\; e^{(\mathrm{TS})}_t\right) \]
+
+<p>\(B_t\)가 <code>Boundaries</code>, \(g(\cdot)\)는 두 극단도를 합치는 함수다. 곱으로 볼지 최댓값으로 볼지는 본문에 명시되지 않았다.</p>
+
+<h3>3.4 예측회귀 설계</h3>
+
+<p>논문은 두 종류의 12개월 시계 예측회귀를 돌린다.</p>
+
+<ol>
+<li><strong>주식시장 수익률</strong>을 종속변수로 두고, 극단 국면의 반전항을 통제한다.</li>
+<li><strong>시계열 모멘텀 전략 수익률</strong>을 종속변수로 두고 같은 통제를 넣는다.</li>
+</ol>
+
+<p>인용문의 결정적 문장은 "극단 국면에서 큰 절대 12개월 수익률이 모멘텀 수익률을 음(-)으로 예측한다"이다. 부호가 아니라 <em>크기</em>가 예측력을 갖는다. 이를 회귀식으로 옮기면 다음과 같다(<strong>재구성</strong>).</p>
+
+\[ r^{\mathrm{TSMOM}}_{t+1,\,t+12} = \alpha + \beta_1 \left| r_{t-12,\,t} \right| + \beta_2\, B_t \left| r_{t-12,\,t} \right| + \gamma' z_t + \varepsilon_{t+12} \]
+
+<p>\(|r_{t-12,t}|\)는 직전 12개월 수익률의 절댓값, \(B_t\)는 경계 변수, \(z_t\)는 통제변수 묶음이다. 저자들의 주장은 \(\beta_2 < 0\)이다. 즉 경계에 가까울수록 큰 추세가 오히려 손실을 예고한다.</p>
+
+<p>주식 수익률 회귀에서는 같은 항이 <em>반전</em>으로 나타난다. 극단 국면에서 큰 상승 뒤에는 하락이, 큰 하락 뒤에는 상승이 온다는 뜻이다.</p>
+
+<h3>3.5 메커니즘 검증</h3>
+
+<p>저자들은 붕괴의 원인을 거시 민감도로 설명한다. 극단 국면에서는 다음 변수들이 과거 주가 수익률과 훨씬 강하게 연결된다.</p>
+
+<ul>
+<li>실물 성장률</li>
+<li>침체 발생 위험</li>
+<li>통화정책, 즉 단기금리</li>
+<li>장기금리</li>
+</ul>
+
+<p>해석은 이렇다. 고평가 극단에서 시장이 더 오르면 중앙은행이 긴축으로 반응한다. 저평가 극단에서 시장이 더 빠지면 완화로 반응한다. 어느 쪽이든 정책이 추세를 되돌린다. 이 되먹임이 강한 구간에서 모멘텀의 전제가 깨진다.</p>
+
+<h2>4. 데이터와 실험 설계</h2>
+
+<p>요약 기사와 초록에는 표본 구성의 세부가 거의 없다. 확인된 항목과 미확인 항목을 나눠 정리한다.</p>
+
+<table>
+<thead>
+<tr><th>항목</th><th>내용</th><th>출처 확실성</th></tr>
+</thead>
+<tbody>
+<tr><td>대상 시장</td><td>미국 표본과 국제 표본 모두 사용</td><td>인용문에 명시</td></tr>
+<tr><td>자산</td><td>주식시장 지수, 국채(수익률곡선)</td><td>초록에 명시</td></tr>
+<tr><td>예측 변수</td><td>CAPE, 배당수익률, 장단기 금리차의 이동평균</td><td>초록·인용문에 명시</td></tr>
+<tr><td>모멘텀 룩백</td><td>12개월</td><td>인용문에 명시</td></tr>
+<tr><td>예측 시계</td><td>12개월</td><td>초록·인용문에 명시</td></tr>
+<tr><td>극단 판정 창</td><td>10년 또는 20년 역사적 범위</td><td>초록에 명시</td></tr>
+<tr><td>평가 지표</td><td>예측회귀의 \(R^2\), 표본 외 회귀 성과</td><td>초록·인용문에 명시</td></tr>
+<tr><td>표본 시작·종료 연도</td><td>본문에 명시되지 않음</td><td>미확인</td></tr>
+<tr><td>대상 국가 수와 목록</td><td>본문에 명시되지 않음</td><td>미확인</td></tr>
+<tr><td>관측 주기(월별/일별)</td><td>본문에 명시되지 않음. 월별로 추정</td><td>추정</td></tr>
+<tr><td>거래비용 반영 여부</td><td>본문에 명시되지 않음</td><td>미확인</td></tr>
+<tr><td>변동성 스케일링 적용 여부</td><td>본문에 명시되지 않음</td><td>미확인</td></tr>
+<tr><td>표본 외 검증 방식</td><td>표본 외 회귀를 수행했다고만 서술. 확장창/롤링창 구분 없음</td><td>부분 확인</td></tr>
+<tr><td>중첩 관측 처리</td><td>본문에 명시되지 않음. 12개월 시계라면 Hodrick 또는 Newey-West 표준오차가 필요</td><td>추정</td></tr>
+</tbody>
+</table>
+
+<p>12개월 시계 회귀는 중첩 표본을 만든다. 표준오차 처리와 유효 관측 수가 결과의 신뢰도를 좌우한다. 원논문 확인이 필요한 1순위 항목이다.</p>
+
+<h2>5. 주요 결과</h2>
+
+<h3>5.1 설명력 증가</h3>
+
+<p>가장 눈에 띄는 숫자는 \(R^2\) 증가율이다.</p>
+
+<table>
+<thead>
+<tr><th>예측 대상</th><th>\(R^2\) 증가</th><th>배수 환산</th></tr>
+</thead>
+<tbody>
+<tr><td>주식시장 수익률</td><td>최대 +110%</td><td>약 2.1배</td></tr>
+<tr><td>시계열 모멘텀 수익률</td><td>최대 +550%</td><td>약 6.5배</td></tr>
+</tbody>
+</table>
+
+<p>주의할 점이 있다. 이 수치는 <em>상대</em> 증가율이다. 기준 모형의 \(R^2\) 절대값은 본문에 명시되지 않았다. 12개월 시계 예측회귀의 통상적 \(R^2\)를 감안하면 절대 수준은 여전히 낮을 가능성이 크다(<strong>추정</strong>).</p>
+
+<p>그럼에도 6.5배라는 증가폭은 의미가 있다. 모멘텀 수익률의 예측 가능성 대부분이 경계 변수 하나에서 나온다는 뜻이기 때문이다.</p>
+
+<h3>5.2 국면별 성과 패턴</h3>
+
+<table>
+<thead>
+<tr><th>밸류에이션 국면</th><th>모멘텀 작동</th><th>주가 방향</th></tr>
+</thead>
+<tbody>
+<tr><td>중간 구간</td><td>안정적, 우수한 성과</td><td>추세 지속</td></tr>
+<tr><td>10년·20년 극단 부근</td><td>붕괴</td><td>반전 빈발</td></tr>
+</tbody>
+</table>
+
+<p>구간별 샤프비율이나 연환산 수익률 같은 성과 수치는 본문에 명시되지 않았다.</p>
+
+<h3>5.3 대칭성</h3>
+
+<p>붕괴는 방향을 가리지 않는다. 요약 기사의 표현대로 "밸류에이션이 극단적으로 높든 낮든, 모멘텀 신호가 양이든 음이든" 동일하게 나타난다. 이는 단순한 고평가 회피 규칙과 다르다. 저평가 극단에서도 추세를 믿으면 안 된다는 결론이다.</p>
+
+<h3>5.4 표본 외 성과</h3>
+
+<p>저자들은 <code>Boundaries</code> 변수가 표본 외 회귀에서도 모멘텀 수익률과 주식 위험프리미엄을 예측한다고 밝힌다. 구체적인 표본 외 \(R^2\) 값이나 Clark-West 검정 통계량은 본문에 없다.</p>
+
+<h3>5.5 부호가 아닌 크기</h3>
+
+<p>실무적으로 가장 유용한 결과는 이것이다. 극단 국면에서는 \(|r_{t-12,t}|\)가 클수록 모멘텀 수익률이 나빠진다. 강한 추세가 곧 위험 신호가 된다. 평상시 논리와 정확히 반대다.</p>
+
+<h2>6. 한계와 주의점</h2>
+
+<h3>6.1 데이터와 통계</h3>
+
+<ul>
+<li><strong>극단 표본의 희소성</strong>: 10년·20년 극단은 정의상 드물다. 붕괴 구간의 유효 관측 수가 적으면 추정치의 표준오차가 커진다. 원논문의 관측 수 확인이 필요하다.</li>
+<li><strong>중첩 회귀</strong>: 12개월 시계는 월별 데이터에서 11개월치 중첩을 만든다. 표준오차를 보정하지 않으면 t값이 과대평가된다.</li>
+<li><strong>다중 검정</strong>: 가치 지표 3개, 창 길이 2개(10년·20년), 이동평균 길이까지 조합하면 설계 자유도가 크다. 최대 110%, 최대 550%라는 "최대" 표현은 여러 사양 중 최선을 보고했을 가능성을 시사한다(<strong>추정</strong>).</li>
+</ul>
+
+<h3>6.2 구조적 문제</h3>
+
+<ul>
+<li><strong>CAPE 수준의 비정상성</strong>: 회계 기준, 자사주 매입, 무형자산 비중이 바뀌면 CAPE의 정상 범위도 이동한다. 20년 롤링 극단은 이 문제를 부분적으로만 완화한다.</li>
+<li><strong>금리차의 체제 변화</strong>: 양적완화 이후 수익률곡선의 정보 내용이 달라졌다는 견해가 있다. 2020년대의 역전 구간을 과거와 동일하게 다룰 수 있는지는 논쟁거리다.</li>
+<li><strong>주식 중심</strong>: 초록은 주식시장 시계열 모멘텀만 다룬다. 매니지드 퓨처스의 실제 포트폴리오는 통화, 원자재, 채권 비중이 크다. 이 발견이 전 자산군으로 확장되는지는 확인되지 않았다.</li>
+</ul>
+
+<h3>6.3 실전 적용에서 걸리는 지점</h3>
+
+<ul>
+<li><strong>데이터 공표 시차</strong>: CAPE는 10년 평균 실질이익을 쓴다. 이익 데이터는 시차를 두고 확정된다. 실시간에는 그때 알 수 있었던 값만 써야 한다.</li>
+<li><strong>롤링 극단의 선견 편향</strong>: 전체 표본의 최고·최저로 극단을 정의하면 미래 정보가 새어 든다. 반드시 시점 \(t\) 이전 창만 쓴다.</li>
+<li><strong>거래 빈도와 비용</strong>: 경계 근처를 오가면 게이트가 켜졌다 꺼졌다 반복한다. 이력 현상(히스테리시스)을 넣지 않으면 회전율이 폭증한다.</li>
+<li><strong>기회비용</strong>: 극단 국면은 몇 년씩 이어질 수 있다. 1990년대 후반이나 2020~2021년처럼 고평가가 장기간 지속되며 상승이 이어진 구간에서는 위험 축소가 큰 손실로 돌아온다.</li>
+</ul>
+
+<h2>7. 시스템 트레이딩 적용 아이디어</h2>
+
+<h3>7.1 데이터 파이프라인</h3>
+
+<table>
+<thead>
+<tr><th>입력</th><th>소스 예시</th><th>갱신 주기</th><th>주의</th></tr>
+</thead>
+<tbody>
+<tr><td>주가지수 총수익 지수</td><td>S&amp;P 500 TR, MSCI 국가지수</td><td>일별</td><td>배당 포함 계열 사용</td></tr>
+<tr><td>CAPE</td><td>Shiller 온라인 데이터셋</td><td>월별</td><td>이익 확정 시차 반영</td></tr>
+<tr><td>배당수익률</td><td>지수 제공사 또는 Shiller 계열</td><td>월별</td><td>CAPE의 대체 지표로 병렬 산출</td></tr>
+<tr><td>장단기 금리차</td><td>FRED <code>DGS10</code>, <code>DGS2</code>, <code>DTB3</code></td><td>일별</td><td>10년-3개월과 10년-2년 두 정의 모두 검토</td></tr>
+<tr><td>실행 수단</td><td>지수선물(예: ES) 또는 지수 ETF</td><td>-</td><td>롤 일정과 증거금 반영</td></tr>
+</tbody>
+</table>
+
+<h3>7.2 신호 산출 절차</h3>
+
+<ol>
+<li>월말마다 12개월 누적 수익률 \(r_{t-12,t}\)와 그 부호 \(s_t\)를 계산한다.</li>
+<li>각 가치 지표의 이동평균 \(\bar{x}_t\)를 구한다. 12개월 평균을 기본값으로 잡는다.</li>
+<li>120개월, 240개월 롤링 창에서 백분위 \(p^{(x)}_t\)와 극단도 \(e^{(x)}_t\)를 계산한다. 창은 반드시 시점 \(t\)까지만 쓴다.</li>
+<li>CAPE 극단도와 금리차 극단도를 결합해 \(B_t \in [0,1]\)을 만든다. 초기 사양은 두 값의 곱 또는 최댓값으로 두 버전을 모두 검증한다.</li>
+<li>변동성 추정치 \(\hat{\sigma}_t\)를 산출한다. 60일 실현변동성이나 EWMA를 쓴다.</li>
+</ol>
+
+<h3>7.3 포지션 규칙</h3>
+
+<p>보수적 버전은 경계에서 위험만 줄인다.</p>
+
+\[ w_t = s_t \cdot \frac{\sigma_{\mathrm{target}}}{\hat{\sigma}_t} \cdot \big(1 - \lambda B_t\big) \]
+
+<p>\(w_t\)는 목표 익스포저, \(\sigma_{\mathrm{target}}\)은 목표 변동성, \(\hat{\sigma}_t\)는 추정 변동성, \(\lambda \in [0,1]\)은 경계 감쇠 강도다. \(\lambda = 1\)이면 완전 극단에서 포지션이 0이 된다.</p>
+
+<p>공격적 버전은 논문의 음(-) 계수를 그대로 쓴다. 극단이면서 추세 크기가 클 때 방향을 뒤집는다.</p>
+
+\[ w_t = s_t \cdot \frac{\sigma_{\mathrm{target}}}{\hat{\sigma}_t} \cdot \Big(1 - \lambda B_t - \kappa\, B_t \left|r_{t-12,t}\right|\Big) \]
+
+<p>\(\kappa\)는 반전 기울기다. 괄호 안이 음수가 되면 반대 포지션이 된다. 이 버전은 표본 외 검증을 통과하기 전에는 실계좌에 올리지 않는 편이 낫다.</p>
+
+<h3>7.4 실행 세부</h3>
+
+<ul>
+<li><strong>리밸런싱</strong>: 신호는 월말 1회 갱신한다. 다만 금리차는 일별로 움직이므로 일별 모니터링 후 임계 돌파 시에만 중간 조정하는 절충안이 있다.</li>
+<li><strong>히스테리시스</strong>: 게이트 진입 임계와 해제 임계를 다르게 둔다. 예로 \(e_t > 0.8\)에서 켜고 \(e_t < 0.7\)에서 끈다. 경계 근처 진동을 막는다.</li>
+<li><strong>연속 함수 우선</strong>: 이진 온오프보다 \(B_t\)에 비례한 연속 축소가 회전율과 파라미터 민감도 모두에서 유리하다.</li>
+<li><strong>국가별 분리</strong>: 국제 표본으로 확장하면 CAPE와 금리차를 국가별로 계산한다. 국가별 게이트를 독립 적용한 뒤 위험 균등으로 합산한다.</li>
+</ul>
+
+<h3>7.5 검증 프로토콜</h3>
+
+<ol>
+<li>확장창 표본 외 설계로 \(\lambda\), \(\kappa\), 창 길이를 시점마다 재추정한다.</li>
+<li>기준선 세 개와 비교한다. 무조건 매수보유, 순수 시계열 모멘텀, 변동성 타깃만 적용한 모멘텀.</li>
+<li>평가는 수익률만 보지 않는다. 최대낙폭, 최악 12개월 구간, 왼쪽 꼬리 분위수를 함께 본다. 논문의 주장은 꼬리 위험 축소이기 때문이다.</li>
+<li>게이트가 켜졌던 기간을 따로 뽑아 사건 연구를 한다. 1999~2000년, 2007년, 2020년 같은 구간에서 무엇을 했는지 눈으로 확인한다.</li>
+<li>거래비용을 왕복 기준으로 넣는다. 선물이면 슬리피지 1틱 수준을 가정한다.</li>
+</ol>
+
+<h3>7.6 위험 관리 관점의 대안 활용</h3>
+
+<p>게이트를 포지션 크기에 직접 걸지 않는 방법도 있다. \(B_t\)가 높을 때만 풋 스프레드나 변동성 헤지를 켜는 식이다. 추세 상승 국면의 기회비용을 줄이면서 반전 위험만 잘라낸다.</p>
+
+<h2>8. 함께 볼 만한 개념</h2>
+
+<ul>
+<li><strong>Moskowitz, Ooi, Pedersen (2012), "Time Series Momentum"</strong> — 이 논문이 비판적으로 확장하는 기준 문헌이다.</li>
+<li><strong>Daniel, Moskowitz, "Momentum Crashes"</strong> — 횡단면 모멘텀의 붕괴를 다룬다. 반등 국면의 베타 급변이 원인이다.</li>
+<li><strong>Barroso, Santa-Clara, "Momentum Has Its Moments"</strong> — 변동성 스케일링으로 모멘텀 꼬리를 관리하는 표준 기법이다.</li>
+<li><strong>Campbell-Shiller 분해와 배당수익률 예측회귀</strong> — 가치 지표가 왜 장기 수익률을 예측하는지의 이론적 배경이다.</li>
+<li><strong>Goyal, Welch (2008)</strong> — 주식 수익률 예측 변수의 표본 외 성과에 회의를 던진 논문이다. 이 논문의 표본 외 주장을 평가할 때 필요한 잣대다.</li>
+<li><strong>Estrella, Mishkin</strong> — 수익률곡선 기울기와 침체 예측의 고전이다.</li>
+<li><strong>Faber, "A Quantitative Approach to Tactical Asset Allocation"</strong> — 이동평균 기반 시장 타이밍의 실무형 원형이다.</li>
+<li><strong>Asness, Moskowitz, Pedersen, "Value and Momentum Everywhere"</strong> — 가치와 모멘텀의 상호작용을 자산군 전반에서 본다.</li>
+<li><strong>키워드</strong>: 국면 전환 모형(regime switching), 마르코프 스위칭, 국면 조건부 오버레이, 위험 패리티와 변동성 타깃, 중첩 표본 표준오차(Hodrick, Newey-West), 표본 외 \(R^2\)와 Clark-West 검정, 통화정책 반응함수와 이른바 중앙은행 풋.</li>
+</ul>
+  <div class="abs" style="margin-top:32px"><b>ORIGINAL ABSTRACT</b>Time-series momentum stands as one of the most reliable and heavily backtested anomalies in quantitative finance, serving as a foundational alpha source for modern managed futures and trend-following strategies. However, a recent academic paper by Matti Suominen and Erik Hjalmarsson, titled &quot;Boundaries of Time Series Momentum,&quot; uncovers a structural vulnerability that every practitioner must account for. The authors demonstrate that while equity market trends persist reliably during normal business cycles, they systematically break down and aggressively reverse when market valuations reach historical extremes. This phenomenon establishes clear macro &quot;boundaries&quot; where chasing the trend shifts from a highly profitable strategy to a severe drawdown risk.</div>
+  <footer><p>로컬 Claude Code 로 생성한 요약 리포트입니다. 인용 전 반드시 원문을 확인하세요.</p></footer>
+</div>
+</body>
+</html>

@@ -1,85 +1,85 @@
-# 퀀트 논문 다이제스트 (arXiv + SSRN)
+# Quant Paper Digest — arXiv q-fin + SSRN
 
-**리포트 보기 → https://woodzkr.github.io/qfin-digest/**
+**[한국어 README](README.ko.md)** · **[Live digest →](https://woodzkr.github.io/qfin-digest/)**
 
-arXiv q-fin.PM/ST/TR 과 SSRN 7개 eJournal 에서 **최근 2개 날짜** 논문을 모아
-한국어로 요약하고 HTML 리포트로 만든다. 이미 요약한 논문은 자동으로 건너뛴다.
+Collects new work from arXiv q-fin.PM/ST/TR, seven SSRN eJournals and five practitioner
+blogs; summarizes each item in Korean *and* English with a local Claude Code CLI; and
+renders one self-contained HTML digest. Anything already summarized is skipped on the
+next run.
 
-설계 배경·실측 결과는 [DESIGN.md](DESIGN.md) 참고.
+[DESIGN.md](DESIGN.md) describes the system; [NOTES.md](NOTES.md) is the running log of
+decisions, dead ends and measurements.
 
-## 준비물
+## Requirements
 
 ```powershell
-npm i -g @anthropic-ai/claude-code     # 요약 엔진
-pip install requests playwright pypdf  # SSRN 용
+npm i -g @anthropic-ai/claude-code     # the summarizer
+pip install requests playwright pypdf  # SSRN path
 python -m playwright install chromium
 ```
 
-SSRN 은 Cloudflare 로 막혀 있어 **설치된 Chrome(또는 Edge)** 이 필요하다.
-스크립트가 전용 프로필로 Chrome 을 잠깐 띄웠다가 닫으며, 창은 화면 밖에 있어
-작업을 방해하지 않는다. arXiv 만 쓸 거면 `--source arxiv` 로 브라우저 없이 돌아간다.
+SSRN sits behind Cloudflare, so an installed **Chrome (or Edge)** is required. The
+script starts a throwaway-profile Chrome, parks it off-screen, and closes it when done.
+With `--source arxiv` nothing but Python is needed.
 
-## 사용법
-
-```powershell
-cd C:\Users\260165\arxiv-qfin-digest
-
-python run.py                      # 크롤 → 요약 → 리포트 생성 후 브라우저 열기
-python run.py --deep 5             # 위와 같되 ★ 상위 5편은 상세 리포트까지 미리 생성
-python run.py serve                # 원클릭 모드로 리포트 열기 (아래 참고)
-
-python run.py --source arxiv       # arXiv 만
-python run.py --source ssrn        # SSRN 만
-
-python run.py fetch                # 목록 + 초록 수집만
-python run.py summarize            # 미요약 논문만 요약
-python run.py deep --deep 3        # ★ 상위 3편 상세 리포트만 생성
-python run.py report --all         # 누적 전체로 리포트 다시 생성
-python run.py status               # 현재 누적 상태
-python run.py paper 2608.28399 ssrn-7363482    # 논문별 상세 리포트
-```
-
-### 원클릭 모드 — `python run.py serve`
-
-정적 HTML 은 스스로 Claude 를 부를 수 없어서, 원래는 요청 ID 를 복사해 터미널에
-붙여넣어야 했다. `serve` 는 `report/` 를 서빙하면서 작은 API 를 얹어 그 왕복을 없앤다.
+## Usage
 
 ```powershell
-python run.py serve            # http://127.0.0.1:8765 로 열림
+python run.py                      # crawl -> summarize -> report, then open it
+python run.py --deep 5             # same, but also pre-build the top 5 deep reports
+python run.py serve                # one-click mode (see below)
+
+python run.py --source arxiv       # arXiv only
+python run.py --source ssrn        # SSRN only
+
+python run.py fetch                # listings and abstracts only
+python run.py summarize            # summarize whatever is missing one
+python run.py deep --deep 3        # deep reports for the top 3
+python run.py report --all         # rebuild the digest over everything
+python run.py status               # what is in the store
+python run.py paper 2608.28399 --lang en
+python run.py publish              # commit generated files and push
 ```
 
-카드의 `📄 보고서 생성` 을 누르면 바로 생성이 시작되고, 버튼이
-`⏳ PDF 받는 중…` → `⏳ 요약 중…` → `📄 상세 리포트 보기` 로 바뀌며 새 탭이 열린다.
-생성이 끝나면 다이제스트 HTML 도 자동으로 다시 만들어져 링크가 반영된다.
-SSRN 용 Chrome 은 서버가 살아 있는 동안 한 번만 띄워 재사용한다. 종료는 `Ctrl+C`.
-
-서버 없이 파일을 그냥 열거나 GitHub Pages 에서 볼 때는 예전처럼 **명령어 복사** 방식으로
-조용히 되돌아간다. 페이지가 `/api/ping` 응답 유무로 알아서 판단한다.
-서버에 붙어 있으면 필터 바 오른쪽에 초록색 `로컬 서버 연결됨` 표시가 뜬다.
-
-주요 옵션
-
-| 옵션 | 설명 |
+| Flag | Meaning |
 |---|---|
-| `--source arxiv\|ssrn\|all` | 대상 출처 (기본 all) |
-| `--days N` | 출처별로 가져올 최근 날짜 수 (기본 2) |
-| `--workers N` | 요약 동시 실행 수 (기본 3) |
-| `--force` | 이미 처리한 논문도 다시 처리 |
-| `--all` | `report` 시 날짜 필터 없이 누적 전체 출력 |
-| `--no-open` | 생성 후 브라우저를 열지 않음 |
-| `--show-browser` | SSRN 용 Chrome 창을 화면에 표시 (디버깅) |
-| `--chrome <경로>` | Chrome/Edge 실행 파일 직접 지정 |
-| `--deep N` | ★ 상위 N편의 상세 리포트를 미리 생성 |
-| `--port N` | `serve` 포트 (기본 8765) |
+| `--source` | `all` (default), one source, or a list: `arxiv,quantpedia,man` |
+| `--blog-limit N` | newest N posts per blog (default 8) |
+| `--lang ko\|en\|both` | language for deep reports (default `ko`) |
+| `--days N` | recent listing dates per source (default 2) |
+| `--workers N` | parallel summaries (default 3) |
+| `--deep N` | pre-build deep reports for the top N by star |
+| `--force` | redo work that is already done |
+| `--all` | build the digest over everything, not just today |
+| `--push` | run `publish` after `all` |
+| `--port N` | `serve` port (default 8765) |
+| `--no-open` | do not open a browser |
+| `--show-browser` | keep the SSRN Chrome window on screen |
+| `--chrome <path>` | explicit Chrome/Edge executable |
 
-## 수집 대상
+### One-click mode — `python run.py serve`
 
-**arXiv** — q-fin.PM(Portfolio Management), q-fin.ST(Statistical Finance),
-q-fin.TR(Trading & Market Microstructure). 초록은 arXiv Atom API 에서 받는다.
+A static page cannot call Claude, so the plain file has to fall back to copying a
+command into a terminal. `serve` hosts `report/` with a small API attached, and the
+buttons then build on click:
 
-**SSRN** — 배지 약어로 표시된다.
+```
+📄 한국어 / 📄 English  →  ⏳ fetching PDF…  →  ⏳ writing report…  →  📄 (opens)
+```
 
-| 배지 | 저널 |
+The digest HTML is rebuilt automatically when a report finishes, and the SSRN Chrome
+instance is started once and reused for the server's life. Opened as a file or on
+GitHub Pages, the page probes `api/ping`, gets nothing, and silently reverts to the
+copy-a-command flow. A green `local server connected` badge shows which mode you are in.
+
+## Sources
+
+**arXiv** — q-fin.PM (Portfolio Management), q-fin.ST (Statistical Finance),
+q-fin.TR (Trading & Market Microstructure). Abstracts come from the arXiv Atom API.
+
+**SSRN** — badges on each card:
+
+| Badge | eJournal |
 |---|---|
 | QM | Quantitative Methods in Investing & Financial Statement Analysis |
 | TI | Technology & Investing |
@@ -89,83 +89,146 @@ q-fin.TR(Trading & Market Microstructure). 초록은 arXiv Atom API 에서 받�
 | MEF | Capital Markets: Market Efficiency |
 | MMS | Capital Markets: Market Microstructure |
 
-## 리포트 화면
+**Blogs** — practitioner writing rather than papers, so they are taken as the newest
+N posts instead of "the two most recent dates".
 
-- **출처 필터** — arXiv / SSRN
-- **분야 필터** — PM·ST·TR / QM·TI·GIS·GEX·APV·MEF·MMS (복수 선택, 미선택이면 전체)
-- **검색·정렬** — 제목·요약·저자·키워드 검색, ★ 순 정렬
-- **논문 카드** — 한 줄 요약 + ★1~5. `자세히` 를 누르면 불릿 3~4개 /
-  방법 / 데이터 / 시사점 / **적용도 근거** / 키워드 / 원문 초록
-
-### ★ = 시스템 트레이딩 구현 가능성
-
-연구의 학술적 수준이 아니라 **계량 규칙으로 코딩해 자동매매로 돌릴 수 있는가**만 잰다.
-
-| ★ | 뜻 |
-|---|---|
-| 5 | 진입·청산 규칙이 명시적이고 공개·표준 데이터만으로 그대로 구현 가능 |
-| 4 | 매매 신호·전략 방법론을 제시하고 표준 데이터로 재현 가능. 파라미터는 직접 결정 |
-| 3 | 쓸 만한 특징이나 포트폴리오 기법은 주지만 설계를 더 해야 함 |
-| 2 | 구현 장벽이 큼 — 위성 사진, 설문, 독점 주문흐름, 초저지연 인프라 등 |
-| 1 | 이론·정책·법률·서베이. 자동매매로 옮길 여지 없음 |
-
-통념을 반증하거나, 백테스트 검증 방법론을 개선하거나, 착상이 독창적이면 **+1**.
-점수 근거는 카드를 펼치면 `적용도 n/5` 항목에 데이터 확보 난이도와 함께 나온다.
-- **버튼** — `원문`, `PDF`, `📄 보고서 생성`
-
-### 보고서 생성 버튼 흐름
-
-| | `serve` 로 열었을 때 | 파일로 열거나 Pages 에서 볼 때 |
+| Badge | Site | How |
 |---|---|---|
-| 클릭하면 | 바로 생성 시작, 진행 상황이 버튼에 표시되고 끝나면 새 탭으로 열림 | 하단 바에 요청이 쌓임 |
-| 그다음 | 없음 | `요청 목록 복사` → 터미널에 붙여넣어 실행 |
+| QP | [Quantpedia](https://quantpedia.com/blog/) | RSS feed |
+| MAN | [Man Group Insights](https://www.man.com/insights) | landing page + one request per article |
+| AA | [Alpha Architect](https://alphaarchitect.com/blog/) | RSS feed (the blog page itself is Cloudflare-blocked) |
+| MS | [Macrosynergy](https://macrosynergy.com/research/blog/) | RSS feed, after clearing Cloudflare in a real Chrome |
+| QC | [Quantocracy](https://quantocracy.com/) | homepage scrape of its curated link list |
 
-전문 확보 방식: arXiv 는 `arxiv.org/html/{id}v1`, SSRN 은 PDF 를 받아 텍스트를 뽑는다.
-둘 다 실패하면 초록만으로 만들고 그 사실을 리포트 머리말에 적는다.
-수식은 원본 LaTeX 를 살려 MathJax 로 렌더한다.
+Quantocracy is an aggregator, so it overlaps the sites above. Entries pointing at a
+site collected directly are dropped, and the direct entry is kept — Quantocracy
+truncates its excerpts while the origin's own feed carries the whole thing. The store
+is also checked by normalized URL, which catches copies left by an earlier run with a
+narrower `--source`.
 
-## Git / GitHub Pages
+## The digest page
 
-저장소에는 **코드와 생성물을 함께** 커밋한다. `state/seen.json`(누적 DB)이 같이 올라가야
-다른 기기에서 clone 해도 이미 요약한 논문을 건너뛴다.
+- **Language switch** — 한국어 / English, applied instantly. Both are in the page.
+- **Filters** — source (arXiv / SSRN), field (PM·ST·TR, QM·TI·GIS·GEX·APV·MEF·MMS),
+  free-text search over titles, summaries, authors and keywords.
+- **Cards** — one-liner plus ★1–5. Expanding shows 3–4 bullets, method, data,
+  the trading angle, why it got that score, keywords and the original abstract.
+- **Buttons** — `abs`, `PDF`, and one deep-report button per language.
 
-커밋에서 제외하는 것 (`.gitignore`)
+### ★ = systematic-trading implementability
 
-- `state/chrome_profile/` — 150MB 넘는 캐시에 더해 **`cf_clearance` 세션 쿠키가 들어 있다.**
-  절대 올리면 안 된다.
+This does not score academic quality. It scores whether the paper can be turned into
+rules a machine can trade.
+
+| ★ | Meaning |
+|---|---|
+| 5 | Explicit entry/exit rules on public, standard data. Backtestable as written. |
+| 4 | Gives a signal or method reproducible from standard data; parameters left to you. |
+| 3 | Useful features or portfolio techniques, but needs substantial further design. |
+| 2 | High barrier — satellite imagery, surveys, proprietary order flow, ultra-low latency. |
+| 1 | Theory, policy, law or survey. Nothing to automate. |
+
+**+1** if it refutes a popular belief, improves backtest methodology, or is original
+enough to be worth reading anyway. Data you cannot obtain caps the score at 2 no matter
+how good the results look. Every score carries a one-line justification that must
+mention data availability; expand a card to read it.
+
+## Deep reports
+
+Eight sections: at a glance, the gap, method, data and design, results, limitations,
+systematic-trading angle, related concepts.
+
+Body text comes from the arXiv HTML edition or the SSRN PDF. If neither can be had, the
+abstract is used and the page says so. Math is preserved as real LaTeX and rendered
+with MathJax — arXiv's `<math alttext="...">` is restored before tags are stripped, so
+subscripts survive.
+
+Files land at `report/paper/{id}.{lang}.html`.
+
+## Git and GitHub Pages
+
+Code *and* generated files are committed. `state/seen.json` has to travel with the repo,
+otherwise a clone on another machine re-summarizes everything.
+
+Excluded in `.gitignore`:
+
+- `state/chrome_profile/` — 150 MB of cache **and the `cf_clearance` session cookie**.
+  Never commit this.
 - `state/*.bak`, `state/*.tmp`, `__pycache__/`
 
-루트의 `index.html` 은 `report` 명령이 돌 때마다 자동으로 다시 만들어지며,
-날짜별 다이제스트와 상세 리포트 목록을 담는다. GitHub Pages 의 진입점이다.
+`index.html` at the repository root is regenerated on every `report` run and is the
+GitHub Pages entry point.
 
 ```powershell
-python run.py --deep 5 --push   # 수집 → 요약 → 상세 리포트 → 리포트 생성 → 커밋 & push
-python run.py publish           # 지금 있는 생성물만 커밋 & push
-python run.py publish -m "메모"  # 커밋 메시지 직접 지정
+python run.py --deep 5 --push   # crawl -> summarize -> deep reports -> report -> push
+python run.py publish           # publish whatever is already generated
+python run.py publish -m "note"
 ```
 
-`publish` 는 커밋 메시지를 `digest 2026-08-31 — 요약 43편, 상세 리포트 3편` 처럼
-자동으로 만든다. push 하고 1~2분이면 Pages 에 반영된다.
-`git` 이 PATH 에 없으면 `%LOCALAPPDATA%\Programs\PortableGit` 도 함께 찾는다.
+`publish` writes a message like `digest 2026-08-31 — 59 summaries, 6 reports` on its own.
+Pages picks the change up a minute or two after the push. If `git` is not on PATH,
+`%LOCALAPPDATA%\Programs\PortableGit` is also searched.
 
-## 파일
+## Updating from the web, with no machine of your own running
+
+`.github/workflows/update-digest.yml` runs the whole pipeline on GitHub's servers.
+
+- **Actions → Update digest → Run workflow** starts it by hand. That button works from
+  a phone, and needs nothing switched on at home.
+- It also runs on a schedule: 06:00 KST, weekdays.
+- Inputs let you pick sources, how many dates, how many deep reports and which language.
+
+One-time setup: add an `ANTHROPIC_API_KEY` secret under
+**Settings → Secrets and variables → Actions**. The summarizer is the Claude Code CLI,
+and a CI runner has no interactive login to fall back on, so usage is billed to that
+API key.
+
+Two caveats worth knowing:
+
+- **Only people with write access can press that button.** GitHub does not expose
+  workflow triggers to anonymous visitors, and it should not. Someone else who wants
+  their own copy should fork or clone and run it locally — the Quick start below is
+  written for exactly that.
+- **SSRN is best-effort in CI.** Its Cloudflare challenge is usually refused from
+  datacentre IPs, so the default source list is `arxiv,quantpedia,man`. Opting SSRN
+  back in will not fail the run if it gets blocked; the other sources still land.
+
+## Quick start for someone else's machine
+
+```powershell
+git clone https://github.com/WoodzKR/qfin-digest
+cd qfin-digest
+pip install requests playwright pypdf
+python -m playwright install chromium
+npm i -g @anthropic-ai/claude-code
+claude login          # or set ANTHROPIC_API_KEY
+
+python run.py --source arxiv,quantpedia,man   # no browser needed
+python run.py serve                            # one-click deep reports
+```
+
+`state/seen.json` comes with the clone, so nothing already summarized is paid for twice.
+Add `--source all` once Chrome is installed to include SSRN.
+
+## Layout
 
 ```
 run.py                 CLI
 arxiv_digest/
-  config.py            경로·URL·카테고리·SSRN 저널 목록
-  listing.py           arXiv /list/{cat}/recent 크롤
-  api.py               arXiv Atom API (제목·저자·초록)
-  ssrn.py              SSRN 목록 API + Chrome/CDP 초록·PDF 수집
-  store.py             seen.json 입출력 (원자적 저장 + .bak)
-  summarize.py         claude CLI 호출, JSON 스키마 요약
-  paper.py             논문별 심층 리포트 (수식 보존 + MathJax)
-  render.py            다이제스트 HTML 렌더링
+  config.py            paths, endpoints, category and journal tables
+  listing.py           arXiv /list/{cat}/recent crawler
+  api.py               arXiv Atom API
+  ssrn.py              SSRN listing API + Chrome/CDP abstract and PDF fetch
+  store.py             seen.json I/O, atomic writes, schema migration
+  summarize.py         claude CLI calls, bilingual JSON schema
+  paper.py             deep reports, math preservation
+  render.py            digest and index rendering
+  server.py            local one-click server
 state/
-  seen.json            누적 DB — 이 파일이 중복 요약을 막는다
-  chrome_profile/      SSRN 전용 Chrome 프로필 (cf_clearance 쿠키 보관)
-report/                생성된 리포트
+  seen.json            the store — this is what prevents re-summarizing
+  chrome_profile/      SSRN Chrome profile (holds cf_clearance; not committed)
+report/                generated output
 ```
 
-`state/seen.json` 을 지우면 전부 다시 요약한다. 한 논문만 다시 하려면
-그 항목의 `summary` 키를 지우고 `python run.py summarize` 를 실행하면 된다.
+Delete `state/seen.json` to redo everything. To redo one paper, drop its `summary` key
+and run `python run.py summarize`.

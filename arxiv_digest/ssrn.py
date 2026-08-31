@@ -1,14 +1,15 @@
-"""SSRN eJournal 수집.
+"""SSRN eJournal collection, in two stages.
 
-두 단계로 나뉜다.
-
-1. **목록** — `api.ssrn.com/content/v1/bindings/{journal_id}/papers` 는 Cloudflare 뒤에
-   있지 않아 평범한 HTTP 로 읽힌다. 제목·저자·소속·승인일(approved_date)·abstract_id 를 준다.
-   다만 **초록은 주지 않는다.**
-2. **초록/전문** — `papers.ssrn.com` 은 Cloudflare JS 챌린지로 막혀 있다. requests 는 물론
-   Playwright 가 직접 띄운 Chromium/Chrome 도 통과하지 못한다. 통과하는 방법은
-   *우리가 직접 실행한 진짜 Chrome 에 CDP 로 붙는 것* 하나뿐이라, 그렇게 한다.
-   챌린지를 한 번 통과하면 `cf_clearance` 쿠키가 전용 프로필에 남아 다음 실행이 빨라진다.
+1. **Listing** — ``api.ssrn.com/content/v1/bindings/{journal_id}/papers`` sits
+   outside Cloudflare and answers plain HTTP. It gives title, authors,
+   affiliation, ``approved_date`` and ``abstract_id``. It does **not** give the
+   abstract, and the per-paper detail endpoints all return 401.
+2. **Abstract / full text** — ``papers.ssrn.com`` is behind a Cloudflare JS
+   challenge. requests fails, and so does Playwright driving its own bundled
+   Chromium *or* a real Chrome it launched itself. The one thing that works is
+   attaching over CDP to a Chrome **we started ourselves**, so that is what this
+   does. Clearing the challenge once leaves a ``cf_clearance`` cookie in the
+   dedicated profile, which makes later runs fast.
 """
 
 from __future__ import annotations
@@ -55,7 +56,7 @@ def _parse_date(label: str) -> date | None:
         return None
 
 
-# ── 1. 목록 (Cloudflare 없음) ────────────────────────────────────────────
+# ── 1. Listing (no Cloudflare) ───────────────────────────────────────────
 
 def _api_session() -> requests.Session:
     sess = requests.Session()
@@ -69,8 +70,9 @@ def _api_session() -> requests.Session:
     return sess
 
 
-def list_journal(jid: str, recent_days: int, session: requests.Session | None = None) -> list[dict]:
-    """저널 하나에서 논문이 실린 최근 `recent_days`개 승인일의 논문을 모은다."""
+def list_journal(jid: str, recent_days: int,
+                 session: requests.Session | None = None) -> list[dict]:
+    """Papers from the most recent ``recent_days`` approval dates of one journal."""
     sess = session or _api_session()
     short, name = SSRN_JOURNALS.get(jid, (jid, jid))
     picked_days: list[str] = []
@@ -88,7 +90,7 @@ def list_journal(jid: str, recent_days: int, session: requests.Session | None = 
             label = paper.get("approved_date") or ""
             if label not in picked_days:
                 if len(picked_days) >= recent_days:
-                    return out                       # 날짜 내림차순이므로 여기서 끝
+                    return out          # results are date-descending, so we are done
                 picked_days.append(label)
             day = _parse_date(label)
             ext_id = str(paper.get("id") or "")
@@ -118,7 +120,7 @@ def list_journal(jid: str, recent_days: int, session: requests.Session | None = 
 
 def collect_recent(journal_ids: list[str] | None = None, recent_days: int = 2,
                    verbose: bool = True) -> tuple[dict[str, dict], list[str]]:
-    """저널별 최근 N개 날짜를 모아 합집합으로 돌려준다. (중복 제거된 dict, 날짜 목록)"""
+    """Union across journals, de-duplicated. Returns (papers, dates)."""
     jids = journal_ids or list(SSRN_JOURNALS)
     sess = _api_session()
     merged: dict[str, dict] = {}
@@ -129,7 +131,7 @@ def collect_recent(journal_ids: list[str] | None = None, recent_days: int = 2,
         papers = list_journal(jid, recent_days, sess)
         seen_days = sorted({p["listed_date"] for p in papers if p["listed_date"]}, reverse=True)
         if verbose:
-            print(f"  [{short}] {name[:44]} — {', '.join(seen_days) or '없음'} : {len(papers)}건")
+            print(f"  [{short}] {name[:44]} — {', '.join(seen_days) or 'none'} : {len(papers)}")
         days.update(seen_days)
         for paper in papers:
             prev = merged.get(paper["id"])
@@ -144,13 +146,13 @@ def collect_recent(journal_ids: list[str] | None = None, recent_days: int = 2,
     return merged, sorted(days, reverse=True)
 
 
-# ── 2. 초록/전문 (Cloudflare — 진짜 Chrome + CDP) ────────────────────────
+# ── 2. Abstract / full text (Cloudflare — real Chrome over CDP) ──────────
 
 class SsrnBrowser:
-    """직접 띄운 Chrome 에 CDP 로 붙는다. with 문으로 쓴다.
+    """Launches Chrome ourselves, then attaches to it over CDP. Use as a context manager.
 
-    Playwright 가 launch() 한 브라우저는 Cloudflare 가 자동화로 판정해 막는다.
-    반면 우리가 별도 프로필로 실행한 Chrome 에 connect_over_cdp 로 붙으면 통과한다.
+    A browser Playwright ``launch()``es is flagged as automation and never clears
+    the challenge; a plain Chrome we started with ``--remote-debugging-port`` does.
     """
 
     def __init__(self, port: int = SSRN_CDP_PORT, profile=CHROME_PROFILE,
@@ -166,18 +168,20 @@ class SsrnBrowser:
 
     def __enter__(self) -> "SsrnBrowser":
         if not self.chrome:
-            raise SsrnError("Chrome 또는 Edge 를 찾지 못했습니다. --chrome 으로 경로를 지정하세요.")
+            raise SsrnError("No Chrome or Edge found. Pass --chrome with an explicit path.")
         try:
             from playwright.sync_api import sync_playwright
         except ImportError as exc:
-            raise SsrnError("playwright 가 없습니다. `pip install playwright && playwright install chromium`") from exc
+            raise SsrnError("playwright is missing. "
+                            "`pip install playwright && playwright install chromium`") from exc
 
         os.makedirs(self.profile, exist_ok=True)
         args = [self.chrome, f"--remote-debugging-port={self.port}",
                 f"--user-data-dir={self.profile}", "--no-first-run",
                 "--no-default-browser-check", "--disable-features=Translate"]
         if self.offscreen:
-            # 화면 밖에 띄워 작업을 방해하지 않는다. 진짜 창이라 챌린지는 그대로 통과한다.
+            # Parked off-screen so it stays out of the way. Still a real window,
+            # so the challenge clears exactly as it would on screen.
             args += ["--window-position=-2400,-2400", "--window-size=1280,900"]
         args.append("about:blank")
         self._proc = subprocess.Popen(args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -190,7 +194,7 @@ class SsrnBrowser:
                 time.sleep(0.5)
         else:
             self.__exit__(None, None, None)
-            raise SsrnError(f"Chrome 디버깅 포트 {self.port} 에 붙지 못했습니다.")
+            raise SsrnError(f"Could not attach to the Chrome debugging port {self.port}.")
 
         self._pw = sync_playwright().start()
         self._browser = self._pw.chromium.connect_over_cdp(f"http://127.0.0.1:{self.port}")
@@ -207,12 +211,13 @@ class SsrnBrowser:
             except Exception:
                 pass
 
-    # -- 내부 --------------------------------------------------------
+    # -- internals ---------------------------------------------------
     def _wait_content(self, selector: str, timeout: int = 90) -> bool:
-        """Cloudflare 챌린지가 끝나고 실제 콘텐츠가 나올 때까지 기다린다.
+        """Wait for real content rather than for the challenge to disappear.
 
-        챌린지 페이지 제목은 브라우저 언어에 따라 번역되므로 제목으로 판정하지 않고
-        목표 셀렉터가 나타나는지로만 판정한다.
+        The interstitial's title is localised by browser language (it reads
+        "잠시만 기다리십시오…" on a Korean Chrome), so title matching is unreliable.
+        Waiting on the target selector is not.
         """
         for _ in range(timeout):
             try:
@@ -233,18 +238,17 @@ class SsrnBrowser:
         except Exception:
             return BROWSER_UA
 
-    # -- 공개 --------------------------------------------------------
+    # -- public ------------------------------------------------------
     def fetch_abstract(self, entry: dict, timeout: int = 90) -> dict:
-        """초록 페이지에서 초록·PDF 링크·키워드를 읽어 entry 를 갱신한다."""
+        """Read the abstract, PDF link and keywords off the abstract page."""
         from .config import SSRN_ABS_URL
 
         url = entry.get("abs_url") or SSRN_ABS_URL.format(id=entry["ext_id"])
         self._page.goto(url, wait_until="domcontentloaded", timeout=120_000)
         if not self._wait_content("div.abstract-text", timeout):
-            raise SsrnError("Cloudflare 챌린지를 통과하지 못했습니다 (초록 영역 없음).")
+            raise SsrnError("Cloudflare challenge not cleared (no abstract element).")
 
         text = self._page.locator("div.abstract-text").first.inner_text()
-        # 첫 줄의 "Abstract" 라벨을 떼어낸다.
         text = re.sub(r"^\s*abstract\s*\n+", "", text, flags=re.I).strip()
         entry["abstract"] = " ".join(text.split())
 
@@ -252,8 +256,8 @@ class SsrnBrowser:
         if links.count():
             href = links.first.get_attribute("href") or ""
             if href:
-                entry["pdf_url"] = ("https://papers.ssrn.com/sol3/" + href.lstrip("/")
-                                    if not href.startswith("http") else href)
+                entry["pdf_url"] = (href if href.startswith("http")
+                                    else "https://papers.ssrn.com/sol3/" + href.lstrip("/"))
         try:
             kw = self._page.locator("div.keywords-text, p.keywords").first
             if kw.count():
@@ -264,7 +268,7 @@ class SsrnBrowser:
         return entry
 
     def download_pdf(self, entry: dict) -> bytes:
-        """브라우저가 얻어 둔 cf_clearance 쿠키로 PDF 를 내려받는다."""
+        """Fetch the PDF using the cf_clearance cookie the browser earned."""
         url = entry.get("pdf_url") or SSRN_PDF_URL.format(id=entry["ext_id"])
         sess = requests.Session()
         sess.headers.update({
@@ -274,14 +278,14 @@ class SsrnBrowser:
         })
         resp = sess.get(url, cookies=self.cookies(), timeout=180, allow_redirects=True)
         if resp.status_code != 200 or not resp.content.startswith(b"%PDF"):
-            raise SsrnError(f"PDF 를 받지 못했습니다 (HTTP {resp.status_code}, "
-                            f"{len(resp.content)}바이트).")
+            raise SsrnError(f"PDF download failed (HTTP {resp.status_code}, "
+                            f"{len(resp.content)} bytes).")
         return resp.content
 
 
 def fetch_abstracts(entries: list[dict], browser: SsrnBrowser | None = None,
                     verbose: bool = True) -> tuple[int, int]:
-    """초록이 없는 entry 들을 채운다. (성공, 실패)."""
+    """Fill in missing abstracts. Returns (succeeded, failed)."""
     todo = [e for e in entries if not e.get("abstract")]
     if not todo:
         return 0, 0
@@ -296,11 +300,11 @@ def fetch_abstracts(entries: list[dict], browser: SsrnBrowser | None = None,
                 ctx.fetch_abstract(entry)
                 ok += 1
                 if verbose:
-                    print(f"  [{i}/{len(todo)}] 초록 OK  {entry['ext_id']} "
-                          f"{entry.get('title', '')[:55]}")
+                    print(f"  [{i}/{len(todo)}] ok   {entry['ext_id']} "
+                          f"{entry.get('title', '')[:52]}")
             except Exception as exc:  # noqa: BLE001
                 fail += 1
-                print(f"  [{i}/{len(todo)}] 초록 실패 {entry['ext_id']} — {str(exc)[:140]}",
+                print(f"  [{i}/{len(todo)}] FAIL {entry['ext_id']} — {str(exc)[:140]}",
                       file=sys.stderr)
     finally:
         if own:
@@ -312,21 +316,19 @@ def pdf_to_text(data: bytes) -> str:
     try:
         from pypdf import PdfReader
     except ImportError as exc:
-        raise SsrnError("pypdf 가 없습니다. `pip install pypdf`") from exc
-    reader = PdfReader(io.BytesIO(data))
+        raise SsrnError("pypdf is missing. `pip install pypdf`") from exc
     chunks = []
-    for page in reader.pages:
+    for page in PdfReader(io.BytesIO(data)).pages:
         try:
             chunks.append(page.extract_text() or "")
         except Exception:
             continue
-    text = "\n\n".join(chunks)
-    text = re.sub(r"[ \t]+", " ", text)
+    text = re.sub(r"[ \t]+", " ", "\n\n".join(chunks))
     return re.sub(r"\n\s*\n+", "\n\n", text).strip()
 
 
 def fetch_fulltext(entry: dict, browser: SsrnBrowser | None = None) -> tuple[str, str]:
-    """(본문 텍스트, 출처 설명). 실패하면 ('', 사유)."""
+    """(body text, provenance note). Empty body means we fell back to the abstract."""
     own = browser is None
     ctx = SsrnBrowser() if own else browser
     try:
@@ -336,7 +338,7 @@ def fetch_fulltext(entry: dict, browser: SsrnBrowser | None = None) -> tuple[str
             ctx.fetch_abstract(entry)
         data = ctx.download_pdf(entry)
     except Exception as exc:  # noqa: BLE001
-        return "", f"PDF 확보 실패 — {str(exc)[:90]} (초록만 사용)"
+        return "", f"PDF unavailable — {str(exc)[:90]} (abstract only)"
     finally:
         if own:
             ctx.__exit__(None, None, None)
@@ -344,8 +346,8 @@ def fetch_fulltext(entry: dict, browser: SsrnBrowser | None = None) -> tuple[str
     try:
         text = pdf_to_text(data)
     except Exception as exc:  # noqa: BLE001
-        return "", f"PDF 텍스트 추출 실패 — {str(exc)[:90]} (초록만 사용)"
+        return "", f"PDF text extraction failed — {str(exc)[:90]} (abstract only)"
     if len(text) < 2000:
-        return "", "PDF 본문이 너무 짧음 (초록만 사용)"
+        return "", "PDF body too short (abstract only)"
     truncated = len(text) > MAX_CHARS
-    return text[:MAX_CHARS], f"SSRN PDF 전문{' (앞부분 발췌)' if truncated else ''}"
+    return text[:MAX_CHARS], f"SSRN PDF full text{' (truncated)' if truncated else ''}"

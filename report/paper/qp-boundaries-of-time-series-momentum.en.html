@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Boundaries of Time Series Momentum — deep report</title>
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --panel-2:#fbfcfd; --ink:#16191d; --muted:#5c6672;
+  --line:#e2e6ea; --accent:#3b6ef0; --accent-soft:#eaf0fe;
+  --pm:#3b6ef0; --st:#0f9d76; --tr:#d4791f; --ssrn:#8b5cf6; --other:#7a68c9;
+  --qp:#c0392b; --man:#0f766e;
+  --star:#f0a91b; --shadow:0 1px 2px rgba(16,24,40,.06),0 4px 14px rgba(16,24,40,.05);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#101317; --panel:#181c22; --panel-2:#1e232a; --ink:#e7ebf0; --muted:#98a3b0;
+    --line:#2a3038; --accent:#7ea3ff; --accent-soft:#1d2637;
+    --pm:#7ea3ff; --st:#4bd6a8; --tr:#f0ad5e; --ssrn:#b18cff; --other:#b0a0f0;
+    --qp:#f08a7c; --man:#3fc4b4;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.25);
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:15px/1.65 -apple-system,"Segoe UI","Malgun Gothic",Roboto,"Helvetica Neue",sans-serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:32px 20px 140px}
+a{color:var(--accent)}
+
+/* language switching: only the active language is displayed */
+[data-l]{display:none}
+html[data-lang="ko"] [data-l="ko"]{display:revert}
+html[data-lang="en"] [data-l="en"]{display:revert}
+
+header.top{margin-bottom:24px}
+h1{font-size:26px;margin:0 0 6px;letter-spacing:-.02em}
+.sub{color:var(--muted);font-size:13.5px;margin:0}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:9px 13px;font-size:13px;box-shadow:var(--shadow)}
+.stat b{font-size:16px;margin-right:5px}
+
+.controls{position:sticky;top:0;z-index:20;background:var(--bg);
+  padding:12px 0 10px;margin:20px 0 8px;border-bottom:1px solid var(--line)}
+.row{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:7px}
+.row:last-child{margin-bottom:0}
+.rowlabel{font-size:11.5px;color:var(--muted);font-weight:700;letter-spacing:.06em;min-width:38px}
+.chip{border:1px solid var(--line);background:var(--panel);color:var(--muted);
+  border-radius:999px;padding:5px 12px;font-size:12.5px;cursor:pointer;
+  font-family:inherit;transition:.12s;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);
+  color:var(--accent);font-weight:600}
+.chip:hover{border-color:var(--accent)}
+.langsel{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.langsel button{border:0;background:var(--panel);color:var(--muted);padding:5px 13px;
+  font:inherit;font-size:12.5px;cursor:pointer;transition:.12s}
+.langsel button[aria-pressed="true"]{background:var(--accent);color:#fff;font-weight:700}
+#q{flex:1;min-width:180px;padding:7px 12px;border:1px solid var(--line);border-radius:8px;
+  background:var(--panel);color:var(--ink);font:inherit;font-size:13.5px}
+#q:focus{outline:2px solid var(--accent);outline-offset:-1px}
+select{padding:7px 10px;border:1px solid var(--line);border-radius:8px;
+  background:var(--panel);color:var(--ink);font:inherit;font-size:13.5px}
+.count{color:var(--muted);font-size:12.5px;margin-left:auto}
+
+h2.day{font-size:15px;margin:30px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--line);
+  color:var(--muted);font-weight:600;letter-spacing:.02em}
+h2.day span.d{color:var(--ink)}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow)}
+.card.hide{display:none}
+.badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+.badge{font-size:11px;font-weight:700;letter-spacing:.04em;padding:2.5px 8px;
+  border-radius:5px;color:#fff}
+.b-PM{background:var(--pm)} .b-ST{background:var(--st)} .b-TR{background:var(--tr)}
+.b-ssrn{background:var(--ssrn)} .b-qp{background:var(--qp)} .b-man{background:var(--man)}
+.b-XX{background:var(--other)}
+.badge.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);font-weight:600}
+.stars{color:var(--star);font-size:12.5px;letter-spacing:1px;margin-left:auto}
+.stars i{color:var(--line);font-style:normal}
+
+.title{font-size:16.5px;font-weight:650;line-height:1.4;margin:0 0 6px;letter-spacing:-.01em}
+.title a{color:var(--ink);text-decoration:none}
+.title a:hover{color:var(--accent)}
+.oneliner{margin:0 0 8px;font-size:14.5px;color:var(--ink)}
+.oneliner::before{content:"\25B8 ";color:var(--accent)}
+.authors{margin:0;color:var(--muted);font-size:12.5px}
+
+.detail{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+.detail[hidden]{display:none}
+.detail ul{margin:0 0 12px;padding-left:19px}
+.detail li{margin-bottom:4px}
+.kv{display:grid;grid-template-columns:92px 1fr;gap:5px 10px;font-size:13.5px;margin-bottom:12px}
+.kv dt{color:var(--muted);font-weight:600}
+.kv dd{margin:0}
+.keys{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.key{font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);
+  border-radius:5px;padding:2px 7px;color:var(--muted)}
+.abs{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;
+  padding:11px 13px;font-size:13px;color:var(--muted);line-height:1.7}
+.abs b{color:var(--ink);display:block;margin-bottom:4px;font-size:12px;letter-spacing:.03em}
+
+.actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;align-items:center}
+.actions .sep{width:1px;height:18px;background:var(--line);margin:0 2px}
+.btn{border:1px solid var(--line);background:var(--panel);color:var(--muted);
+  border-radius:7px;padding:5.5px 12px;font-size:12.5px;cursor:pointer;
+  font-family:inherit;text-decoration:none;display:inline-block;transition:.12s}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{filter:brightness(1.08);color:#fff}
+.btn.queued{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);
+  font-weight:600}
+.btn.done{border-color:var(--st);color:var(--st)}
+.btn.failed{border-color:var(--tr);color:var(--tr)}
+#livebadge{font-size:11.5px;color:var(--st);font-weight:700;letter-spacing:.03em;
+  display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+#livebadge::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--st);
+  animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--panel);
+  border-top:1px solid var(--line);box-shadow:0 -4px 20px rgba(0,0,0,.10);
+  padding:12px 20px;display:none}
+.bar.on{display:block}
+.bar-in{max-width:1000px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.bar pre{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;
+  padding:6px 9px;font-size:12px;flex:1;min-width:200px;overflow:auto;margin:0;
+  white-space:pre;line-height:1.5}
+.empty{color:var(--muted);text-align:center;padding:50px 0}
+footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);
+  color:var(--muted);font-size:12px}
+@media print{.controls,.bar,.actions{display:none!important}.detail{display:block!important}
+  .card{break-inside:avoid;box-shadow:none}}
+
+.doc{max-width:780px}
+.doc h1{font-size:24px;line-height:1.35;margin:0 0 10px}
+.doc h2{font-size:19px;margin:38px 0 12px;padding-bottom:7px;border-bottom:2px solid var(--accent);
+  letter-spacing:-.01em}
+.doc h3{font-size:15.5px;margin:22px 0 8px;color:var(--accent)}
+.doc p{margin:0 0 14px}
+.doc ul,.doc ol{margin:0 0 16px;padding-left:22px}
+.doc li{margin-bottom:7px}
+.doc blockquote{margin:0 0 18px;padding:14px 18px;border-left:3px solid var(--accent);
+  background:var(--accent-soft);border-radius:0 8px 8px 0;font-size:15.5px}
+.doc blockquote p:last-child{margin-bottom:0}
+.doc table{width:100%;border-collapse:collapse;margin:0 0 18px;font-size:13.5px;
+  display:block;overflow-x:auto}
+.doc th,.doc td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+.doc th{background:var(--panel-2);font-weight:650;white-space:nowrap}
+.doc code{background:var(--panel-2);border:1px solid var(--line);border-radius:4px;
+  padding:1px 5px;font-size:13px}
+.doc mjx-container[display="true"]{margin:16px 0;overflow-x:auto;overflow-y:hidden;padding:2px 0}
+.doc .meta-head{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;margin:18px 0 26px;box-shadow:var(--shadow)}
+.doc .meta-head .sub{margin-bottom:4px}
+.doc .langlinks{float:right;font-size:12.5px}
+</style>
+
+<script>
+window.MathJax={
+  tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]'],['$$','$$']],processEscapes:true},
+  options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']},
+  chtml:{scale:0.98}
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+</head>
+<body>
+<div class="wrap doc">
+  <p class="sub"><span class="langlinks"><a href="qp-boundaries-of-time-series-momentum.ko.html">Korean</a> </span>
+     <a href="javascript:history.back()">← Back</a></p>
+  <h1>Boundaries of Time Series Momentum</h1>
+  <div class="meta-head">
+    <p class="sub">Quantpedia</p>
+    <p class="sub">quantpedia · https://quantpedia.com/boundaries-of-time-series-momentum/ · Uncategorized, CAPE, index valuation, managed futures</p>
+    <p class="sub">Body source: Quantpedia article</p>
+    <div class="actions">
+      <a class="btn" href="https://quantpedia.com/boundaries-of-time-series-momentum/" target="_blank" rel="noopener">Source page</a>
+      
+    </div>
+  </div>
+  <blockquote><p>Suominen and Hjalmarsson show time-series momentum fails at valuation extremes.</p></blockquote>
+  <h2>1. At a glance</h2>
+
+<blockquote>Equity time-series momentum works in mid-valuation regimes and fails near historical valuation extremes, where the market direction commonly turns. Adding a control for these reversals raises the \(R^2\) of a predictive regression of equity returns by up to 110%, and of time-series momentum returns by up to 550%.</blockquote>
+
+<ul>
+<li>Three value anchors define the regime: Shiller's CAPE, the aggregate dividend yield, and the government bond yield-curve slope (term spread).</li>
+<li>The authors build a single state variable, <strong>Boundaries</strong>, from moving averages of the term spread combined with either CAPE or dividend yield. Low Boundaries means momentum works; high Boundaries means it breaks.</li>
+<li>Near the extremes, large <em>absolute</em> 12-month returns negatively predict momentum returns. The breakdown is symmetric: it holds for high and low valuations, and for positive and negative momentum signals.</li>
+<li>The proposed mechanism is macro, not behavioral. In extreme regimes, growth, recession risk, short rates, and long rates become more tightly coupled to past equity returns, which kills trend continuation.</li>
+</ul>
+
+<p><strong>Source caveat:</strong> the only material available was the Quantpedia summary plus the paper's abstract and four quoted passages. Everything below marked as an inference is my reconstruction, not a claim from the paper.</p>
+
+<h2>2. The gap it targets</h2>
+
+<p>Time-series momentum (TSMOM) has been treated as an unconditional anomaly since Moskowitz, Ooi and Pedersen. The standard framing is behavioral: under-reaction produces continuation, delayed over-reaction produces reversal at long horizons. The signal is a pure price function, computed without reference to fundamentals.</p>
+
+<p>Separately, a valuation literature predicts equity returns from CAPE, dividend yield, and term spread. These two literatures rarely meet. Practitioners run trend books in one silo and valuation-based tactical allocation in another.</p>
+
+<p>Suominen and Hjalmarsson connect them. Their claim is that valuation levels do not merely shift the <em>mean</em> return that momentum is trying to capture; they switch off the <em>autocorrelation structure</em> momentum depends on. The conditioning variable is not volatility, not dispersion, not a crisis dummy — it is the distance of a slow-moving valuation measure from its own 10- or 20-year historical extremes.</p>
+
+<p>The second departure is the target variable. Most conditional-momentum work predicts the underlying asset. This paper also runs a predictive regression on the <em>momentum strategy return itself</em>, which is where the 550% \(R^2\) gain appears.</p>
+
+<h2>3. Method</h2>
+
+<h3>3.1 The baseline momentum object</h3>
+
+<p>The standard 12-month equity TSMOM position and payoff:</p>
+
+\[ R^{\text{MOM}}_{t \to t+12} = \operatorname{sign}\!\left(r_{t-12 \to t}\right) \cdot r_{t \to t+12} \]
+
+<p>Here \(r_{t-12 \to t}\) is the trailing 12-month equity market return (the signal), \(r_{t \to t+12}\) is the forward 12-month return, and \(R^{\text{MOM}}\) is the return to holding the market long or short according to the sign of the signal. Momentum "works" when \(E[R^{\text{MOM}}] > 0\), which requires positive autocorrelation at the 12-month horizon.</p>
+
+<h3>3.2 The valuation state</h3>
+
+<p>The paper's stated inputs are moving averages of the term spread and either CAPE or the dividend yield. The term spread is the yield-curve slope:</p>
+
+\[ TS_t = y^{\text{long}}_t - y^{\text{short}}_t \]
+
+<p>\(y^{\text{long}}\) is the long government bond yield, \(y^{\text{short}}\) the short rate. CAPE is Shiller's cyclically adjusted price/earnings ratio, price divided by a 10-year inflation-adjusted average of earnings. The dividend yield is the aggregate market dividend-to-price ratio.</p>
+
+<p>The exact smoothing window and functional form of the composite are <strong>not stated in the available source</strong>. Two facts are stated: the measures are combined jointly, and "extreme" is defined relative to a 10-year or 20-year historical range.</p>
+
+<h3>3.3 The Boundaries variable</h3>
+
+<p>The construction is <strong>not stated in the source</strong>. The economically consistent form, given the paper's own description that the breakdown occurs at both high and low valuations, is a U-shaped distance-from-median measure. As an inference, something of this shape:</p>
+
+\[ B_t = \max\!\left( F_t,\; 1 - F_t \right), \qquad F_t = \text{rank of } V_t \text{ within } \{V_{t-h}, \ldots, V_t\} \]
+
+<p>\(V_t\) is the smoothed valuation composite, \(F_t\) its percentile rank inside a rolling window of length \(h\) (120 or 240 months), and \(B_t\) the resulting Boundaries score. \(B_t \approx 0.5\) means mid-valuation; \(B_t \to 1\) means the composite sits at a decade or two-decade extreme in either direction. The absolute-value symmetry is what makes the finding hold "regardless of whether valuations are extremely high or low."</p>
+
+<h3>3.4 The predictive regressions</h3>
+
+<p>Regression A predicts the equity market return, adding a reversal term active only near the boundaries:</p>
+
+\[ r_{t \to t+12} = \alpha + \beta\, X_t + \gamma\, B_t \cdot r_{t-12 \to t} + \varepsilon_{t+12} \]
+
+<p>\(X_t\) is the set of standard valuation predictors, \(B_t \cdot r_{t-12 \to t}\) is the boundary-conditioned reversal term, and \(\gamma\) is expected negative — in extreme regimes, a strong past 12-month move predicts a move back. This term is what lifts \(R^2\) by up to 110%.</p>
+
+<p>Regression B predicts the momentum strategy return directly. The quoted passage states that "large absolute 12-month returns negatively predict momentum returns" near the extremes, which implies a specification of the form:</p>
+
+\[ R^{\text{MOM}}_{t \to t+12} = a + b\, B_t + c\, B_t \cdot \left| r_{t-12 \to t} \right| + u_{t+12} \]
+
+<p>\(\left| r_{t-12 \to t} \right|\) is the magnitude of the trend regardless of direction, and \(c < 0\). This is the sharp version of the paper's thesis: at a valuation boundary, a <em>bigger</em> trend is a <em>worse</em> trade. The exact right-hand side is an inference; the sign and the conditioning variables are stated.</p>
+
+<h3>3.5 Out-of-sample validation</h3>
+
+<p>The authors state that Boundaries predicts both TSMOM returns and the equity risk premium at the 12-month horizon "also in out-of-sample regressions." The OOS protocol — expanding versus rolling estimation, the benchmark forecast, whether they report Campbell–Thompson \(R^2_{OOS}\) — is <strong>not stated in the source</strong>.</p>
+
+<h2>4. Data and experimental design</h2>
+
+<table>
+<thead>
+<tr><th>Element</th><th>What the source states</th></tr>
+</thead>
+<tbody>
+<tr><td>Valuation inputs</td><td>Shiller CAPE, aggregate dividend yield, government bond yield-curve slope</td></tr>
+<tr><td>Momentum signal</td><td>12-month trailing equity market return</td></tr>
+<tr><td>Prediction horizon</td><td>12 months</td></tr>
+<tr><td>Extreme definition</td><td>Near 10-year or 20-year historical extremes</td></tr>
+<tr><td>Geography</td><td>U.S. and international samples</td></tr>
+<tr><td>Sample period</td><td>Not stated in the paper</td></tr>
+<tr><td>Country count</td><td>Not stated in the paper</td></tr>
+<tr><td>Data frequency</td><td>Not stated; monthly is the near-certain choice (inference)</td></tr>
+<tr><td>Primary metric</td><td>\(R^2\) of predictive regressions, in-sample and out-of-sample</td></tr>
+<tr><td>Transaction costs</td><td>Not stated in the paper</td></tr>
+<tr><td>Sharpe ratios / drawdowns</td><td>Not stated in the paper</td></tr>
+</tbody>
+</table>
+
+<p>Two design points follow from the stated setup. First, a 10- or 20-year rolling extreme window plus a long estimation sample means the study needs deep history — Shiller's U.S. series runs from 1871, so a century-scale U.S. sample is plausible (inference). Second, a 12-month forecast horizon at monthly frequency creates heavily overlapping observations. Correct inference requires Hodrick or Newey–West standard errors; whether the authors use them is not stated.</p>
+
+<p>The benchmark is implicit: the null is unconditional TSMOM and a standard valuation-only predictive regression. Boundaries is the added regressor, and the reported gains are incremental over those baselines.</p>
+
+<h2>5. Results</h2>
+
+<table>
+<thead>
+<tr><th>Dependent variable</th><th>Effect of controlling for boundary reversals</th></tr>
+</thead>
+<tbody>
+<tr><td>Equity market return, 12-month horizon</td><td>\(R^2\) rises by up to <strong>110%</strong></td></tr>
+<tr><td>TSMOM strategy return, 12-month horizon</td><td>\(R^2\) rises by up to <strong>550%</strong></td></tr>
+</tbody>
+</table>
+
+<p>Both figures are <em>relative</em> increases, not percentage points. The base \(R^2\) values are not stated. This matters: predictive regressions of 12-month equity returns typically start with single-digit \(R^2\), so a 550% relative gain off a base of, say, 1% lands at roughly 6.5% — economically interesting, but far from a high-\(R^2\) model. Read the headline as "the reversal term is the dominant explanatory variable for momentum returns," not "momentum returns are now well explained."</p>
+
+<h3>Qualitative results stated</h3>
+
+<ul>
+<li>TSMOM performs best in mid-valuation regimes and breaks down near valuation extremes.</li>
+<li>Near the extremes, large absolute 12-month returns <em>negatively</em> predict momentum returns.</li>
+<li>The breakdown is symmetric across high and low valuations, and across positive and negative momentum signals.</li>
+<li>The Boundaries variable predicts both TSMOM returns and the equity risk premium out of sample.</li>
+<li>Results hold in U.S. and international samples.</li>
+<li>The proposed channel: in extreme regimes, growth, recession risk, short-term yields and long-term rates all become more tightly linked to prior market returns.</li>
+</ul>
+
+<p>The mechanism claim is the interesting economics. In an extreme valuation state, a large past equity move is itself informative about the macro path — a crash tightens credit and forces policy easing, a melt-up pulls forward tightening. The feedback from prices to policy and growth turns the market around, and the trend-follower is positioned exactly wrong.</p>
+
+<p>No Sharpe ratios, hit rates, drawdown figures, turnover, or capacity estimates appear in the available source. The Quantpedia post refers to figures and tables in the paper, but reproduces none of their values.</p>
+
+<h2>6. Limitations</h2>
+
+<h3>Flagged or implied by the setup</h3>
+<ul>
+<li>The \(R^2\) gains are relative and the base is unstated. Without the level, the economic magnitude cannot be judged.</li>
+<li>The mechanism is an attribution, not an identified causal test. "Macro conditions are more sensitive to past returns in extreme regimes" is a correlation between two conditional moments.</li>
+</ul>
+
+<h3>What bites on replication</h3>
+<ul>
+<li><strong>Few independent events.</strong> A 10- or 20-year extreme is rare by construction. Across a century of U.S. data you get a handful of genuinely distinct boundary episodes: 1929, 1937, the early 1980s rate peak, 2000, 2008, possibly 2021. Overlapping 12-month windows inflate the apparent observation count without adding independent information.</li>
+<li><strong>Overlapping-return inference.</strong> Monthly observations of 12-month returns share 11 months of data. Naive OLS t-stats will be roughly \(\sqrt{12}\) too large.</li>
+<li><strong>CAPE's non-stationary level.</strong> U.S. CAPE has drifted structurally higher since the 1990s. A rolling 10- or 20-year window partly absorbs this, but the choice of window length is a live researcher degree of freedom, and the paper reports two windows.</li>
+<li><strong>Specification search.</strong> Two valuation ratios, two window lengths, a term-spread moving average of unspecified length, and a choice of interaction form. The "up to" phrasing on both \(R^2\) numbers signals a best-of-several reporting convention.</li>
+<li><strong>Real-time availability.</strong> Shiller earnings are reported with a lag. A backtest using the current CAPE series applies restated earnings that were not known at the decision date.</li>
+<li><strong>Cross-country CAPE quality.</strong> International CAPE series are shorter and noisier than the U.S. one, and 10-year earnings averages are unavailable for many markets before the 1980s.</li>
+<li><strong>Equity-only scope.</strong> Production managed-futures books trade 50-plus instruments across rates, FX, and commodities. A finding about equity index TSMOM does not automatically transfer to the diversified book, where equities are a minority of risk.</li>
+<li><strong>Timing granularity.</strong> A slow valuation composite tells you the regime, not the turn date. Sitting at an extreme for three years while de-risked is a real and expensive failure mode — see anyone who de-risked on CAPE in 1996 or 2017.</li>
+</ul>
+
+<h2>7. Systematic trading angle</h2>
+
+<h3>Signal construction</h3>
+<ul>
+<li><strong>Momentum leg:</strong> \(\operatorname{sign}(r_{t-12 \to t})\) on the equity index total-return series, or a volatility-scaled version \(\operatorname{sign}(r_{t-12 \to t}) \cdot \sigma_{\text{target}} / \sigma_t\).</li>
+<li><strong>Valuation composite:</strong> smoothed CAPE (or dividend yield) plus smoothed term spread.</li>
+<li><strong>Boundaries score:</strong> rolling 120- and 240-month percentile rank of the composite, folded to a distance-from-median measure so both tails score high.</li>
+<li><strong>Overlay:</strong> scale gross momentum exposure by \((1 - \lambda B_t)\), with \(\lambda\) set so a full boundary state cuts risk by 50–75% rather than to zero.</li>
+</ul>
+
+<h3>Data and cadence</h3>
+<table>
+<thead>
+<tr><th>Input</th><th>Source</th><th>Update</th></tr>
+</thead>
+<tbody>
+<tr><td>Shiller CAPE, U.S.</td><td>Robert Shiller's public series (Yale)</td><td>Monthly, with a reporting lag — lag it one extra month</td></tr>
+<tr><td>Term spread</td><td>FRED: 10y Treasury minus 3m bill, or 10y minus 2y</td><td>Daily; use month-end</td></tr>
+<tr><td>Dividend yield</td><td>Index provider or Shiller series</td><td>Monthly</td></tr>
+<tr><td>Index total return</td><td>Front-month equity index futures, back-adjusted</td><td>Daily; signal computed month-end</td></tr>
+<tr><td>International CAPE</td><td>Barclays / Research Affiliates / StarCapital-style datasets</td><td>Monthly or quarterly</td></tr>
+</tbody>
+</table>
+
+<h3>Execution notes</h3>
+<ul>
+<li><strong>Rebalance monthly.</strong> The valuation composite moves slowly; a daily overlay adds turnover and no information.</li>
+<li><strong>Apply the overlay to the equity sleeve only.</strong> The paper's evidence is about equity TSMOM. Leave rates, FX, and commodity trend legs untouched until you have separate evidence.</li>
+<li><strong>Do not flip the sign.</strong> The finding is that expected momentum return falls toward or below zero at the boundaries, not that a reliable counter-trend trade exists there. De-risking is the supported action; systematically shorting the trend is not.</li>
+<li><strong>Use strictly point-in-time percentile ranks.</strong> Computing the 10-year extreme with any forward data is the single easiest way to fake this result.</li>
+<li><strong>Correct the test statistics.</strong> Evaluate the overlay on non-overlapping annual blocks, or bootstrap in blocks, before believing any t-stat.</li>
+<li><strong>Sanity check on episodes.</strong> Before sizing this, list every historical date where your \(B_t\) exceeded its threshold, and inspect the next 12 months by hand. If the whole effect lives in 2000 and 2008, you have a two-observation strategy.</li>
+</ul>
+
+<h3>Where it fits a book</h3>
+<p>This is a risk-budgeting overlay, not a standalone alpha. It belongs in the same layer as volatility targeting and crisis-alpha sizing rules. The realistic payoff is a shallower left tail on the equity trend sleeve during the 12 months around a macro turn, at the cost of underperformance during long stretches parked at a valuation extreme.</p>
+
+<h2>8. Related concepts</h2>
+
+<ul>
+<li><strong>Time-series momentum / TSMOM</strong> — Moskowitz, Ooi and Pedersen (2012); the unconditional baseline this paper conditions.</li>
+<li><strong>Trend-following and managed futures</strong> — CTA replication, Hurst/Ooi/Pedersen "A Century of Evidence on Trend-Following."</li>
+<li><strong>Value-timing of factors</strong> — Asness, Chandra, Ilmanen, Israel "Contrarian Factor Timing Is Deceptively Difficult"; the counterargument to valuation-based factor timing.</li>
+<li><strong>Momentum crashes</strong> — Daniel and Moskowitz; a different conditioning variable (bear market plus high volatility) for the same failure mode.</li>
+<li><strong>Predictive regressions and Stambaugh bias</strong> — persistent regressors with overlapping horizons bias coefficients and inflate significance.</li>
+<li><strong>Out-of-sample \(R^2\)</strong> — Campbell and Thompson (2008); Goyal and Welch (2008) on the fragility of equity premium predictors.</li>
+<li><strong>Long-horizon reversal</strong> — De Bondt and Thaler; the 3–5 year mean reversion this paper compresses to 12 months conditional on valuation.</li>
+<li><strong>Regime-switching overlays</strong> — Markov switching, HMM regime detection, volatility-managed portfolios (Moreira and Muir).</li>
+<li><strong>Search keywords</strong> — "conditional time series momentum", "valuation-conditioned trend following", "CAPE market timing", "term spread equity premium", "momentum breakdown regimes", "Boundaries variable Suominen Hjalmarsson", SSRN abstract 6867878.</li>
+</ul>
+  <div class="abs" style="margin-top:32px"><b>ORIGINAL ABSTRACT</b>Time-series momentum stands as one of the most reliable and heavily backtested anomalies in quantitative finance, serving as a foundational alpha source for modern managed futures and trend-following strategies. However, a recent academic paper by Matti Suominen and Erik Hjalmarsson, titled &quot;Boundaries of Time Series Momentum,&quot; uncovers a structural vulnerability that every practitioner must account for. The authors demonstrate that while equity market trends persist reliably during normal business cycles, they systematically break down and aggressively reverse when market valuations reach historical extremes. This phenomenon establishes clear macro &quot;boundaries&quot; where chasing the trend shifts from a highly profitable strategy to a severe drawdown risk.</div>
+  <footer><p>Generated locally with Claude Code. Check the original before citing.</p></footer>
+</div>
+</body>
+</html>

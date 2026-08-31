@@ -1,11 +1,12 @@
-"""논문 1편 상세 리포트 생성 (report/paper/{id}.html).
+"""Deep report for a single paper -> ``report/paper/{id}.{lang}.html``.
 
-arXiv 전문(HTML) 또는 SSRN PDF 본문을 확보해 한국어 심층 리포트를 만든다.
-본문을 못 구하면 초록만으로 생성하되 그 사실을 리포트에 명시한다.
+Body text comes from the arXiv HTML edition or the SSRN PDF. If neither can be
+had we fall back to the abstract and say so on the page.
 
-수식 처리: arXiv 의 LaTeXML 출력은 `<math alttext="\\bar{p}_{id}">` 형태로 원본
-LaTeX 를 품고 있다. 태그를 그냥 벗기면 첨자·기호가 뭉개지므로, 태그 제거 **전에**
-alttext 를 `\\( ... \\)` 로 되살린 뒤 모델에 넘기고, 출력 리포트는 MathJax 로 렌더한다.
+Math: arXiv's LaTeXML output carries the original LaTeX in
+``<math alttext="\\bar{p}_{id}">``. Stripping tags first mangles subscripts into
+noise, so alttext is restored to ``\\( ... \\)`` *before* tags are removed, and
+the rendered page loads MathJax.
 """
 
 from __future__ import annotations
@@ -17,9 +18,11 @@ from pathlib import Path
 
 import requests
 
-from .config import HTML_URL, PAPER_DIR, USER_AGENT, ensure_dirs
+from .config import (BLOG_SOURCES, HTML_URL, LANGS, PAPER_DIR, USER_AGENT, ensure_dirs,
+                     report_name)
 from .render import CSS, _esc, abs_url, pdf_url
 from .summarize import SummarizerError, _extract_json, _run_cli, find_cli
+from .store import text as summary_text
 
 _SCRIPT_RE = re.compile(r"<(script|style|noscript)\b.*?</\1>", re.S | re.I)
 _MATH_RE = re.compile(r"<math\b[^>]*?\balttext=\"(.*?)\"[^>]*>.*?</math>", re.S | re.I)
@@ -28,40 +31,13 @@ _TAG_RE = re.compile(r"<[^>]+>")
 
 MAX_CHARS = 90_000
 
-STYLE_RULES = """문체 규칙 — 이 리포트는 가독성이 생명입니다. 아래를 반드시 지키세요.
-- 영어를 직역하지 말고 한국어로 다시 쓴다는 생각으로 작성하세요.
-- 한 문장은 60자 안팎으로 끊으세요. 접속사로 계속 이어붙인 긴 문장을 만들지 마세요.
-- 수동태를 능동태로 바꾸세요. ("~에 의해 측정된다" → "~로 측정한다")
-- 번역투를 피하세요. "~에 대한", "~를 통하여", "~에 있어서", "~하는 것을 통해" 금지.
-- 명사를 셋 이상 연달아 붙이지 마세요. 조사를 넣어 풀어 쓰세요.
-- 한 문단은 2~4문장. 5문장을 넘기면 문단을 나누세요.
-- 나열·비교는 문장 대신 <ul> 이나 <table> 로 빼서 문장 길이를 줄이세요.
-- 전문 용어는 처음 나올 때만 한국어(영문) 병기하고, 그 뒤로는 한국어만 쓰세요.
-- 문장 끝은 '~다'로 통일하고, 구어체·감탄사·수사 의문문을 쓰지 마세요."""
+MATH_RULES = r"""Math notation — the page ships with MathJax.
+- Inline math goes in \( ... \); display math in \[ ... \]. Write raw LaTeX.
+- Math already present as \( ... \) in the source must be copied verbatim.
+- After a formula, explain what each symbol means in one line.
+- Never wrap math in <code>. <code> is only for variable, file and function names."""
 
-MATH_RULES = r"""수식 표기 — 페이지에 MathJax 가 들어 있습니다.
-- 인라인 수식은 \( ... \), 별행 수식은 \[ ... \] 로 감싸 LaTeX 그대로 쓰세요.
-- 본문에 이미 \( ... \) 형태로 들어 있는 수식은 그대로 옮기세요. 임의로 고치지 마세요.
-- 수식 뒤에는 기호가 무엇을 뜻하는지 한 줄로 풀어 주세요.
-- 수식에는 <code> 를 쓰지 마세요. <code> 는 변수명·파일명·함수명에만 씁니다."""
-
-PROMPT = """당신은 퀀트 리서치 애널리스트입니다. 아래 논문을 읽고 한국어 심층 리포트를 작성하세요.
-독자는 금융공학 배경은 있지만 이 논문은 처음 보는 실무자입니다.
-
-[제목] {title}
-[저자] {authors}
-[분류] {categories}
-[출처] {origin}
-[본문 출처] {source}
-
-<paper>
-{body}
-</paper>
-
-아래 순서의 HTML 조각만 출력하세요. <html>/<head>/<body> 태그와 코드펜스는 쓰지 마세요.
-쓸 수 있는 태그: h2, h3, p, ul, ol, li, table, thead, tbody, tr, th, td, strong, em, code, blockquote.
-
-<h2>1. 한눈에 보기</h2>
+KO_SECTIONS = """<h2>1. 한눈에 보기</h2>
   먼저 <blockquote> 안에 이 논문의 결론을 2문장으로 적고, 이어서 <ul> 로 핵심 포인트 3~4개.
 <h2>2. 문제의식과 배경</h2>
   기존 연구가 어디서 막혔는지, 이 논문은 무엇을 다르게 보는지.
@@ -73,46 +49,126 @@ PROMPT = """당신은 퀀트 리서치 애널리스트입니다. 아래 논문�
   수치를 인용해 구체적으로. 수치 비교는 <table> 로.
 <h2>6. 한계와 주의점</h2>
   저자가 밝힌 한계와, 재현·실전 적용에서 걸릴 지점.
-<h2>7. 실무 적용 아이디어</h2>
-  포트폴리오나 트레이딩에 쓴다면 무엇을, 어떻게, 어떤 데이터로. 구체적으로.
+<h2>7. 시스템 트레이딩 적용 아이디어</h2>
+  자동매매로 옮긴다면 어떤 신호를, 어떤 데이터로, 어떤 주기로. 구체적으로.
 <h2>8. 함께 볼 만한 개념</h2>
-  관련 기법과 논문 키워드를 <ul> 로.
+  관련 기법과 논문 키워드를 <ul> 로."""
+
+KO_STYLE = """문체 규칙 — 이 리포트는 가독성이 생명입니다. 반드시 지키세요.
+- 영어를 직역하지 말고 한국어로 다시 쓴다는 생각으로 작성하세요.
+- 한 문장은 60자 안팎으로 끊으세요. 접속사로 계속 이어붙이지 마세요.
+- 수동태를 능동태로 바꾸세요. ("~에 의해 측정된다" → "~로 측정한다")
+- 번역투를 피하세요. "~에 대한", "~를 통하여", "~에 있어서", "~하는 것을 통해" 금지.
+- 명사를 셋 이상 연달아 붙이지 마세요. 조사를 넣어 풀어 쓰세요.
+- 한 문단은 2~4문장. 5문장을 넘기면 문단을 나누세요.
+- 나열·비교는 문장 대신 <ul> 이나 <table> 로 빼서 문장 길이를 줄이세요.
+- 전문 용어는 처음 나올 때만 한국어(영문) 병기하고, 그 뒤로는 한국어만 쓰세요.
+- 문장 끝은 '~다'로 통일하고, 구어체·수사 의문문을 쓰지 마세요."""
+
+KO_FACTS = """사실 규칙:
+- 본문에 없는 수치나 결과를 지어내지 마세요. 근거가 없으면 "본문에 명시되지 않음"이라고 쓰세요.
+- 본문이 초록뿐이라면 1번 항목 끝에 그 사실을 한 문장으로 밝히고,
+  추론한 대목은 "추정"이라고 표시하세요."""
+
+EN_SECTIONS = """<h2>1. At a glance</h2>
+  Open with a <blockquote> holding the paper's conclusion in two sentences,
+  then a <ul> of 3-4 key points.
+<h2>2. The gap it targets</h2>
+  Where prior work stalls, and what this paper looks at differently.
+<h2>3. Method</h2>
+  The model and algorithm, step by step. Show key formulas on their own line
+  and explain the symbols.
+<h2>4. Data and experimental design</h2>
+  Datasets, window, benchmarks, metrics. Use a <table> when there are several.
+<h2>5. Results</h2>
+  Concrete, with the reported numbers. Put comparisons in a <table>.
+<h2>6. Limitations</h2>
+  What the authors flag, plus what would bite on replication or in production.
+<h2>7. Systematic trading angle</h2>
+  If you traded this: which signal, from which data, at what cadence. Be specific.
+<h2>8. Related concepts</h2>
+  Adjacent techniques and search keywords, as a <ul>."""
+
+EN_STYLE = """Style rules — this report lives or dies on readability.
+- Plain, direct sentences. Aim under 20 words; break anything longer.
+- Active voice, named actors. No "it can be observed that".
+- Paragraphs of 2-4 sentences. Split anything past five.
+- Push enumerations and comparisons into <ul> or <table> instead of prose.
+- Define a term once on first use, then just use it.
+- No filler openers, no rhetorical questions, no hedging strings."""
+
+EN_FACTS = """Accuracy rules:
+- Never invent numbers or findings. If the source is silent, write
+  "not stated in the paper".
+- If the only source was the abstract, say so in one sentence at the end of
+  section 1 and mark anything inferred as an inference."""
+
+LANG_SPEC = {
+    "ko": {"name": "Korean", "sections": KO_SECTIONS, "style": KO_STYLE, "facts": KO_FACTS,
+           "back": "← 돌아가기", "src": "본문 출처", "page": "원문 페이지", "pdf": "원문 PDF",
+           "abs": "ORIGINAL ABSTRACT",
+           "foot": "로컬 Claude Code 로 생성한 요약 리포트입니다. 인용 전 반드시 원문을 확인하세요.",
+           "suffix": "상세 리포트"},
+    "en": {"name": "English", "sections": EN_SECTIONS, "style": EN_STYLE, "facts": EN_FACTS,
+           "back": "← Back", "src": "Body source", "page": "Source page", "pdf": "Source PDF",
+           "abs": "ORIGINAL ABSTRACT",
+           "foot": "Generated locally with Claude Code. Check the original before citing.",
+           "suffix": "deep report"},
+}
+
+PROMPT = """You are a quant research analyst. Read the paper below and write a deep
+report in {language}. The reader knows financial engineering but has not seen this paper.
+
+[Title] {title}
+[Authors] {authors}
+[Categories] {categories}
+[Source] {origin}
+[Body source] {source}
+
+<paper>
+{body}
+</paper>
+
+Output an HTML fragment only, in the section order below. No <html>/<head>/<body>
+wrapper, no code fences. Allowed tags: h2, h3, p, ul, ol, li, table, thead, tbody,
+tr, th, td, strong, em, code, blockquote.
+
+{sections}
 
 {style}
 
 {math}
 
-사실 규칙:
-- 본문에 없는 수치나 결과를 지어내지 마세요. 근거가 없으면 "본문에 명시되지 않음"이라고 쓰세요.
-- 본문이 초록뿐이라면 1번 항목 끝에 그 사실을 한 문장으로 밝히고, 추론한 대목은 "추정"이라고 표시하세요.
+{facts}
 """
 
 
 def html_to_text(page: str, keep_math: bool = True) -> str:
-    """HTML → 평문. 수식은 LaTeX 로 되살리고 블록 경계는 줄바꿈으로 남긴다."""
+    """HTML -> plain text, restoring math as LaTeX and keeping block boundaries."""
     body = _SCRIPT_RE.sub(" ", page)
     if keep_math:
         body = _MATH_RE.sub(lambda m: " \\(" + html.unescape(m.group(1)).strip() + "\\) ", body)
     body = _BLOCK_RE.sub("\n", body)
     text = html.unescape(_TAG_RE.sub(" ", body))
-    text = re.sub(r"[ \t ]+", " ", text)
+    text = re.sub(r"[ \t ]+", " ", text)
     return re.sub(r"\n\s*\n+", "\n\n", text).strip()
 
 
 def fetch_fulltext(paper_id: str, session: requests.Session | None = None) -> tuple[str, str]:
-    """arXiv 전문 HTML → (본문 텍스트, 출처 설명). 없으면 ('', 사유)."""
+    """arXiv HTML edition -> (body text, provenance). Empty body means no full text."""
     sess = session or requests.Session()
     try:
-        resp = sess.get(HTML_URL.format(id=paper_id), headers={"User-Agent": USER_AGENT}, timeout=90)
+        resp = sess.get(HTML_URL.format(id=paper_id), headers={"User-Agent": USER_AGENT},
+                        timeout=90)
     except requests.RequestException:
-        return "", "요청 실패 (초록만 사용)"
+        return "", "request failed (abstract only)"
     if resp.status_code != 200 or "<html" not in resp.text.lower():
-        return "", "전문 HTML 없음 (초록만 사용)"
+        return "", "no HTML edition (abstract only)"
     text = html_to_text(resp.text)
     if len(text) < 2000:
-        return "", "전문 HTML 내용 부족 (초록만 사용)"
+        return "", "HTML edition too thin (abstract only)"
     truncated = len(text) > MAX_CHARS
-    return text[:MAX_CHARS], f"arXiv HTML 전문{' (앞부분 발췌)' if truncated else ''}"
+    return text[:MAX_CHARS], f"arXiv HTML full text{' (truncated)' if truncated else ''}"
 
 
 def _clean_fragment(text: str) -> str:
@@ -159,64 +215,75 @@ DOC_CSS = textwrap.dedent("""
 .doc .meta-head{background:var(--panel);border:1px solid var(--line);border-radius:12px;
   padding:16px 18px;margin:18px 0 26px;box-shadow:var(--shadow)}
 .doc .meta-head .sub{margin-bottom:4px}
+.doc .langlinks{float:right;font-size:12.5px}
 """)
 
 
-def build_report(entry: dict, body: str, source: str, timeout: int = 900) -> Path:
-    """본문 텍스트를 받아 상세 리포트 HTML 을 쓴다."""
+def build_report(entry: dict, body: str, source: str, lang: str = "ko",
+                 timeout: int = 900) -> Path:
+    """Turn body text into a deep report page in ``lang``."""
     ensure_dirs()
+    spec = LANG_SPEC[lang]
     exe = find_cli()
     pid = entry["id"]
+    src = entry.get("src", "arxiv")
+    origin = {"arxiv": f"arXiv:{entry.get('ext_id', pid)}",
+              "ssrn": f"SSRN abstract_id {entry.get('ext_id', '')}"}.get(
+        src, f"{src} · {entry.get('abs_url', '')}")
+
     prompt = PROMPT.format(
+        language=spec["name"],
         title=entry.get("title", pid),
         authors=", ".join(entry.get("authors", [])),
         categories=", ".join(entry.get("categories") or entry.get("src_cats") or []),
-        origin=("arXiv:" + entry.get("ext_id", pid)) if entry.get("src", "arxiv") == "arxiv"
-               else ("SSRN abstract_id " + entry.get("ext_id", "")),
+        origin=origin,
         source=source,
         body=body,
-        style=STYLE_RULES,
+        sections=spec["sections"],
+        style=spec["style"],
         math=MATH_RULES,
+        facts=spec["facts"],
     )
-    stdout = _run_cli(exe, prompt, timeout)
-    envelope = _extract_json(stdout)
-    fragment = _clean_fragment(envelope.get("result") if isinstance(envelope.get("result"), str) else "")
+    envelope = _extract_json(_run_cli(exe, prompt, timeout))
+    fragment = _clean_fragment(
+        envelope.get("result") if isinstance(envelope.get("result"), str) else "")
     if len(fragment) < 200:
-        raise SummarizerError(f"{pid}: 리포트 본문이 비었습니다.")
+        raise SummarizerError(f"{pid}: report body came back empty.")
 
-    summary = entry.get("summary") or {}
-    authors = ", ".join(entry.get("authors", []))
+    one_liner = summary_text(entry, lang).get("one_liner", "")
     tags = ", ".join(entry.get("categories") or entry.get("src_cats") or [])
-    origin_label = ("arXiv:" + entry.get("ext_id", pid)) if entry.get("src", "arxiv") == "arxiv" \
-        else ("SSRN " + entry.get("ext_id", ""))
+    others = "".join(
+        f'<a href="{_esc(report_name(pid, other))}">{LANG_SPEC[other]["name"]}</a> '
+        for other in LANGS if other != lang and (PAPER_DIR / report_name(pid, other)).exists())
 
-    out = PAPER_DIR / f"{pid}.html"
+    out = PAPER_DIR / report_name(pid, lang)
     out.write_text(f"""<!doctype html>
-<html lang="ko">
+<html lang="{lang}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{_esc(entry.get('title', pid))} — 상세 리포트</title>
+<title>{_esc(entry.get('title', pid))} — {spec['suffix']}</title>
 <style>{CSS}{DOC_CSS}</style>
 {MATHJAX}
 </head>
 <body>
 <div class="wrap doc">
-  <p class="sub"><a href="javascript:history.back()">← 돌아가기</a></p>
+  <p class="sub"><span class="langlinks">{others}</span>
+     <a href="javascript:history.back()">{spec['back']}</a></p>
   <h1>{_esc(entry.get('title', pid))}</h1>
   <div class="meta-head">
-    <p class="sub">{_esc(authors)}</p>
-    <p class="sub">{_esc(origin_label)} · {_esc(tags)}</p>
-    <p class="sub">본문 출처: {_esc(source)}</p>
+    <p class="sub">{_esc(", ".join(entry.get("authors", [])))}</p>
+    <p class="sub">{_esc(origin)} · {_esc(tags)}</p>
+    <p class="sub">{spec['src']}: {_esc(source)}</p>
     <div class="actions">
-      <a class="btn" href="{_esc(abs_url(entry))}" target="_blank" rel="noopener">원문 페이지</a>
-      <a class="btn" href="{_esc(pdf_url(entry))}" target="_blank" rel="noopener">원문 PDF</a>
+      <a class="btn" href="{_esc(abs_url(entry))}" target="_blank" rel="noopener">{spec['page']}</a>
+      {f'<a class="btn" href="{_esc(pdf_url(entry))}" target="_blank" rel="noopener">{spec["pdf"]}</a>' if pdf_url(entry) else ''}
     </div>
   </div>
-  {f'<blockquote><p>{_esc(summary.get("one_liner", ""))}</p></blockquote>' if summary.get("one_liner") else ''}
+  {f'<blockquote><p>{_esc(one_liner)}</p></blockquote>' if one_liner else ''}
   {fragment}
-  <div class="abs" style="margin-top:32px"><b>ORIGINAL ABSTRACT</b>{_esc(entry.get('abstract', ''))}</div>
-  <footer><p>로컬 Claude Code 로 생성한 요약 리포트입니다. 인용 전 반드시 원문을 확인하세요.</p></footer>
+  <div class="abs" style="margin-top:32px"><b>{spec['abs']}</b>{_esc(entry.get('abstract', ''))}</div>
+  <footer><p>{spec['foot']}</p></footer>
 </div>
 </body>
 </html>
@@ -225,19 +292,23 @@ def build_report(entry: dict, body: str, source: str, timeout: int = 900) -> Pat
 
 
 def build_paper_report(entry: dict, session: requests.Session | None = None,
-                       timeout: int = 900, ssrn_browser=None) -> Path:
-    """출처에 맞게 본문을 확보한 뒤 리포트를 만든다."""
+                       timeout: int = 900, ssrn_browser=None, lang: str = "ko") -> Path:
+    """Get the body from the right place for this source, then write the report."""
     src = entry.get("src", "arxiv")
     if src == "ssrn":
         from . import ssrn
 
         body, source = ssrn.fetch_fulltext(entry, browser=ssrn_browser)
+    elif src in BLOG_SOURCES:
+        from . import blogs
+
+        body, source = blogs.fetch_fulltext(entry, session)
     else:
         body, source = fetch_fulltext(entry.get("ext_id", entry["id"]), session)
 
     if not body:
         body = entry.get("abstract", "")
         if not body:
-            raise SummarizerError(f"{entry['id']}: 본문도 초록도 없습니다.")
-        source = source or "초록만 사용"
-    return build_report(entry, body, source, timeout=timeout)
+            raise SummarizerError(f"{entry['id']}: no full text and no abstract.")
+        source = source or "abstract only"
+    return build_report(entry, body, source, lang=lang, timeout=timeout)

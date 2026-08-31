@@ -1,4 +1,4 @@
-"""공통 설정 및 경로."""
+"""Shared paths, endpoints and source definitions."""
 
 from pathlib import Path
 
@@ -9,6 +9,10 @@ PAPER_DIR = REPORT_DIR / "paper"
 CHROME_PROFILE = STATE_DIR / "chrome_profile"
 
 SEEN_PATH = STATE_DIR / "seen.json"
+
+# Languages every summary and deep report is produced in.
+LANGS = ("ko", "en")
+LANG_LABEL = {"ko": "한국어", "en": "English"}
 
 # ── arXiv ────────────────────────────────────────────────────────────────
 CATEGORIES = {
@@ -27,7 +31,7 @@ API_BATCH = 100
 API_SLEEP = 3.0
 
 # ── SSRN ─────────────────────────────────────────────────────────────────
-# journal_id → (짧은 배지 이름, 정식 이름)
+# journal_id -> (badge, full journal name)
 SSRN_JOURNALS = {
     "4058861": ("QM", "Quantitative Methods in Investing & Financial Statement Analysis"),
     "4058853": ("TI", "Technology & Investing"),
@@ -44,18 +48,58 @@ SSRN_PDF_URL = "https://papers.ssrn.com/sol3/Delivery.cfm/{id}.pdf?abstractid={i
 SSRN_JOURNAL_URL = ("https://papers.ssrn.com/sol3/JELJOUR_Results.cfm"
                     "?form_name=journalBrowse&journal_id={jid}")
 SSRN_PAGE_SIZE = 50
-SSRN_MAX_SCAN = 300          # 최근 날짜를 찾느라 훑을 최대 논문 수 (저널당)
-SSRN_CDP_PORT = 9333         # 사용자의 일반 Chrome 과 겹치지 않게
-SSRN_NAV_SLEEP = 1.2         # 초록 페이지 사이 대기(초)
+SSRN_MAX_SCAN = 300          # max papers to scan per journal while hunting recent dates
+SSRN_CDP_PORT = 9333         # kept away from a user's own Chrome debugging port
+SSRN_NAV_SLEEP = 1.2         # seconds between abstract page loads
 
-# 카테고리별로 가져올 "최근 N개 날짜"
+# ── Practitioner blogs ───────────────────────────────────────────────────
+QUANTPEDIA_FEED_URL = "https://quantpedia.com/feed/"
+QUANTPEDIA_BLOG_URL = "https://quantpedia.com/blog/"
+QUANTPEDIA_LABEL = "Quantpedia"
+MAN_INSIGHTS_URL = "https://www.man.com/insights"
+MAN_LABEL = "Man Group"
+ALPHAARCH_FEED_URL = "https://alphaarchitect.com/feed/"
+ALPHAARCH_LABEL = "Alpha Architect"
+MACROSYNERGY_FEED_URL = "https://macrosynergy.com/feed/"
+MACROSYNERGY_BLOG_URL = "https://macrosynergy.com/research/blog/"
+MACROSYNERGY_LABEL = "Macrosynergy"
+QUANTOCRACY_URL = "https://quantocracy.com/"
+QUANTOCRACY_LABEL = "Quantocracy"
+
+# Macrosynergy is behind the same kind of challenge as SSRN, so it borrows the
+# browser trick on its own debugging port.
+MACROSYNERGY_CDP_PORT = 9334
+
+# Blogs publish irregularly, so they are taken as "newest N posts" rather than
+# "the two most recent listing dates".
+BLOG_LIMIT = 8
+
+BLOG_SOURCES = ("quantpedia", "man", "alphaarchitect", "macrosynergy", "quantocracy")
+
+# Blog badge -> full site name, used for chips and card badges.
+BLOG_LABELS = {
+    "QP": QUANTPEDIA_LABEL,
+    "MAN": MAN_LABEL,
+    "AA": ALPHAARCH_LABEL,
+    "MS": MACROSYNERGY_LABEL,
+    "QC": QUANTOCRACY_LABEL,
+}
+
+# How many recent listing dates to take, per paper source.
 RECENT_DAYS = 2
 
-USER_AGENT = "arxiv-qfin-digest/0.2 (personal research digest)"
+USER_AGENT = "qfin-digest/0.4 (personal research digest)"
 BROWSER_UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
               "(KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36")
 
-SOURCES = ("arxiv", "ssrn")
+SOURCES = ("arxiv", "ssrn", "quantpedia", "man", "alphaarchitect", "macrosynergy",
+           "quantocracy")
+PAPER_SOURCES = ("arxiv", "ssrn")
+
+
+def report_name(paper_id: str, lang: str) -> str:
+    """Deep report filename for a paper in a given language."""
+    return f"{paper_id}.{lang}.html"
 
 
 def ensure_dirs() -> None:

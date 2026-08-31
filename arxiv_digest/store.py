@@ -1,6 +1,14 @@
-"""state/seen.json 입출력. ID 를 키로 하는 단일 사전이 전부다.
+"""Read/write ``state/seen.json`` — a single dict keyed by paper id.
 
-`summary` 키가 있으면 이미 요약된 논문 → 다음 실행에서 건너뛴다.
+An entry carries a summary once it has been written; that is what makes the
+next run skip it. Summaries are bilingual::
+
+    "summary": {
+      "relevance": 4,
+      "keywords": ["kelly criterion", ...],
+      "ko": {"one_liner": ..., "bullets": [...], ...},
+      "en": {"one_liner": ..., "bullets": [...], ...}
+    }
 """
 
 from __future__ import annotations
@@ -11,7 +19,10 @@ import shutil
 from datetime import datetime, timezone
 from pathlib import Path
 
-from .config import SEEN_PATH, ensure_dirs
+from .config import LANGS, SEEN_PATH, ensure_dirs
+
+# Per-language fields; ``relevance`` and ``keywords`` are shared across languages.
+TEXT_FIELDS = ("one_liner", "bullets", "method", "data", "takeaway", "relevance_why")
 
 
 def now_iso() -> str:
@@ -26,7 +37,7 @@ def load(path: Path = SEEN_PATH) -> dict[str, dict]:
             data = json.load(fh)
     except (json.JSONDecodeError, OSError) as exc:
         backup = path.with_suffix(".json.bak")
-        print(f"! {path.name} 를 읽지 못했습니다 ({exc}). 백업에서 복구를 시도합니다.")
+        print(f"! Could not read {path.name} ({exc}); trying the backup.")
         if backup.exists():
             with backup.open(encoding="utf-8") as fh:
                 data = json.load(fh)
@@ -36,17 +47,26 @@ def load(path: Path = SEEN_PATH) -> dict[str, dict]:
 
 
 def _migrate(data: dict[str, dict]) -> dict[str, dict]:
-    """SSRN 도입 전(v0.1)에 저장된 항목에 src/ext_id 를 채워 넣는다."""
+    """Bring entries written by older versions up to the current shape.
+
+    v0.1 had no ``src``/``ext_id``; v0.3 stored a single Korean summary with the
+    text fields at the top level of ``summary``.
+    """
     for pid, entry in data.items():
         if not isinstance(entry, dict):
             continue
         entry.setdefault("src", "ssrn" if pid.startswith("ssrn-") else "arxiv")
         entry.setdefault("ext_id", pid.split("-", 1)[1] if pid.startswith("ssrn-") else pid)
+
+        summary = entry.get("summary")
+        if isinstance(summary, dict) and "one_liner" in summary:
+            korean = {k: summary.pop(k) for k in TEXT_FIELDS if k in summary}
+            summary["ko"] = korean
     return data
 
 
 def save(data: dict, path: Path = SEEN_PATH) -> None:
-    """임시 파일 → os.replace 로 원자적 교체. 직전 버전은 .bak 로 남긴다."""
+    """Write via a temp file and ``os.replace``; keep one ``.bak`` generation."""
     ensure_dirs()
     path.parent.mkdir(parents=True, exist_ok=True)
     if path.exists():
@@ -58,7 +78,7 @@ def save(data: dict, path: Path = SEEN_PATH) -> None:
 
 
 def upsert(seen: dict[str, dict], paper_id: str, fields: dict) -> dict:
-    """기존 요약을 덮어쓰지 않으면서 메타데이터만 갱신한다."""
+    """Refresh metadata without ever clobbering an existing summary."""
     entry = seen.setdefault(paper_id, {"id": paper_id, "first_seen": now_iso()})
     for key, value in fields.items():
         if key == "summary":
@@ -69,6 +89,28 @@ def upsert(seen: dict[str, dict], paper_id: str, fields: dict) -> dict:
     return entry
 
 
-def needs_summary(entry: dict) -> bool:
-    summary = entry.get("summary")
-    return not (isinstance(summary, dict) and summary.get("one_liner"))
+def text(entry: dict, lang: str) -> dict:
+    """Per-language part of a summary, falling back to the other language."""
+    summary = entry.get("summary") or {}
+    block = summary.get(lang)
+    if isinstance(block, dict) and block.get("one_liner"):
+        return block
+    for other in LANGS:
+        block = summary.get(other)
+        if isinstance(block, dict) and block.get("one_liner"):
+            return block
+    return {}
+
+
+def has_lang(entry: dict, lang: str) -> bool:
+    block = (entry.get("summary") or {}).get(lang)
+    return isinstance(block, dict) and bool(block.get("one_liner"))
+
+
+def needs_summary(entry: dict, langs: tuple[str, ...] = LANGS) -> bool:
+    return not all(has_lang(entry, lang) for lang in langs)
+
+
+def is_summarized(entry: dict) -> bool:
+    """True once at least one language is present (enough to render a card)."""
+    return any(has_lang(entry, lang) for lang in LANGS)

@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Yield Trap Hiding in Junior Bank Bonds — 상세 리포트</title>
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --panel-2:#fbfcfd; --ink:#16191d; --muted:#5c6672;
+  --line:#e2e6ea; --accent:#3b6ef0; --accent-soft:#eaf0fe;
+  --pm:#3b6ef0; --st:#0f9d76; --tr:#d4791f; --ssrn:#8b5cf6; --other:#7a68c9;
+  --qp:#c0392b; --man:#0f766e;
+  --star:#f0a91b; --shadow:0 1px 2px rgba(16,24,40,.06),0 4px 14px rgba(16,24,40,.05);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#101317; --panel:#181c22; --panel-2:#1e232a; --ink:#e7ebf0; --muted:#98a3b0;
+    --line:#2a3038; --accent:#7ea3ff; --accent-soft:#1d2637;
+    --pm:#7ea3ff; --st:#4bd6a8; --tr:#f0ad5e; --ssrn:#b18cff; --other:#b0a0f0;
+    --qp:#f08a7c; --man:#3fc4b4;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.25);
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:15px/1.65 -apple-system,"Segoe UI","Malgun Gothic",Roboto,"Helvetica Neue",sans-serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:32px 20px 140px}
+a{color:var(--accent)}
+
+/* language switching: only the active language is displayed */
+[data-l]{display:none}
+html[data-lang="ko"] [data-l="ko"]{display:revert}
+html[data-lang="en"] [data-l="en"]{display:revert}
+
+header.top{margin-bottom:24px}
+h1{font-size:26px;margin:0 0 6px;letter-spacing:-.02em}
+.sub{color:var(--muted);font-size:13.5px;margin:0}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:9px 13px;font-size:13px;box-shadow:var(--shadow)}
+.stat b{font-size:16px;margin-right:5px}
+
+.controls{position:sticky;top:0;z-index:20;background:var(--bg);
+  padding:12px 0 10px;margin:20px 0 8px;border-bottom:1px solid var(--line)}
+.row{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:7px}
+.row:last-child{margin-bottom:0}
+.rowlabel{font-size:11.5px;color:var(--muted);font-weight:700;letter-spacing:.06em;min-width:38px}
+.chip{border:1px solid var(--line);background:var(--panel);color:var(--muted);
+  border-radius:999px;padding:5px 12px;font-size:12.5px;cursor:pointer;
+  font-family:inherit;transition:.12s;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);
+  color:var(--accent);font-weight:600}
+.chip:hover{border-color:var(--accent)}
+.langsel{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.langsel button{border:0;background:var(--panel);color:var(--muted);padding:5px 13px;
+  font:inherit;font-size:12.5px;cursor:pointer;transition:.12s}
+.langsel button[aria-pressed="true"]{background:var(--accent);color:#fff;font-weight:700}
+#q{flex:1;min-width:180px;padding:7px 12px;border:1px solid var(--line);border-radius:8px;
+  background:var(--panel);color:var(--ink);font:inherit;font-size:13.5px}
+#q:focus{outline:2px solid var(--accent);outline-offset:-1px}
+select{padding:7px 10px;border:1px solid var(--line);border-radius:8px;
+  background:var(--panel);color:var(--ink);font:inherit;font-size:13.5px}
+.count{color:var(--muted);font-size:12.5px;margin-left:auto}
+
+h2.day{font-size:15px;margin:30px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--line);
+  color:var(--muted);font-weight:600;letter-spacing:.02em}
+h2.day span.d{color:var(--ink)}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow)}
+.card.hide{display:none}
+.badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+.badge{font-size:11px;font-weight:700;letter-spacing:.04em;padding:2.5px 8px;
+  border-radius:5px;color:#fff}
+.b-PM{background:var(--pm)} .b-ST{background:var(--st)} .b-TR{background:var(--tr)}
+.b-ssrn{background:var(--ssrn)} .b-qp{background:var(--qp)} .b-man{background:var(--man)}
+.b-XX{background:var(--other)}
+.badge.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);font-weight:600}
+.stars{color:var(--star);font-size:12.5px;letter-spacing:1px;margin-left:auto}
+.stars i{color:var(--line);font-style:normal}
+
+.title{font-size:16.5px;font-weight:650;line-height:1.4;margin:0 0 6px;letter-spacing:-.01em}
+.title a{color:var(--ink);text-decoration:none}
+.title a:hover{color:var(--accent)}
+.oneliner{margin:0 0 8px;font-size:14.5px;color:var(--ink)}
+.oneliner::before{content:"\25B8 ";color:var(--accent)}
+.authors{margin:0;color:var(--muted);font-size:12.5px}
+
+.detail{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+.detail[hidden]{display:none}
+.detail ul{margin:0 0 12px;padding-left:19px}
+.detail li{margin-bottom:4px}
+.kv{display:grid;grid-template-columns:92px 1fr;gap:5px 10px;font-size:13.5px;margin-bottom:12px}
+.kv dt{color:var(--muted);font-weight:600}
+.kv dd{margin:0}
+.keys{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.key{font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);
+  border-radius:5px;padding:2px 7px;color:var(--muted)}
+.abs{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;
+  padding:11px 13px;font-size:13px;color:var(--muted);line-height:1.7}
+.abs b{color:var(--ink);display:block;margin-bottom:4px;font-size:12px;letter-spacing:.03em}
+
+.actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;align-items:center}
+.actions .sep{width:1px;height:18px;background:var(--line);margin:0 2px}
+.btn{border:1px solid var(--line);background:var(--panel);color:var(--muted);
+  border-radius:7px;padding:5.5px 12px;font-size:12.5px;cursor:pointer;
+  font-family:inherit;text-decoration:none;display:inline-block;transition:.12s}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{filter:brightness(1.08);color:#fff}
+.btn.queued{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);
+  font-weight:600}
+.btn.done{border-color:var(--st);color:var(--st)}
+.btn.failed{border-color:var(--tr);color:var(--tr)}
+#livebadge{font-size:11.5px;color:var(--st);font-weight:700;letter-spacing:.03em;
+  display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+#livebadge::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--st);
+  animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--panel);
+  border-top:1px solid var(--line);box-shadow:0 -4px 20px rgba(0,0,0,.10);
+  padding:12px 20px;display:none}
+.bar.on{display:block}
+.bar-in{max-width:1000px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.bar pre{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;
+  padding:6px 9px;font-size:12px;flex:1;min-width:200px;overflow:auto;margin:0;
+  white-space:pre;line-height:1.5}
+.empty{color:var(--muted);text-align:center;padding:50px 0}
+footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);
+  color:var(--muted);font-size:12px}
+@media print{.controls,.bar,.actions{display:none!important}.detail{display:block!important}
+  .card{break-inside:avoid;box-shadow:none}}
+
+.doc{max-width:780px}
+.doc h1{font-size:24px;line-height:1.35;margin:0 0 10px}
+.doc h2{font-size:19px;margin:38px 0 12px;padding-bottom:7px;border-bottom:2px solid var(--accent);
+  letter-spacing:-.01em}
+.doc h3{font-size:15.5px;margin:22px 0 8px;color:var(--accent)}
+.doc p{margin:0 0 14px}
+.doc ul,.doc ol{margin:0 0 16px;padding-left:22px}
+.doc li{margin-bottom:7px}
+.doc blockquote{margin:0 0 18px;padding:14px 18px;border-left:3px solid var(--accent);
+  background:var(--accent-soft);border-radius:0 8px 8px 0;font-size:15.5px}
+.doc blockquote p:last-child{margin-bottom:0}
+.doc table{width:100%;border-collapse:collapse;margin:0 0 18px;font-size:13.5px;
+  display:block;overflow-x:auto}
+.doc th,.doc td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+.doc th{background:var(--panel-2);font-weight:650;white-space:nowrap}
+.doc code{background:var(--panel-2);border:1px solid var(--line);border-radius:4px;
+  padding:1px 5px;font-size:13px}
+.doc mjx-container[display="true"]{margin:16px 0;overflow-x:auto;overflow-y:hidden;padding:2px 0}
+.doc .meta-head{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;margin:18px 0 26px;box-shadow:var(--shadow)}
+.doc .meta-head .sub{margin-bottom:4px}
+.doc .langlinks{float:right;font-size:12.5px}
+</style>
+
+<script>
+window.MathJax={
+  tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]'],['$$','$$']],processEscapes:true},
+  options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']},
+  chtml:{scale:0.98}
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+</head>
+<body>
+<div class="wrap doc">
+  <p class="sub"><span class="langlinks"></span>
+     <a href="javascript:history.back()">← 돌아가기</a></p>
+  <h1>The Yield Trap Hiding in Junior Bank Bonds</h1>
+  <div class="meta-head">
+    <p class="sub">Man Group</p>
+    <p class="sub">man · https://www.man.com/insights/views-from-the-floor-2026-28-July · Man Group</p>
+    <p class="sub">본문 출처: Man Group article</p>
+    <div class="actions">
+      <a class="btn" href="https://www.man.com/insights/views-from-the-floor-2026-28-July" target="_blank" rel="noopener">원문 페이지</a>
+      
+    </div>
+  </div>
+  <blockquote><p>은행 후순위채의 위험을 시장이 과소평가한다고 지적한다.</p></blockquote>
+  <h2>1. 한눈에 보기</h2>
+
+<blockquote>
+<p>AT1(기타기본자본증권)의 스프레드는 206bp로 2014년 지수 출범 이후 최저 수준에 근접했다. 은행 자체는 건전하지만, 콜 연장과 듀레이션 확대, 문서 조항의 격차까지 감안하면 지금의 금리는 그 위험을 보상하지 못한다는 것이 저자들의 결론이다.</p>
+<p>저자들은 AT1이 "은행 건전성에 거는 베팅"에서 "금리에 거는 베팅"으로 조용히 바뀌었다고 본다. 소유하지 못할 자산은 아니지만, 안목 있는 투자자의 시장이지 수익률에 쫓기는 투자자의 시장은 아니라고 정리한다.</p>
+</blockquote>
+
+<ul>
+<li><strong>밸류에이션</strong>: ICE CoCo 지수 기준 스프레드 206bp. 역사적 중앙값 385bp의 약 54% 수준이다.</li>
+<li><strong>콜 연장 위험</strong>: 최근 발행분의 리셋 스프레드가 낮게 고정돼 있다. 발행사 입장에서는 콜하지 않는 편이 유리해진다. 그 순간 채권은 사실상 영구채가 되고 듀레이션은 15~20년으로 늘어난다.</li>
+<li><strong>듀레이션 자체가 상승</strong>: 지수 듀레이션이 2023년 2.3년에서 3.7년으로 올라왔다. 올해 발행된 은행 AT1의 약 4분의 1이 10년 논콜 구조다.</li>
+<li><strong>문서 격차</strong>: 일부 발행물은 채권자 동의 없이 트리거 수준을 상향할 수 있다. 이 차이는 지수나 헤드라인 스프레드에 전혀 드러나지 않는다.</li>
+</ul>
+
+<p><em>참고: 이 글은 학술 논문이 아니라 Man Group의 시장 코멘터리(Views from the Floor)다. 데이터 출처와 몇 개의 요약 수치만 공개하고, 모형·회귀·백테스트는 제시하지 않는다. 아래 3절과 7절에서 수식으로 정리한 부분은 본문 논지를 재구성한 것이며 원문에 수식은 없다. 해당 대목은 "추정"으로 표시했다.</em></p>
+
+<h2>2. 문제의식과 배경</h2>
+
+<p>2026년 채권시장의 관심은 인공지능 설비 투자와 중동 분쟁에 쏠려 있다. 저자들은 그 사이에 후순위 은행채의 위험이 방치됐다고 본다. 문제의 뿌리는 은행의 건전성이 아니라 투자자의 수익률 갈증이다.</p>
+
+<p>AT1은 2008년 위기 이후 만들어졌다. 은행이 어려워졌을 때 납세자가 아니라 은행의 투자자가 손실을 흡수하게 하려는 설계다. 그 대가로 손실 순위에서 앞자리를 받고 더 높은 금리를 지급한다.</p>
+
+<p>기존 시각의 한계는 두 갈래다. 첫째, 시장은 AT1을 "5년 만기 은행채 + 알파"로 관성적으로 취급한다. 콜 옵션의 행사 조건이 발행사에게만 유리하게 기울어진 국면을 반영하지 못한다. 둘째, 지수 스프레드를 밸류에이션 지표로 쓰지만, 지수는 종목별 문서 조항의 차이를 흡수해 버린다.</p>
+
+<p>이 글의 차별점은 스프레드 수준 하나로 판단하지 않는다는 데 있다. 가격, 콜 경제성, 듀레이션 구조, 법적 문서라는 네 축을 함께 놓고 본다. 그 결과 "싸지 않다"가 아니라 "위험의 성격이 바뀌었다"는 진단으로 넘어간다.</p>
+
+<h2>3. 방법론</h2>
+
+<h3>3.1 자본구조 안에서의 위치 확인</h3>
+
+<p>AT1은 우발전환사채(CoCo, contingent convertible)의 한 종류다. 자본구조에서 보통주 바로 위, 선순위 채권자 뒤에 앉는다. 두 가지 조항이 일반 채권과 결정적으로 다르다.</p>
+
+<ul>
+<li><strong>쿠폰 재량 정지</strong>: 은행이 재량으로 쿠폰을 건너뛸 수 있다. 그래도 부도 사유가 아니다.</li>
+<li><strong>원금 손실 흡수</strong>: 자본비율이 정해진 트리거를 깨면 원금을 상각하거나 주식으로 전환한다.</li>
+</ul>
+
+<h3>3.2 스프레드의 백분위 평가</h3>
+
+<p>저자들은 절대 수준이 아니라 각 지수의 전체 역사 대비 백분위로 밸류에이션을 판정한다. 지수 \(i\)의 현재 옵션조정스프레드(OAS)를 \(s_i(t)\), 과거 관측치 집합을 \(\{s_i(u)\}\)라 하면 다음과 같다.</p>
+
+\[ P_i(t) = \frac{1}{N_i}\sum_{u \in H_i} \mathbf{1}\{ s_i(u) \le s_i(t) \} \]
+
+<p>\(P_i(t)\)는 백분위, \(H_i\)는 지수 \(i\)의 가용 역사 구간, \(N_i\)는 그 관측 수, \(\mathbf{1}\{\cdot\}\)는 조건이 참이면 1인 지시함수다. 값이 낮을수록 역사적으로 타이트하다는 뜻이다.</p>
+
+<h3>3.3 콜 경제성 판정 (추정: 본문 논지의 수식화)</h3>
+
+<p>AT1은 보통 발행 5년 뒤 첫 콜 날짜를 갖는다. 콜하지 않으면 만기가 연장되고 쿠폰이 리셋된다. 리셋 후 쿠폰은 통상 다음 구조를 따른다.</p>
+
+\[ c_{\text{reset}} = r_{\text{swap}}(t_c) + s_{\text{reset}} \]
+
+<p>\(c_{\text{reset}}\)은 리셋 이후 지급 쿠폰, \(r_{\text{swap}}(t_c)\)는 콜 시점의 기준 스왑금리, \(s_{\text{reset}}\)은 발행 당시 확정한 리셋 가산금리다. 핵심은 \(s_{\text{reset}}\)이 발행 시점에 못 박힌다는 점이다.</p>
+
+<p>발행사가 콜을 실행할지는 다음 비교로 갈린다.</p>
+
+\[ \text{Call if } \; s_{\text{new}}(t_c) + \kappa \;<\; s_{\text{reset}} \]
+
+<p>\(s_{\text{new}}(t_c)\)는 콜 시점에 신규 AT1을 찍을 때 물어야 하는 가산금리, \(\kappa\)는 발행 비용과 평판 요인을 뭉뚱그린 항이다. 시장이 타이트할 때 발행된 채권은 \(s_{\text{reset}}\)이 낮다. 훗날 \(s_{\text{new}}\)가 그보다 높아지면 콜하지 않는 쪽이 합리적이다.</p>
+
+<h3>3.4 연장 위험과 음의 컨벡시티 (추정)</h3>
+
+<p>콜 확률을 \(p\)라 두면 실효 듀레이션은 두 시나리오의 가중 평균으로 근사할 수 있다.</p>
+
+\[ D_{\text{eff}} = p \cdot D_{\text{call}} + (1-p)\cdot D_{\text{perp}} \]
+
+<p>\(D_{\text{call}}\)은 첫 콜 날짜를 만기로 본 듀레이션, \(D_{\text{perp}}\)는 영구채로 본 듀레이션이다. 본문 수치를 대입하면 \(D_{\text{call}}\)은 5년 미만, \(D_{\text{perp}}\)는 15~20년 수준이다.</p>
+
+<p>문제는 \(p\)가 시장 스프레드의 감소함수라는 데 있다. 즉 \(\partial p / \partial s_{\text{new}} < 0\)이다. 시장이 무너져 스프레드가 벌어지면 콜 확률이 떨어지고 듀레이션이 늘어난다. 손실이 나는 국면에서 금리 민감도가 커지는 구조다. 이것이 본문이 말하는 음의 컨벡시티(negative convexity)다.</p>
+
+<p>반대 방향은 막혀 있다. 시장이 좋아져도 가격은 콜 가격(액면) 근처에서 눌린다. 상승은 제한되고 하락은 증폭된다.</p>
+
+<h3>3.5 문서 조항의 개별 심사</h3>
+
+<p>마지막 축은 정량 지표가 아니라 계약서 읽기다. 전환 트리거 수준을 \(T\), 현재 보통주자본비율을 \(\text{CET1}\)이라 하면 투자자의 안전판은 다음과 같다.</p>
+
+\[ B = \text{CET1} - T \]
+
+<p>\(B\)는 트리거까지 남은 완충폭이다. 일부 투자설명서는 \(T\)를 채권자 동의 없이 자동으로 올릴 수 있게 해 둔다. 발행사가 골대를 옮기면서 \(B\)를 좁힐 수 있다는 뜻이다. 반면 다른 발행물은 트리거 변경에 보유자의 절대다수 동의를 요구한다.</p>
+
+<h2>4. 데이터와 실험 설계</h2>
+
+<p>원문은 백테스트나 회귀분석 대신 지수 데이터의 시계열 백분위와 발행 통계를 근거로 삼는다. 사용한 데이터는 다음과 같다.</p>
+
+<table>
+<thead>
+<tr><th>항목</th><th>내용</th></tr>
+</thead>
+<tbody>
+<tr><td>출처</td><td>ICE BofA 지수, 일별 옵션조정스프레드</td></tr>
+<tr><td>AT1 계열 지수</td><td>COCO, COCE, COCU — 2014년 1월부터</td></tr>
+<tr><td>비교 지수</td><td>ELT2, EBSL, EBBA, C0P0, ER00 — 1999년 12월부터</td></tr>
+<tr><td>기준일</td><td>2026년 6월 30일</td></tr>
+<tr><td>평가 방식</td><td>각 지수의 전체 가용 역사 대비 백분위</td></tr>
+<tr><td>시장 규모</td><td>ICE CoCo 지수 기준 잔액 3,000억 달러 초과</td></tr>
+<tr><td>발행 통계</td><td>2026년 발행 은행 AT1 중 10년 논콜 비중</td></tr>
+<tr><td>듀레이션</td><td>지수 금리 민감도, 2023년 대비 현재</td></tr>
+</tbody>
+</table>
+
+<p>지수 코드가 가리키는 자산군은 본문에 풀어서 설명하지 않는다. 통상 ELT2는 유로 후순위 은행채(Tier 2), EBSL은 유로 은행 선순위, C0P0은 달러 하이브리드 계열, ER00은 유로 투자등급 회사채를 가리킨다. 이 대응은 <em>추정</em>이다.</p>
+
+<p>벤치마크 비교는 "AT1 대 다른 신용자산"의 상대 밸류에이션으로 구성한다. 본문은 다른 자산군도 모두 타이트하지만 AT1이 유독 역사적 최저 근처라는 점을 강조한다.</p>
+
+<h2>5. 주요 결과</h2>
+
+<h3>5.1 가격: 위험 대비 보상이 역사적 저점</h3>
+
+<table>
+<thead>
+<tr><th>지표</th><th>수치</th><th>비고</th></tr>
+</thead>
+<tbody>
+<tr><td>현재 CoCo 지수 스프레드</td><td>206bp</td><td>2026년 6월 30일 기준</td></tr>
+<tr><td>역사적 중앙값</td><td>385bp</td><td>2014년 1월 이후</td></tr>
+<tr><td>중앙값 대비 비율</td><td>약 54%</td><td>206 ÷ 385</td></tr>
+<tr><td>중앙값 대비 차이</td><td>-179bp</td><td>—</td></tr>
+<tr><td>역사적 위치</td><td>사상 최저 근접</td><td>구체적 백분위는 본문에 명시되지 않음</td></tr>
+</tbody>
+</table>
+
+<h3>5.2 듀레이션: 구조적으로 길어지는 중</h3>
+
+<table>
+<thead>
+<tr><th>지표</th><th>2023년</th><th>현재(2026년)</th><th>변화</th></tr>
+</thead>
+<tbody>
+<tr><td>지수 듀레이션</td><td>2.3년</td><td>3.7년</td><td>+1.4년 (약 +61%)</td></tr>
+<tr><td>10년 논콜 발행 비중</td><td>전통적으로 5년이 표준</td><td>올해 발행분의 약 25%</td><td>논콜 기간 2배</td></tr>
+<tr><td>콜 불이행 시 듀레이션</td><td>—</td><td>15~20년</td><td>최초 가격에 반영된 수준의 약 4배</td></tr>
+</tbody>
+</table>
+
+<h3>5.3 발행 시장의 행태</h3>
+
+<ul>
+<li>은행들이 이 국면을 놓치지 않았다. 일부는 기록적인 속도로 10년치 조달을 확정했다.</li>
+<li>투자자의 반발은 거의 없었다. 이른바 "국가 대표급" 은행들이 통상의 두 배 기간을 낮은 쿠폰에 조달했다.</li>
+<li>결과적으로 투자자는 기존의 복잡성 위에 금리 위험까지 추가로 떠안았다.</li>
+</ul>
+
+<h3>5.4 구조적 결론</h3>
+
+<p>저자들의 핵심 주장은 위험의 성격 전환이다. 스프레드가 얇고 듀레이션이 길어지면, 수익률을 좌우하는 것은 발행사의 실적이 아니라 금리의 움직임이다. AT1은 신용 자산에서 금리 자산으로 옮겨갔다.</p>
+
+<p>여기에 리셋 스프레드가 낮은 종목일수록 매도 국면에서 낙폭이 깊을 것으로 본다. 콜 확률이 낮아 듀레이션이 먼저 늘어나기 때문이다.</p>
+
+<h2>6. 한계와 주의점</h2>
+
+<h3>6.1 저자들이 밝힌 한계</h3>
+
+<ul>
+<li>은행 자체의 건전성은 문제 삼지 않는다. 이 글은 신용 악화 전망이 아니다.</li>
+<li>AT1을 보유하지 못할 자산으로 규정하지 않는다. 포트폴리오에서 유용한 역할을 할 수 있다고 인정한다.</li>
+<li>문서 격차는 지수 지표로 잡히지 않는다. 바텀업 실사가 필요하다는 점을 스스로 밝힌다.</li>
+</ul>
+
+<h3>6.2 재현과 실전 적용에서 걸릴 지점</h3>
+
+<ul>
+<li><strong>데이터 접근</strong>: ICE BofA 지수는 유료다. 개인이나 소규모 기관이 동일한 시계열을 확보하기 어렵다.</li>
+<li><strong>표본 길이의 비대칭</strong>: CoCo 지수는 2014년부터다. 다른 지수는 1999년부터다. 서로 다른 길이의 역사로 계산한 백분위를 나란히 놓는 것은 해석상 주의가 필요하다. CoCo 표본에는 2008년 위기가 아예 없다.</li>
+<li><strong>중앙값의 대표성</strong>: 385bp라는 중앙값에는 2016년 도이체방크 사태, 2020년 코로나, 2023년 크레디트스위스 사태가 들어 있다. 위기 구간이 밀집된 짧은 표본의 중앙값을 "정상 수준"으로 보기에는 무리가 있다.</li>
+<li><strong>콜 확률 추정</strong>: 콜 여부는 순수한 경제 계산만으로 결정되지 않는다. 규제 당국의 시선, 발행사의 시장 접근성, 평판이 함께 작용한다. \(\kappa\)를 관측할 방법이 없다.</li>
+<li><strong>문서 심사의 확장성</strong>: 발행물이 수백 건이다. 투자설명서를 일일이 읽는 작업은 자동화가 쉽지 않다.</li>
+<li><strong>타이밍의 부재</strong>: 스프레드가 타이트하다는 진단은 방향이지 시점이 아니다. 타이트한 상태가 몇 년 이어질 수 있다. 캐리를 포기한 조기 매도는 그 자체로 비용이다.</li>
+<li><strong>백테스트 부재</strong>: 원문은 "리셋 스프레드가 낮은 종목의 낙폭이 깊다"는 명제를 검증하지 않았다. 실증은 독자의 몫이다.</li>
+</ul>
+
+<h2>7. 시스템 트레이딩 적용 아이디어</h2>
+
+<h3>7.1 밸류에이션 레짐 신호 (일별)</h3>
+
+<p>CoCo 지수 옵션조정스프레드의 확장 백분위를 매일 계산한다. 다른 신용 지수와의 상대 백분위 차이를 함께 본다.</p>
+
+\[ Z(t) = P_{\text{CoCo}}(t) - \frac{1}{K}\sum_{j=1}^{K} P_{j}(t) \]
+
+<p>\(P_{\text{CoCo}}\)는 AT1 지수의 백분위, \(P_j\)는 비교군 \(K\)개 지수의 백분위다. \(Z\)가 크게 음수면 AT1만 유독 비싸다는 뜻이다. 이때 AT1 익스포저를 줄이고 후순위 은행채(Tier 2)나 선순위로 옮기는 규칙을 건다.</p>
+
+<h3>7.2 연장 위험 점수 (주별 갱신)</h3>
+
+<p>종목별로 다음 지표를 계산해 순위를 매긴다.</p>
+
+\[ E_k = s_{\text{new}}^{\text{peer}}(t) - s^{k}_{\text{reset}} \]
+
+<p>\(s^{k}_{\text{reset}}\)은 종목 \(k\)의 리셋 가산금리, \(s_{\text{new}}^{\text{peer}}\)는 동급 발행사의 현재 신규 발행 가산금리 추정치다. \(E_k\)가 클수록 콜 유인이 없고 연장 위험이 크다. 필요 입력은 발행 조건 데이터베이스와 프라이머리 시장의 신규 발행 스프레드다.</p>
+
+<p>운용 규칙은 단순하게 짠다. \(E_k\) 상위 분위 종목을 매도하고 하위 분위를 매수하는 시장중립 상대가치 바스켓을 구성한다. 리밸런싱은 주 1회면 충분하다. 이 자산군은 거래 비용이 높아 회전율을 억제해야 한다.</p>
+
+<h3>7.3 듀레이션 드리프트 감시 (월별)</h3>
+
+<ul>
+<li>지수 듀레이션의 12개월 변화율을 추적한다. 본문의 2.3년 → 3.7년 같은 흐름을 조기에 잡는다.</li>
+<li>신규 발행에서 10년 논콜 비중을 월별로 집계한다. 이 비중이 오르면 지수의 금리 베타가 구조적으로 상승한다.</li>
+<li>포트폴리오의 금리 위험을 스왑이나 국채 선물로 목표 듀레이션에 맞춰 되돌린다. 신용 노출만 남기는 방식이다.</li>
+</ul>
+
+<h3>7.4 트리거 완충폭 모니터링 (분기별)</h3>
+
+<p>발행사별로 분기 공시에서 보통주자본비율을 긁어온다. 종목별 트리거와의 차이 \(B = \text{CET1} - T\)를 계산한다. \(B\)가 임계치 아래로 내려간 발행사는 자동으로 관찰 대상에 올린다. 이 데이터는 유럽은행감독청 공시나 개별 은행의 실적 자료에서 얻을 수 있다.</p>
+
+<h3>7.5 문서 플래그 (발행 시점 1회)</h3>
+
+<p>새 발행물의 투자설명서에서 트리거 변경 조항을 추출한다. 언어 모형으로 1차 분류하고 사람이 검수하는 구조가 현실적이다. 분류 결과는 두 가지다.</p>
+
+<ul>
+<li>발행사가 채권자 동의 없이 트리거를 상향할 수 있는가</li>
+<li>변경에 보유자의 절대다수 동의가 필요한가</li>
+</ul>
+
+<p>후자에 해당하는 종목에만 가중치를 주는 필터를 건다. 지수를 그대로 사면 이 구분이 사라진다는 것이 본문의 지적이다.</p>
+
+<h3>7.6 컨벡시티 헤지</h3>
+
+<p>음의 컨벡시티는 옵션으로 되사는 것이 정공법이다. 두 가지 경로를 생각할 수 있다.</p>
+
+<ul>
+<li>스프레드 확대 국면을 대비해 유럽 은행 지수의 신용부도스왑 옵션이나 페이어 스왑션을 보유한다.</li>
+<li>AT1 보유 은행의 주식 풋을 저비용으로 얹는다. 손실 흡수 구조상 주식과 상관이 높아지는 구간을 겨냥한다.</li>
+</ul>
+
+<p>다만 이 헤지들의 유효성은 원문이 검증하지 않았다. 실행 전 자체 백테스트가 필요하다.</p>
+
+<h2>8. 함께 볼 만한 개념</h2>
+
+<ul>
+<li>우발전환사채(CoCo)의 가격 결정 — 구조 모형과 신용 파생 접근</li>
+<li>AT1 콜 연장 위험과 리셋 스프레드 기반 상대가치</li>
+<li>음의 컨벡시티 — 모기지 담보 증권의 조기상환 모형과의 유사성</li>
+<li>바젤 III 자본 규제, 보통주자본비율, MDA(최대 배당가능액) 제약</li>
+<li>쿠폰 재량 정지와 배당 제한의 연동 구조</li>
+<li>베일인 제도와 채권자 손실분담 순위</li>
+<li>2023년 크레디트스위스 AT1 전액 상각 사례와 자본구조 역전 논쟁</li>
+<li>스프레드 백분위 기반 신용 레짐 판별</li>
+<li>옵션조정스프레드 계산과 콜 가능 채권의 실효 듀레이션</li>
+<li>채권 계약 조항 분석 — 코버넌트 품질 점수와 문서 텍스트 마이닝</li>
+<li>캐리 대 컨벡시티 상충, 위기 시 상관 급등 현상</li>
+</ul>
+  <div class="abs" style="margin-top:32px"><b>ORIGINAL ABSTRACT</b>As fixed income markets remain fixated on AI buildouts and the conflict in the Middle East, are investors far too complacent when it comes to the risks of junior bank debt?</div>
+  <footer><p>로컬 Claude Code 로 생성한 요약 리포트입니다. 인용 전 반드시 원문을 확인하세요.</p></footer>
+</div>
+</body>
+</html>
