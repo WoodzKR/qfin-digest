@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Tail Is the Only Signal: Flush Reversion in Equity Indices and Crypto Perpetual Futures — 상세 리포트</title>
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --panel-2:#fbfcfd; --ink:#16191d; --muted:#5c6672;
+  --line:#e2e6ea; --accent:#3b6ef0; --accent-soft:#eaf0fe;
+  --pm:#3b6ef0; --st:#0f9d76; --tr:#d4791f; --ssrn:#8b5cf6; --other:#7a68c9;
+  --star:#f0a91b; --shadow:0 1px 2px rgba(16,24,40,.06),0 4px 14px rgba(16,24,40,.05);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#101317; --panel:#181c22; --panel-2:#1e232a; --ink:#e7ebf0; --muted:#98a3b0;
+    --line:#2a3038; --accent:#7ea3ff; --accent-soft:#1d2637;
+    --pm:#7ea3ff; --st:#4bd6a8; --tr:#f0ad5e; --ssrn:#b18cff; --other:#b0a0f0;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.25);
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:15px/1.65 -apple-system,"Segoe UI","Malgun Gothic",Roboto,"Helvetica Neue",sans-serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:32px 20px 140px}
+a{color:var(--accent)}
+
+header.top{margin-bottom:24px}
+h1{font-size:26px;margin:0 0 6px;letter-spacing:-.02em}
+.sub{color:var(--muted);font-size:13.5px;margin:0}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:9px 13px;font-size:13px;box-shadow:var(--shadow)}
+.stat b{font-size:16px;margin-right:5px}
+
+.controls{position:sticky;top:0;z-index:20;background:var(--bg);
+  padding:12px 0 10px;margin:20px 0 8px;border-bottom:1px solid var(--line)}
+.row{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:7px}
+.row:last-child{margin-bottom:0}
+.rowlabel{font-size:11.5px;color:var(--muted);font-weight:700;letter-spacing:.06em;
+  min-width:38px}
+.chip{border:1px solid var(--line);background:var(--panel);color:var(--muted);
+  border-radius:999px;padding:5px 12px;font-size:12.5px;cursor:pointer;
+  font-family:inherit;transition:.12s;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);
+  color:var(--accent);font-weight:600}
+.chip:hover{border-color:var(--accent)}
+#q{flex:1;min-width:180px;padding:7px 12px;border:1px solid var(--line);border-radius:8px;
+  background:var(--panel);color:var(--ink);font:inherit;font-size:13.5px}
+#q:focus{outline:2px solid var(--accent);outline-offset:-1px}
+select{padding:7px 10px;border:1px solid var(--line);border-radius:8px;
+  background:var(--panel);color:var(--ink);font:inherit;font-size:13.5px}
+.count{color:var(--muted);font-size:12.5px;margin-left:auto}
+
+h2.day{font-size:15px;margin:30px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--line);
+  color:var(--muted);font-weight:600;letter-spacing:.02em}
+h2.day span{color:var(--ink)}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow)}
+.card.hide{display:none}
+.badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+.badge{font-size:11px;font-weight:700;letter-spacing:.04em;padding:2.5px 8px;
+  border-radius:5px;color:#fff}
+.b-PM{background:var(--pm)} .b-ST{background:var(--st)} .b-TR{background:var(--tr)}
+.b-ssrn{background:var(--ssrn)} .b-XX{background:var(--other)}
+.badge.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);font-weight:600}
+.stars{color:var(--star);font-size:12.5px;letter-spacing:1px;margin-left:auto}
+.stars i{color:var(--line);font-style:normal}
+
+.title{font-size:16.5px;font-weight:650;line-height:1.4;margin:0 0 6px;letter-spacing:-.01em}
+.title a{color:var(--ink);text-decoration:none}
+.title a:hover{color:var(--accent)}
+.oneliner{margin:0 0 8px;font-size:14.5px;color:var(--ink)}
+.oneliner::before{content:"\25B8 ";color:var(--accent)}
+.authors{margin:0;color:var(--muted);font-size:12.5px}
+
+.detail{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+.detail[hidden]{display:none}
+.detail ul{margin:0 0 12px;padding-left:19px}
+.detail li{margin-bottom:4px}
+.kv{display:grid;grid-template-columns:76px 1fr;gap:5px 10px;font-size:13.5px;margin-bottom:12px}
+.kv dt{color:var(--muted);font-weight:600}
+.kv dd{margin:0}
+.keys{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.key{font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);
+  border-radius:5px;padding:2px 7px;color:var(--muted)}
+.abs{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;
+  padding:11px 13px;font-size:13px;color:var(--muted);line-height:1.7}
+.abs b{color:var(--ink);display:block;margin-bottom:4px;font-size:12px;letter-spacing:.03em}
+
+.actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.btn{border:1px solid var(--line);background:var(--panel);color:var(--muted);
+  border-radius:7px;padding:5.5px 12px;font-size:12.5px;cursor:pointer;
+  font-family:inherit;text-decoration:none;display:inline-block;transition:.12s}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{filter:brightness(1.08);color:#fff}
+.btn.queued{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:600}
+.btn.done{border-color:var(--st);color:var(--st)}
+
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--panel);
+  border-top:1px solid var(--line);box-shadow:0 -4px 20px rgba(0,0,0,.10);
+  padding:12px 20px;display:none}
+.bar.on{display:block}
+.bar-in{max-width:1000px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.bar code{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;
+  padding:4px 8px;font-size:12px;flex:1;min-width:200px;overflow:auto;white-space:nowrap}
+.empty{color:var(--muted);text-align:center;padding:50px 0}
+footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);
+  color:var(--muted);font-size:12px}
+@media print{.controls,.bar,.actions{display:none!important}.detail{display:block!important}
+  .card{break-inside:avoid;box-shadow:none}}
+
+.doc{max-width:780px}
+.doc h1{font-size:24px;line-height:1.35;margin:0 0 10px}
+.doc h2{font-size:19px;margin:38px 0 12px;padding-bottom:7px;border-bottom:2px solid var(--accent);
+  letter-spacing:-.01em}
+.doc h3{font-size:15.5px;margin:22px 0 8px;color:var(--accent)}
+.doc p{margin:0 0 14px}
+.doc ul,.doc ol{margin:0 0 16px;padding-left:22px}
+.doc li{margin-bottom:7px}
+.doc blockquote{margin:0 0 18px;padding:14px 18px;border-left:3px solid var(--accent);
+  background:var(--accent-soft);border-radius:0 8px 8px 0;font-size:15.5px}
+.doc blockquote p:last-child{margin-bottom:0}
+.doc table{width:100%;border-collapse:collapse;margin:0 0 18px;font-size:13.5px;
+  display:block;overflow-x:auto}
+.doc th,.doc td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+.doc th{background:var(--panel-2);font-weight:650;white-space:nowrap}
+.doc code{background:var(--panel-2);border:1px solid var(--line);border-radius:4px;
+  padding:1px 5px;font-size:13px}
+.doc mjx-container[display="true"]{margin:16px 0;overflow-x:auto;overflow-y:hidden;padding:2px 0}
+.doc .meta-head{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;margin:18px 0 26px;box-shadow:var(--shadow)}
+.doc .meta-head .sub{margin-bottom:4px}
+</style>
+
+<script>
+window.MathJax={
+  tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]'],['$$','$$']],processEscapes:true},
+  options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']},
+  chtml:{scale:0.98}
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+</head>
+<body>
+<div class="wrap doc">
+  <p class="sub"><a href="javascript:history.back()">← 돌아가기</a></p>
+  <h1>The Tail Is the Only Signal: Flush Reversion in Equity Indices and Crypto Perpetual Futures</h1>
+  <div class="meta-head">
+    <p class="sub">Alexandr Dashyan</p>
+    <p class="sub">SSRN 7363482 · Quantitative Methods in Investing &amp; Financial Statement Analysis</p>
+    <p class="sub">본문 출처: SSRN PDF 전문</p>
+    <div class="actions">
+      <a class="btn" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7363482" target="_blank" rel="noopener">원문 페이지</a>
+      <a class="btn" href="https://papers.ssrn.com/sol3/Delivery.cfm/7363482.pdf?abstractid=7363482&amp;mirid=1" target="_blank" rel="noopener">원문 PDF</a>
+    </div>
+  </div>
+  <blockquote><p>대폭 하락 후 반등 효과 대부분이 이벤트 중복 집계의 착시임을 밝힌다</p></blockquote>
+  <h2>1. 한눈에 보기</h2>
+
+<blockquote>
+<p>대형 급락 다음 날의 반등(플러시 리버전)은 대부분 통계 착시다. 사건을 날짜 단위로 한 번만 세고, 깊이 구간을 겹치지 않게 나누고, 다중검정과 부트스트랩을 바로잡으면, 76년 미국 주가지수 표본에서 −7% 이하 급락 한 구간만 살아남는다.</p>
+</blockquote>
+
+<ul>
+<li>같은 날 여러 종목이 함께 떨어진다. 종목–일자 단위로 풀링하면 하나의 시장 충격을 여러 번 세는 셈이다. 개별종목 패널에서 t값이 6.76에서 1.68로 무너진다.</li>
+<li>살아남은 결과는 −7% 이하 지수 급락뿐이다. 다음 세션 평균 수익률 3.08%, 다중검정 보정 p값 0.006, 부트스트랩 구간 1.34~4.84%다.</li>
+<li>이 효과는 폭락 후 회복 추세가 아니다. 다음 세션만 3.08%이고 그 뒤 9거래일은 평균 0.01%로 무조건부 일평균(약 0.03%)보다도 낮다.</li>
+<li>암호화폐 무기한 선물에서는 같은 규칙이 전혀 통하지 않는다. 베타 조정 엣지가 모든 국면, 모든 연도에서 음수다.</li>
+<li>경제적 의미는 작다. 76년 동안 25일만 발동한다. 자본시간(capital time) 기준 노출은 0.05%이고, 국채 대비 초과수익은 연 0.44%p에 그친다.</li>
+</ul>
+
+<h2>2. 문제의식과 배경</h2>
+
+<p>"나쁜 날의 종가에 사서 다음 날 종가에 판다"는 아이디어는 오래됐다. 단기 반전(short-horizon reversal) 문헌이 뒷받침하고, 백테스트로 그럴듯한 숫자를 만들기도 쉽다. 저자는 이 아이디어가 실제로 얼마나 남는지를 한 가지 사건 정의와 한 가지 검정 절차로 검증한다.</p>
+
+<p>기존 문헌의 경제학적 뿌리는 유동성 공급 보상이다. Grossman·Miller(1988)는 재고를 떠안는 중개자가 요구하는 가격 양보를 모형화했다. Nagel(2012)은 유동성이 마를수록 단기 반전 수익이 급등한다는 점을 보였다. Hameed 외(2010)는 유동성이 특히 시장이 하락한 뒤에 빠져나간다는 비대칭을 확인했다.</p>
+
+<p>이 논문이 겨냥하는 지점은 경제학이 아니라 계산 방식이다. 급락일은 시간축에 독립적으로 흩어지지 않는다. 지수를 5% 떨어뜨린 사건은 대개 같은 오후에 거의 모든 종목을 함께 떨어뜨린다. 따라서 종목–일자를 독립 관측치로 취급한 사건연구는 표본 수만 부풀린다.</p>
+
+<p>Kolari·Pynnonen(2010)은 사건일이 겹칠 때 낮은 상관만으로도 심각한 과대기각이 생긴다고 보였다. Mitchell·Stafford(2000)는 독립 가정에 기댄 풀링 추론이 무효라고 지적했다. 이 논문은 그 처방 중 가장 무딘 방식, 즉 달력 날짜당 관측치 하나만 쓰는 방법을 택한다. 투명하다는 것이 선택 이유다.</p>
+
+<p>저자는 여기에 세 가지 보정을 더한다. 임계값을 중첩이 아닌 배타 구간으로 정의하기, 여러 임계값 검정에 대한 가족단위 오류율(familywise) 보정, 그리고 부트스트랩 블록 길이 교정이다. 특히 세 번째는 저자 본인의 1차 분석이 저지른 오류다. 조용히 고치는 대신 오류 자체를 논문에 기록했다.</p>
+
+<h2>3. 방법론</h2>
+
+<h3>3.1 사건 정의</h3>
+
+<p>플러시(flush)는 종가 대비 종가 수익률이 임계값 이하인 날이다. 의도적으로 단순하게 잡았다. 거래는 그 종가에 매수하고 다음 종가에 매도한다. 왕복 거래비용은 20bp를 반영한다.</p>
+
+<p>사건 발생 조건은 다음과 같다.</p>
+
+\[ r_t = \frac{P_t^{close}}{P_{t-1}^{close}} - 1 \le \tau \]
+
+<p>여기서 \(r_t\)는 t일의 종가 대비 종가 수익률, \(P_t^{close}\)는 종가, \(\tau\)는 깊이 임계값이다. 평가 대상은 다음 세션 수익률 \(r_{t+1}\)이다.</p>
+
+<h3>3.2 배타 구간 설계</h3>
+
+<p>이 논문의 가장 중요한 설계 선택이다. 임계값 −3%, −5%, −7%를 누적 절단이 아니라 서로 겹치지 않는 밴드로 정의한다.</p>
+
+<ul>
+<li>밴드 1: −3% 초과 하락이면서 −5%보다는 얕은 구간</li>
+<li>밴드 2: −5%와 −7% 사이 구간</li>
+<li>밴드 3: −7% 이하 전부</li>
+</ul>
+
+<p>중첩 정의를 쓰면 −7% 급락이 −5% 표본과 −3% 표본에도 모두 들어간다. 강한 꼬리 효과가 얕은 구간으로 희석돼 스며든다. 연구자는 세 임계값이 일치한다고 보고 강건성으로 오독한다. 실제로는 하나의 결과를 세 번 본 것이다.</p>
+
+<h3>3.3 추론 규칙 네 가지</h3>
+
+<ol>
+<li><strong>날짜당 관측치 하나.</strong> 그날 급락한 종목들의 평균을 그 날짜의 단일 관측치로 쓴다. 횡단면 종속성에 대한 직접 처방이다.</li>
+<li><strong>독립동일분포 부트스트랩.</strong> 날짜 단위 관측치에 대해 1만 회 재표본을 뽑는다. 표본 내 블록 수가 20개 미만이면 블록 부트스트랩 변형을 아예 거부한다.</li>
+<li><strong>가족단위 최대통계량 보정.</strong> 세 밴드를 검정하므로, 중심화한 날짜 시계열을 재표본해 최대통계량 분포를 만든다. 관측 통계량을 그 분포와 비교한다.</li>
+<li><strong>에피소드 군집화.</strong> 60일 이내에 몰린 날짜들을 하나의 에피소드로 묶는다. 25개 날짜가 10개 위기에서 나왔다면 25개 독립 관측이 아니다. 지수 패널에만 적용하고, 밀도가 높은 개별종목 패널에서는 군집 규칙이 무너져 보고하지 않는다.</li>
+</ol>
+
+<h3>3.4 블록 부트스트랩 오류 기록</h3>
+
+<p>1차 분석은 정상 블록 부트스트랩(stationary bootstrap)을 평균 블록 길이 10으로 썼다. 그 표본의 가장 깊은 밴드에는 날짜 단위 관측치가 22개뿐이었다. 평균 블록이 표본의 45%를 차지한 것이다. 순환 재표본이 같은 시계열의 회전에 가까워지고, 부트스트랩 표준오차가 붕괴하고, 통계량이 부풀었다.</p>
+
+<p>저자는 이 검정의 크기(size)를 직접 측정했다. 아래가 그 결과다.</p>
+
+<table>
+<thead>
+<tr><th>부트스트랩 설정</th><th>n=22에서 기각률</th><th>n=58에서 기각률</th></tr>
+</thead>
+<tbody>
+<tr><td>평균 블록 10 (1차 설정)</td><td>13.3%</td><td>10.6%</td></tr>
+<tr><td>독립 부트스트랩 (교정 후)</td><td>6.5%</td><td>5.6%</td></tr>
+<tr><td>명목 수준</td><td>5%</td><td>5%</td></tr>
+</tbody>
+</table>
+
+<p>애초에 블록 보정이 필요하지 않았다는 진단도 두 가지 제시한다. 날짜 단위 시계열의 1차 자기상관은 얕은 밴드부터 꼬리까지 0.062, −0.137, −0.112다. 블록이 잡아낼 양의 종속성이 거의 없다. 또한 사건 인덱스 공간에서의 블록은 달력 시간의 블록이 아니다. 연속 사건 간 중앙값 간격이 밴드별로 10일, 24일, 14일인데 최대 간격은 10년을 넘는다.</p>
+
+<h3>3.5 계좌 시뮬레이션</h3>
+
+<p>사건일만 걷지 않고 고정 달력 전체를 걷는다. 급락일에는 그날의 신호에 자본을 균등 배분한다. 포지션당 20%, 총계 95% 상한을 둔다. 나머지 날에는 국채 금리를 받는다.</p>
+
+<p>전체 달력을 걷는 이유는 세 가지다. 신호가 연율화 구간을 스스로 고르지 못하게 막는다. 유휴 자본이 공짜로 취급되지 않게 한다. 노출을 "거래한 날의 수"가 아니라 자본시간, 즉 실제로 위험에 노출된 달러–일의 비율로 보고할 수 있게 한다.</p>
+
+<h2>4. 데이터와 실험 설계</h2>
+
+<table>
+<thead>
+<tr><th>항목</th><th>내용</th></tr>
+</thead>
+<tbody>
+<tr><td>주식 지수</td><td>S&amp;P 500(1950~), 나스닥 종합(1971~), 러셀 2000(1987~), 다우존스 산업평균(1992~)</td></tr>
+<tr><td>개별종목</td><td>대형주 28종목 패널</td></tr>
+<tr><td>달력</td><td>1950-01-04 ~ 2026-08-17, 19,276 세션, 76.6년</td></tr>
+<tr><td>가격 데이터</td><td>공개 벤더 API의 일간 시가·종가 (총수익 아닌 가격 시계열)</td></tr>
+<tr><td>무위험 수익률</td><td>13주 만기 미 국채 금리 (유휴 현금 이자, 초과수익 산출)</td></tr>
+<tr><td>암호화폐</td><td>주요 거래소의 USD 마진 무기한 선물 20종목, 2021~2026, 사건 87,870건</td></tr>
+<tr><td>거래비용</td><td>왕복 20bp</td></tr>
+<tr><td>벤치마크</td><td>국채, S&amp;P 500 가격지수(1950~), S&amp;P 500 총수익(1988~)</td></tr>
+<tr><td>평가지표</td><td>다음 세션 평균 수익률, 날짜 단위 t값, 에피소드 t값, 가족단위 p값, CAGR, 최대낙폭, 샤프, 자본시간</td></tr>
+</tbody>
+</table>
+
+<p>시작 연도를 옮긴 사연도 밝힌다. 1차 분석은 1990년부터 시작해 1987-10-19를 배제했다. 기록상 최대 일간 하락일이다. 그것이 제약이 아니라 선택임을 인식한 뒤 시작점을 1950년으로 되돌렸다.</p>
+
+<p>암호화폐 쪽에는 두 가지 단서가 붙는다. 첫째, 거래소의 네이티브 청산 피드는 2026-06-03부터만 존재한다. 실제 네이티브 관측 구간은 약 63일, 급락 군집 약 16개다. 그 이전 사건은 가격과 거래량으로 식별했다. 둘째, 87,870건은 종목–일자 풀링 집계다. 이 논문의 날짜 보정을 적용하지 않았다. 결과가 일관되게 음수이므로 보정하면 더 나빠질 뿐이라는 것이 저자의 논리다.</p>
+
+<h2>5. 주요 결과</h2>
+
+<h3>5.1 풀링 통계량은 인공물이다</h3>
+
+<table>
+<thead>
+<tr><th>패널·밴드</th><th>사건 수</th><th>날짜 수</th><th>풀링 t</th><th>날짜 t</th><th>부트스트랩 p(미보정)</th></tr>
+</thead>
+<tbody>
+<tr><td>지수, −3%~−5%</td><td>535</td><td>322</td><td>0.22</td><td>0.61</td><td>0.271</td></tr>
+<tr><td>지수, −5%~−7%</td><td>88</td><td>55</td><td>0.73</td><td>0.40</td><td>0.327</td></tr>
+<tr><td>지수, −7% 이하</td><td>50</td><td>25</td><td>5.55</td><td>3.38</td><td>0.0005</td></tr>
+<tr><td>개별, −3%~−5%</td><td>11,556</td><td>5,231</td><td>0.87</td><td>1.11</td><td>0.138</td></tr>
+<tr><td>개별, −5%~−7%</td><td>2,545</td><td>1,580</td><td>1.97</td><td>1.21</td><td>0.117</td></tr>
+<tr><td>개별, −7% 이하</td><td>1,361</td><td>791</td><td>6.76</td><td>1.68</td><td>0.045</td></tr>
+</tbody>
+</table>
+
+<p>개별종목 패널에서 문제가 가장 크게 드러난다. 28개 종목이 791일에 함께 급락해 1,361건의 사건을 만든다. 풀링 통계량은 종목의 개수를 증거의 개수로 착각한다. 지수 패널은 종목이 4개뿐이라 훼손이 덜하다. 5.55에서 3.38로 깎이지만 살아남는다.</p>
+
+<p>이것이 무엇을 보이고 무엇을 보이지 않는지는 정확히 구분해야 한다. 개별종목 효과가 정확히 0이라는 뜻은 아니다. 점추정치는 모든 밴드에서 양수다. 다만 지수 패널보다 날짜 수가 약 19배 많은, 검정력이 훨씬 큰 표본이 어떤 깊이에서도 귀무가설을 기각하지 못한다는 뜻이다. 소표본에서의 무결과보다 훨씬 강한 진술이다.</p>
+
+<h3>5.2 지수 패널: 꼬리만 남는다</h3>
+
+<table>
+<thead>
+<tr><th>밴드</th><th>사건</th><th>날짜</th><th>에피소드</th><th>다음 세션 평균</th><th>날짜 t</th><th>에피소드 t</th><th>가족단위 p</th></tr>
+</thead>
+<tbody>
+<tr><td>−3%~−5%</td><td>535</td><td>322</td><td>65</td><td>+0.089%</td><td>0.61</td><td>0.54</td><td>0.631</td></tr>
+<tr><td>−5%~−7%</td><td>88</td><td>55</td><td>22</td><td>+0.243%</td><td>0.40</td><td>−0.04</td><td>0.733</td></tr>
+<tr><td>−7% 이하</td><td>50</td><td>25</td><td>10</td><td>+3.075%</td><td>3.38</td><td>3.89</td><td>0.0058</td></tr>
+</tbody>
+</table>
+
+<p>꼬리 밴드의 부트스트랩 95% 구간은 1.335%에서 4.835%다. 해당 날짜의 72%가 양의 다음 세션으로 이어졌다. 살아남은 결과는 76년 동안 10개 에피소드에 기댄다. 대략 7년 반에 한 번꼴이다.</p>
+
+<h3>5.3 플라세보 지평 검정</h3>
+
+<p>가장 명백한 반론은 "폭락 후에는 원래 시장이 오른다"는 것이다. 저자는 사건을 고정하고 결과 시점만 옮겨 검증한다. 급락 2일 뒤, 3일 뒤, 최대 10일 뒤의 단일일 수익률을 각각 재서 다음 세션과 비교한다.</p>
+
+<ul>
+<li>꼬리 밴드: 다음 세션 3.075%, 이후 9일 평균 각 0.013%. 비율 234대 1이다. 게다가 0.013%는 무조건부 일평균 약 0.03%보다 낮다.</li>
+<li>최얕은 밴드: 같은 비율이 0.8이다. 다음 세션이 플라세보 날들보다 오히려 나쁘다. 효과가 없을 때 나와야 하는 그림이다.</li>
+</ul>
+
+<h3>5.4 위기 연도 제외</h3>
+
+<p>2008년과 2020년을 빼면 13개 날짜, 8개 에피소드에 사건 20건이 남는다. 평균 3.009%, 날짜 t 2.15, 에피소드 t 3.47, 부트스트랩 p 0.0095다. 결과는 유지된다.</p>
+
+<p>다만 한계도 함께 봐야 한다. 1997, 1998, 2000~2002, 2008, 2009, 2011, 2020, 2022년을 모두 빼면 날짜가 3개만 남는다. 평균 1.064%, p값 0.402다. 저자는 이를 검정이 아니라 경계값으로 보고한다. 앞선 분석에서 사건당 엣지가 사전 변동성 국면에 무관하게 평평했다는 점도 덧붙인다. 따라서 정확한 진술은 "효과가 위기에 조건부"가 아니라 "풀링 결과의 통계적 유의성이 위기 연도에 의존한다"이다. 이는 더 약한 주장이다.</p>
+
+<h3>5.5 실행 가능성: 갭과 정규장 분해</h3>
+
+<p>종가와 다음 시가 사이에만 존재하는 효과라면 거래할 수 없다. 분해 결과는 우호적이다.</p>
+
+<table>
+<thead>
+<tr><th>구성</th><th>기여</th><th>비중</th></tr>
+</thead>
+<tbody>
+<tr><td>야간 갭 (종가→시가)</td><td>0.510%</td><td>17%</td></tr>
+<tr><td>정규장 (시가→종가)</td><td>2.567%</td><td>83%</td></tr>
+</tbody>
+</table>
+
+<p>시가에 사는 방식으로 바꾸면 활성일당 수익이 1.349%에서 1.032%로 23% 줄어든다. 복리 기준으로는 연 4.26%에서 4.16%로 거의 변하지 않는다.</p>
+
+<h3>5.6 개별종목: 검정력이 더 큰 표본에서의 재현 실패</h3>
+
+<p>28개 종목의 세 밴드는 날짜 t 1.11, 1.21, 1.68을 준다. p값은 0.138, 0.117, 0.045다. 가장 깊은 밴드만 관행적 유의수준에 근접한다. 세 밴드를 검정한 뒤 가족단위 보정을 걸면 살아남지 못할 것으로 예상한다. 다만 저자는 이 보정을 지수 패널에서만 실제로 계산했다고 명시한다. 개별종목 패널에 대해서는 측정치가 아니라 예상이다.</p>
+
+<p>"개별주에 −5%는 지수의 −5%보다 훨씬 약한 사건"이라는 반론도 검증했다. 절대 임계값을 직전 250일로만 추정한 표준화 임계값으로 바꿨다. 미래 정보는 들어가지 않는다.</p>
+
+<table>
+<thead>
+<tr><th>표준화 임계값</th><th>지수 패널 날짜 t</th><th>개별종목 날짜 t</th></tr>
+</thead>
+<tbody>
+<tr><td>3 표준편차</td><td>0.42</td><td>0.78</td></tr>
+<tr><td>4 표준편차</td><td>0.69</td><td>−0.80</td></tr>
+<tr><td>6 표준편차</td><td>4.29 (평균 +2.784%)</td><td>−1.78 (평균 −0.618%, 승률 37.5%)</td></tr>
+</tbody>
+</table>
+
+<p>각 종목 고유 단위로 심각도를 재면 비대칭이 오히려 커진다. 반론이 해소되지 않는다.</p>
+
+<h3>5.7 암호화폐 무기한 선물: 어떤 깊이에서도 없다</h3>
+
+<p>결과는 약한 양수가 아니라 일관된 음수다. 베타를 제거한 사건당 엣지 기준이다.</p>
+
+<ul>
+<li>국면별 엣지: 상승장 −0.118, 하락장 −0.100, 횡보장 −0.087</li>
+<li>연도별: 6년 표본 모든 연도에서 엣지가 양수일 추정 확률이 0으로 반올림된다. 재표본 해상도를 감안하면 1% 미만으로 읽어야 하며 정확한 0이 아니다.</li>
+<li>실현 승률 47.9%로 브래킷 손익비의 손익분기점을 밑돈다.</li>
+<li>머신러닝 메타레이블러: 정제 워크포워드 검증에서 표본외 AUC 0.493~0.506이다. 동전 던지기다. 확신도 상위 구간 승률 51.4%가 전체 평균 54.4%보다 낮다. 어떤 확신도 구간도 60%에 못 미친다.</li>
+</ul>
+
+<p>흔한 탈출구 세 가지도 막았다.</p>
+
+<ol>
+<li><strong>규칙 반전.</strong> 반전 대신 추세 추종으로 뒤집어도 진다. 방향 승률 48.6%, 48.4%로 손익분기 49.8%를 밑돈다. 부호가 뒤집힌 신호가 아니라 양방향으로 수수료를 내는 동전 던지기의 흔적이다.</li>
+<li><strong>브래킷 기하 변경.</strong> 익절·손절 설정 세 가지 모두 거래당 순수익이 −0.09%로 동일하다. 기하 변경은 승률과 손익분기점을 함께 움직인다.</li>
+<li><strong>주문 유형.</strong> 유일하게 큰 개선은 예측이 아니라 체결 효과였다. 가격 개선 지정가 진입은 하락장에서 역선택이었다. 하락이 계속될 때만 체결됐기 때문이다. 시장가로 바꾸자 승률은 그대로인 채 기준 성과가 −21.7%에서 +17.6%로 옮겨갔다. 이는 주문 유형에 관한 발견이지 반전에 관한 발견이 아니다.</li>
+</ol>
+
+<h3>5.8 자산군이 다른 이유</h3>
+
+<p>유동성 공급 논리대로라면 암호화폐 무기한 선물이 더 많이 지급해야 한다. 강제 매도가 가용 호가 대비 크고 빠르기 때문이다. 실제로는 반대다. 저자가 제시하는 유력한 설명은 두 사건이 같은 사건이 아니라는 것이다.</p>
+
+<p>주식시장의 폭락 매도자는 스트레스 아래에서 결정을 내리는 사람이나 기관이다. 재고를 밤새 떠안는 중개자가 그 대가를 받는다. 무기한 선물시장에서는 청산 엔진 자체가 매도자다. 가격에 관심이 없다. Cheng 외(2021)는 비트코인 무기한 선물의 일간 강제청산을 롱 미결제약정의 3.51%, 숏의 1.89%로 측정했다. 평균 레버리지는 약 60배다.</p>
+
+<p>따라서 청산 캐스케이드는 중개자를 기다리는 일시적 불균형이 아니다. 레버리지가 소진될 때까지 이어지는 기계적 과정이다. 특정 세션의 종가에서 멈출 이유가 없다. 이 시장은 애초에 닫히지 않는다.</p>
+
+<p>더 소박한 두 번째 설명도 있다. 암호화폐 사건은 자체 변동성 대비 빈번하고 얕다. 반면 살아남은 주식 결과는 7년 반에 한 번 일어나는 깊이에 산다. 암호화폐 표본에는 자체 분포 기준으로 그만큼 희귀한 사건이 거의 없다.</p>
+
+<p>저자는 이 설명을 후보일 뿐 입증된 것이 아니라고 못박는다. 이 설계는 가격을 관측하지 매도자를 관측하지 않기 때문이다.</p>
+
+<h3>5.9 계좌: 실재하지만 경제적으로 미미하다</h3>
+
+<table>
+<thead>
+<tr><th>구분</th><th>활성일</th><th>자본시간</th><th>일 승률</th><th>활성일당 평균</th><th>CAGR</th><th>최대낙폭</th><th>샤프</th></tr>
+</thead>
+<tbody>
+<tr><td>−3%~−5%</td><td>322</td><td>0.555%</td><td>49.7%</td><td>−0.050%</td><td>+3.53%</td><td>13.2%</td><td>−0.14</td></tr>
+<tr><td>−5%~−7%</td><td>55</td><td>0.091%</td><td>54.5%</td><td>+0.056%</td><td>+3.84%</td><td>5.5%</td><td>0.02</td></tr>
+<tr><td>−7% 이하</td><td>25</td><td>0.052%</td><td>72.0%</td><td>+1.349%</td><td>+4.26%</td><td>2.7%</td><td>0.31</td></tr>
+<tr><td>국채</td><td>—</td><td>0%</td><td>—</td><td>—</td><td>+3.82%</td><td>0.0%</td><td>—</td></tr>
+<tr><td>S&amp;P 500 가격, 1950~2026</td><td>—</td><td>100%</td><td>—</td><td>—</td><td>+8.33%</td><td>56.8%</td><td>0.35</td></tr>
+<tr><td>S&amp;P 500 총수익, 1988~2026</td><td>—</td><td>100%</td><td>—</td><td>—</td><td>+11.53%</td><td>55.3%</td><td>0.54</td></tr>
+</tbody>
+</table>
+
+<p>얕은 밴드는 국채(3.82%)에도 못 미친다. 중간 밴드는 사실상 현금과 같다. 꼬리 밴드만 국채를 연 0.44%p 앞선다.</p>
+
+<p>자본시간 열이 실무적 결론을 결정한다. 꼬리 전략은 달러–일의 0.052%만 위험에 노출한다. 투입 자본 단위당 수익은 매우 크다. 활성일 1.349%는 무조건부 일평균 약 0.03%의 45배다. 그래서 문서화할 가치가 있다. 그러나 그 계좌를 운용하는 실체는 드문 오버레이가 붙은 국채 포트폴리오다. 76년에 25번만 쓸 수 있다는 사실은 오버레이 실력으로 바꾸지 못한다.</p>
+
+<p>이는 품질 제약이 아니라 용량과 빈도의 제약이다. 레버리지로 풀려면 정확히 이 전략이 수확하려던 꼬리 위험을 다시 들여와야 한다.</p>
+
+<h2>6. 한계와 주의점</h2>
+
+<h3>저자가 밝힌 한계</h3>
+
+<ul>
+<li><strong>표본이 얇다.</strong> 살아남은 결과는 76년 동안 25개 날짜, 10개 에피소드다. 신뢰구간 1.34~4.84%가 그만큼 넓다. 저자 본인이 "−7% 지수 급락 뒤에 무언가 일어나지만 크기는 잘 결정되지 않았다"는 정도로 읽으라고 권한다.</li>
+<li><strong>생존편향.</strong> 개별종목 28개는 오늘도 거래되는 이름들이다. 편향의 방향은 반전을 과대 추정하는 쪽이다. 실제로 망한 기업이야말로 급락 뒤 회복하지 못한 사례이고, 그들이 표본에 없다. 데이터 소스에서 상장폐지 종목을 받을 수 없어 직접 검증하지 못했다. 따라서 보고된 무결과는 관대하기보다 보수적일 가능성이 높다.</li>
+<li><strong>가격 시계열.</strong> 총수익이 아닌 가격 시계열을 써서 하루치 배당만큼 반전을 과소 측정한다. 결론을 바꿀 크기는 아니다.</li>
+<li><strong>암호화폐 결과의 출처.</strong> 이 논문에서 재계산하지 않고 연구 프로그램의 이전 단계 기록에서 인용했다. 브래킷 기하 재검증 스크립트만 저장소에 남아 있다. 나머지는 임시 세션 작업공간에서 작성돼 소실됐다. 독립 재현 가능한 산출물이 아니라 출처가 문서화된 보고 결과로 취급해야 한다.</li>
+<li><strong>사건 식별 약점.</strong> 2026년 6월 이전 암호화폐 사건은 청산 피드가 없어 가격과 거래량으로 식별했다. 일관된 음수 결과를 양수로 뒤집을 만한 약점은 아니라고 저자는 본다.</li>
+<li><strong>비교의 비대칭.</strong> 주식은 76년, 암호화폐는 6년이다. 암호화폐의 무결과는 짧은 기간에 대한 강한 진술이지 긴 기간에 대한 약한 진술이 아니다.</li>
+<li><strong>설명보다 사실 확립.</strong> 저자는 이 논문이 비대칭을 설명하기보다 확립했다고 인정한다. 자동청산 설명과 "암호화폐 시장은 닫히지 않는다"는 단순한 관찰을 구분하려면 다른 연구 설계가 필요하다.</li>
+</ul>
+
+<h3>재현·실전에서 걸릴 지점</h3>
+
+<ul>
+<li><strong>낙폭 수치가 위험을 재지 않는다.</strong> 최대낙폭 2.7%가 작은 이유는 거의 노출되지 않기 때문이다. 반등에 실패한 꼬리 사건 하나면 크게 달라진다. 저자도 이 점을 명시한다.</li>
+<li><strong>지수 자체는 매매 대상이 아니다.</strong> ETF나 선물로 대리 거래해야 한다. 급락 당일 종가 유동성, 스프레드 확대, 서킷브레이커 발동 여부를 별도로 확인해야 한다. 논문의 20bp 왕복비용은 위기일 실제 체결 비용을 반영하지 못할 수 있다.</li>
+<li><strong>4개 지수의 중복성.</strong> 사건 50건이 날짜 25개다. 즉 대부분의 날에 두 개 이상 지수가 동시에 급락한다. 실전에서는 사실상 한 개 시장 위험에 베팅하는 것이다.</li>
+<li><strong>가족단위 보정 범위.</strong> 세 밴드에 대해서만 보정했다. 실제 연구 과정에서 시도한 임계값·기간·자산군 조합 전체를 계산에 넣으면 검색 폭이 더 넓다. Harvey 외(2016)의 논지를 이 논문 자체에 적용하면 p 0.0058도 여유가 크지 않다.</li>
+<li><strong>사후 임계값 문제.</strong> 왜 −7%인가에 대한 사전 근거가 없다. 사후적으로 유의한 구간이 −7% 이하였을 가능성을 배제하기 어렵다. 다만 배타 구간 설계와 플라세보 검정이 이 위험을 상당히 줄인다.</li>
+</ul>
+
+<h2>7. 실무 적용 아이디어</h2>
+
+<h3>7.1 이 논문에서 실제로 가져갈 것: 방법론</h3>
+
+<p>가장 이식성이 높은 산출물은 신호가 아니라 계산 규칙이다. 사내 사건연구 검정 프로토콜에 다음을 표준으로 박아 넣을 수 있다.</p>
+
+<ol>
+<li><strong>유효 표본 수를 행 수로 세지 않는다.</strong> 사건 테이블에 <code>event_date</code> 기준 고유 날짜 수를 항상 병기한다. 두 수의 비율이 2를 넘으면 풀링 t값을 보고하지 않는다.</li>
+<li><strong>임계값은 배타 구간으로 정의한다.</strong> 누적 절단으로 "임계값을 바꿔도 결과가 유지된다"는 강건성 주장을 금지한다. 그것은 하나의 결과를 세 번 본 것이다.</li>
+<li><strong>블록 부트스트랩에 하한 규칙을 건다.</strong> 표본 길이를 평균 블록 길이로 나눈 값이 20 미만이면 블록 방식을 쓰지 않는다. 대신 1차 자기상관을 먼저 재고, 양의 종속성이 없으면 독립 부트스트랩을 쓴다.</li>
+<li><strong>재표본 횟수보다 작은 p값을 출력하지 않는다.</strong> 1만 회 재표본에서 p=0.0000은 존재하지 않는다. "&lt;0.0001"로 적는다.</li>
+<li><strong>검정 크기를 몬테카를로로 직접 잰다.</strong> 실제 표본 크기에서 참인 귀무가설을 몇 % 기각하는지 확인한다. 이 논문의 13.3% 대 5% 사례가 왜 필요한지 보여준다.</li>
+</ol>
+
+<h3>7.2 성과 보고 방식 변경</h3>
+
+<p>자본시간 개념을 백테스트 리포트의 필수 항목으로 승격할 만하다. "거래한 날 수"는 노출을 약 3배 과대 표시한다. 논문은 다음 세 가지를 함께 요구한다.</p>
+
+<ul>
+<li>고정 달력 전체를 걷는 시뮬레이션 (연율화 구간을 신호가 고르지 못하게)</li>
+<li>유휴 자본에 무위험 이자 부과 (현금이 공짜가 아니게)</li>
+<li>자본시간 기준 노출 보고 (실제 위험 노출을 정직하게)</li>
+</ul>
+
+<p>이 세 가지만 적용해도 "샤프 2.0" 류의 저빈도 전략 상당수가 현금 계좌에 얇은 오버레이를 얹은 것으로 드러난다.</p>
+
+<h3>7.3 신호 자체의 활용</h3>
+
+<p>단독 전략으로는 쓸 수 없다. 76년에 25번, 연 0.44%p다. 대신 기존 포트폴리오의 오버레이나 리스크 관리 규칙으로 붙이는 방향이 현실적이다.</p>
+
+<ul>
+<li><strong>기계적 손절 억제 규칙.</strong> 지수가 −7% 이하로 마감한 날에는 다음 세션 개장 손절 주문을 발동하지 않는다. 다음 세션이 평균 +3.08%라면 그 시점의 기계적 청산은 체계적으로 가장 나쁜 지점이다.</li>
+<li><strong>리밸런싱 타이밍.</strong> 정기 리밸런싱이나 신규 자금 집행이 −7% 급락 직후에 걸리면 다음 시가로 앞당긴다. 83%가 정규장에서 발생하므로 시가 진입으로도 대부분을 잡는다.</li>
+<li><strong>옵션 매도 관점.</strong> 급락 직후 다음 세션의 양의 드리프트는 그날의 풋 매도나 콜 스프레드 가격에 이미 반영돼 있는지 확인할 여지가 있다. 논문은 옵션을 다루지 않으므로 이 부분은 추가 검증이 필요하다.</li>
+</ul>
+
+<h3>7.4 필요한 데이터와 구축 순서</h3>
+
+<table>
+<thead>
+<tr><th>단계</th><th>필요 데이터</th><th>확인 사항</th></tr>
+</thead>
+<tbody>
+<tr><td>1. 사건 재현</td><td>지수 일간 시가·종가, 1950년 이후</td><td>1987-10-19를 포함했는지 반드시 확인</td></tr>
+<tr><td>2. 검정</td><td>날짜 단위 집계 시계열</td><td>고유 날짜 수와 사건 수를 함께 기록</td></tr>
+<tr><td>3. 실행 가능성</td><td>ETF/선물 일중 데이터, 시가·종가</td><td>급락일 스프레드와 체결량, 서킷브레이커 이력</td></tr>
+<tr><td>4. 비용</td><td>실제 체결 기록 또는 위기일 스프레드 추정치</td><td>20bp 가정이 위기일에도 유효한지</td></tr>
+<tr><td>5. 계좌</td><td>13주 국채 금리 시계열</td><td>유휴 현금 이자 반영, 자본시간 산출</td></tr>
+<tr><td>6. 편향 점검</td><td>상장폐지 포함 종목 유니버스</td><td>이 논문이 하지 못한 부분. CRSP 등 필요</td></tr>
+</tbody>
+</table>
+
+<h3>7.5 확장 검증 아이디어</h3>
+
+<ul>
+<li>비미국 지수(코스피, 닛케이, 유로스톡스)로 밴드 구조를 그대로 옮겨 검증한다. 독립 표본이 늘어난다. 다만 미국 급락일과 날짜가 겹치므로 같은 날짜 보정을 적용해야 한다.</li>
+<li>−7%보다 깊은 밴드를 하나 더 쪼개 효과 크기가 깊이에 단조 증가하는지 본다. 단조성이 있으면 임계값 사후 선택 우려가 줄어든다.</li>
+<li>암호화폐 쪽에서는 자체 변동성 대비 희귀도로 사건을 재정의해 본다. 논문의 두 번째 설명, 즉 "충분히 희귀한 사건이 표본에 없다"를 직접 검증하는 설계다.</li>
+</ul>
+
+<h2>8. 함께 볼 만한 개념</h2>
+
+<ul>
+<li><strong>사건일 군집과 횡단면 상관</strong> — Kolari &amp; Pynnonen(2010)의 조정 통계량, Mitchell &amp; Stafford(2000)의 달력시간 포트폴리오 접근</li>
+<li><strong>단기 반전</strong> — Lehmann(1990), Jegadeesh(1990), Lo &amp; MacKinlay(1990)의 횡단면 대 자기상관 분해</li>
+<li><strong>유동성 공급 보상</strong> — Grossman &amp; Miller(1988), Campbell·Grossman·Wang(1993), Nagel(2012)의 "증발하는 유동성", Hameed·Kang·Viswanathan(2010)의 하락 후 비대칭</li>
+<li><strong>가격 압력과 감쇠</strong> — Hendershott &amp; Menkveld(2014), Da·Liu·Schaumburg(2014)</li>
+<li><strong>다중검정과 데이터 스누핑</strong> — White(2000) 리얼리티 체크, Romano &amp; Wolf(2005) 단계적 가족단위 절차, Harvey·Liu·Zhu(2016), Bailey &amp; López de Prado(2014)의 디플레이티드 샤프비율</li>
+<li><strong>부트스트랩</strong> — Politis &amp; Romano(1994) 정상 블록 부트스트랩, 블록 길이 선택과 검정 크기 보정</li>
+<li><strong>펀딩 유동성과 청산 캐스케이드</strong> — Brunnermeier &amp; Pedersen(2009), Cheng 외(2021)의 비트코인 선물 강제청산 측정</li>
+<li><strong>암호화폐 시장 마찰</strong> — Makarov &amp; Schoar(2020)</li>
+<li><strong>검색 키워드</strong> — event clustering, calendar-time portfolio, familywise error rate, stationary bootstrap block length, capital time, purged walk-forward validation, meta-labeling, adverse selection in limit orders</li>
+</ul>
+  <div class="abs" style="margin-top:32px"><b>ORIGINAL ABSTRACT</b>Buying an asset immediately after a large single day decline is one of the oldest ideas in short horizon trading, and it is easy to make it look profitable. This paper applies one event definition and one testing protocol to two asset classes, four US equity indices over seventy six years and, in results carried over from an earlier stage of the same research program, twenty cryptocurrency perpetual futures, and finds that almost all of the apparent effect is an artifact of how the events are counted. Large declines arrive on the same few calendar dates across instruments, so an event study that treats each instrument day as an independent observation is counting one market wide shock many times. In a panel of twenty eight single names, 1,361 declines at or below seven percent are only 791 distinct dates, and the pooled t statistic of 6.76 falls to 1.68 when each date is counted once. Three further corrections matter and are usually skipped: the depth thresholds that define such events are nested rather than independent, so a strong tail leaks into every shallower cut; testing several depths requires a familywise correction; and a stationary block bootstrap with a block length that is a large fraction of the sample is badly anti conservative, which in our own first pass manufactured a p value two orders of magnitude too small. After all four corrections, exactly one result survives in equities. Index declines at or below seven percent, 50 events on 25 dates clustering into 10 episodes since 1950, are followed by a mean next session return of 3.08 percent, with a familywise p value of 0.006 and a bootstrap interval from 1.34 to 4.84 percent. It is not crash window drift: the next session returns 3.08 percent while each of the following nine averages 0.01 percent, below the unconditional daily mean. It is implementable, since 83 percent of the move occurs after the opening print. Everything shallower is indistinguishable from zero, and the corresponding single name effect is absent. In crypto perpetuals the same mechanism fails completely, with an edge net of market beta that is negative in every regime and every year of a six year sample. The economics are the final constraint: an account trading the surviving tail signal deploys 0.05 percent of its capital time and beats Treasury bills by 0.44 points a year, which is a real effect that cannot carry a portfolio.</div>
+  <footer><p>로컬 Claude Code 로 생성한 요약 리포트입니다. 인용 전 반드시 원문을 확인하세요.</p></footer>
+</div>
+</body>
+</html>

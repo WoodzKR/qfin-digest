@@ -1,0 +1,29 @@
+# --- 절대 커밋하면 안 되는 것 --------------------------------------------
+# SSRN 용 Chrome 프로필. 150MB 넘는 캐시에 더해 cf_clearance 세션 쿠키가 들어 있다.
+state/chrome_profile/
+state/browser*/
+
+# --- 임시/백업 -------------------------------------------------------------
+state/*.bak
+state/*.tmp
+state/pending.json
+state/summaries_in.json
+*.log
+
+# --- 파이썬 ----------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# --- OS / 에디터 -----------------------------------------------------------
+Thumbs.db
+desktop.ini
+.DS_Store
+.idea/
+.vscode/
+
+# state/seen.json 과 report/ 는 의도적으로 커밋한다.
+# 누적 DB가 있어야 다른 기기에서도 이미 요약한 논문을 건너뛸 수 있다.

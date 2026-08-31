@@ -1,0 +1,2120 @@
+{
+  "2608.23393": {
+    "abstract": "KellyBoost is a single multi-output XGBoost model whose softmax output is the portfolio: with y the vector of per-asset holding-period returns, the training loss is - log(1 + w y), the negative log growth rate, so the fitted model is the growth-optimal (Kelly) allocation conditioned on the features. The objective is exact rather than a surrogate: we derive the gradient, the analytic diagonal Hessian and the full Hessian in closed form, verify them by finite differences, and ship a dependency-free reference engine.",
+    "authors": [
+      "Jiayu Li"
+    ],
+    "categories": [
+      "q-fin.PM",
+      "cs.LG"
+    ],
+    "comment": "",
+    "cross_from": null,
+    "ext_id": "2608.23393",
+    "first_seen": "2026-08-31T13:49:33+09:00",
+    "id": "2608.23393",
+    "listed_date": "2026-08-25",
+    "primary": "q-fin.PM",
+    "published": "2026-08-24T15:38:36Z",
+    "src": "arxiv",
+    "src_cats": [
+      "q-fin.PM"
+    ],
+    "summarized_at": "2026-08-31T14:39:14+09:00",
+    "summary": {
+      "bullets": [
+        "평균-분산(mean-variance) 대신 성장률 최대화를 직접 목적함수로 삼는다",
+        "다중출력 XGBoost의 소프트맥스(softmax) 출력을 그대로 비중으로 쓴다",
+        "-log(1+wy) 손실의 그래디언트와 헤시안을 닫힌 형태로 유도한다",
+        "대리 목적함수가 아닌 정확한 목적함수를 쓰고, 수치미분으로 검증한다"
+      ],
+      "data": "이론·구현 중심 연구로 초록에 데이터셋이나 검증 구간이 없다.",
+      "keywords": [
+        "Kelly criterion",
+        "growth-optimal portfolio",
+        "gradient boosting",
+        "XGBoost",
+        "custom loss",
+        "portfolio allocation"
+      ],
+      "method": "자산별 보유기간 수익률에 대해 음의 로그성장률을 손실로 삼는 단일 다중출력 XGBoost 모델이다.",
+      "one_liner": "XGBoost 손실함수를 로그성장률로 바꿔 켈리 포트폴리오를 직접 학습한다.",
+      "relevance": 4,
+      "relevance_why": "입력이 가격 수익률과 일반 특징뿐이라 데이터 확보가 쉽고 의존성 없는 참조 엔진까지 제공하지만, 유니버스·리밸런싱 주기·집행 규칙은 직접 정해야 한다.",
+      "takeaway": "가격 데이터로 만든 특징을 넣어 리밸런싱 시점마다 비중 벡터를 바로 뽑는 배분 엔진으로 쓴다."
+    },
+    "title": "KellyBoost: Growth-Optimal Portfolio Construction with Gradient-Boosted Trees",
+    "updated": "2026-08-24T15:38:36Z"
+  },
+  "2608.23416": {
+    "abstract": "Systematic trading rests on one article of faith: that regularities found in the past persist. We state it as a time-invariant mechanism driven by an unobserved latent state, and show that it leaves a researcher five constants to declare --- the recurrence bound $Lambda$ at a block length $b$, the invariance defect $epsilon_0$ of the representation it is declared of, the coherence times $ell_i$ of the state's coordinates, the signal ceiling $rho$ and the fraction $kappa$ of it contingent on the regime --- after which the architecture of a correct quantitative investment system is nearly forced.",
+    "authors": [
+      "Jiayu Li"
+    ],
+    "categories": [
+      "cs.LG",
+      "q-fin.PM"
+    ],
+    "comment": "",
+    "cross_from": "cs.LG",
+    "ext_id": "2608.23416",
+    "first_seen": "2026-08-31T13:49:33+09:00",
+    "id": "2608.23416",
+    "listed_date": "2026-08-25",
+    "primary": "cs.LG",
+    "published": "2026-08-24T15:58:15Z",
+    "src": "arxiv",
+    "src_cats": [
+      "q-fin.PM"
+    ],
+    "summarized_at": "2026-08-31T14:39:17+09:00",
+    "summary": {
+      "bullets": [
+        "체계적 트레이딩은 과거 규칙성이 지속된다는 믿음에 기댄다",
+        "관측 불가능한 잠재 상태가 이끄는 시불변 메커니즘으로 이를 공식화했다",
+        "연구자가 선언할 상수는 다섯 개뿐이다: 블록 길이 b의 재현 한계 Λ, 표현의 불변성 결손 ε₀, 상태 좌표별 일관 시간 ℓᵢ, 신호 상한 ρ, 그중 국면에 의존하는 비율 κ",
+        "이 상수들이 정해지면 올바른 퀀트 투자 시스템의 구조가 거의 자동으로 결정된다"
+      ],
+      "data": "이론 연구",
+      "keywords": [
+        "latent state",
+        "time-invariant mechanism",
+        "information budget",
+        "regime dependence",
+        "systematic trading design",
+        "signal ceiling"
+      ],
+      "method": "잠재 상태(latent state) 기반 시불변 메커니즘을 공리로 놓고, 정보 예산 형태의 다섯 상수로 시스템 구조를 유도하는 이론적 틀이다.",
+      "one_liner": "잠재 상태 가정에서 퀀트 시스템 설계를 다섯 상수로 환원했다.",
+      "relevance": 3,
+      "relevance_why": "매매 규칙이 아닌 설계 원리를 주지만 다섯 상수를 가격·수익률 데이터로 추정하는 발상 자체가 독창적이라 가산점을 줬다. 필요한 데이터는 표준 시계열뿐이라 확보 난이도는 낮고, 걸림돌은 데이터가 아니라 상수를 실제로 추정하는 설계 작업이다.",
+      "takeaway": "전략을 짜기 전 체크리스트로 쓴다. 신호의 유효 기간, 재현 가능한 국면 수, 기대 가능한 최대 상관을 숫자로 먼저 적고, 거기에 맞춰 룩백 길이와 리밸런싱 주기, 모델 복잡도를 정한다."
+    },
+    "title": "The Axiomatic Trader: Latent Regularity, Information Budgets, and the Canonical Form of a Quantitative Investment System",
+    "updated": "2026-08-24T15:58:15Z"
+  },
+  "2608.23576": {
+    "abstract": "We characterise minimum-distortion wealth taxation under two contrasting normative criteria within a Fokker-Planck framework on log-wealth: the JKO free-energy gap, an information-theoretic measure aligned with the Mirrleesian decision-distortion tradition, and the squared 2-Wasserstein distance from the no-tax distribution at horizon $T$, a transport-geometric measure aligned with the Saez-Zucman distributional-compression tradition. Restricting to the neutrality-preserving (C1)-(C3) schedule class of a companion paper (Froseth 2026), both optima admit closed forms in the two-dimensional design plane parametrised by the corporate-dividend retention $k = (1-τ_c)(1-τ_d)$ and the proportional wealth-tax rate $τ_w$. The JKO optimum partitions the regime axis into three phases as a function of the dimensionless ratio $ρ= Σ_0 m_0/σ^2$, with $m_0 = μ- σ^2/2$ the geometric mean log-return: a pure wealth-tax phase at low $ρ$, a mixed-instrument phase at intermediate $ρ$, and a pure flow-tax phase at high $ρ$. The $W_2$ optimum, by contrast, is degenerate in this calibration: it pins to the pure flow-tax corner across the whole regime axis. The criterion contrast admits an economically meaningful reading via a bluntness index $B(m_0) = b/(a m_0)$ that measures the wealth-tax channel's mean-displacement-per-revenue overshoot relative to the flow-tax channel; JKO weights $B$ linearly, $W_2$ weights it quadratically, and the two normative traditions correspond to this difference in weighting. Norwegian-flavoured calibrations sit inside the JKO mixed-instrument phase under stock-heavy portfolio volatility but move into the pure flow-tax phase under the realised effective volatility of typical real-estate-heavy households.",
+    "authors": [
+      "Anders G Frøseth"
+    ],
+    "categories": [
+      "physics.soc-ph",
+      "econ.GN",
+      "q-fin.PM"
+    ],
+    "comment": "41 pages, 3 figures, 2 tables. Companion paper to arXiv:2603.05264, arXiv:2603.05277, arXiv:2603.05283, and arXiv:2607.06153",
+    "cross_from": "physics.soc-ph",
+    "ext_id": "2608.23576",
+    "first_seen": "2026-08-31T13:49:33+09:00",
+    "id": "2608.23576",
+    "listed_date": "2026-08-26",
+    "primary": "physics.soc-ph",
+    "published": "2026-07-08T18:18:15Z",
+    "src": "arxiv",
+    "src_cats": [
+      "q-fin.PM"
+    ],
+    "summarized_at": "2026-08-31T14:39:17+09:00",
+    "summary": {
+      "bullets": [
+        "부유세와 배당세 중 무엇이 왜곡을 덜 낳는지 기준이 갈린다",
+        "로그 자산의 포커-플랑크(Fokker-Planck) 방정식 위에서 두 최적화를 닫힌 해로 푼다",
+        "JKO 기준은 세 구간으로 갈리고, W2 기준은 배당세 코너에 고정된다",
+        "노르웨이 가계는 포트폴리오 변동성에 따라 구간이 바뀐다"
+      ],
+      "data": "이론 연구, 노르웨이 가계의 실효 변동성 수준을 예시 보정값으로만 쓴다.",
+      "keywords": [
+        "wealth taxation",
+        "Fokker-Planck",
+        "Wasserstein distance",
+        "JKO scheme",
+        "optimal taxation",
+        "log-wealth dynamics"
+      ],
+      "method": "로그 자산 확산과정에 포커-플랑크를 세우고, JKO 자유에너지 격차와 2-바서슈타인(2-Wasserstein) 거리를 비례세 구간에서 최소화한다.",
+      "one_liner": "부유세 설계의 최적점을 두 규범 기준으로 나눠 풀었다",
+      "relevance": 1,
+      "relevance_why": "매매 신호가 전혀 없는 조세정책 이론이고, 필요한 데이터도 가계 자산 분포와 세율 파라미터라 시장 데이터로는 대체 불가능하다.",
+      "takeaway": "세율 변화가 장기 자산 분포를 어떻게 밀어내는지 계산하는 틀이라, 세후 기대 로그수익률 기반의 장기 배분이나 배당·양도 세금 최적화 정도에만 참고할 만하다."
+    },
+    "title": "Minimum-Distortion Wealth Taxation, I: Information-Theoretic versus Transport-Geometric Optimality on the Proportional Class",
+    "updated": "2026-07-08T18:18:15Z"
+  },
+  "2608.24449": {
+    "abstract": "We show that the key optimization results of the classical Markowitz portfolio selection theory, originally formulated for variance as the risk measure, remain available in explicit closed form under a broader class of strictly convex quadratic risk measures. The proposed framework replaces the covariance matrix with an arbitrary symmetric positive definite matrix and allows additional linear and constant terms, thereby containing various models arising in transaction cost optimization, benchmark relative optimization, covariance regularization, and factor models. Closed-form formulas are obtained for the efficient frontier, the global minimum risk portfolio, the maximum Sharpe ratio portfolio, the Capital Market Curve, the tangency portfolio, and the maximum utility portfolio. In contrast to the classical Markowitz model, the tangency portfolio does not coincide with the maximum Sharpe ratio portfolio, revealing a new geometric phenomenon. A numerical example confirms the derived formulas.",
+    "authors": [
+      "Ignas Gasparavičius",
+      "Andrius Grigutis"
+    ],
+    "categories": [
+      "q-fin.PM",
+      "math.OC"
+    ],
+    "comment": "",
+    "cross_from": null,
+    "ext_id": "2608.24449",
+    "first_seen": "2026-08-31T13:49:33+09:00",
+    "id": "2608.24449",
+    "listed_date": "2026-08-26",
+    "primary": "q-fin.PM",
+    "published": "2026-08-25T12:04:22Z",
+    "src": "arxiv",
+    "src_cats": [
+      "q-fin.PM"
+    ],
+    "summarized_at": "2026-08-31T14:39:17+09:00",
+    "summary": {
+      "bullets": [
+        "공분산 행렬만 쓰는 평균-분산(mean-variance) 틀은 거래비용이나 벤치마크 추적 같은 실무 목적함수를 담지 못한다",
+        "공분산을 임의의 대칭 양정부호 행렬로 바꾸고 선형·상수항을 더한 이차 위험측도로 일반화한다",
+        "효율적 투자선, 최소위험·최대샤프·접점(tangency)·최대효용 포트폴리오를 모두 닫힌 해로 구한다",
+        "고전 모형과 달리 접점 포트폴리오와 최대 샤프 포트폴리오가 어긋나는 새 기하 현상을 밝힌다"
+      ],
+      "data": "이론 연구다. 수치 예제로 공식만 검증한다",
+      "keywords": [
+        "portfolio optimization",
+        "quadratic risk measure",
+        "efficient frontier",
+        "tangency portfolio",
+        "transaction costs",
+        "covariance regularization"
+      ],
+      "method": "공분산 행렬을 임의의 대칭 양정부호 행렬로 대체하고 선형·상수항을 허용한 엄격 볼록 이차계획으로 최적해를 유도한다",
+      "one_liner": "마코위츠 최적화를 일반 이차 위험측도로 확장했다",
+      "relevance": 3,
+      "relevance_why": "가격 시계열만 있으면 공분산과 거래비용 행렬을 만들 수 있어 데이터 확보는 쉽지만, 매매 신호가 없고 위험행렬 설계와 파라미터 튜닝을 직접 해야 해서 3점이다",
+      "takeaway": "거래비용 패널티나 벤치마크 대비 추적오차, 축소추정 공분산을 하나의 이차형식에 넣어 리밸런싱 비중을 닫힌 해로 뽑는 데 쓴다"
+    },
+    "title": "Generalizing Markowitz Portfolio Optimization by a Quadratic Risk Measure",
+    "updated": "2026-08-25T12:04:22Z"
+  },
+  "2608.26106": {
+    "abstract": "We study statistical predictability in daily U.S. equity prices using only information available at the market open. Using SPY from February 1, 1993 through March 15, 2024, we benchmark XGBoost against Random Forest, LightGBM, Logistic Regression, and naive baselines under expanding-window walk-forward validation. After observing the current day's opening price and two lagged target-specific prices, the task is to predict whether the same day's close will be above or below the previous day's close. On the last 800 trading days, Logistic Regression attains the highest close-direction accuracy (71.09%), Random Forest reaches 61.20%, and XGBoost reaches 58.45% with a 95% bootstrap confidence interval of [54.94%, 62.08]. For XGBoost, close-direction accuracy rises to 72.7% when the predicted move exceeds 1%, but the usable sample falls to 154 observations. We also report Diebold-Mariano and McNemar tests, regime-specific results, SHAP feature importance, and an auxiliary 541-equity screen. The evidence supports a narrow statistical-finance conclusion: simple daily equity features contain detectable same-day directional information, but the result should be interpreted with careful sample-size accounting and limited economic claims.",
+    "authors": [
+      "Alex Chen"
+    ],
+    "categories": [
+      "q-fin.ST"
+    ],
+    "comment": "7 figures, 7 tables, includes appendices",
+    "cross_from": null,
+    "ext_id": "2608.26106",
+    "first_seen": "2026-08-31T13:49:33+09:00",
+    "id": "2608.26106",
+    "listed_date": "2026-08-28",
+    "primary": "q-fin.ST",
+    "published": "2026-05-01T15:47:15Z",
+    "src": "arxiv",
+    "src_cats": [
+      "q-fin.ST"
+    ],
+    "summarized_at": "2026-08-31T14:39:29+09:00",
+    "summary": {
+      "bullets": [
+        "개장 시점 정보만으로 당일 종가 방향을 맞출 수 있는지 검증",
+        "XGBoost를 랜덤포레스트·LightGBM·로지스틱 회귀와 확장 창 워크포워드로 비교",
+        "마지막 800거래일에서 로지스틱 회귀 71.09%, XGBoost 58.45% 기록",
+        "XGBoost는 예측 변동폭 1% 초과 구간에서 72.7%까지 올랐으나 표본이 154개로 줄었다"
+      ],
+      "data": "SPY 일봉 1993년 2월 1일~2024년 3월 15일을 쓰고, 마지막 800거래일로 성과를 평가했으며 541개 종목으로 보조 검증을 붙였다.",
+      "keywords": [
+        "walk-forward validation",
+        "same-day directional prediction",
+        "XGBoost",
+        "SPY",
+        "SHAP",
+        "Diebold-Mariano test"
+      ],
+      "method": "당일 시가와 두 개의 시차 가격을 입력으로 쓰고, XGBoost·랜덤포레스트·LightGBM·로지스틱 회귀를 확장 창 워크포워드로 비교한 뒤 Diebold-Mariano·McNemar 검정과 SHAP으로 뜯어봤다.",
+      "one_liner": "장 시작가만 보고 당일 종가 방향을 맞추는 벤치마크를 세웠다",
+      "relevance": 4,
+      "relevance_why": "필요한 데이터가 SPY 일봉 시가·종가뿐이라 확보 난이도가 사실상 없고 신호 정의도 명확하지만, 거래비용과 청산 규칙은 직접 설계해야 한다.",
+      "takeaway": "시가 갭과 시차 가격을 당일 방향 필터로 쓰되, 예측 변동폭 1% 이상인 날만 골라 강도 기반 진입 게이트로 삼는 것이 현실적이다."
+    },
+    "title": "A Statistical-Finance Benchmark for Same-Day Directional Stock Prediction: Walk-Forward Evidence from SPY",
+    "updated": "2026-05-01T15:47:15Z"
+  },
+  "2608.26115": {
+    "abstract": "We re-estimate canonical option-implied predictability evidence using a unified 2015--2026 panel of 12.36 million U.S. equity firm-day observations across 10,026 underlyings. We split the sample into three regimes: late-post-crisis low volatility (2015--2019), high-volatility transition (2020--2022), and AI/mega-cap concentration (2023--2026). The Xing et al. (2010) smirk--return relationship weakens steadily: the next-month univariate smirk coefficient falls from $-0.023$ $(t=-5.5)$ in 2015--2019 to an insignificant $-0.006$ $(t=-1.5)$ in 2023--2026, and turns positive at the three-month horizon $(+0.016,\\ t=+2.1)$. In joint specifications with all six canonical signals, the smirk is insignificant throughout and again changes sign in the latest regime. By contrast, the Cremers--Weinbaum IV spread and a Bakshi et al. (2003)-style risk-neutral skewness measure remain significant across regimes and specifications. A boosted-tree benchmark using IV-surface, trading-activity, Greeks, and liquidity features outperforms linear models for next-month return prediction only in the AI/mega-cap regime, with $R^2_{\\mathrm{OOS}}=+1.29%$ versus $+0.07%$. Permutation importance identifies different leading predictors by regime, and no canonical hand-engineered signal enters the top five. For firm-level five-day crash classification, AUC is highest in calm markets $(0.706,\\ \\text{XGBoost})$ and lowest during the high-volatility transition $(0.561)$. Overall, option-implied predictability is real but regime-dependent, and the post-2023 AI/mega-cap period differs sharply from the pre-COVID setting in which the canonical results were established.",
+    "authors": [
+      "Baichuan Li",
+      "Mengxiao Wang"
+    ],
+    "categories": [
+      "q-fin.ST"
+    ],
+    "comment": "",
+    "cross_from": null,
+    "ext_id": "2608.26115",
+    "first_seen": "2026-08-31T13:49:33+09:00",
+    "id": "2608.26115",
+    "listed_date": "2026-08-28",
+    "primary": "q-fin.ST",
+    "published": "2026-06-10T10:13:06Z",
+    "src": "arxiv",
+    "src_cats": [
+      "q-fin.ST"
+    ],
+    "summarized_at": "2026-08-31T14:39:31+09:00",
+    "summary": {
+      "bullets": [
+        "Xing(2010) 스마크-수익률 관계가 최근 국면에서 사라졌는지 확인한다",
+        "2015~2026년을 저변동성·고변동성·AI 대형주 집중 세 국면으로 쪼개 재추정한다",
+        "스마크는 최근 국면에서 유의성을 잃고 3개월 시계에선 부호까지 뒤집힌다",
+        "IV 스프레드와 위험중립 왜도는 전 국면에서 유의성을 유지한다"
+      ],
+      "data": "미국 주식 옵션 10,026개 기초자산, 2015~2026년 1,236만 기업-일 패널을 세 국면으로 나눠 검증한다",
+      "keywords": [
+        "option-implied volatility",
+        "volatility smirk",
+        "risk-neutral skewness",
+        "crash prediction",
+        "regime dependence",
+        "gradient boosting"
+      ],
+      "method": "6개 표준 옵션 신호의 회귀 재추정에 부스팅 트리(XGBoost) 벤치마크와 순열 중요도를 더한다",
+      "one_liner": "옵션 내재 신호의 수익률 예측력이 국면마다 갈린다는 재검증",
+      "relevance": 4,
+      "relevance_why": "신호 정의가 표준 문헌에 있어 그대로 코딩할 수 있지만, 1,200만 건 규모의 미국 주식 옵션 체인 이력은 OptionMetrics급 유료 데이터가 필요해 확보 비용이 만만치 않다",
+      "takeaway": "스마크 단독 신호는 버리고 IV 스프레드와 위험중립 왜도를 팩터로 쓰되, 국면 판별 스위치를 얹어 비중을 조절한다"
+    },
+    "title": "Option-Implied Signals and Crash Risk: Predictability and Machine-Learning Evidence from U.S. Equity Options",
+    "updated": "2026-06-10T10:13:06Z"
+  },
+  "2608.26122": {
+    "abstract": "This article examines various methods of constructingmultidimensional probabilistic forecasts of electricity prices. Building on the Multiple Split (MS) method, it incorporates forecast averaging across estimation windows of different lengths and compares its performance with that of other, well-established methods. The research demonstrates that the ensemble representation of the price distribution is particularly useful in battery energy storage system (BESS) management. It enables the direct construction of probabilistic forecasts of daily profits. These forecasts can be used to determine optimal charging and discharging hours, as well as to support risk management decisions. The methods are evaluated using data from the German and Spanish day-ahead electricity markets from 2021-2024. The results indicate that theMS method with averaging (MS-ave) generally outperforms the other considered approaches in terms of Prediction Interval Coverage Probability (PICP), the Continuous Ranked Probability Score (CRPS) and the Energy Score (ES). Moreover, it is superior in supporting BESS trading strategies, particularly in case of non-zero operational costs.",
+    "authors": [
+      "Tomasz Weron",
+      "Katarzyna Maciejowska"
+    ],
+    "categories": [
+      "q-fin.ST",
+      "stat.AP"
+    ],
+    "comment": "",
+    "cross_from": null,
+    "ext_id": "2608.26122",
+    "first_seen": "2026-08-31T13:49:33+09:00",
+    "id": "2608.26122",
+    "listed_date": "2026-08-28",
+    "primary": "q-fin.ST",
+    "published": "2026-06-20T14:36:04Z",
+    "src": "arxiv",
+    "src_cats": [
+      "q-fin.ST"
+    ],
+    "summarized_at": "2026-08-31T14:39:31+09:00",
+    "summary": {
+      "bullets": [
+        "전력 하루전 시장의 다차원 확률예측이 실제 수익으로 이어지는지 확인한다",
+        "Multiple Split 기법에 서로 다른 길이의 추정창 예측을 평균해 앙상블을 만든다",
+        "가격 분포 앙상블에서 일일 수익 분포를 직접 뽑아 충·방전 시간을 정한다",
+        "MS-ave가 PICP, CRPS, 에너지 스코어에서 앞서고 운영비가 있을 때 격차가 커진다"
+      ],
+      "data": "독일과 스페인 하루전 전력시장의 2021~2024년 가격 데이터로 검증한다",
+      "keywords": [
+        "probabilistic forecasting",
+        "electricity price",
+        "BESS arbitrage",
+        "ensemble forecast",
+        "CRPS",
+        "energy score"
+      ],
+      "method": "다중 분할(Multiple Split) 기반 다차원 확률예측에 추정창 길이별 예측 평균을 결합한다",
+      "one_liner": "전력가격 확률예측으로 배터리 저장장치 매매 수익을 예측한다",
+      "relevance": 4,
+      "relevance_why": "유럽 하루전 전력가격은 ENTSO-E 등에서 공개돼 데이터 확보가 쉽고 충·방전 시간 결정 규칙까지 제시하지만, 배터리 용량·효율 같은 운영 파라미터와 실제 집행 규칙은 직접 정해야 한다",
+      "takeaway": "여러 추정창 예측을 평균해 만든 앙상블로 수익 분포를 직접 추정하고, 그 분위수로 진입 시간과 포지션 크기를 정한다"
+    },
+    "title": "From electricity prices to profits: multidimensional probabilistic forecasting for BESS trading",
+    "updated": "2026-06-20T14:36:04Z"
+  },
+  "2608.26127": {
+    "abstract": "Accurate forecasting of realized volatility ($RV$) is crucial for risk management and derivatives pricing. Although the implied volatility ($IV$) surface offers rich informational content, prevailing methods that treat it as a static image fail to capture its inherent dynamics. To overcome this limitation, we propose the Finance-Aware Graph Spatio-Temporal Network (FA-GSTN), a novel architecture that reframes $RV$ forecasting as modeling the evolution of a structured financial object. FA-GSTN builds a spatio-temporal graph sequence from the $IV$ surface, where nodes correspond to grid points and edges encode adaptive spatial (intra-day) and explicit temporal (inter-day) dependencies. The model incorporates domain knowledge through finance-aware node features (e.g., option Greeks) and tackles high-frequency noise via a multi-scale temporal smoothing gate coupled with an adaptive robust loss function. Comprehensive evaluations on a large-scale equity options dataset show that FA-GSTN sets a new state of the art, delivering superior predictive accuracy ($R^2$ up to 0.473). It also demonstrates remarkable data efficiency, substantially outperforming strong Vision Transformer baselines when trained on only one year of data ($R^2$: 0.372 vs. 0.315). Furthermore, the model exhibits enhanced robustness during periods of market stress, such as 2020--2021. Ablation studies confirm the vital roles of the spatio-temporal graph structure, finance-aware components, and integrated noise-handling modules. Our work underscores the substantial benefits of explicitly modeling temporal dynamics and infusing financial inductive biases for accurate and robust volatility forecasting.",
+    "authors": [
+      "Chuanzhen Wang",
+      "Alice Zhang",
+      "Wei Chen",
+      "Michael Brown"
+    ],
+    "categories": [
+      "q-fin.ST",
+      "cs.CL",
+      "cs.LG"
+    ],
+    "comment": "15 pages",
+    "cross_from": null,
+    "ext_id": "2608.26127",
+    "first_seen": "2026-08-31T13:49:33+09:00",
+    "id": "2608.26127",
+    "listed_date": "2026-08-28",
+    "primary": "q-fin.ST",
+    "published": "2026-06-23T01:31:09Z",
+    "src": "arxiv",
+    "src_cats": [
+      "q-fin.ST"
+    ],
+    "summarized_at": "2026-08-31T14:39:32+09:00",
+    "summary": {
+      "bullets": [
+        "IV 곡면을 정적 이미지로 보는 기존 방식은 시간 변화를 놓친다",
+        "격자점을 노드로, 일중·일간 의존성을 엣지로 삼는 그래프를 만든다",
+        "그릭스 등 금융 특징과 노이즈 처리 모듈을 함께 넣는다",
+        "R² 0.473으로 최고 성능, 1년 학습에서도 ViT를 앞선다"
+      ],
+      "data": "대규모 주식 옵션 데이터로 검증했고, 2020~2021년 시장 스트레스 구간을 별도로 살폈다",
+      "keywords": [
+        "realized volatility",
+        "implied volatility surface",
+        "spatio-temporal graph neural network",
+        "option Greeks",
+        "volatility forecasting"
+      ],
+      "method": "IV 곡면에서 시공간 그래프 시퀀스를 만들고, 옵션 그릭스를 노드 특징으로 넣은 뒤 다중 스케일 시간 평활 게이트와 적응형 강건 손실로 학습하는 FA-GSTN이다",
+      "one_liner": "IV 곡면을 시공간 그래프로 다뤄 실현변동성을 예측한다",
+      "relevance": 3,
+      "relevance_why": "옵션체인은 상용 데이터로 확보할 수 있지만 대규모 IV 곡면 시계열 구축과 노이즈 처리 비용이 크고, 매매 규칙이 아닌 변동성 예측 특징만 주므로 3점이다",
+      "takeaway": "옵션체인에서 IV 곡면을 복원해 익일 실현변동성을 예측하고, 변동성 스프레드나 옵션 매도 포지션의 사이징 신호로 쓴다"
+    },
+    "title": "Graph-Based Modeling of Financial Volatility Dynamics",
+    "updated": "2026-06-23T01:31:09Z"
+  },
+  "2608.26128": {
+    "abstract": "This thesis analyzes the collective dynamics of the S&P 500 from an econophysics perspective, treating the financial market as a complex system. Using daily logarithmic returns of 430 companies, time-dependent Pearson correlation matrices are constructed over sliding windows and their spectral structure is studied through the leading eigenvalues and eigenvectors. Market States (MS) are identified by applying k-Means clustering to several spectral quantities: the largest eigenvalue (interpreted as the State of the Market), the squared entries of the dominant eigenvector (read as a relative participation of each stock), and truncated matrix reconstructions C^l built from the l largest eigenpairs and normalized to retain a correlation-matrix interpretation. The stability of the resulting clusters is assessed, transition matrices and their stationary vectors are computed, and the inverse participation ratio is used to quantify how participation spreads across assets. The COVID-19 episode emerges as an atypical state in the full correlation matrices; reconstructing it requires more than one principal component, and the C^2 and C^3 constructions reproduce it, particularly for window length q=40 and k=5. During crisis periods the relative participation distributes over a larger number of assets, while the 2017-2018 interval contributes to the dynamics without appearing as an isolated regime. The analysis is descriptive rather than predictive, and provides conceptual and methodological tools relevant to portfolio design and trading strategies, with natural extensions to other international exchanges.",
+    "authors": [
+      "Javier Gómez Morales"
+    ],
+    "categories": [
+      "q-fin.ST"
+    ],
+    "comment": "72 pages, 40 figures, 9 tables. Undergraduate (Licenciatura) thesis, Facultad de Ciencias, UNAM, 2026. Original Spanish version in the UNAM thesis repository (TESIUNAM, record 0881908)",
+    "cross_from": null,
+    "ext_id": "2608.26128",
+    "first_seen": "2026-08-31T13:49:33+09:00",
+    "id": "2608.26128",
+    "listed_date": "2026-08-28",
+    "primary": "q-fin.ST",
+    "published": "2026-06-23T02:30:50Z",
+    "src": "arxiv",
+    "src_cats": [
+      "q-fin.ST"
+    ],
+    "summarized_at": "2026-08-31T14:39:43+09:00",
+    "summary": {
+      "bullets": [
+        "시장을 복잡계로 보고 종목 간 집단 움직임을 파악한다",
+        "이동창 상관행렬의 주성분에 k-평균을 걸어 국면을 나눈다",
+        "코로나 국면은 주성분 하나로 못 잡고 두세 개가 필요하다",
+        "위기 때는 지배 고유벡터의 참여도가 여러 종목에 퍼진다"
+      ],
+      "data": "S&P 500 편입 430개 종목의 일간 로그수익률이며, 창 길이 q=40 등에서 코로나 국면을 포함한 구간을 다룬다.",
+      "keywords": [
+        "correlation matrix",
+        "principal component analysis",
+        "market states",
+        "k-means clustering",
+        "inverse participation ratio",
+        "econophysics"
+      ],
+      "method": "이동창 피어슨 상관행렬의 최대 고윳값, 지배 고유벡터, 절단 재구성 행렬에 k-평균(k-Means)을 적용하고 전이행렬과 역참여율(IPR)로 검증한다.",
+      "one_liner": "S&P 500 상관행렬의 고유구조로 시장 국면을 분류한 연구다.",
+      "relevance": 3,
+      "relevance_why": "일간 종가만 있으면 상관행렬과 고유구조를 그대로 재현할 수 있어 데이터 확보는 매우 쉽지만, 저자 스스로 예측이 아닌 서술적 분석이라 밝혀 진입·청산 규칙까지는 직접 설계해야 한다.",
+      "takeaway": "상관행렬 고윳값과 역참여율을 국면 판별 지표로 삼아 위기 국면에서 분산 효과 감소를 반영해 익스포저를 줄이는 데 쓴다."
+    },
+    "title": "Analysis of the Principal Components of Correlation Matrices of S&P 500 Financial Data from an Econophysics Perspective",
+    "updated": "2026-06-23T02:30:50Z"
+  },
+  "2608.26158": {
+    "abstract": "This paper provides a controlled comparison of six information bar types (dollar, volume, volatility, range, Renko, and hybrid bars) constructed from both raw Binance aggTrade tick data and one-minute OHLCV bars for the BTCUSDT USDT-margined perpetual futures market over a six-year period spanning January 2020 to December 2025, and evaluated against fixed-interval time-bar baselines. Both pipelines share a common adaptive EMA calibration framework; the tick pipeline additionally uses strictly tick-native activity signals, isolating data resolution as the sole experimental variable. Results across eight statistical quality criteria reveal that the tick advantage is bar-type-specific and most pronounced in bar types whose activity signals are most sensitive to intra-minute price dynamics: tick Renko bars achieve the smallest random-walk deviation recorded ($|\\mathrm{VR}(4){-}1| = 0.020$, lag-1 autocorrelation $= 0.002$), and tick volatility bars reduce serial dependence by 69\\% relative to the minute baseline ($|\\mathrm{VR}(4){-}1|: 0.028$ versus $0.089$). In the multi-regime six-year sample, normality improvements are regime-dependent and secondary: the extreme market events of 2020--2022 inflate fat tails across all bar types, and Ljung-Box independence is rejected for all series at the sample sizes studied. A matched-frequency robustness analysis shows that the apparent tick underperformance on distributional criteria is largely a sampling-frequency artefact: when tick series are coarsened to the minute pipeline's bar count, frequency-matched tick dollar bars lead on all six criteria and matched tick volatility bars attain LB $p = 0.51$, recovering serial independence that the raw oversampled series rejects.",
+    "authors": [
+      "Muhammad Toheed Fayyaz",
+      "Abdul Jabbar",
+      "Faheem Ahmad Qureshi",
+      "Syed Qaisar Jalil"
+    ],
+    "categories": [
+      "q-fin.ST",
+      "cs.CE"
+    ],
+    "comment": "",
+    "cross_from": null,
+    "ext_id": "2608.26158",
+    "first_seen": "2026-08-31T13:49:33+09:00",
+    "id": "2608.26158",
+    "listed_date": "2026-08-28",
+    "primary": "q-fin.ST",
+    "published": "2026-07-07T11:40:08Z",
+    "src": "arxiv",
+    "src_cats": [
+      "q-fin.ST"
+    ],
+    "summarized_at": "2026-08-31T14:39:45+09:00",
+    "summary": {
+      "bullets": [
+        "정보 바를 틱으로 만들 가치가 있는지 답이 없었다",
+        "동일 EMA 보정으로 6종 바를 틱·분봉에서 각각 생성해 비교",
+        "Renko·변동성 바에서 틱 우위가 뚜렷, 랜덤워크 편차 0.020",
+        "빈도를 맞추면 틱 달러 바가 6개 기준 모두 우세"
+      ],
+      "data": "BTCUSDT USDT 무기한 선물의 Binance aggTrade 틱과 1분봉을 2020년 1월부터 2025년 12월까지 6년간 쓴다.",
+      "keywords": [
+        "information bars",
+        "tick data",
+        "Renko bars",
+        "variance ratio",
+        "crypto perpetual futures",
+        "sampling frequency"
+      ],
+      "method": "달러·거래량·변동성·레인지·Renko·하이브리드 6종 정보 바를 공통 적응형 EMA 보정으로 만들어 8개 통계 기준으로 비교한다.",
+      "one_liner": "틱 데이터로 만든 정보 바가 분봉 기반보다 나은지 통제 비교했다",
+      "relevance": 4,
+      "relevance_why": "바이낸스 aggTrade 틱은 공개 API로 무료로 받을 수 있어 데이터 장벽이 낮고, 매매 신호가 아닌 샘플링 계층을 다루지만 빈도 매칭이라는 백테스트 검증 개선을 함께 준다.",
+      "takeaway": "고빈도 전략의 샘플링 단위를 시간 바 대신 틱 기반 Renko나 변동성 바로 바꾸되, 비교·검증 시 바 개수를 맞춰야 한다."
+    },
+    "title": "A Frequency-Controlled Comparison of Tick- and Minute-Based Information Bars for Cryptocurrency Markets",
+    "updated": "2026-07-07T11:40:08Z"
+  },
+  "2608.26174": {
+    "abstract": "Bitcoin's future fluctuations are a substantial concern for investments and risk management. Investors and financial institutions require accurate forecasts of these price movements to hedge and optimize portfolios. This study aims to answer the question of whether Bitcoin's price will rise beyond 5% within the next 7 days by utilizing on-chain, market, and sentiment data from February 2018 to December 2025. The proposed model consists of a multi-scale temporal convolutional network with InceptionTCN blocks, CNN channel attention, adaptive average pooling, and a pairwise ranking loss. Dilated convolutions with bottleneck and fusion layers are employed to efficiently capture features over horizons from 1 to 4 days. Given the class imbalance in the dataset, AUC is used instead of accuracy and other classification metrics to reflect the model's performance better. Subsequently, a profit-optimized decision threshold is also applied to align model selection with financial objectives. The proposed model is compared with 5 other baselines: ImprovedTCN_GRU, LSTM, TCN, XGBoost, and Random Forest. Results indicate that the proposed model achieved an AUC of 0.6316 and a profit of 1.703, outperforming all baseline models. Using a novel deep learning model would assist investors in making better financial decisions.",
+    "authors": [
+      "Parsa Yousefnezhad",
+      "Gholamreza Mansourfar",
+      "Mohammadreza Feizi Derakhshi"
+    ],
+    "categories": [
+      "q-fin.ST",
+      "q-fin.TR"
+    ],
+    "comment": "",
+    "cross_from": null,
+    "ext_id": "2608.26174",
+    "first_seen": "2026-08-31T13:49:33+09:00",
+    "id": "2608.26174",
+    "listed_date": "2026-08-28",
+    "primary": "q-fin.ST",
+    "published": "2026-07-25T06:45:21Z",
+    "src": "arxiv",
+    "src_cats": [
+      "q-fin.ST",
+      "q-fin.TR"
+    ],
+    "summarized_at": "2026-08-31T14:39:45+09:00",
+    "summary": {
+      "bullets": [
+        "비트코인 급등 예측은 헤지와 포트폴리오 최적화에 직결된다",
+        "InceptionTCN 블록과 채널 어텐션, 쌍별 랭킹 손실을 결합했다",
+        "클래스 불균형 탓에 정확도 대신 AUC로 성능을 잰다",
+        "AUC 0.6316, 수익 1.703으로 5개 베이스라인을 모두 앞섰다"
+      ],
+      "data": "2018년 2월부터 2025년 12월까지 비트코인의 온체인·시장·심리 데이터를 쓴다.",
+      "keywords": [
+        "Bitcoin",
+        "Temporal Convolutional Network",
+        "on-chain data",
+        "class imbalance",
+        "profit-optimized threshold",
+        "pairwise ranking loss"
+      ],
+      "method": "InceptionTCN 블록과 CNN 채널 어텐션, 적응형 평균 풀링, 쌍별 랭킹(pairwise ranking) 손실을 얹은 다중 스케일 시간 합성곱 신경망(TCN)에 수익 최적화 임계값을 적용한다.",
+      "one_liner": "온체인·시장·심리 데이터로 비트코인 7일 내 5% 상승을 예측하는 다중 스케일 TCN을 제안했다.",
+      "relevance": 4,
+      "relevance_why": "온체인·가격·심리 지표는 Glassnode나 무료 API로 대체 확보가 가능하고 예측 대상과 임계값 결정 기준이 명확하지만, 정확한 피처 목록과 집행 규칙은 직접 채워야 한다.",
+      "takeaway": "7일 5% 상승 확률을 별도 신호로 뽑아 롱 진입 필터나 포지션 크기 조절에 쓰고, 임계값은 AUC가 아니라 수익 기준으로 잡는다."
+    },
+    "title": "Forecasting Economically Significant Bitcoin Moves: A Multi-Scale TCN with Profit-Optimized Thresholds",
+    "updated": "2026-07-25T06:45:21Z"
+  },
+  "2608.27076": {
+    "abstract": "Algorithmic trading now represents a market exceeding $20 billion, where even marginal gains in signal robustness can translate into economically significant returns. Existing evaluations of equity prediction models do not explicitly target regime robustness during hyperparameter selection. Five model classes are trained on daily observations from approximately 300 large-cap US equities over eleven years, with Bayesian optimisation configured to target trading performance across three statistically different market regimes. Regime-robust hyperparameter selection is associated with out-of-sample generalisation, as signal precision remains above the random baseline across all four quarters of the test period, and portfolio performance slowly degrades under simulated input noise before collapsing beyond a defined threshold. No individual tabular deep learning architecture outperforms gradient-boosted trees, but combining XGBoost and TabNet using rank aggregation produces a Hybrid ensemble with an annualised return of 51.26%, a Sharpe ratio of 2.44, and a statistically significant CAPM alpha of 0.423 (p = 0.011). A near-zero beta indicates this outperformance is driven by stock selection, not market exposure. Alternative data plays a secondary role once technical and fundamental features are accounted for, as well as contributing more strongly on the short side than the long, and varies by model class. An interactive application makes these results explorable in real time, with live data integration the remaining step toward practical deployment.",
+    "authors": [
+      "Joshua Le Grice"
+    ],
+    "categories": [
+      "cs.LG",
+      "q-fin.CP",
+      "q-fin.TR"
+    ],
+    "comment": "",
+    "cross_from": "cs.LG",
+    "ext_id": "2608.27076",
+    "first_seen": "2026-08-31T13:49:33+09:00",
+    "id": "2608.27076",
+    "listed_date": "2026-08-28",
+    "primary": "cs.LG",
+    "published": "2026-08-27T13:01:32Z",
+    "src": "arxiv",
+    "src_cats": [
+      "q-fin.TR"
+    ],
+    "summarized_at": "2026-08-31T14:39:48+09:00",
+    "summary": {
+      "bullets": [
+        "기존 주가 예측 모델은 하이퍼파라미터를 고를 때 레짐 변화를 고려하지 않는다",
+        "미국 대형주 일봉에 5개 모델을 학습하고, 세 가지 시장 레짐의 매매 성과를 목표로 베이지안 최적화를 돌린다",
+        "단일 테이블 딥러닝은 부스팅 트리를 못 넘지만, XGBoost와 TabNet을 순위 집계로 섞은 하이브리드가 연 51.26%, 샤프 2.44, CAPM 알파 0.423(p=0.011)을 낸다",
+        "베타가 0에 가까워 초과수익은 시장 노출이 아니라 종목 선택에서 나온다"
+      ],
+      "data": "미국 대형주 약 300종목의 11년치 일간 데이터를 쓰고, 테스트 구간을 4개 분기로 나눠 검증한다",
+      "keywords": [
+        "tabular deep learning",
+        "Bayesian optimisation",
+        "regime robustness",
+        "rank aggregation",
+        "XGBoost",
+        "TabNet"
+      ],
+      "method": "XGBoost 등 부스팅 트리와 TabNet 같은 테이블 딥러닝 5종을 레짐별 매매 성과 기준의 베이지안 최적화로 튜닝하고, 순위 집계(rank aggregation)로 앙상블한다",
+      "one_liner": "레짐별 로버스트 튜닝으로 주식 신호를 만든 연구다",
+      "relevance": 4,
+      "relevance_why": "가격·재무 데이터는 표준 소스로 쉽게 구하고 대체 데이터는 부차적이라고 밝혀 재현 부담이 낮은 대신, 진입·청산 규칙과 리밸런싱 주기를 직접 정해야 해 4점이다",
+      "takeaway": "기술적·재무 지표로 XGBoost와 TabNet 신호를 각각 만든 뒤 순위로 합치고, 하이퍼파라미터는 단일 구간이 아니라 여러 레짐의 매매 성과로 고르는 방식을 그대로 옮길 만하다"
+    },
+    "title": "Tabular Deep Learning for Algorithmic Trading: Cross-Regime Bayesian Optimisation for Equity Signal Generation",
+    "updated": "2026-08-27T13:01:32Z"
+  },
+  "2608.27734": {
+    "abstract": "Large language models (LLMs) are increasingly used to discover trading strategies, and much of the resulting literature shares a methodological weakness: many candidate strategies are generated, the best is reported, and neither look-ahead bias nor the intensity of the search behind the reported result is corrected for. We present a strategy-discovery system that makes both corrections structural rather than procedural. First, the agent can only act through registry-validated tools whose feature space excludes look-ahead by construction; we show that this guardrail is not redundant with statistical correction: a deliberately leaky oracle posting a Sharpe ratio of 35 survives Deflated Sharpe and probability-of-backtest-overfitting testing completely. Second, the system records every strategy evaluation its search performs and deflates all reported performance by that trial count, tracing how the best in-sample Sharpe ratio climbs with each trial while the deflation threshold, driven by the agent's own search, climbs faster. Across a 453-stock point-in-time US equity universe and a 39-ETF multi-asset universe with realistic transaction, impact, and borrow costs, honest evaluation certifies passive benchmarks (out-of-sample confidence intervals excluding zero), rejects every LLM-discovered strategy (across two frontier models, search budgets up to one hundred candidates, and five repeated runs), catching selection luck, predicted rank degradation, and out-of-sample collapse through complementary instruments, and evaluates a human trader's production rule system under identical instruments. The framework formalizes why pre-registered hypotheses earn lower evidential bars than brute search, and quantifies the sample sizes that credible certification of moderate edges actually requires.",
+    "authors": [
+      "Eray Gençay"
+    ],
+    "categories": [
+      "q-fin.ST"
+    ],
+    "comment": "",
+    "cross_from": null,
+    "ext_id": "2608.27734",
+    "first_seen": "2026-08-31T13:49:33+09:00",
+    "id": "2608.27734",
+    "listed_date": "2026-08-31",
+    "primary": "q-fin.ST",
+    "published": "2026-08-27T21:50:28Z",
+    "src": "arxiv",
+    "src_cats": [
+      "q-fin.ST"
+    ],
+    "summarized_at": "2026-08-31T14:39:58+09:00",
+    "summary": {
+      "bullets": [
+        "LLM 전략 발굴 연구는 후보 수천 개 중 최고만 보고하고 미래정보 누출과 탐색 강도를 보정하지 않는다",
+        "도구 레지스트리로 미래정보를 구조적으로 차단하고, 평가 횟수를 전부 기록해 성과를 축소 보정한다",
+        "샤프 35짜리 의도적 누출 전략이 기존 통계 검정을 모두 통과했다",
+        "패시브 벤치마크만 살아남고 LLM 전략은 모델·예산·반복을 바꿔도 전부 탈락했다"
+      ],
+      "data": "시점 정합(point-in-time) 미국 주식 453종목과 ETF 39종 멀티에셋 유니버스를 쓰고, 거래·시장충격·대차 비용을 반영해 표본외로 검증한다",
+      "keywords": [
+        "deflated Sharpe ratio",
+        "backtest overfitting",
+        "look-ahead bias",
+        "LLM agents",
+        "multiple testing",
+        "point-in-time data"
+      ],
+      "method": "레지스트리 검증 도구로 특징 공간을 제한한 LLM 에이전트에 축소 샤프(Deflated Sharpe)와 백테스트 과최적화 확률(PBO)을 결합한 검증 체계다",
+      "one_liner": "LLM이 찾아낸 매매 전략은 정직한 검증을 하나도 통과하지 못했다",
+      "relevance": 3,
+      "relevance_why": "매매 규칙 자체는 주지 않지만 검증 방법론을 개선해 가산점을 받았고, 필요한 데이터는 시점 정합 주가·재무 데이터라 유료 벤더가 필요해 확보 난이도가 중간이다",
+      "takeaway": "전략 탐색 파이프라인에 시도 횟수 기록과 축소 보정을 붙여, 백테스트 결과를 채택하기 전 관문으로 삼는다"
+    },
+    "title": "What survives honest evaluation? Leakage-safe, search-aware assessment of LLM-driven trading strategy discovery",
+    "updated": "2026-08-27T21:50:28Z"
+  },
+  "2608.28399": {
+    "abstract": "In financial markets, a sequential policy that reacts systematically to price movements may become predictable to other market participants. This paper studies whether large language model (LLM) agents exhibit such directional structure through RetailAgent, an experimental framework in which an LLM observes anonymized intraday equity price histories and permitted state, then repeatedly chooses long (hold the stock) or flat (stay out) before the subsequent interval return is revealed. We compare returns during long and flat intervals along the same stock's intraday path after removing the overall fraction of long decisions. This exposure-matched measure reveals persistent negative timing across modality, horizon, state, and model family. Shuffling saved action sequences substantially attenuates the effect, showing that alignment between actions and subsequent returns drives the negative score. Feeding self-authored memories into decisions further increases policy persistence, while timing becomes more negative among stock-days on which the agent uses both actions. These results reveal stable, recoverable directional structure in sequential LLM financial decisions and a behavioral signal for studying how another participant could respond to a predictable policy.",
+    "authors": [
+      "Yupeng Zhang",
+      "Liuyuan Jiang",
+      "Hongyi Huang",
+      "Bingheng Li",
+      "Lisha Chen"
+    ],
+    "categories": [
+      "cs.AI",
+      "q-fin.TR"
+    ],
+    "comment": "",
+    "cross_from": "cs.AI",
+    "ext_id": "2608.28399",
+    "first_seen": "2026-08-31T13:49:33+09:00",
+    "id": "2608.28399",
+    "listed_date": "2026-08-31",
+    "primary": "cs.AI",
+    "published": "2026-08-28T14:53:08Z",
+    "report_path": "2608.28399.html",
+    "src": "arxiv",
+    "src_cats": [
+      "q-fin.TR"
+    ],
+    "summarized_at": "2026-08-31T14:40:01+09:00",
+    "summary": {
+      "bullets": [
+        "LLM 에이전트의 순차적 매매 결정에 예측 가능한 방향성이 있는지 검증",
+        "익명화한 장중 가격 이력만 주고 롱/현금을 반복 선택하게 하는 실험 설계",
+        "롱 비중을 맞춰 비교하니 모달리티·기간·모델을 가리지 않고 타이밍이 음(-)으로 지속",
+        "행동 순서를 섞으면 효과가 크게 줄어, 행동과 후속 수익률의 정렬이 원인임을 확인"
+      ],
+      "data": "익명화한 개별 종목의 장중 가격 이력을 쓰지만, 구체적 유니버스와 검증 구간은 초록에 없다.",
+      "keywords": [
+        "LLM trading agent",
+        "adverse timing",
+        "intraday equity",
+        "exposure-matched",
+        "behavioral signal",
+        "multimodal"
+      ],
+      "method": "멀티모달 LLM에 장중 가격 이력을 주고 롱/현금을 반복 선택시킨 뒤, 노출 비중을 맞춰 타이밍 성과를 재는 RetailAgent 실험 틀이다.",
+      "one_liner": "LLM 매매 에이전트가 구조적으로 타이밍을 반대로 잡는다는 실증",
+      "relevance": 3,
+      "relevance_why": "장중 가격 데이터는 구하기 쉽지만 신호를 얻으려면 LLM 추론을 대량으로 돌려야 하고 진입·청산 규칙이 없어 설계를 더 해야 한다. 다만 LLM에 매매를 맡기는 통념을 반증해 쓰지 말아야 할 것을 알려주는 값어치가 있다.",
+      "takeaway": "LLM에 직접 매매를 맡기지 말고, 그 결정을 역방향 신호나 개인투자자 심리 대용치로 쓰는 편이 낫다."
+    },
+    "title": "RetailAgent: Structured Adverse Timing in Self-Conditioned Multimodal LLM Trading Agents",
+    "updated": "2026-08-28T14:53:08Z"
+  },
+  "ssrn-7346819": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7346819",
+    "abstract": "Investors price commercial property partly on how it looks, yet visual attributes rarely appear in the data used to study transaction pricing. Using satellite and street view imagery for 6,533 U.S. single-tenant net lease transactions from 2005 to 2020, we read each property's images two ways: as scores against attributes we name in advance, and as unlabeled statistical summaries. Together they close about 6.5 percent of the cap rate variation left unexplained by conventional property, market, lease, and time controls, and the named attributes account for most of it. The gain survives county fixed effects, public controls for walkability, demographics, urban form, and flood risk, and it improves out-of-sample forecasts. Because most of what imagery contributes can be stated in words, appraisal and underwriting can use it without sacrificing transparency.",
+    "affiliations": "University of Central Florida, Auburn University - Department of Finance, Florida State University and University of South Florida",
+    "authors": [
+      "Randy I. Anderson",
+      "Stace Sirmans",
+      "G. Stacy Sirmans",
+      "Greg Smersh"
+    ],
+    "categories": [
+      "Technology & Investing"
+    ],
+    "downloads": 11,
+    "ext_id": "7346819",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7346819",
+    "journals": [
+      "Technology & Investing"
+    ],
+    "listed_date": "2026-08-28",
+    "page_count": 50,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7346819.pdf?abstractid=7346819&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "TI"
+    ],
+    "summarized_at": "2026-08-31T14:40:02+09:00",
+    "summary": {
+      "bullets": [
+        "투자자는 건물 외관을 보고 값을 매기지만 기존 가격 연구는 시각 정보를 뺀다",
+        "사진을 미리 정한 속성 점수와 라벨 없는 통계 요약, 두 방식으로 읽는다",
+        "기존 변수로 못 잡던 캡레이트 변동의 약 6.5%를 추가로 설명한다",
+        "설명력 대부분이 말로 표현 가능한 속성에서 나와 심사 투명성을 지킨다"
+      ],
+      "data": "2005~2020년 미국 단일 임차인 순임대 거래 6,533건과 각 물건의 위성·거리뷰 사진이다",
+      "keywords": [
+        "geospatial imagery",
+        "cap rate",
+        "commercial real estate",
+        "machine learning",
+        "net lease",
+        "hedonic valuation"
+      ],
+      "method": "위성·거리뷰 이미지를 사전 정의 속성 점수와 비지도 임베딩으로 변환해 캡레이트 회귀에 넣고, 카운티 고정효과와 공공 변수로 통제한 뒤 표본 외 예측력을 검증한다",
+      "one_liner": "위성·거리뷰 사진으로 상업용 부동산 캡레이트를 더 잘 설명하다",
+      "relevance": 2,
+      "relevance_why": "위성·거리뷰 사진과 비공개 순임대 거래 데이터를 모아야 하는 데다 캡레이트는 거래가 드물어 자동매매 주기에 맞지 않는다",
+      "takeaway": "리츠나 부동산 담보 자산의 밸류에이션 보조 지표로 쓸 만하지만, 거래 단위 캡레이트 예측이라 초단기 매매 신호로는 직접 옮기기 어렵다"
+    },
+    "title": "Geospatial Imagery and Machine Learning in Commercial Real Estate Valuation"
+  },
+  "ssrn-7355099": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7355099",
+    "abstract": "On August 10, 2026, Nvidia announced memoranda of understanding with Apollo, BlackRock, Blackstone, Brookfield, Goldman Sachs, and KKR to mobilize over five hundred billion dollars of third-party capital through GPU-backed financing platforms. This paper argues that the structure introduces a category of risk that existing asset-backed securitisation theory does not formally address. I identify three conditions shared with the mortgage-backed securities market before 2008: correlated collateral values, unproven cash flow assumptions, and asymmetric incentives between originators and downstream debt holders. I then define two risk categories specific to technology asset-backed lending: Vendor-Circular Financing, which describes the structural conflict created when a manufacturer backstops credit facilities enabling purchases of its own products, and Innovation-Cycle Depreciation, which describes the systematic destruction of collateral value triggered by the vendor's own product roadmap. Secondary market data shows that H100 GPUs have lost approximately seventy-three percent of their 2023 value by mid-2026, providing preliminary empirical grounding for both risk categories.",
+    "affiliations": "affiliation not provided to SSRN",
+    "authors": [
+      "Zohaan"
+    ],
+    "categories": [
+      "Global Equities, Exchanges & Investment Indices"
+    ],
+    "downloads": 7,
+    "ext_id": "7355099",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7355099",
+    "journals": [
+      "Global Equities, Exchanges & Investment Indices"
+    ],
+    "listed_date": "2026-08-29",
+    "page_count": 10,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7355099.pdf?abstractid=7355099&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "GEX"
+    ],
+    "summarized_at": "2026-08-31T14:40:02+09:00",
+    "summary": {
+      "bullets": [
+        "엔비디아가 5천억 달러 규모 GPU 담보 금융을 추진한다",
+        "2008년 MBS와 공유하는 세 가지 조건을 짚는다",
+        "벤더 순환 금융과 혁신주기 감가라는 위험 범주를 새로 정의한다",
+        "H100 중고가가 2023년 대비 약 73% 빠졌다"
+      ],
+      "data": "H100 GPU 중고 시장 가격, 2023년부터 2026년 중반까지다",
+      "keywords": [
+        "GPU-backed lending",
+        "vendor financing",
+        "asset-backed securitisation",
+        "collateral depreciation",
+        "systemic risk"
+      ],
+      "method": "자산유동화 이론을 GPU 담보 대출에 적용한 개념적 위험 분류다",
+      "one_liner": "GPU 담보 대출의 구조적 위험을 MBS와 비교해 정의한다",
+      "relevance": 2,
+      "relevance_why": "착상은 독창적이나 매매 규칙이 전혀 없고, 핵심 근거인 GPU 중고 시세와 사모 대출 익스포저는 표준 데이터로 구하기 어려워 자동화 장벽이 크다",
+      "takeaway": "엔비디아와 GPU 담보 금융에 노출된 사모·대체투자 운용사를 묶어 담보가치 하락 국면의 리스크 팩터로 감시한다"
+    },
+    "title": "Chip-Backed Securities: Structural Risk in GPU-Collateralised Lending and the Vendor-Circular Financing Problem"
+  },
+  "ssrn-7355943": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7355943",
+    "abstract": "Financial technology has reshaped the way capital is raised, invested, traded, and supervised. Innovations in electronic trading, algorithmic execution, digital advisory services, and distributed infrastructure have altered the structure of capital markets and the delivery of investment management services, while introducing new categories of operational, technological, and regulatory risk. This research examines financial technology as it applies to investment management and capital market services. It considers the FinTech ecosystem and its participants, the digital transformation of primary and secondary markets, the risk management and cybersecurity implications of technology adoption, the governance and internal control frameworks required to oversee it, and the contribution of financial technology to financial inclusion. The study concludes with an assessment of the developments expected to shape investment management and capital market infrastructure over the coming decade.",
+    "affiliations": "",
+    "authors": [
+      "Ihab Hubeishi"
+    ],
+    "categories": [
+      "Technology & Investing",
+      "Global Equities, Exchanges & Investment Indices"
+    ],
+    "downloads": 12,
+    "ext_id": "7355943",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7355943",
+    "journals": [
+      "Technology & Investing",
+      "Global Equities, Exchanges & Investment Indices"
+    ],
+    "listed_date": "2026-08-28",
+    "page_count": 54,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7355943.pdf?abstractid=7355943&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "TI",
+      "GEX"
+    ],
+    "summarized_at": "2026-08-31T14:40:09+09:00",
+    "summary": {
+      "bullets": [
+        "전자거래와 알고리즘 집행, 디지털 자문이 시장 구조를 바꿨다",
+        "핀테크 생태계와 발행·유통시장의 디지털 전환을 짚는다",
+        "기술 도입이 낳은 운영·사이버보안 위험과 지배구조를 검토한다",
+        "금융포용 기여와 향후 10년 인프라 전망으로 마무리한다"
+      ],
+      "data": "이론 연구",
+      "keywords": [
+        "FinTech",
+        "algorithmic execution",
+        "capital markets",
+        "investment management",
+        "cybersecurity",
+        "financial inclusion"
+      ],
+      "method": "정량 모형 없이 핀테크 생태계와 규제·거버넌스를 서술로 정리한 개관이다.",
+      "one_liner": "핀테크가 자본시장과 투자관리에 미친 변화를 종합 정리한 개관 연구다.",
+      "relevance": 1,
+      "relevance_why": "매매 규칙도 실증 데이터도 없는 제도·서베이형 논문이라, 데이터 확보 난이도를 따질 대상 자체가 없다.",
+      "takeaway": "직접 쓸 신호는 없고, 알고리즘 집행 인프라와 사이버 리스크 점검 항목을 운영 체크리스트로만 참고한다."
+    },
+    "title": "Financial Technology, Investment Management, and Capital Market Services"
+  },
+  "ssrn-7355962": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7355962",
+    "abstract": "Financial markets increasingly depend upon sophisticated technological infrastructures that facilitate the efficient exchange of information, movement of funds, settlement of transactions, regulatory compliance, cybersecurity protection, and operational resilience. These foundational technologies serve as critical enablers of modern financial systems and support the stability, efficiency, and scalability of financial services globally. This research examines the technological infrastructure underlying contemporary financial markets, with particular emphasis on financial market infrastructures, payment systems, cloud computing, data management, digital identity systems, cybersecurity frameworks, regulatory technologies, operational resilience, and emerging digital architectures. The study analyzes the role of infrastructure in enabling financial innovation while maintaining security, reliability, and market integrity. Furthermore, the research explores future developments that are expected to transform the architecture of financial systems over the coming decades.",
+    "affiliations": "",
+    "authors": [
+      "Ihab Hubeishi"
+    ],
+    "categories": [
+      "Technology & Investing"
+    ],
+    "downloads": 9,
+    "ext_id": "7355962",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7355962",
+    "journals": [
+      "Technology & Investing"
+    ],
+    "listed_date": "2026-08-28",
+    "page_count": 92,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7355962.pdf?abstractid=7355962&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "TI"
+    ],
+    "summarized_at": "2026-08-31T14:40:12+09:00",
+    "summary": {
+      "bullets": [
+        "현대 금융시장이 결제·청산·보안 인프라에 의존하는 현실을 짚는다",
+        "시장 인프라, 지급결제, 클라우드, 데이터 관리, 디지털 신원을 다룬다",
+        "보안과 시장 건전성을 지키면서 혁신을 가능케 하는 인프라의 역할을 논한다",
+        "향후 수십 년간 금융 시스템 구조를 바꿀 기술 흐름을 전망한다"
+      ],
+      "data": "이론 연구",
+      "keywords": [
+        "financial market infrastructure",
+        "payment systems",
+        "cloud computing",
+        "regtech",
+        "cybersecurity",
+        "operational resilience"
+      ],
+      "method": "정량 모델 없이 인프라 영역별로 정리한 문헌 검토다.",
+      "one_liner": "금융시장을 떠받치는 기술 인프라를 개괄한 서베이다.",
+      "relevance": 1,
+      "relevance_why": "매매 신호도 검증 가능한 가설도 없는 제도·기술 서베이이며, 애초에 분석할 데이터셋 자체를 제시하지 않아 확보 난이도를 따질 대상조차 없다.",
+      "takeaway": "매매 규칙보다는 체결·결제 인프라와 운영 리스크를 점검하는 배경 지식으로 쓴다."
+    },
+    "title": "Financial Technology Infrastructure"
+  },
+  "ssrn-7356059": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7356059",
+    "abstract": "The digitization of judicial systems has radically transformed intake and case processing channels through electronic filing (efiling) platforms. However, the effectiveness of this infrastructure is severely constrained by a structural gap: the lack of standardization and quality control in the stage prior to formal submission (pre-filing). This paper examines the operational and conceptual distinction between the technological capacity of the reception portal and the integrity of the documentary input. Through a dogmatic-procedural, technical, and comparative analysis, it demonstrates how preventable documentary inconsistencies generate procedural friction, correction queues, requests for evidence (RFEs), and institutional rework. Finally, it theorizes and proposes the Pre-Filing Procedural Integrity Framework (PIF) as a dimension of preventive procedural economy and a guarantee of functional access to justice.",
+    "affiliations": "Florida International University",
+    "authors": [
+      "Laura Rosas"
+    ],
+    "categories": [
+      "Technology & Investing"
+    ],
+    "downloads": 5,
+    "ext_id": "7356059",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7356059",
+    "journals": [
+      "Technology & Investing"
+    ],
+    "listed_date": "2026-08-28",
+    "page_count": 7,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7356059.pdf?abstractid=7356059&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "TI"
+    ],
+    "summarized_at": "2026-08-31T14:40:14+09:00",
+    "summary": {
+      "bullets": [
+        "전자제출 플랫폼은 깔렸지만 제출 직전 단계는 표준이 없다",
+        "포털의 기술 역량과 문서 자체의 완결성을 개념적으로 분리한다",
+        "법리·절차·기술을 엮은 비교 분석으로 보정 요구와 재작업 비용을 짚는다",
+        "예방적 절차경제 관점의 제출 전 무결성 프레임워크(PIF)를 내놓는다"
+      ],
+      "data": "이론 연구",
+      "keywords": [
+        "e-filing",
+        "pre-filing",
+        "procedural integrity",
+        "document quality control",
+        "digital justice"
+      ],
+      "method": "법해석학과 절차법 이론에 기술적·비교법적 분석을 더한 규범 연구다",
+      "one_liner": "전자소송 제출 전 문서 품질관리 체계를 제안한 법제도 연구다",
+      "relevance": 1,
+      "relevance_why": "매매 신호가 전혀 없는 사법 절차 논문이고, 필요한 데이터도 각국 법원의 내부 보정 처리 기록이라 확보 자체가 불가능하다",
+      "takeaway": "굳이 쓴다면 주문 전송 전 유효성 검증으로 리젝과 재전송을 줄인다는 발상 정도다"
+    },
+    "title": "From Digital Case Files to Input Integrity: Pre-Filing Document Management as a Guarantee of Procedural Efficiency in Digital Justice"
+  },
+  "ssrn-7356758": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7356758",
+    "abstract": "We document a large and robust pre-announcement drift in Japanese equity indices ahead of scheduled Bank of Japan (BOJ) monetary policy decisions: prices drift up steadily in the days before a meeting, peak immediately ahead of the decision, and do not continue afterward, earning an economically large and statistically significant excess return without elevated volatility. The drift is concentrated in meetings preceded by high ex-ante implied volatility. It is the Bank-of-Japan analog of the pre-FOMC drift of Lucca and Moench (2015), with a distinctive Japanese feature-variable announcement timing-that aids identification.",
+    "affiliations": "",
+    "authors": [
+      "Jun Maeda"
+    ],
+    "categories": [
+      "Global Equities, Exchanges & Investment Indices"
+    ],
+    "downloads": 88,
+    "ext_id": "7356758",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7356758",
+    "journals": [
+      "Global Equities, Exchanges & Investment Indices"
+    ],
+    "listed_date": "2026-08-28",
+    "page_count": 22,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7356758.pdf?abstractid=7356758&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "GEX"
+    ],
+    "summarized_at": "2026-08-31T14:40:16+09:00",
+    "summary": {
+      "bullets": [
+        "미국 FOMC 직전 드리프트가 일본에도 있는지 확인한다",
+        "정례 회의 전후 일본 주가지수 초과수익을 사건 분석한다",
+        "회의 직전까지 꾸준히 오르고 발표 후에는 이어지지 않는다",
+        "사전 내재변동성이 높았던 회의에 수익이 몰린다"
+      ],
+      "data": "일본 주가지수 가격과 정례 일본은행 회의 일정, 사전 내재변동성을 쓴다. 구체적 검증 구간은 초록에 없다",
+      "keywords": [
+        "pre-announcement drift",
+        "Bank of Japan",
+        "monetary policy",
+        "implied volatility",
+        "event study",
+        "Japanese equities"
+      ],
+      "method": "일본은행 정책 결정일을 기준으로 삼은 사건 연구(event study)로 발표 전 누적 초과수익을 측정한다",
+      "one_liner": "일본은행 회의 직전 주가지수가 오르는 현상을 밝혔다",
+      "relevance": 5,
+      "relevance_why": "회의 일정, 지수 가격, 내재변동성(닛케이 VI) 모두 공개 데이터라 확보가 쉽고, 진입·청산 시점이 달력으로 정해져 그대로 자동매매로 옮길 수 있다",
+      "takeaway": "회의 며칠 전 진입해 발표 직전 청산하는 캘린더 전략을 짜고, 직전 내재변동성이 높은 회의만 골라 베팅 크기를 키운다"
+    },
+    "title": "The Pre-BOJ Announcement Drift: Evidence from Japanese Equity Indices"
+  },
+  "ssrn-7356939": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7356939",
+    "abstract": "The Markets in Crypto-Assets Regulation (MiCA) is usually discussed as a matter of supervisory detail: the rules for stablecoins, the requirements for service providers, and the perimeter of decentralised finance. This paper argues that MiCA's most consequential problems are structural, and that they lie at the intersection of regulatory law and private international law. It develops a single method: control as the criterion of responsibility and entitlement, coordinated across borders through conflict-of-laws connecting factors. From that method it derives a reform agenda. It proposes an objective directed-activity test for reverse solicitation, transposed from Pammer and Hotel Alpenhof; a general antiabuse rule for MiCA; a controller-of-last-resort attribution rule for decentralised finance; a functional property rule for tokens grounded in Article 114 TFEU; a crypto-specific presumption of the centre of main interests anchored in Eurofood and Interedil; and a free-standing conflict-of-laws Regulation for the proprietary aspects of tokens, with the effective locus of control over key-management infrastructure as the connecting factor for custody. It closes with a ten-principle framework for a transnational private law of digital-asset custody. The paper's contribution is to show that the perimeter, stablecoin, DeFi and private-law questions form one problem, and that control and private international law supply their common solution.",
+    "affiliations": "Public University of Navarra (UPNA)",
+    "authors": [
+      "Cayetana Santaolalla"
+    ],
+    "categories": [
+      "Technology & Investing"
+    ],
+    "downloads": 7,
+    "ext_id": "7356939",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7356939",
+    "journals": [
+      "Technology & Investing"
+    ],
+    "listed_date": "2026-08-28",
+    "page_count": 11,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7356939.pdf?abstractid=7356939&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "TI"
+    ],
+    "summarized_at": "2026-08-31T14:40:21+09:00",
+    "summary": {
+      "bullets": [
+        "MiCA 논의가 감독 세부에 갇혀 구조적 문제를 놓친다",
+        "'통제'를 책임과 권리의 기준으로 삼고 국경 간 연결점으로 조율한다",
+        "역권유 판정, 남용방지 규칙, DeFi 최종통제자 귀속 등 개혁안을 제시한다",
+        "디지털자산 수탁을 위한 10원칙 초국가 사법 틀로 마무리한다"
+      ],
+      "data": "이론 연구",
+      "keywords": [
+        "MiCA",
+        "crypto-assets",
+        "private international law",
+        "custody",
+        "DeFi",
+        "conflict of laws"
+      ],
+      "method": "판례에서 끌어온 연결점 이론으로 규제법과 국제사법을 잇는 법해석 연구다.",
+      "one_liner": "MiCA의 구조적 결함을 국제사법으로 풀자는 법제도 개혁안이다.",
+      "relevance": 1,
+      "relevance_why": "매매 신호가 전혀 없는 순수 법제도 논문이고, 애초에 계량화할 데이터 자체를 제시하지 않아 확보 난이도를 따질 여지도 없다.",
+      "takeaway": "EU 대상 암호자산 매매나 수탁 인프라를 짤 때 규제 리스크 점검표로 참고할 만하다."
+    },
+    "title": "Control, Custody and Conflict of Laws: Private International Law and the Regulation of Crypto-assets in the European Union"
+  },
+  "ssrn-7357138": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7357138",
+    "abstract": "In July 2026 the Dubai Financial Services Authority asked whether any regulatory barrier stands in the way of issuing tokenised fund units in the Dubai International Financial Centre. This paper argues that the barrier is legal rather than technological, and that the Authority has already described it without naming it. Section 8.7 of the Collective Investment Rules requires a fund manager to keep a register of unitholders. It attributes no legal effect to that register. The register is not conclusive evidence of title, or evidence of title, and no power of rectification accompanies it. The DIFC Digital Assets Law of 2024 provides that the person in control of a digital asset is presumed to hold the superior title. One legal order therefore supplies an answer and a silence, and the answer was drafted for native crypto assets rather than for fund units. The paper meets the objection that this tension is illusory. The DIFC statute admits only assets that exist independently of any person and of any legal system, and a fund unit is a right constituted by a legal system. The objection is well founded, and it does not rescue the position. It produces what this paper calls the constitutive paradox. Either the tokenised unit is a digital asset, and control governs by default; or it is not, and the token carries no proprietary protection at all under the law that issued it. The paper then identifies a second gap, which it calls the anchoring problem. Article 129 of the DIFC Law of Security refers the applicable law for security rights in digital assets, and in assets embodied in digital assets, to the laws of England and Wales. That provision reaches tokenised fund units used as collateral. It refers the question to a system that has not yet settled it. Outside the security context nothing governs title at all. The paper states the case for that referral before answering it and compares the DIFC with the Abu Dhabi Global Market. It proposes anchoring by designation, modelled on Principle 5 of the UNIDROIT Principles on Digital Assets and Private Law, and applies the same reasoning to collateral, custody and insolvency.",
+    "affiliations": "Public University of Navarra (UPNA)",
+    "authors": [
+      "Cayetana Santaolalla"
+    ],
+    "categories": [
+      "Technology & Investing"
+    ],
+    "downloads": 6,
+    "ext_id": "7357138",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7357138",
+    "journals": [
+      "Technology & Investing"
+    ],
+    "listed_date": "2026-08-28",
+    "page_count": 14,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7357138.pdf?abstractid=7357138&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "TI"
+    ],
+    "summarized_at": "2026-08-31T14:40:23+09:00",
+    "summary": {
+      "bullets": [
+        "토큰화 펀드 지분의 장벽은 기술이 아니라 법이라는 문제 제기",
+        "집합투자규칙 8.7조는 지분권자 명부에 아무 법적 효력도 주지 않는다",
+        "디지털자산법은 통제자를 우선 권원 보유자로 추정해 충돌이 생긴다",
+        "담보권 준거법을 영국법에 넘기지만 그 법도 미정, 지정에 의한 연결을 제안"
+      ],
+      "data": "이론 연구",
+      "keywords": [
+        "tokenised fund units",
+        "DIFC",
+        "conflict of laws",
+        "digital assets",
+        "UNIDROIT"
+      ],
+      "method": "DIFC와 ADGM 규정을 비교한 법해석 분석에 UNIDROIT 원칙 5를 적용한다.",
+      "one_liner": "DIFC 토큰화 펀드 지분의 소유권 준거법 공백을 짚은 법률 논문이다.",
+      "relevance": 1,
+      "relevance_why": "매매 신호가 전혀 없는 순수 법제도 논문이고, 애초에 데이터셋 자체가 없어 확보 난이도를 따질 대상도 아니다.",
+      "takeaway": "중동 토큰화 펀드에 손대기 전 법적 소유권 리스크를 점검하는 참고 자료로만 쓴다."
+    },
+    "title": "Where does Title Live? Tokenised Fund Units, Control and the Conflict of Laws in the DIFC 1"
+  },
+  "ssrn-7359658": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7359658",
+    "abstract": "We develop a multi-agent deep reinforcement learning framework for analyzing Maximal Extractable Value (MEV) allocation in decentralized exchange (DEX) markets under Proposer-Builder Separation (PBS). The model follows the PBS block-production pipeline from uninformed DEX-user transactions to searcher bundle construction, builder block assembly, proposer block selection, and on-chain execution. Multi-agent deep reinforcement learning (MARL) optimizes participant policies in this shared execution environment, and average approximate best-response (ABR) regret quantifies the residual unilateral gains found by a finite evaluation procedure that holds all other agents' policies fixed and retrains one agent at a time. In a two-pool, single-token-pair experimental instantiation, we compare a configuration with two back-running searchers against a mixed configuration with one sandwich searcher and one back-running searcher. This distinction matters because a back-running transaction is appended after observed order flow and does not change the amount of output tokens received by the original uninformed trader, whereas a sandwich attack places searcher transactions around a targeted victim swap and can reduce the amount of output tokens received by that trader. The results show that MEV-related cumulative rewards are allocated differently across these configurations. Searchers convert visible order flow into bundle profits, builders aggregate these bundles through block construction, and builder competition transfers part of the resulting value to the proposer through block bids. Permitting sandwich attacks lowers uninformed traders' cumulative rewards and increases reward asymmetry among searchers.",
+    "affiliations": ", Beihang University (BUAA) and School of Economics and Management, Beihang University",
+    "authors": [
+      "Shengyu Chen",
+      "Hui Zhang",
+      "Junhuan Zhang"
+    ],
+    "categories": [
+      "Technology & Investing"
+    ],
+    "downloads": 3,
+    "ext_id": "7359658",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7359658",
+    "journals": [
+      "Technology & Investing"
+    ],
+    "listed_date": "2026-08-28",
+    "page_count": 33,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7359658.pdf?abstractid=7359658&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "TI"
+    ],
+    "summarized_at": "2026-08-31T14:40:28+09:00",
+    "summary": {
+      "bullets": [
+        "MEV 수익이 서처·빌더·프로포저 사이에 어떻게 나뉘는지 규명한다",
+        "PBS 블록 생산 전 과정을 시뮬레이션하고 MARL로 각 참여자 정책을 최적화한다",
+        "샌드위치 공격을 허용하면 일반 트레이더 수익이 줄고 서처 간 격차가 커진다",
+        "빌더 경쟁이 번들 이익 일부를 블록 입찰로 프로포저에게 넘긴다"
+      ],
+      "data": "실데이터 없이 두 개 풀과 단일 토큰쌍으로 구성한 시뮬레이션 환경만 쓴다",
+      "keywords": [
+        "MEV",
+        "Proposer-Builder Separation",
+        "Multi-Agent Reinforcement Learning",
+        "DEX",
+        "Sandwich Attack",
+        "Back-running"
+      ],
+      "method": "다중 에이전트 심층 강화학습(MARL)으로 정책을 학습하고, 평균 근사 최적대응(ABR) 후회로 균형 수렴도를 잰다",
+      "one_liner": "PBS 환경에서 MEV 분배를 다중 에이전트 강화학습으로 분석한다",
+      "relevance": 2,
+      "relevance_why": "시뮬레이션 기반 이론 분석이라 매매 규칙이 없고, 실제 적용하려면 멤풀 주문흐름과 빌더 입찰 데이터, 초저지연 인프라가 필요해 확보 장벽이 높다",
+      "takeaway": "DEX 자동매매를 짤 때 백러닝은 체결가에 영향이 없고 샌드위치는 수취 토큰을 깎는다는 점을 슬리피지 한도 설정에 반영한다"
+    },
+    "title": "Multi-Agent Deep Reinforcement Learning for Maximal Extractable Value Allocation under Proposer-Builder Separation"
+  },
+  "ssrn-7359662": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7359662",
+    "abstract": "Artificial intelligence is changing how citizenship is exercised. Decisions about welfare, mobility, work, knowledge and political communication increasingly depend on data and automated systems operating across territorial and legal boundaries. These systems also require energy, water, minerals, labour and land, revealing the physical limits of seemingly immaterial digitalisation. Established accounts of digital citizenship explain rights, participation, inclusion and people's capacity to act through data. They give less attention, however, to ecological costs, ownership of essential infrastructure and consequences that extend across places and generations. This chapter develops EcoTechnoPolitical Citizenship as a framework connecting these concerns. It defines citizenship as the practical capacity to claim digital rights, participate in collective decisions, shape technological infrastructure and accept ecological responsibilities according to each actor's power and contribution. The framework has four dimensions: the physical and ecological basis of digital systems; democratic control over infrastructure; meaningful citizen agency; and responsibility across territories, supply chains and generations. The chapter traces the development of digital citizenship towards automated public life and explains AI economics through data, computing capacity, finance, labour and public dependence. It then examines the digital-green transition, which seeks to align digitalisation with sustainability but often leaves technological growth outside enforceable ecological limits. Practical implications are developed for impact assessment, public digital infrastructure, data commons, territorial oversight, citizen participation and education. Particular attention is paid to unequal power among citizens, governments, firms and communities affected by infrastructure. EcoTechnoPolitical Citizenship ultimately provides an accessible conceptual map for governing AI-dependent societies democratically while respecting planetary limits.",
+    "affiliations": "Ikerbasque Foundation UPV/EHU",
+    "authors": [
+      "Igor Calzada"
+    ],
+    "categories": [
+      "Technology & Investing"
+    ],
+    "downloads": 7,
+    "ext_id": "7359662",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7359662",
+    "journals": [
+      "Technology & Investing"
+    ],
+    "listed_date": "2026-08-28",
+    "page_count": 23,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7359662.pdf?abstractid=7359662&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "TI"
+    ],
+    "summarized_at": "2026-08-31T14:40:28+09:00",
+    "summary": {
+      "bullets": [
+        "디지털 시민권 논의가 생태 비용과 인프라 소유권을 놓쳤다는 문제 제기",
+        "물질적 기반, 인프라의 민주적 통제, 시민 행위성, 세대 간 책임의 4개 축 제시",
+        "디지털-그린 전환이 기술 성장을 생태 한계 밖에 방치한다고 지적",
+        "영향평가, 공공 디지털 인프라, 데이터 공유재 등 정책 시사점 도출"
+      ],
+      "data": "이론 연구",
+      "keywords": [
+        "digital citizenship",
+        "AI governance",
+        "data commons",
+        "digital-green transition",
+        "planetary limits"
+      ],
+      "method": "실증 모델 없이 개념 분석으로 구축한 규범적 시민권 프레임워크다.",
+      "one_liner": "AI 시대 시민권을 생태·기술·정치 축으로 재정의한 이론 프레임워크다.",
+      "relevance": 1,
+      "relevance_why": "매매 규칙이나 계량 변수가 전혀 없고, 프레임워크가 다루는 생태 비용·인프라 소유권 지표는 표준화된 시계열로 구할 수도 없다.",
+      "takeaway": "AI 데이터센터의 전력·수자원·광물 수요를 유틸리티와 원자재 섹터의 구조적 수요 테마로 참고하는 정도다."
+    },
+    "title": "EcoTechnoPolitical Citizenship"
+  },
+  "ssrn-7359698": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7359698",
+    "abstract": "5G deployment, India telecom sector, digital infrastructure, financial sustainability, spectrum pricing, economic impact, telecommunications policy, ARPU, CAPEX, infrastructure sharing",
+    "affiliations": "",
+    "authors": [
+      "Rafiullah Sakhizada"
+    ],
+    "categories": [
+      "Technology & Investing"
+    ],
+    "downloads": 16,
+    "ext_id": "7359698",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7359698",
+    "journals": [
+      "Technology & Investing"
+    ],
+    "listed_date": "2026-08-28",
+    "page_count": 44,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7359698.pdf?abstractid=7359698&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "TI"
+    ],
+    "summarized_at": "2026-08-31T14:40:33+09:00",
+    "summary": {
+      "bullets": [
+        "인도 통신사가 5G 투자비를 감당할 수 있는지 묻는다",
+        "주파수 경매 가격과 통신 정책이 수익성에 미치는 영향을 살핀다",
+        "ARPU와 설비투자(CAPEX), 인프라 공유를 축으로 지속가능성을 진단한다",
+        "5G 확산이 디지털 인프라와 거시 경제에 미칠 파급을 정리한다"
+      ],
+      "data": "초록에 데이터셋과 검증 구간을 밝히지 않았다. 산업·정책 분석에 가깝다",
+      "keywords": [
+        "5G deployment",
+        "telecom sector",
+        "spectrum pricing",
+        "ARPU",
+        "CAPEX",
+        "infrastructure sharing"
+      ],
+      "method": "인도 통신 산업의 재무 지표와 정책을 정성적으로 검토한다",
+      "one_liner": "인도 5G 구축의 재무 지속성과 정책 과제를 짚는다",
+      "relevance": 1,
+      "relevance_why": "매매 규칙이 없는 산업·정책 논의이고, 주파수 가격이나 통신사별 ARPU·CAPEX 시계열은 규제기관 공시를 일일이 수집해야 해 자동화 난도가 높다",
+      "takeaway": "인도 통신주 롱숏의 펀더멘털 필터로 ARPU와 CAPEX 추이를 참고하는 정도다"
+    },
+    "title": "5G Deployment in India"
+  },
+  "ssrn-7363041": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7363041",
+    "abstract": "The Gravity paper claims a recovered growth rate—the arch—for an investor who holds a baseline allocation and exercises stored safety after damage. This paper tests that claim in simulation, discovers the structure underneath it, and proves what the simulation found. The arch is an exact long-run law. Under the bang-bang shortfall rule studied here, for baselines below the market the gap to the arch line is positive recurrent with a closed-form stationary law. The fraction of time spent at Kelly converges to (p^* = y_0/(2-y_0)), and mean log-growth converges to the arch. At the market seat, the stationary law disappears and the convergence becomes degenerate. At the 20- and 50-year horizons tested, the arch is kept by both the median and the dollar mean, but not yet by mean log-wealth: the remaining shortfall is a transient whose clock is computable. Against the natural skeptic—a static portfolio at twice the baseline, or at the best static seat for the same goal—the moving portfolio loses on growth and dispersion and wins on the one thing it was built for: the probability of keeping the line. It does so with less average exposure, and for a computable number of years: 67 at 30/70, 78 at 50/50, 91 at 70/30, and 122 at the market. The crossover boundary (T^*(y_0)) is exactly characterized—the static side in closed form and the moving side by an explicit Laplace transform—and evaluated numerically as a curve in years. What remains outside the theorem—which paths fall deep, and how deep, before the law asserts itself—is the price. The price is itself a finding: exact, at a price, over time, within limits.",
+    "affiliations": "",
+    "authors": [
+      "Tom Anderson"
+    ],
+    "categories": [
+      "Global Investment Strategy"
+    ],
+    "downloads": 9,
+    "ext_id": "7363041",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7363041",
+    "journals": [
+      "Global Investment Strategy"
+    ],
+    "listed_date": "2026-08-29",
+    "page_count": 27,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7363041.pdf?abstractid=7363041&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "GIS"
+    ],
+    "summarized_at": "2026-08-31T14:40:39+09:00",
+    "summary": {
+      "bullets": [
+        "기존 Gravity 논문의 '아치' 성장률 회복 주장이 실제로 성립하는지 불확실했다",
+        "시뮬레이션으로 검증한 뒤 그 밑에 깔린 구조를 찾아 정리로 증명했다",
+        "시장 미만 베이스라인에서 아치와의 격차는 양의 재귀성을 갖고 정상분포가 닫힌 형태로 나온다",
+        "켈리(Kelly) 구간 체류 비율이 p*=y0/(2-y0)로 수렴하고, 정적 포트폴리오 대비 우위는 30/70에서 67년 등 유한하다"
+      ],
+      "data": "이론 연구. 20년·50년 지평의 시뮬레이션으로만 검증한다",
+      "keywords": [
+        "Kelly criterion",
+        "dynamic asset allocation",
+        "log-growth",
+        "stationary distribution",
+        "bang-bang control",
+        "shortfall rule"
+      ],
+      "method": "뱅뱅(bang-bang) 부족분 규칙을 쓴 동적 배분을 시뮬레이션하고, 정상분포와 라플라스 변환으로 교차 시점 T*(y0)를 닫힌 형태로 특성화한다",
+      "one_liner": "베이스라인 보유 후 안전자산을 푸는 전략의 장기 성장률 법칙을 증명했다",
+      "relevance": 3,
+      "relevance_why": "가격 데이터만 있으면 규칙을 코딩할 수 있어 데이터 확보 난이도는 낮지만, 종목 선택이나 진입·청산 신호가 아니라 장기 배분 비중 규칙이라 매매 전략으로 옮기려면 설계가 더 필요하다",
+      "takeaway": "목표 성장선 유지 확률을 노리는 자산배분 오버레이의 리스크 예산 규칙으로 쓰되, 성장률과 분산은 손해라는 점을 전제한다"
+    },
+    "title": "Gravity and the Arch: Implementation Tests and Findings"
+  },
+  "ssrn-7363442": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7363442",
+    "abstract": "Attributing future systemic tail losses across assets remains dominated by exposures estimated asset by asset, market beta, downside beta and volatility, although drawdowns are precisely the episodes in which losses become collective and concentrate where shocks recirculate among tightly co-moving names. The quantities proposed here originate in our prior work on network fragility: the FSRI, a structural index for microbial co-occurrence networks in agricultural soils, and its financial descendant, the TSI, whose standalone version we falsified and reported. From that starting point we hypothesized that the same structural information could carry marginal value if localized to individual assets, extended with a response dimension, and handed to a flexible learner as features rather than composed by hand. The result is the Omega Block: five per-asset features computed from daily prices alone, two triadic quantities measured against a closed-form configuration null and three response quantities around scheduled FOMC announcements, among them Omega-R, a perturbation response normalized by each asset's own baseline drift, developed for this block. In pre-registered paired ablations with a same-width noise placebo, the block adds 1.3 to 3.4 points of out-of-fold R 2 to next-year tail-loss attribution over baselines that instantiate the public state of the art, up to 31 columns including sector, downside beta, co-moments, a conditional MES proxy, size, liquidity and balance-sheet fundamentals, replicated on two universes and two nearly disjoint periods (2012-2017, 2016-2025), while the placebo worsens the same model in every configuration. Because the baselines that decide adoption in practice are proprietary, the paper's verification is designed to travel to the data: an open acceptance harness reruns the entire protocol on any universe, baseline and event calendar, with a values-only mode and a cryptographic time-lock. The scope established by the evidence is cross-sectional attribution, not market timing.",
+    "affiliations": "",
+    "authors": [
+      "Alberto Acedo"
+    ],
+    "categories": [
+      "Capital Markets: Market Efficiency"
+    ],
+    "downloads": 7,
+    "ext_id": "7363442",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7363442",
+    "journals": [
+      "Capital Markets: Market Efficiency"
+    ],
+    "listed_date": "2026-08-30",
+    "page_count": 9,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7363442.pdf?abstractid=7363442&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "MEF"
+    ],
+    "summarized_at": "2026-08-31T14:40:44+09:00",
+    "summary": {
+      "bullets": [
+        "하락장 손실은 집단적으로 몰리는데, 기존 지표는 자산을 하나씩 떼어 본다",
+        "일간 가격만으로 자산별 특징 5개를 만든다. 삼각 구조 2개와 FOMC 반응 3개다",
+        "섹터·하방 베타·조건부 MES 등 최대 31개 변수 기준선 대비 R² 1.3~3.4포인트를 더한다",
+        "노이즈 위약(placebo) 대조와 사전등록 절차로 우연한 개선을 걸러냈다"
+      ],
+      "data": "일간 가격만으로 두 유니버스와 거의 겹치지 않는 두 구간(2012-2017, 2016-2025)에서 폴드 외 검증을 돌렸다.",
+      "keywords": [
+        "correlation network",
+        "tail risk attribution",
+        "downside beta",
+        "conditional MES",
+        "FOMC event study",
+        "cross-sectional features"
+      ],
+      "method": "구성 널(configuration null) 대비 삼각 구조량과 FOMC 전후 반응량을 자산별 특징으로 만들어 유연한 학습기에 넣는다.",
+      "one_liner": "상관 네트워크 특징으로 시스템 꼬리손실 귀속력을 높였다",
+      "relevance": 4,
+      "relevance_why": "일간 가격과 공개된 FOMC 일정만 쓰므로 데이터 확보 장벽이 사실상 없고 공개 검증 하니스까지 제공하지만, 매매 타이밍이 아닌 횡단면 귀속에 그쳐 진입·청산 규칙은 직접 설계해야 한다.",
+      "takeaway": "일간 종가와 FOMC 일정만 있으면 재현되니, 꼬리위험 예측 모델의 리스크 팩터로 얹어 포지션 한도나 헤지 비중을 조절한다."
+    },
+    "title": "The Omega Block: Correlation-Network Features that Improve Systemic Tail-Loss Attribution Beyond Downside Beta and Conditional MES"
+  },
+  "ssrn-7363443": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7363443",
+    "abstract": "We survey 28 leading Swiss pension fund consultants and asset managers to understand the factors and their ranking driving institutional asset allocation decisions. The risk tolerance of pension fund boards, target returns, and risk-free rates emerge as the most influential factors, while traditional portfolio theory predictors such as expected returns, volatility or individual risk aversion show limited practical relevance. Finally, we find that individual risk aversion of beneficiaries plays a limited role. Our findings suggest that while institutional investors may overcome individual suboptimal asset allocation choices, they face distinct institutional frictions that also influence asset allocation decisions.",
+    "affiliations": "University of Neuchatel - Institute of Financial Analysis and FHNW School of Business",
+    "authors": [
+      "Carolina Salva",
+      "Tim Alexander Kroencke"
+    ],
+    "categories": [
+      "Global Investment Strategy"
+    ],
+    "downloads": 6,
+    "ext_id": "7363443",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7363443",
+    "journals": [
+      "Global Investment Strategy"
+    ],
+    "listed_date": "2026-08-30",
+    "page_count": 37,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7363443.pdf?abstractid=7363443&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "GIS"
+    ],
+    "summarized_at": "2026-08-31T14:40:44+09:00",
+    "summary": {
+      "bullets": [
+        "기관 자산배분이 교과서 이론대로 움직이는지 검증한다",
+        "스위스 연금 컨설턴트·자산운용사 28곳을 설문해 요인 순위를 매긴다",
+        "이사회 위험 감내도, 목표 수익률, 무위험 금리가 상위를 차지한다",
+        "기대수익률·변동성·개인 위험회피는 실무 영향력이 미미하다"
+      ],
+      "data": "스위스 주요 연금 컨설턴트·자산운용사 28곳의 설문 응답이며, 별도 시계열 검증 구간은 없다.",
+      "keywords": [
+        "institutional asset allocation",
+        "pension funds",
+        "survey evidence",
+        "risk tolerance",
+        "portfolio theory"
+      ],
+      "method": "전문가 28명 대상 설문으로 자산배분 결정 요인의 중요도 순위를 집계한다.",
+      "one_liner": "스위스 연금 컨설턴트 설문으로 기관 자산배분의 실제 결정 요인을 밝힌 연구다.",
+      "relevance": 2,
+      "relevance_why": "설문 기반 정성 연구라 매매 규칙이 없고, 28곳 응답 같은 데이터는 재수집이 사실상 불가능하지만 평균-분산 이론의 실무 적합성을 반증한 점에서 가산점을 준다.",
+      "takeaway": "연금 자금 흐름을 예측할 때 기대수익률 대신 무위험 금리와 목표 수익률 갭을 대리 변수로 삼는다."
+    },
+    "title": "What Drives Institutional Asset Allocation? Survey Evidence from Pension Fund Advisors"
+  },
+  "ssrn-7363482": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7363482",
+    "abstract": "Buying an asset immediately after a large single day decline is one of the oldest ideas in short horizon trading, and it is easy to make it look profitable. This paper applies one event definition and one testing protocol to two asset classes, four US equity indices over seventy six years and, in results carried over from an earlier stage of the same research program, twenty cryptocurrency perpetual futures, and finds that almost all of the apparent effect is an artifact of how the events are counted. Large declines arrive on the same few calendar dates across instruments, so an event study that treats each instrument day as an independent observation is counting one market wide shock many times. In a panel of twenty eight single names, 1,361 declines at or below seven percent are only 791 distinct dates, and the pooled t statistic of 6.76 falls to 1.68 when each date is counted once. Three further corrections matter and are usually skipped: the depth thresholds that define such events are nested rather than independent, so a strong tail leaks into every shallower cut; testing several depths requires a familywise correction; and a stationary block bootstrap with a block length that is a large fraction of the sample is badly anti conservative, which in our own first pass manufactured a p value two orders of magnitude too small. After all four corrections, exactly one result survives in equities. Index declines at or below seven percent, 50 events on 25 dates clustering into 10 episodes since 1950, are followed by a mean next session return of 3.08 percent, with a familywise p value of 0.006 and a bootstrap interval from 1.34 to 4.84 percent. It is not crash window drift: the next session returns 3.08 percent while each of the following nine averages 0.01 percent, below the unconditional daily mean. It is implementable, since 83 percent of the move occurs after the opening print. Everything shallower is indistinguishable from zero, and the corresponding single name effect is absent. In crypto perpetuals the same mechanism fails completely, with an edge net of market beta that is negative in every regime and every year of a six year sample. The economics are the final constraint: an account trading the surviving tail signal deploys 0.05 percent of its capital time and beats Treasury bills by 0.44 points a year, which is a real effect that cannot carry a portfolio.",
+    "affiliations": "",
+    "authors": [
+      "Alexandr Dashyan"
+    ],
+    "categories": [
+      "Quantitative Methods in Investing & Financial Statement Analysis"
+    ],
+    "downloads": 9,
+    "ext_id": "7363482",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7363482",
+    "journals": [
+      "Quantitative Methods in Investing & Financial Statement Analysis"
+    ],
+    "listed_date": "2026-08-30",
+    "page_count": 22,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7363482.pdf?abstractid=7363482&mirid=1",
+    "report_path": "ssrn-7363482.html",
+    "src": "ssrn",
+    "src_cats": [
+      "QM"
+    ],
+    "summarized_at": "2026-08-31T14:40:47+09:00",
+    "summary": {
+      "bullets": [
+        "급락일이 종목 간 같은 날짜에 몰려 표본을 부풀린다",
+        "날짜 중복·임계값 중첩·다중검정·부트스트랩을 모두 보정",
+        "지수 -7% 급락만 살아남아 다음날 평균 3.08% 반등",
+        "암호화폐 무기한 선물에선 같은 신호가 전부 실패"
+      ],
+      "data": "1950년 이후 76년치 미국 주가지수 4개와 개별종목 28개, 그리고 6년치 암호화폐 무기한 선물 20종을 쓴다",
+      "keywords": [
+        "event clustering",
+        "mean reversion",
+        "multiple testing correction",
+        "block bootstrap",
+        "crypto perpetual futures"
+      ],
+      "method": "이벤트 스터디에 날짜 단위 집계, 패밀리와이즈 보정, 정상 블록 부트스트랩을 적용해 검정한다",
+      "one_liner": "급락 후 반등 효과는 대부분 중복 집계가 만든 착시다",
+      "relevance": 5,
+      "relevance_why": "일간 종가만 있으면 -7% 급락 규칙을 그대로 코딩할 수 있어 데이터 확보가 사실상 무료이고, 얕은 급락 매수라는 통념을 반증하며 검정 방법론까지 교정해 가산점을 준다",
+      "takeaway": "지수가 하루 -7% 이상 빠진 날 종가에 사서 다음날 청산하는 규칙만 쓰되, 자본 가동률이 0.05%라 단독 전략이 아닌 보조 신호로 붙인다"
+    },
+    "title": "The Tail Is the Only Signal: Flush Reversion in Equity Indices and Crypto Perpetual Futures"
+  },
+  "ssrn-7364940": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7364940",
+    "abstract": "Blockchain technology has emerged as a transformative innovation with the potential to enhance transparency, security, and efficiency in banking operations. However, empirical evidence on its effect on transaction transparency within the context of Industry 4.0 remains limited. This study investigates the relationship between blockchain adoption and transaction transparency in the banking sector, with particular attention to implementation practices, transparency outcomes, and the challenges influencing adoption. A quantitative descriptive research design was employed using a structured questionnaire administered to 120 banking professionals drawn from commercial, microfinance, and central banks. Data were analysed using descriptive statistics, Pearson correlation, and simple linear regression in SPSS, with the measurement instrument demonstrating good internal reliability (Cronbach's α = 0.858). The findings reveal a strong and statistically significant positive relationship between blockchain adoption and transaction transparency (r = 0.713, p < 0.001). Regression analysis further indicates that blockchain adoption explains 50.8% of the variance in transaction transparency (R² = 0.508), highlighting its substantial contribution to improving transparency within banking operations. Respondents identified enhanced auditability, fraud reduction, operational efficiency, and regulatory confidence as key benefits, while budget constraints, legacy system integration, regulatory uncertainty, and limited technical expertise were identified as major barriers to implementation. The study contributes to the growing literature on blockchain-enabled digital transformation by providing empirical evidence on the role of blockchain in enhancing transaction transparency within the Industry 4.0 paradigm. The findings offer practical insights for banking executives, policymakers, and regulators seeking to strengthen transparency, trust, and operational performance through blockchain adoption.",
+    "affiliations": "University of Aberdeen",
+    "authors": [
+      "Cephas Abban"
+    ],
+    "categories": [
+      "Technology & Investing"
+    ],
+    "downloads": 3,
+    "ext_id": "7364940",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7364940",
+    "journals": [
+      "Technology & Investing"
+    ],
+    "listed_date": "2026-08-29",
+    "page_count": 29,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7364940.pdf?abstractid=7364940&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "TI"
+    ],
+    "summarized_at": "2026-08-31T14:40:51+09:00",
+    "summary": {
+      "bullets": [
+        "블록체인이 은행 투명성을 높인다는 실증 근거가 부족하다",
+        "상업·마이크로파이낸스·중앙은행 종사자 120명에게 설문을 돌렸다",
+        "도입도와 투명성의 상관 0.713, 설명력 R²=0.508로 나왔다",
+        "감사 용이성과 사기 감소가 이점, 예산·레거시 통합이 걸림돌이다"
+      ],
+      "data": "은행 종사자 120명 대상 자체 설문 자료이며, 시계열 검증 구간은 없다.",
+      "keywords": [
+        "blockchain adoption",
+        "transaction transparency",
+        "banking",
+        "Industry 4.0",
+        "survey regression"
+      ],
+      "method": "구조화 설문 자료에 기술통계, 피어슨 상관, 단순 선형회귀를 적용했다.",
+      "one_liner": "설문으로 은행권 블록체인 도입과 거래 투명성의 상관을 검증했다.",
+      "relevance": 1,
+      "relevance_why": "가격·재무 데이터가 전혀 없고 핵심 변수가 120명 자체 설문 응답이라 외부에서 같은 데이터를 구할 방법이 없어 자동매매로 옮길 여지가 없다.",
+      "takeaway": "매매 신호로는 쓸 수 없고, 은행·핀테크 종목의 블록체인 도입 공시를 장기 테마 스크리닝의 정성 근거로만 참고한다."
+    },
+    "title": "Blockchain Adoption and Transaction Transparency in Banking: Empirical Evidence from the Industry 4.0 Paradigm"
+  },
+  "ssrn-7365578": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7365578",
+    "abstract": "When an AI system appears to generate equity alpha, five explanations compete with genuine skill: factor exposure, a weak benchmark, data leakage, model complexity, and an advantage a conventional system could replicate. We test all five on the same signal. Using the peer-reviewed replication of 212 published anomalies, language-model and agentic arms forecast which anomalies persist after their original samples end. The arms earn significant factor alpha-and none of it survives comparison with a passive portfolio of all published anomalies, which requires no model at all. Leakage does not explain the result: contamination made performance worse. The models' verbal mechanism judgements outperform their own numeric scores, but in-sample persistence absorbs them. A composite forecast scoring 0.400 owes 98.5% of that to a statistic we supplied. Apparent AI alpha here is a benchmarking artefact, not information.",
+    "affiliations": "Independent",
+    "authors": [
+      "Tushar Kholia"
+    ],
+    "categories": [
+      "Capital Markets: Market Efficiency"
+    ],
+    "downloads": 11,
+    "ext_id": "7365578",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7365578",
+    "journals": [
+      "Capital Markets: Market Efficiency"
+    ],
+    "listed_date": "2026-08-30",
+    "page_count": 42,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7365578.pdf?abstractid=7365578&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "MEF"
+    ],
+    "summarized_at": "2026-08-31T14:40:56+09:00",
+    "summary": {
+      "bullets": [
+        "AI 에이전트의 알파를 진짜 실력으로 볼 근거가 약하다",
+        "팩터 노출·약한 벤치마크·데이터 누출·복잡도·재현 가능성을 한 신호에 모두 검증",
+        "논문 이상현상 전체를 담은 패시브 포트폴리오를 못 이긴다",
+        "합성 예측치 0.400 중 98.5%가 연구진이 넣어준 통계에서 나온다"
+      ],
+      "data": "동료심사를 거쳐 재현한 212개 공표 이상현상(anomaly), 원논문 표본 종료 이후 구간으로 검증한다",
+      "keywords": [
+        "anomaly persistence",
+        "benchmark artefact",
+        "factor alpha",
+        "data leakage",
+        "agentic research",
+        "LLM forecasting"
+      ],
+      "method": "언어모델과 에이전트로 이상현상의 지속 여부를 예측하고, 다섯 가지 대안 설명을 같은 신호에 차례로 검증한다",
+      "one_liner": "AI가 만든 알파는 벤치마크를 잘못 잡아 생긴 착시다",
+      "relevance": 3,
+      "relevance_why": "매매 규칙은 없지만 AI 신호 검증 절차를 바로잡아 주고, 필요한 데이터가 공개된 이상현상 재현 데이터셋(Chen-Zimmermann 계열)이라 확보 난이도가 낮아 3점을 준다",
+      "takeaway": "AI 신호를 평가할 때 무모델 패시브 벤치마크를 반드시 대조군으로 세우고, 인샘플 지속성 지표를 통제한 뒤 남는 알파만 인정한다"
+    },
+    "title": "Attributing Apparent AI Alpha: Factor Exposure, Leakage, Complexity, and Reasoning in Agentic Equity Research"
+  },
+  "ssrn-7365579": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7365579",
+    "abstract": "Investment banking, shadow banking, and high-frequency trading are among those manifestations of modern finance that evoke fascination and mistrust in equal measure. Drawing on the academic literature and on current data from international institutions (Financial Stability Board, ESMA, SEC, LSEG), this paper examines what these lines of business actually are, how they function, who conducts them, and whose interests they serve. The analysis shows that all of the activities examined constitute legal, economically well-founded, and in large part regulated businesses whose questionable reputation stems chiefly from opacity, conflicts of interest, and isolated excesses. Investment banking is a highly concentrated business of a few large banks, with worldwide fee income of $60.5 billion in the first half of 2025 alone. Shadow banking, as recorded by the Financial Stability Board, comprises assets of $256.8 trillion and thus already 51 per cent of the global financial system. In high-frequency trading, roughly 55 per cent of US and up to 43 per cent of European equity trading volume is attributable to strategies whose reaction times are measured in millionths of a second; the costs associated with latency arbitrage amount to roughly five billion dollars per year worldwide (Aquilina, Budish, and O'Neill, 2022). For investors, a differentiated assessment follows: none of the businesses examined is disreputable per se, and none is free of risk. Those who understand how they work, who the participants are, and where the profits originate can weigh opportunities and dangers realistically — and may, in selected cases, participate in these markets themselves, whether through listed trading firms or through regulated credit funds.",
+    "affiliations": "",
+    "authors": [
+      "Roland Rupprechter"
+    ],
+    "categories": [
+      "Capital Markets: Asset Pricing & Valuation",
+      "Capital Markets: Market Efficiency"
+    ],
+    "downloads": 5,
+    "ext_id": "7365579",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7365579",
+    "journals": [
+      "Capital Markets: Asset Pricing & Valuation",
+      "Capital Markets: Market Efficiency"
+    ],
+    "listed_date": "2026-08-30",
+    "page_count": 29,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7365579.pdf?abstractid=7365579&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "APV",
+      "MEF"
+    ],
+    "summarized_at": "2026-08-31T14:40:57+09:00",
+    "summary": {
+      "bullets": [
+        "현대 금융의 세 축을 두고 불신과 매혹이 엇갈린다",
+        "학술 문헌과 FSB·ESMA·SEC·LSEG 공개 통계를 정리한다",
+        "그림자금융 자산 256.8조 달러로 전체 금융의 51%다",
+        "미국 주식 거래량의 약 55%를 고빈도매매가 차지한다"
+      ],
+      "data": "FSB·ESMA·SEC·LSEG의 공개 집계치와 2025년 상반기 수수료 수입 등 최신 산업 통계를 인용한다.",
+      "keywords": [
+        "high-frequency trading",
+        "shadow banking",
+        "investment banking",
+        "latency arbitrage",
+        "market microstructure"
+      ],
+      "method": "실증 모형 없이 문헌과 규제기관 통계를 종합한 서술적 개관이다.",
+      "one_liner": "투자은행·그림자금융·HFT의 실체와 규모를 정리한 개관 논문이다.",
+      "relevance": 1,
+      "relevance_why": "데이터는 FSB·SEC 공개 통계라 구하기 쉽지만 연 단위 집계라 매매 신호로 쓸 수 없고, 진입·청산 규칙도 없는 제도 개관이다.",
+      "takeaway": "직접 신호로 쓸 것은 없고, 지연차익(latency arbitrage) 비용 연 50억 달러라는 수치를 체결 비용 가정의 상한 근거로 참고한다."
+    },
+    "title": "What Lies Behind Investment Banking, Shadow Banking, and High-Frequency Trading? A Risky, Dangerous, Secretive, or Reputable Business?"
+  },
+  "ssrn-7365822": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7365822",
+    "abstract": "Satellite-to-ground quantum key distribution (QKD) has been proposed and experimentally demonstrated (e.g., China's Micius satellite) as a means of extending quantum-secured communication beyond fiber-optic range, with direct relevance to naval fleet communications and aircraft-to-base communications where mobile assets cannot rely on fixed fiber infrastructure. Unlike this research group's companion terrestrial BB84 study, which evaluated eavesdropper detection under near-ideal channel conditions, satellite links are dominated by a different physical effect: atmospheric photon loss, driven by slant-path absorption, scattering, beam divergence, and elevation-angle-dependent atmospheric thickness. This study models that effect using PKTron's density-matrix simulator, explicitly separating two physically distinct phenomena that are frequently conflated in simplified models: heralded photon loss (which reduces raw key rate without directly causing bit errors) and detector dark counts (a roughly constant background click rate that becomes proportionally significant, and increasingly drives quantum bit error rate, QBER, as the real signal weakens). Across four simulated transmittance scenarios representing satellite pass geometries from zenith (η=0.50) to near-horizon (η=0.005), sifted key count fell from 547 to 15 bits per 2,000 transmitted qubits, while QBER rose from 2.6% to 33.3%, driven by dark counts constituting an increasing fraction (1.3% to 60.0%) of all detector clicks. Hardware validation was performed on IBM Quantum's ibm_marrakesh processor for the surviving-photon measurement step, using the same classical channel model to determine which photons survived transmission. At η=0.50, hardware measurement yielded a 0.550 click rate (matching theoretical prediction) with 12 sifted bits and 0.000 QBER; at η=0.03, a larger sample (400 transmitted qubits) yielded a 0.037 click rate (again matching prediction) with 8 sifted bits and a QBER of 0.125, consistent with the simulated prediction of elevated error rates at low transmittance. These results confirm, in both simulation and on real quantum hardware, that atmospheric loss degrades satellite QKD primarily through reduced key rate and a distinct, gradual, dark-count-driven QBER increase-qualitatively different from the sharp, immediate QBER signature of eavesdropping demonstrated in this group's companion terrestrial QKD study-a distinction with direct relevance to link budget engineering for naval and airborne quantum-secured communication systems.",
+    "affiliations": "Centre of Excellence for Technology Quantum and AI Canada",
+    "authors": [
+      "Dr. Zuhair Ahmed"
+    ],
+    "categories": [
+      "Quantitative Methods in Investing & Financial Statement Analysis"
+    ],
+    "downloads": 5,
+    "ext_id": "7365822",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7365822",
+    "journals": [
+      "Quantitative Methods in Investing & Financial Statement Analysis"
+    ],
+    "listed_date": "2026-08-30",
+    "page_count": 9,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7365822.pdf?abstractid=7365822&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "QM"
+    ],
+    "summarized_at": "2026-08-31T14:41:04+09:00",
+    "summary": {
+      "bullets": [
+        "광섬유가 닿지 않는 함대·항공기 통신에 위성 QKD를 쓰려면 대기 손실 영향을 알아야 한다",
+        "헤럴드 광자 손실과 검출기 암계수를 분리해 모델링한다",
+        "천정(η=0.50)에서 지평선 부근(η=0.005)까지 시프트 키가 547→15비트로 줄고 QBER은 2.6%→33.3%로 올랐다",
+        "암계수가 만드는 QBER 상승은 완만해, 도청이 만드는 급격한 신호와 질적으로 다르다"
+      ],
+      "data": "금융 데이터는 없다. 투과율 시나리오 4종의 시뮬레이션과 IBM 양자 하드웨어 실측(2,000·400 큐비트 전송)을 쓴다.",
+      "keywords": [
+        "quantum key distribution",
+        "satellite communication",
+        "atmospheric loss",
+        "QBER",
+        "BB84",
+        "dark counts"
+      ],
+      "method": "PKTron 밀도행렬 시뮬레이터로 BB84 위성 링크를 모델링하고, IBM ibm_marrakesh 프로세서에서 생존 광자 측정 단계를 검증한다.",
+      "one_liner": "위성-지상 양자키분배에서 대기 손실이 키 생성률과 오류율에 미치는 영향을 시뮬레이션과 실제 양자 하드웨어로 검증했다.",
+      "relevance": 1,
+      "relevance_why": "가격·재무 데이터를 전혀 쓰지 않는 양자통신 물리 실험이라 매매 규칙으로 옮길 여지가 없고, 필요한 데이터 자체가 위성 링크 실측과 양자 프로세서 접근이라 확보 난이도가 극단적으로 높다.",
+      "takeaway": "트레이딩 신호로 쓸 여지는 없고, 저지연 통신 인프라의 물리적 한계를 이해하는 배경지식 정도다."
+    },
+    "title": "Satellite-to-Ground Quantum Key Distribution: Simulated and Hardware-Validated Effects of Atmospheric Loss on Secure Fleet and Aircraft-to-Base Communications"
+  },
+  "ssrn-7366094": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7366094",
+    "abstract": "We provide novel evidence on how investor attention interacts with corporate disclosure during the “full-consignment” shift in cross-border e-commerce, a reversal of the decade-long platform migration toward agency selling. Using 41,236 question-and-answer dialogues from China’s regulated investor interaction platforms for 118 listed supply-chain firms over 2022–2024, we document three counterintuitive findings. Consignment-related Q&A spikes generate overpricing that is larger and reverses faster than that associated with unregulated attention proxies: a five-day abnormal return of +2.9% fully reverses within six weeks, consistent with a credibility illusion created by exchange supervision. Attention also runs backward—investor questioning induces consignment narratives, concentrated in firms that never report consignment revenue. Finally, the market rewards narrative adopters while underreacting to genuine converters. The price-formation benefits of regulated interaction platforms are thus topic-contingent, and investor questioning constitutes a novel demand-side trigger of catering disclosure.​",
+    "affiliations": "Shenzhen University, The Hong Kong Polytechnic University and Hong Kong Polytechnic University",
+    "authors": [
+      "Yu Chen",
+      "Chen Yu",
+      "Gangyan Xu"
+    ],
+    "categories": [
+      "Global Equities, Exchanges & Investment Indices"
+    ],
+    "downloads": 7,
+    "ext_id": "7366094",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7366094",
+    "journals": [
+      "Global Equities, Exchanges & Investment Indices"
+    ],
+    "listed_date": "2026-08-28",
+    "page_count": 12,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7366094.pdf?abstractid=7366094&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "GEX"
+    ],
+    "summarized_at": "2026-08-31T14:41:06+09:00",
+    "summary": {
+      "bullets": [
+        "국경 간 전자상거래의 전면 위탁 전환기에 투자자 관심과 공시가 어떻게 얽히는지 묻는다",
+        "중국 규제 투자자 상호작용 플랫폼의 Q&A 41,236건을 텍스트로 분석한다",
+        "위탁 관련 질문 급증 후 5일 초과수익 +2.9%가 6주 안에 완전히 되돌아간다",
+        "질문이 오히려 서사를 만든다. 시장은 서사 채택 기업에 보상하고 실제 전환 기업은 과소반응한다"
+      ],
+      "data": "중국 상장 공급망 기업 118곳의 2022~2024년 투자자 Q&A 41,236건",
+      "keywords": [
+        "investor attention",
+        "textual analysis",
+        "catering disclosure",
+        "return reversal",
+        "cross-border e-commerce",
+        "event study"
+      ],
+      "method": "투자자 상호작용 플랫폼 Q&A 텍스트를 분석해 관심 급증 이벤트를 뽑고 사건연구로 초과수익과 되돌림을 측정한다",
+      "one_liner": "투자자 질문이 위탁 서사를 유도하고 과대평가를 낳는다는 증거",
+      "relevance": 3,
+      "relevance_why": "가격 반전 패턴은 명확한 신호지만, 중국 상호작용 플랫폼 Q&A를 직접 크롤링하고 위탁 관련 주제를 분류하는 텍스트 파이프라인을 스스로 구축해야 해 데이터 확보 난이도가 높다",
+      "takeaway": "위탁 관련 질문 급증일을 이벤트로 잡아 5일 모멘텀 후 6주 평균회귀를 노리는 역발상 숏 신호로 쓴다"
+    },
+    "title": "Investor attention and the cross-border e-commerce consignment shift: Textual evidence from investor interaction platforms​"
+  },
+  "ssrn-7366218": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7366218",
+    "abstract": "We examine whether NSE index derivatives exhibit a liquidity discontinuity at 15:00 IST, tied to mandatory broker RMS auto-square-off and, historically, the 15:00-15:30 IST closing-price VWAP window. Using kernel-density clustering, regression discontinuity design, and panel GMM on real Nifty 50 (2017) and Bank Nifty (2015-2026) minute data, plus a fully re-derived 62-stock cross-section, we find significantly elevated volatility-not directional returns-at 15:00-15:15, roughly twice as large for high-retailleverage stocks. Placebo tests at nearby cutoffs are also frequently significant, indicating an accelerating volatility curve into the close rather than a sharp, uniquely localized discontinuity.",
+    "affiliations": "affiliation not provided to SSRN",
+    "authors": [
+      "Mohd Atif  Mansuri"
+    ],
+    "categories": [
+      "Capital Markets: Market Microstructure"
+    ],
+    "downloads": 9,
+    "ext_id": "7366218",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7366218",
+    "journals": [
+      "Capital Markets: Market Microstructure"
+    ],
+    "listed_date": "2026-08-30",
+    "page_count": 16,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7366218.pdf?abstractid=7366218&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "MMS"
+    ],
+    "summarized_at": "2026-08-31T14:41:11+09:00",
+    "summary": {
+      "bullets": [
+        "인도 NSE 지수파생에서 15:00 IST 강제 청산이 유동성 단절을 낳는지 묻는다",
+        "커널밀도 군집화, 회귀불연속, 패널 GMM으로 분(minute) 단위 데이터를 분석한다",
+        "15:00~15:15에 방향성 없는 변동성만 뛰고, 개인 레버리지가 높은 종목은 그 폭이 약 두 배다",
+        "인접 시점 위약(placebo) 검정도 자주 유의해, 단절이 아니라 종가로 갈수록 가팔라지는 곡선이다"
+      ],
+      "data": "Nifty 50(2017)과 Bank Nifty(2015~2026) 분봉에 62개 종목 횡단면을 더해 검증한다",
+      "keywords": [
+        "intraday volatility",
+        "regression discontinuity",
+        "order book imbalance",
+        "index derivatives",
+        "auto square-off",
+        "panel GMM"
+      ],
+      "method": "커널밀도 군집화와 회귀불연속 설계(RDD), 패널 GMM을 함께 쓴다",
+      "one_liner": "인도 지수선물의 오후 3시 변동성 급등을 검증했다",
+      "relevance": 3,
+      "relevance_why": "인도 지수·종목 분봉은 유료지만 구하기 어렵지 않은 표준 데이터인 반면, 결과가 시간대별 변동성 특징에 그쳐 진입·청산 규칙까지는 직접 설계해야 한다",
+      "takeaway": "15:00~15:15 변동성 확대를 옵션 매도 회피나 스트래들 매수 시간대로 삼되, 단일 시점 이벤트가 아니라 종가로 이어지는 추세로 다룬다"
+    },
+    "title": "Intraday Liquidity Cascades, Order Book Imbalance, and Gamma Explosions: A Quantitative Analysis of the 3:00 PM Regime Shift in NSE Index Derivatives"
+  },
+  "ssrn-7366638": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7366638",
+    "abstract": "Climate policy uncertainty has become an important consideration for strategic asset allocation, particularly for long-horizon institutional investors whose portfolios are exposed to regulatory shifts and policy reversals. This paper examines how institutional investors can translate climate policy uncertainty into implementable strategic asset-allocation rules. Motivated by the distinction between risk and Knightian ambiguity, we use climate policy uncertainty as an observable state variable that governs the strength of portfolio shrinkage. Building on this idea, we propose two allocation rules. The first is an ambiguity-penalized robust mean -variance optimizer (ARMVO), which blends the maximum-Sharpe and minimum-variance portfolios with a blending intensity controlled by the uncertainty state. The second is an ambiguity-linked Black-Litterman model (ALBL), which shrinks the expected-return input toward the reverse-optimization equilibrium return using the same state variable. We implement the two rules using a rolling percentile of the newly developed climate policy uncertainty (CPU) index of f Gavriilidis et al. (2026) and test them on eleven global ETFs from 2012 to 2024. ALBL improves the Sharpe ratio from 0.119 for equal weighting to 0.286 and generates a certainty equivalent gain of 208 basis points per year for a risk-aversion parameter of γ=5, although the Sharpe-ratio improvement is not statistically significant at conventional levels. Asset-based attribution suggests that the improvement is not fully explained by a static allocation to the same ETFs. The paper contributes a transparent and implementable framework for ambiguity-aware strategic asset allocation.",
+    "affiliations": "Korea Investment Corporation and",
+    "authors": [
+      "jinsuk choi",
+      "Seongeun Kim"
+    ],
+    "categories": [
+      "Global Equities, Exchanges & Investment Indices"
+    ],
+    "downloads": 9,
+    "ext_id": "7366638",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7366638",
+    "journals": [
+      "Global Equities, Exchanges & Investment Indices"
+    ],
+    "listed_date": "2026-08-28",
+    "page_count": 19,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7366638.pdf?abstractid=7366638&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "GEX"
+    ],
+    "summarized_at": "2026-08-31T14:41:12+09:00",
+    "summary": {
+      "bullets": [
+        "규제 변화와 정책 번복에 노출된 장기 기관투자자의 배분 문제",
+        "리스크와 나이트식 모호성을 구분해 불확실성을 상태변수로 삼다",
+        "ARMVO는 최대샤프와 최소분산을, ALBL은 기대수익을 균형수익 쪽으로 축소",
+        "ALBL 샤프가 0.119에서 0.286으로 올랐으나 통계적 유의성은 없다"
+      ],
+      "data": "Gavriilidis et al.(2026)의 기후정책 불확실성(CPU) 지수와 글로벌 ETF 11종, 2012~2024년 구간을 쓴다",
+      "keywords": [
+        "climate policy uncertainty",
+        "Black-Litterman",
+        "robust mean-variance",
+        "portfolio shrinkage",
+        "strategic asset allocation",
+        "Knightian ambiguity"
+      ],
+      "method": "기후정책 불확실성 지수의 롤링 백분위로 혼합 강도를 정한 로버스트 평균-분산(mean-variance) 최적화와 블랙-리터만(Black-Litterman) 모형을 쓴다",
+      "one_liner": "기후정책 불확실성으로 포트폴리오 축소 강도를 조절한다",
+      "relevance": 3,
+      "relevance_why": "ETF 가격은 쉽게 구하고 CPU 지수도 공개 배포본을 받으면 되지만, 월 단위 저빈도 신호라 진입·청산 규칙이 아닌 배분 기법 수준에 머문다",
+      "takeaway": "CPU 백분위를 축소 강도 파라미터로 매핑해 기존 자산배분 엔진의 리밸런싱에 얹어 쓴다"
+    },
+    "title": "Climate Policy Uncertainty and Ambiguity-Aware Strategic Asset Allocation"
+  },
+  "ssrn-7372261": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7372261",
+    "abstract": "This study examines whether pre-expiration stock liquidity is associated with cross-sectional variation in price reactions to a potential increase in the supply of tradable shares, using IPO lockup expirations as pre-scheduled events. We construct a hand-collected dataset of lockup contracts from IPO disclosure documents for 522 IPO firms listed on the Mothers market of the Tokyo Stock Exchange between 2012 and 2021. Because lockup expiration dates are determined at the time of the IPO, this setting mitigates concerns that event timing is chosen in response to contemporaneous market conditions. We find a negative median cumulative abnormal return (CAR) around lockup expirations, and the magnitude of the reaction varies systematically with pre-expiration liquidity. Firms with higher pre-expiration turnover experience higher CAR, and this association remains significant in the joint specification. Higher Amihud illiquidity is associated with lower CAR in separate specifications, whereas wider bid-ask spreads show a marginally significant negative association; neither association remains statistically significant in the joint specification. The liquidity–CAR association is concentrated in the post-expiration window and is not statistically significant in the pre-expiration window, consistent with variation in post-expiration price reactions rather than pre-existing return trends. Overall, pre-expiration liquidity is associated with cross-sectional variation in post-expiration price reactions, with the most robust evidence coming from turnover.",
+    "affiliations": "and",
+    "authors": [
+      "Kenta Kitsuka",
+      "Mikiharu Noma"
+    ],
+    "categories": [
+      "Capital Markets: Market Efficiency",
+      "Capital Markets: Market Microstructure"
+    ],
+    "downloads": 2,
+    "ext_id": "7372261",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7372261",
+    "journals": [
+      "Capital Markets: Market Efficiency",
+      "Capital Markets: Market Microstructure"
+    ],
+    "listed_date": "2026-08-30",
+    "page_count": 47,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7372261.pdf?abstractid=7372261&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "MEF",
+      "MMS"
+    ],
+    "summarized_at": "2026-08-31T14:41:18+09:00",
+    "summary": {
+      "bullets": [
+        "락업 해제로 유통 물량이 늘 때 종목별 주가 반응 차이를 설명한다",
+        "IPO 공시에서 락업 계약을 수작업으로 모아 누적초과수익(CAR)을 회귀한다",
+        "해제 전 회전율이 높을수록 CAR가 높다. 회전율이 가장 견고한 변수다",
+        "유동성과 CAR의 관계는 해제 후 구간에만 나타난다"
+      ],
+      "data": "도쿄증권거래소 마더스 시장 2012~2021년 상장 IPO 522곳의 락업 계약과 주가 자료다",
+      "keywords": [
+        "IPO lockup expiration",
+        "event study",
+        "cumulative abnormal return",
+        "turnover",
+        "Amihud illiquidity",
+        "supply shock"
+      ],
+      "method": "락업 해제일 기준 사건연구로 CAR를 구하고, 해제 전 회전율·아미후드(Amihud) 비유동성·호가 스프레드에 개별·결합 회귀를 돌린다",
+      "one_liner": "IPO 락업 해제 전 유동성이 해제 후 주가 반응을 가른다",
+      "relevance": 4,
+      "relevance_why": "락업 해제일은 상장 시점에 확정돼 사전에 알 수 있고 회전율·수익률은 표준 데이터라 구현이 쉽지만, 락업 계약 조건 자체는 공시 문서를 수작업으로 파싱해야 해 유니버스 구축에 손이 든다",
+      "takeaway": "락업 해제일을 미리 달력에 넣고, 해제 전 회전율이 낮은 종목만 골라 해제 전후로 숏 또는 회피 규칙을 짠다"
+    },
+    "title": "Pre-Expiration Liquidity and Price Reactions to IPO Lockup Expirations"
+  },
+  "ssrn-7372321": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7372321",
+    "abstract": "This study analyses whether gold acts as a hedge or safe haven for the Indian stock market using long-run and crisis-specific return-based methods. Monthly data from 2008–2025 and daily data for the Global Financial Crisis, COVID-19, and the Russia–Ukraine war are used to estimate Pearson and Spearman correlations between gold and Nifty returns, with 60, 120, and 240-day windows. Results show moderate negative long-run correlation, indicating partial hedging, while safe-haven behaviour varies across crises and is strongest during the Russia–Ukraine war, highlighting time-varying diversification benefits.",
+    "affiliations": "Ranchi University and affiliation not provided to SSRN",
+    "authors": [
+      "Amit Kumar",
+      "Nachiketa Bagh"
+    ],
+    "categories": [
+      "Capital Markets: Asset Pricing & Valuation"
+    ],
+    "downloads": 5,
+    "ext_id": "7372321",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7372321",
+    "journals": [
+      "Capital Markets: Asset Pricing & Valuation"
+    ],
+    "listed_date": "2026-08-30",
+    "page_count": 9,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7372321.pdf?abstractid=7372321&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "APV"
+    ],
+    "summarized_at": "2026-08-31T14:41:18+09:00",
+    "summary": {
+      "bullets": [
+        "금이 인도 주식의 위기 방어 자산인지 불분명하다",
+        "장기 구간과 위기 구간을 나눠 상관계수를 계산한다",
+        "장기로는 약한 음의 상관, 부분적 헤지에 그친다",
+        "안전자산 성격은 위기마다 다르고 러-우 전쟁 때 가장 강하다"
+      ],
+      "data": "2008~2025년 월간 데이터와 글로벌 금융위기·코로나19·러시아-우크라이나 전쟁 구간의 일간 데이터를 쓴다",
+      "keywords": [
+        "gold",
+        "safe haven",
+        "hedge",
+        "rolling correlation",
+        "Nifty",
+        "crisis regime"
+      ],
+      "method": "금-Nifty 수익률의 피어슨·스피어만 상관계수를 60/120/240일 롤링 창으로 추정한다",
+      "one_liner": "인도 증시에서 금이 헤지·안전자산인지 상관계수로 검증한다",
+      "relevance": 3,
+      "relevance_why": "금·Nifty 일간 가격은 무료로 쉽게 구하고 롤링 상관도 바로 코딩되지만, 매매 규칙 없이 상관 진단에 머물러 배분 로직은 직접 설계해야 한다",
+      "takeaway": "금-지수 롤링 상관을 국면 판별 지표로 삼아 위기 국면에서만 금 비중을 늘리는 규칙을 짤 수 있다"
+    },
+    "title": "Is Gold a Safe Haven? Crisis-Specific and Long-Run Evidence from Return Correlations in India"
+  },
+  "ssrn-7372430": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7372430",
+    "abstract": "This paper evaluates the extent to which standard quantitative sovereign default models exhibit equity return responses around default risk spikes comparable to the data. It finds that they largely do not. Hébert and Schreger (2017) employ a high-frequency event study around legal rulings and report a 10% increase in default risk causes a 6% decline in firms’ market value. A workhorse sovereign default model augmented with capital accumulation delivers only a 0.2% equity value drop. Three features account for the disconnect: the absence of private capital outflows and trade surpluses during default, the model’s counterfactual prediction of rising dividends, and the nominal depreciation embedded in the dollar-denominated index used in the data.",
+    "affiliations": "University of Seoul",
+    "authors": [
+      "Ilhwan Song"
+    ],
+    "categories": [
+      "Capital Markets: Asset Pricing & Valuation"
+    ],
+    "downloads": 0,
+    "ext_id": "7372430",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7372430",
+    "journals": [
+      "Capital Markets: Asset Pricing & Valuation"
+    ],
+    "listed_date": "2026-08-30",
+    "page_count": 39,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7372430.pdf?abstractid=7372430&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "APV"
+    ],
+    "summarized_at": "2026-08-31T14:41:24+09:00",
+    "summary": {
+      "bullets": [
+        "국가부도 모형이 실제 주식 반응을 재현하는지 묻는다",
+        "자본축적을 넣은 표준 국가부도 모형과 고빈도 사건연구를 비교한다",
+        "데이터의 6% 하락 대비 모형은 0.2%만 떨어진다",
+        "자본유출·무역흑자 부재, 배당 상승 예측, 달러표시 지수의 환율 효과가 원인이다"
+      ],
+      "data": "Hébert and Schreger(2017)의 아르헨티나 법적 판결 전후 고빈도 사건연구 결과를 벤치마크로 쓴다",
+      "keywords": [
+        "sovereign default risk",
+        "equity returns",
+        "event study",
+        "capital accumulation",
+        "CDS spreads",
+        "currency depreciation"
+      ],
+      "method": "자본축적을 추가한 정량적 국가부도 모형을 풀어 법원 판결 사건연구 결과와 대조한다",
+      "one_liner": "국가부도 위험 급등 때 주가 반응을 표준 모형이 못 맞춘다는 분석",
+      "relevance": 2,
+      "relevance_why": "거시모형 보정 연구라 매매 규칙이 없고, CDS 스프레드와 판결 시점 고빈도 데이터는 유료·수작업 확보가 필요해 진입장벽이 크다",
+      "takeaway": "국가 CDS 스프레드 급등 국면에서 달러표시 주가지수를 볼 때 환율 성분을 분리해야 실제 주식 충격을 과대평가하지 않는다"
+    },
+    "title": "A Quantitative Analysis of the Equity Return Consequences of Sovereign Default Risk"
+  },
+  "ssrn-7375459": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7375459",
+    "abstract": "Retail investors reveal in public which stocks they are crowding into, and those stocks become more volatile the following week. Option prices, the market's forecast of that volatility, absorb only about half the signal. Measured from 86.7 million Reddit comments, attention keeps half its predictive power after the full surface is observed, and nonlinear readings do not close the gap. The absorbed half runs through the at-the-money term structure, not the smile, which attention nonetheless reshapes. The unabsorbed half improves volatility forecasts out of sample. Controlling for implied volatility does not control for what retail attention predicts.",
+    "affiliations": "",
+    "authors": [
+      "Pouya Behmaram"
+    ],
+    "categories": [
+      "Capital Markets: Asset Pricing & Valuation",
+      "Capital Markets: Market Efficiency",
+      "Capital Markets: Market Microstructure"
+    ],
+    "downloads": 6,
+    "ext_id": "7375459",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7375459",
+    "journals": [
+      "Capital Markets: Asset Pricing & Valuation",
+      "Capital Markets: Market Efficiency",
+      "Capital Markets: Market Microstructure"
+    ],
+    "listed_date": "2026-08-31",
+    "page_count": 53,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7375459.pdf?abstractid=7375459&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "APV",
+      "MEF",
+      "MMS"
+    ],
+    "summarized_at": "2026-08-31T14:41:27+09:00",
+    "summary": {
+      "bullets": [
+        "개인투자자가 몰리는 종목은 다음 주 변동성이 뛴다",
+        "레딧 댓글 8670만 건으로 관심도를 만들어 내재변동성과 겨룬다",
+        "옵션이 흡수한 절반은 등가격 기간구조에 실린다",
+        "남은 절반은 표본 밖 변동성 예측을 개선한다"
+      ],
+      "data": "레딧 댓글 8670만 건과 미국 주식 옵션 표면 자료를 쓰며, 표본 밖 변동성 예측으로 검증한다. 구간은 초록에 없다",
+      "keywords": [
+        "retail attention",
+        "implied volatility",
+        "Reddit sentiment",
+        "volatility forecasting",
+        "option term structure",
+        "market efficiency"
+      ],
+      "method": "레딧 댓글에서 뽑은 관심도 지표를 옵션 표면(내재변동성 곡면) 전체와 비선형 설정까지 통제하며 주간 실현변동성에 회귀한다",
+      "one_liner": "레딧 관심도가 예고하는 변동성의 절반을 옵션가격이 놓친다",
+      "relevance": 4,
+      "relevance_why": "레딧 댓글은 Pushshift나 API로 수집 가능하고 옵션 표면도 표준 유료 데이터라 확보 난이도가 중간이며, 주간 리밸런싱 변동성 매수 규칙으로 옮기기 쉽다",
+      "takeaway": "레딧 관심도를 내재변동성 위에 얹어 변동성 예측을 보정하고, 관심도가 급증한 종목의 등가격 옵션을 주간 단위로 매수하는 신호로 쓴다"
+    },
+    "title": "Half the Signal: Retail Attention and the Price of Volatility"
+  },
+  "ssrn-7375498": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7375498",
+    "abstract": "This paper investigates whether unsupervised machine learning can identify economically meaningful regimes in the US equity market and whether such regimes provide genuine forecasting or investment value. Using a daily dataset of 3,823 observations spanning 18 October 2010 to 31 December 2025, sixteen standardized market, volatility, and macro-financial features are reduced via Principal Component Analysis (eight components explaining 92.1% of variance) and partitioned using K-Means clustering, validated against a Gaussian Mixture Model. The optimal solution, selected by silhouette score, identifies two statistically and economically distinct regimes, subsequently labelled Bull / Low-Risk (n = 3,201; 83.7% of observations) and Bear / High-Risk (n = 622; 16.3%). The regimes differ significantly across mean return, volatility, VIX level, momentum, and drawdown (Welch t-tests, all p < .001; Cohen's d up to 2.94), and exhibit strong persistence, with Bull-to-Bull and Bear-to-Bear transition probabilities of 96.5% and 81.8% respectively. A chronological, one-step-ahead out-of-sample forecasting exercise compares Logistic Regression, Random Forest, and Gradient Boosting classifiers against a naive persistence benchmark (\"tomorrow's regime equals today's regime\"). The persistence benchmark achieved the highest out-of-sample accuracy (93.55%), exceeding Random Forest (91.89%), Logistic Regression (89.80%), and Gradient Boosting (89.01%). This finding does not support the hypothesis that supervised machine learning provides superior next-day regime forecasting relative to a simple persistence rule. A regime-conditioned tactical investment strategy (fully invested in Bull, fully divested in Bear, signal lagged by one day, 10 basis point transaction costs) reduced maximum drawdown relative to buy-and-hold (-28.20% versus-33.92%) but underperformed on both compound annual growth rate (5.80% versus 12.68%) and Sharpe ratio (0.546 versus 0.780). Forward-return analysis indicates that returns following Bear/High-Risk observations were, on average, higher than returns following Bull/Low-Risk observations at 1-, 5-, and 20-day horizons, offering a plausible explanation for the strategy's return shortfall despite its lower drawdown. The study concludes that regime identification is statistically robust and economically interpretable, but that regime identification is not equivalent to reliable regime forecasting or to superior risk-adjusted investment performance. The paper's contribution lies in this explicit separation of unsupervised classification, supervised forecasting, and economic usefulness-three distinct questions that are frequently conflated in applied machine learning finance research. A supplementary robustness check (Section XI.J), which widens the feature set to twenty-nine variables by restoring the raw price, volume, and moving-average series the main specification deliberately excludes, produces a weaker four-regime solution and a severe train/test distribution shift that collapses out-of-sample forecasting performance-a negative result that, if anything, reinforces the original feature-exclusion rationale in Section IV.",
+    "affiliations": "National Law University Meghalaya",
+    "authors": [
+      "Devanga Goswami"
+    ],
+    "categories": [
+      "Quantitative Methods in Investing & Financial Statement Analysis"
+    ],
+    "downloads": 7,
+    "ext_id": "7375498",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7375498",
+    "journals": [
+      "Quantitative Methods in Investing & Financial Statement Analysis"
+    ],
+    "listed_date": "2026-08-31",
+    "page_count": 23,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7375498.pdf?abstractid=7375498&mirid=1",
+    "report_path": "ssrn-7375498.html",
+    "src": "ssrn",
+    "src_cats": [
+      "QM"
+    ],
+    "summarized_at": "2026-08-31T14:41:37+09:00",
+    "summary": {
+      "bullets": [
+        "비지도 학습이 찾은 시장 국면이 실제 예측·투자 가치를 갖는지 검증",
+        "PCA로 16개 지표를 압축하고 K-Means로 강세/약세 두 국면을 분리",
+        "다음날 국면 예측은 단순 지속 규칙(93.55%)이 ML 3종을 모두 앞섰다",
+        "국면 기반 전술 전략은 MDD만 줄었고 CAGR·샤프는 매수후보유에 뒤졌다"
+      ],
+      "data": "2010년 10월 18일부터 2025년 12월 31일까지 미국 주식시장 일별 3,823 관측치를 쓰고, 시간순 표본외 검증으로 평가한다",
+      "keywords": [
+        "market regime detection",
+        "K-Means clustering",
+        "PCA",
+        "persistence benchmark",
+        "regime-conditioned strategy",
+        "out-of-sample forecasting"
+      ],
+      "method": "표준화한 16개 특징을 주성분분석(PCA)으로 8개 성분에 압축한 뒤 K-Means로 군집화하고, 가우시안 혼합 모형(GMM)으로 교차 검증한다. 예측은 로지스틱 회귀·랜덤 포레스트·그래디언트 부스팅을 시계열 순서대로 1스텝 예측해 지속 벤치마크와 비교한다.",
+      "one_liner": "레짐 식별은 되지만 예측·수익으로는 이어지지 않음을 보인 연구다",
+      "relevance": 4,
+      "relevance_why": "가격·VIX·거시지표 등 공개 표준 데이터만 쓰므로 재현이 쉽고, 국면 기반 타이밍 전략이 매수후보유를 이긴다는 통념을 거래비용까지 반영해 반증한 점에 가산점을 준다",
+      "takeaway": "국면 분류는 리스크 대시보드나 포지션 사이징 보조 지표로만 쓰고, 다음날 국면 예측 모델을 새로 얹는 대신 '오늘 국면 유지' 규칙을 기준선으로 삼는다"
+    },
+    "title": "Identifying and Forecasting US Equity Market Regimes: An Unsupervised and Supervised Machine Learning Analysis of Bull and Bear Market States, 2010-2025 A Research Paper on Quantitative Finance and Market Regime Classification"
+  },
+  "ssrn-7375618": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7375618",
+    "abstract": "A fund can look greener without its manager shifting the portfolio toward greener firms. Independent measures agree that U.S. mutual fund carbon intensity fell by more than a third, yet portfolio reweighting explains only 1.2 percent. Most of the decline instead comes from changing issuer emissions, sales denominators, estimates, and coverage. These inputs reverse the institutional sector trend and reshuffle manager rankings. Attribution replaces two in five managers selected for a green mandate. The replacements subsequently trade greener than those they displace. Carbon scores measure portfolio exposure; attribution reveals who deserves credit for changing it.",
+    "affiliations": "and Queen's University - Smith School of Business",
+    "authors": [
+      "Pouya Behmaram",
+      "Evan Jo"
+    ],
+    "categories": [
+      "Capital Markets: Market Efficiency"
+    ],
+    "downloads": 6,
+    "ext_id": "7375618",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7375618",
+    "journals": [
+      "Capital Markets: Market Efficiency"
+    ],
+    "listed_date": "2026-08-31",
+    "page_count": 54,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7375618.pdf?abstractid=7375618&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "MEF"
+    ],
+    "summarized_at": "2026-08-31T14:41:37+09:00",
+    "summary": {
+      "bullets": [
+        "펀드가 종목을 안 바꿔도 탄소점수는 내려간다",
+        "미국 뮤추얼펀드 탄소집약도 하락분을 요인별로 분해한다",
+        "하락의 1.2%만 포트폴리오 재조정 때문이다",
+        "귀속 분석을 넣으면 그린 위임 선정자 5명 중 2명이 바뀐다"
+      ],
+      "data": "미국 뮤추얼펀드 보유내역과 복수의 독립 탄소집약도 데이터를 쓰지만 구체적 검증 구간은 밝히지 않는다",
+      "keywords": [
+        "carbon intensity",
+        "ESG ratings",
+        "performance attribution",
+        "mutual funds",
+        "data revisions",
+        "greenwashing"
+      ],
+      "method": "탄소집약도 변화를 포트폴리오 재조정과 발행사 배출·매출 분모·추정치·커버리지 변화로 나누는 귀속(attribution) 분해다",
+      "one_liner": "펀드 탄소점수 하락의 원인을 분해해 관리자 공로를 가린다",
+      "relevance": 2,
+      "relevance_why": "탄소점수 하락의 대부분이 데이터 개정 탓이라는 반증이 유용해 가산점을 줬지만, 시점별 배출량 추정치와 커버리지 이력을 갖춘 유료 ESG 데이터가 없으면 재현조차 어렵다",
+      "takeaway": "ESG 점수를 신호로 쓸 때 점수 변화에서 데이터 개정분을 걷어내고 실제 매매로 생긴 부분만 남겨 쓴다"
+    },
+    "title": "Who Gets Credit When Carbon Scores Fall?"
+  },
+  "ssrn-7375738": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7375738",
+    "abstract": "Passive inflows do not make firms issue equity indiscriminately. They redirect corporate share supply toward firms with real opportunities. I isolate those opportunities using federal purchasing growth in markets served by a firm's customers, which raises the firm's own sales. Index funds mostly get their shares from compensation and other transactions that bring the firm no money, and inflows raise no offerings on average. When a real opportunity arrives, supply shifts toward primary shares that raise cash. Firms already indexed issue far less against the same opportunity. Indexed ownership decides which opportunities get financed with new equity.",
+    "affiliations": "",
+    "authors": [
+      "Pouya Behmaram"
+    ],
+    "categories": [
+      "Capital Markets: Asset Pricing & Valuation",
+      "Capital Markets: Market Efficiency"
+    ],
+    "downloads": 5,
+    "ext_id": "7375738",
+    "first_seen": "2026-08-31T14:16:13+09:00",
+    "id": "ssrn-7375738",
+    "journals": [
+      "Capital Markets: Asset Pricing & Valuation",
+      "Capital Markets: Market Efficiency"
+    ],
+    "listed_date": "2026-08-31",
+    "page_count": 73,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7375738.pdf?abstractid=7375738&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "APV",
+      "MEF"
+    ],
+    "summarized_at": "2026-08-31T14:41:38+09:00",
+    "summary": {
+      "bullets": [
+        "패시브 자금 유입이 무분별한 증자를 부르는지 따진다",
+        "고객사 시장의 연방 조달 증가로 실물 기회를 분리한다",
+        "평균적으로 증자는 늘지 않고, 기회가 올 때만 유상증자로 쏠린다",
+        "이미 지수에 편입된 기업은 같은 기회에도 발행을 훨씬 줄인다"
+      ],
+      "data": "미국 상장기업의 지수 보유 지분과 주식 발행 자료에 연방 조달 통계를 결합했다. 구체적 표본 구간은 초록에 없다",
+      "keywords": [
+        "passive investing",
+        "index funds",
+        "equity issuance",
+        "share supply",
+        "seasoned equity offerings",
+        "federal procurement"
+      ],
+      "method": "고객사가 속한 시장의 연방 조달 증가율을 도구변수로 삼아 지수 편입 지분과 신주 발행의 관계를 추정한다",
+      "one_liner": "패시브 자금이 신주 발행을 어디로 돌리는지 밝힌다",
+      "relevance": 2,
+      "relevance_why": "지수 보유 지분과 발행 유형은 표준 데이터로 얻지만, 고객사 시장별 연방 조달 자료는 산업 연결과 수작업 매칭이 필요해 확보 난이도가 높다",
+      "takeaway": "지수 편입 지분이 높으면서 수요 충격을 맞은 기업을 희석 위험이 낮은 후보로 걸러내는 필터로 쓴다"
+    },
+    "title": "Passive Investing and the Supply of New Shares"
+  }
+}

@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Identifying and Forecasting US Equity Market Regimes: An Unsupervised and Supervised Machine Learning Analysis of Bull and Bear Market States, 2010-2025 A Research Paper on Quantitative Finance and Market Regime Classification — 상세 리포트</title>
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --panel-2:#fbfcfd; --ink:#16191d; --muted:#5c6672;
+  --line:#e2e6ea; --accent:#3b6ef0; --accent-soft:#eaf0fe;
+  --pm:#3b6ef0; --st:#0f9d76; --tr:#d4791f; --ssrn:#8b5cf6; --other:#7a68c9;
+  --star:#f0a91b; --shadow:0 1px 2px rgba(16,24,40,.06),0 4px 14px rgba(16,24,40,.05);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#101317; --panel:#181c22; --panel-2:#1e232a; --ink:#e7ebf0; --muted:#98a3b0;
+    --line:#2a3038; --accent:#7ea3ff; --accent-soft:#1d2637;
+    --pm:#7ea3ff; --st:#4bd6a8; --tr:#f0ad5e; --ssrn:#b18cff; --other:#b0a0f0;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.25);
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:15px/1.65 -apple-system,"Segoe UI","Malgun Gothic",Roboto,"Helvetica Neue",sans-serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:32px 20px 140px}
+a{color:var(--accent)}
+
+header.top{margin-bottom:24px}
+h1{font-size:26px;margin:0 0 6px;letter-spacing:-.02em}
+.sub{color:var(--muted);font-size:13.5px;margin:0}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:9px 13px;font-size:13px;box-shadow:var(--shadow)}
+.stat b{font-size:16px;margin-right:5px}
+
+.controls{position:sticky;top:0;z-index:20;background:var(--bg);
+  padding:12px 0 10px;margin:20px 0 8px;border-bottom:1px solid var(--line)}
+.row{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:7px}
+.row:last-child{margin-bottom:0}
+.rowlabel{font-size:11.5px;color:var(--muted);font-weight:700;letter-spacing:.06em;
+  min-width:38px}
+.chip{border:1px solid var(--line);background:var(--panel);color:var(--muted);
+  border-radius:999px;padding:5px 12px;font-size:12.5px;cursor:pointer;
+  font-family:inherit;transition:.12s;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);
+  color:var(--accent);font-weight:600}
+.chip:hover{border-color:var(--accent)}
+#q{flex:1;min-width:180px;padding:7px 12px;border:1px solid var(--line);border-radius:8px;
+  background:var(--panel);color:var(--ink);font:inherit;font-size:13.5px}
+#q:focus{outline:2px solid var(--accent);outline-offset:-1px}
+select{padding:7px 10px;border:1px solid var(--line);border-radius:8px;
+  background:var(--panel);color:var(--ink);font:inherit;font-size:13.5px}
+.count{color:var(--muted);font-size:12.5px;margin-left:auto}
+
+h2.day{font-size:15px;margin:30px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--line);
+  color:var(--muted);font-weight:600;letter-spacing:.02em}
+h2.day span{color:var(--ink)}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow)}
+.card.hide{display:none}
+.badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+.badge{font-size:11px;font-weight:700;letter-spacing:.04em;padding:2.5px 8px;
+  border-radius:5px;color:#fff}
+.b-PM{background:var(--pm)} .b-ST{background:var(--st)} .b-TR{background:var(--tr)}
+.b-ssrn{background:var(--ssrn)} .b-XX{background:var(--other)}
+.badge.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);font-weight:600}
+.stars{color:var(--star);font-size:12.5px;letter-spacing:1px;margin-left:auto}
+.stars i{color:var(--line);font-style:normal}
+
+.title{font-size:16.5px;font-weight:650;line-height:1.4;margin:0 0 6px;letter-spacing:-.01em}
+.title a{color:var(--ink);text-decoration:none}
+.title a:hover{color:var(--accent)}
+.oneliner{margin:0 0 8px;font-size:14.5px;color:var(--ink)}
+.oneliner::before{content:"\25B8 ";color:var(--accent)}
+.authors{margin:0;color:var(--muted);font-size:12.5px}
+
+.detail{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+.detail[hidden]{display:none}
+.detail ul{margin:0 0 12px;padding-left:19px}
+.detail li{margin-bottom:4px}
+.kv{display:grid;grid-template-columns:76px 1fr;gap:5px 10px;font-size:13.5px;margin-bottom:12px}
+.kv dt{color:var(--muted);font-weight:600}
+.kv dd{margin:0}
+.keys{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.key{font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);
+  border-radius:5px;padding:2px 7px;color:var(--muted)}
+.abs{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;
+  padding:11px 13px;font-size:13px;color:var(--muted);line-height:1.7}
+.abs b{color:var(--ink);display:block;margin-bottom:4px;font-size:12px;letter-spacing:.03em}
+
+.actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.btn{border:1px solid var(--line);background:var(--panel);color:var(--muted);
+  border-radius:7px;padding:5.5px 12px;font-size:12.5px;cursor:pointer;
+  font-family:inherit;text-decoration:none;display:inline-block;transition:.12s}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{filter:brightness(1.08);color:#fff}
+.btn.queued{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:600}
+.btn.done{border-color:var(--st);color:var(--st)}
+.btn.failed{border-color:var(--tr);color:var(--tr)}
+#livebadge{font-size:11.5px;color:var(--st);font-weight:700;letter-spacing:.03em;
+  display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+#livebadge::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--st);
+  animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--panel);
+  border-top:1px solid var(--line);box-shadow:0 -4px 20px rgba(0,0,0,.10);
+  padding:12px 20px;display:none}
+.bar.on{display:block}
+.bar-in{max-width:1000px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.bar code{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;
+  padding:4px 8px;font-size:12px;flex:1;min-width:200px;overflow:auto;white-space:nowrap}
+.empty{color:var(--muted);text-align:center;padding:50px 0}
+footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);
+  color:var(--muted);font-size:12px}
+@media print{.controls,.bar,.actions{display:none!important}.detail{display:block!important}
+  .card{break-inside:avoid;box-shadow:none}}
+
+.doc{max-width:780px}
+.doc h1{font-size:24px;line-height:1.35;margin:0 0 10px}
+.doc h2{font-size:19px;margin:38px 0 12px;padding-bottom:7px;border-bottom:2px solid var(--accent);
+  letter-spacing:-.01em}
+.doc h3{font-size:15.5px;margin:22px 0 8px;color:var(--accent)}
+.doc p{margin:0 0 14px}
+.doc ul,.doc ol{margin:0 0 16px;padding-left:22px}
+.doc li{margin-bottom:7px}
+.doc blockquote{margin:0 0 18px;padding:14px 18px;border-left:3px solid var(--accent);
+  background:var(--accent-soft);border-radius:0 8px 8px 0;font-size:15.5px}
+.doc blockquote p:last-child{margin-bottom:0}
+.doc table{width:100%;border-collapse:collapse;margin:0 0 18px;font-size:13.5px;
+  display:block;overflow-x:auto}
+.doc th,.doc td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+.doc th{background:var(--panel-2);font-weight:650;white-space:nowrap}
+.doc code{background:var(--panel-2);border:1px solid var(--line);border-radius:4px;
+  padding:1px 5px;font-size:13px}
+.doc mjx-container[display="true"]{margin:16px 0;overflow-x:auto;overflow-y:hidden;padding:2px 0}
+.doc .meta-head{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;margin:18px 0 26px;box-shadow:var(--shadow)}
+.doc .meta-head .sub{margin-bottom:4px}
+</style>
+
+<script>
+window.MathJax={
+  tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]'],['$$','$$']],processEscapes:true},
+  options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']},
+  chtml:{scale:0.98}
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+</head>
+<body>
+<div class="wrap doc">
+  <p class="sub"><a href="javascript:history.back()">← 돌아가기</a></p>
+  <h1>Identifying and Forecasting US Equity Market Regimes: An Unsupervised and Supervised Machine Learning Analysis of Bull and Bear Market States, 2010-2025 A Research Paper on Quantitative Finance and Market Regime Classification</h1>
+  <div class="meta-head">
+    <p class="sub">Devanga Goswami</p>
+    <p class="sub">SSRN 7375498 · Quantitative Methods in Investing &amp; Financial Statement Analysis</p>
+    <p class="sub">본문 출처: PDF 확보 실패 — PDF 를 받지 못했습니다 (HTTP 403, 5988바이트). (초록만 사용)</p>
+    <div class="actions">
+      <a class="btn" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7375498" target="_blank" rel="noopener">원문 페이지</a>
+      <a class="btn" href="https://papers.ssrn.com/sol3/Delivery.cfm/7375498.pdf?abstractid=7375498&amp;mirid=1" target="_blank" rel="noopener">원문 PDF</a>
+    </div>
+  </div>
+  <blockquote><p>레짐 식별은 되지만 예측·수익으로는 이어지지 않음을 보인 연구다</p></blockquote>
+  <h2>1. 한눈에 보기</h2>
+
+<blockquote>
+<p>비지도 학습은 미국 주식시장에서 통계적으로 뚜렷하고 경제적으로 해석 가능한 두 국면(강세·저위험 / 약세·고위험)을 실제로 찾아낸다. 그러나 그 국면을 찾아냈다는 사실이 곧 다음 날 국면을 잘 맞힌다는 뜻도, 초과 위험조정 수익을 준다는 뜻도 아니다.</p>
+</blockquote>
+
+<ul>
+<li>16개 표준화 변수를 주성분분석(PCA)으로 8개 성분(누적 분산 92.1%)까지 줄인 뒤 K-평균으로 나눴다. 실루엣 점수가 고른 최적해는 2국면이다.</li>
+<li>국면은 매우 끈적하다. 강세→강세 전이확률이 96.5%, 약세→약세가 81.8%다. 그래서 "내일은 오늘과 같다"는 단순 지속 규칙이 정확도 93.55%로 세 가지 지도학습 모델을 모두 이겼다.</li>
+<li>국면 기반 택티컬 전략은 최대낙폭을 -33.92%에서 -28.20%로 줄였다. 대신 연복리수익률은 12.68%에서 5.80%로, 샤프지수는 0.780에서 0.546으로 떨어졌다.</li>
+<li>약세 국면 직후의 1일·5일·20일 선행 수익률이 강세 국면 직후보다 오히려 높았다. 약세 신호로 시장을 빠져나가면 반등을 놓친다는 뜻이다.</li>
+<li>이 논문의 기여는 "군집화 / 예측 / 경제적 유용성"을 서로 다른 세 질문으로 분리했다는 점이다. 응용 머신러닝 금융 연구가 자주 뭉뚱그리는 지점이다.</li>
+</ul>
+
+<p><em>주의: 본 리포트는 PDF 확보에 실패해 초록만 근거로 작성했다. 초록에 없는 대목은 아래에서 "추정"으로 표시한다.</em></p>
+
+<h2>2. 문제의식과 배경</h2>
+
+<p>시장 국면(regime) 연구는 오래된 주제다. 마르코프 전환 모형이나 은닉 마르코프 모형으로 강세장과 약세장을 나누는 시도가 대표적이다. 최근에는 군집화와 분류기를 얹은 머신러닝 접근이 늘었다.</p>
+
+<p>문제는 논문들이 세 가지 다른 주장을 뒤섞는다는 점이다. 첫째, 데이터에서 국면을 찾을 수 있는가. 둘째, 그 국면의 다음 값을 예측할 수 있는가. 셋째, 그 예측이 돈이 되는가. 앞의 질문에 성공했다고 뒤의 질문까지 성공한 것은 아니다.</p>
+
+<p>저자는 이 셋을 순서대로, 각각 독립된 실험으로 검증한다. 특히 지도학습 분류기를 "내일 국면 = 오늘 국면"이라는 순진한 지속 벤치마크와 정면으로 비교한다. 국면이 끈적할수록 이 벤치마크는 강해진다. 많은 연구가 이 벤치마크를 아예 세우지 않는다.</p>
+
+<p>변수 설계에서도 입장이 분명하다. 본 분석은 원계열 가격·거래량·이동평균을 의도적으로 뺐다. 수준 변수를 그대로 넣으면 군집이 시장 상태가 아니라 "시간의 흐름"을 학습하기 때문이다. 저자는 이 판단을 보강 검증(Section XI.J)으로 뒷받침한다.</p>
+
+<h2>3. 방법론</h2>
+
+<h3>3.1 전체 파이프라인</h3>
+
+<ol>
+<li>시장·변동성·거시금융 지표 16개를 만들고 표준화한다.</li>
+<li>주성분분석으로 차원을 8개로 줄인다. 누적 설명 분산은 92.1%다.</li>
+<li>주성분 공간에서 K-평균 군집화를 돌린다. 군집 수는 실루엣 점수로 고른다.</li>
+<li>가우시안 혼합 모형(GMM)으로 결과를 교차 검증한다.</li>
+<li>군집의 평균 수익률·변동성·VIX·모멘텀·낙폭을 비교해 국면에 이름을 붙인다.</li>
+<li>시계열 순서를 지킨 채 1일 앞 국면을 예측하는 표본외 실험을 한다.</li>
+<li>국면에 연동한 택티컬 전략을 만들어 매수후보유와 비교한다.</li>
+</ol>
+
+<h3>3.2 차원 축소</h3>
+
+<p>주성분분석은 표준화한 변수의 공분산 구조에서 분산을 가장 많이 설명하는 방향을 차례로 찾는다.</p>
+
+\[ w_1 = \arg\max_{\|w\|=1} \; w^{\top} \Sigma \, w \]
+
+<p>여기서 \(\Sigma\)는 표준화한 특징 행렬의 공분산 행렬, \(w\)는 단위 길이 적재 벡터다. 두 번째 성분부터는 앞선 성분과 직교한다는 제약이 붙는다.</p>
+
+<h3>3.3 군집화</h3>
+
+<p>K-평균은 각 관측치를 가장 가까운 중심에 배정하고, 군집 내 제곱거리 합을 최소화한다.</p>
+
+\[ \min_{\{C_k\}} \sum_{k=1}^{K} \sum_{x \in C_k} \left\| x - \mu_k \right\|^2 \]
+
+<p>\(C_k\)는 \(k\)번째 군집, \(\mu_k\)는 그 중심, \(x\)는 주성분 좌표로 표현한 하루치 관측이다.</p>
+
+<p>군집 수는 실루엣 점수가 정한다. 관측치 \(i\)의 실루엣은 다음과 같다.</p>
+
+\[ s(i) = \frac{b(i) - a(i)}{\max\{a(i),\, b(i)\}} \]
+
+<p>\(a(i)\)는 같은 군집 내 평균 거리, \(b(i)\)는 가장 가까운 다른 군집까지의 평균 거리다. 값이 1에 가까울수록 군집이 잘 분리된다.</p>
+
+<p>검증용 가우시안 혼합 모형은 데이터를 여러 정규분포의 가중합으로 본다.</p>
+
+\[ p(x) = \sum_{k=1}^{K} \pi_k \, \mathcal{N}\!\left(x \mid \mu_k, \Sigma_k\right) \]
+
+<p>\(\pi_k\)는 혼합 가중치, \(\mu_k\)와 \(\Sigma_k\)는 각 성분의 평균과 공분산이다. K-평균과 달리 소속 확률을 부드럽게 준다.</p>
+
+<h3>3.4 국면의 지속성</h3>
+
+<p>군집 라벨을 시계열로 늘어놓고 1차 전이행렬을 추정한다.</p>
+
+\[ P_{ij} = \Pr\!\left(S_{t+1} = j \mid S_t = i\right) \]
+
+<p>\(S_t\)는 \(t\)일의 국면 라벨이다. 대각 원소가 크면 국면이 오래 머문다는 뜻이다.</p>
+
+<h3>3.5 예측 실험과 벤치마크</h3>
+
+<p>세 가지 분류기를 쓴다. 로지스틱 회귀, 랜덤 포레스트, 그래디언트 부스팅이다. 학습과 검증은 시간 순서를 지킨다. 미래 정보가 과거로 새지 않도록 하는 장치다.</p>
+
+<p>비교 대상은 지속 규칙이다.</p>
+
+\[ \hat{S}_{t+1} = S_t \]
+
+<p>즉 내일 국면을 오늘 국면으로 그대로 찍는다. 전이행렬 대각 원소가 클수록 이 규칙의 정확도가 올라간다.</p>
+
+<h3>3.6 택티컬 전략</h3>
+
+<p>포지션 규칙은 단순하다. 강세 국면이면 100% 투자, 약세 국면이면 100% 현금이다. 신호는 하루 지연해 적용하고, 매매마다 10bp 비용을 뗀다.</p>
+
+\[ w_t = \mathbb{1}\!\left\{ S_{t-1} = \text{Bull} \right\} \]
+
+<p>\(w_t\)는 \(t\)일의 주식 편입 비중, \(\mathbb{1}\{\cdot\}\)는 조건이 참이면 1을 주는 지시함수다. 하루 지연은 실행 가능성을 확보하려는 장치다.</p>
+
+<h2>4. 데이터와 실험 설계</h2>
+
+<table>
+<thead>
+<tr><th>항목</th><th>내용</th></tr>
+</thead>
+<tbody>
+<tr><td>대상 시장</td><td>미국 주식시장</td></tr>
+<tr><td>주기</td><td>일별</td></tr>
+<tr><td>표본 기간</td><td>2010년 10월 18일 ~ 2025년 12월 31일</td></tr>
+<tr><td>관측 수</td><td>3,823일</td></tr>
+<tr><td>기본 변수</td><td>시장·변동성·거시금융 지표 16개 (모두 표준화)</td></tr>
+<tr><td>제외 변수</td><td>원계열 가격, 거래량, 이동평균 (의도적 배제)</td></tr>
+<tr><td>차원 축소</td><td>주성분 8개, 누적 분산 92.1%</td></tr>
+<tr><td>군집 알고리즘</td><td>K-평균 (검증: 가우시안 혼합 모형)</td></tr>
+<tr><td>군집 수 선택 기준</td><td>실루엣 점수</td></tr>
+<tr><td>예측 모델</td><td>로지스틱 회귀, 랜덤 포레스트, 그래디언트 부스팅</td></tr>
+<tr><td>예측 벤치마크</td><td>지속 규칙 (내일 = 오늘)</td></tr>
+<tr><td>예측 설계</td><td>시계열 순서 유지, 1일 앞, 표본외</td></tr>
+<tr><td>통계 검정</td><td>Welch t-검정, 효과크기는 Cohen's d</td></tr>
+<tr><td>투자 성과 지표</td><td>연복리수익률, 샤프지수, 최대낙폭</td></tr>
+<tr><td>거래비용</td><td>편도 10bp, 신호 1일 지연</td></tr>
+<tr><td>보강 검증</td><td>변수 29개로 확장 (Section XI.J)</td></tr>
+</tbody>
+</table>
+
+<p>16개 변수의 구체적 목록과 표본 분할 비율은 초록에 없다. 다만 VIX 수준, 모멘텀, 실현변동성, 낙폭이 포함된다는 사실은 국면 비교 항목에서 확인된다.</p>
+
+<h2>5. 주요 결과</h2>
+
+<h3>5.1 국면 구조</h3>
+
+<table>
+<thead>
+<tr><th>국면</th><th>관측 수</th><th>비중</th><th>다음 날 같은 국면일 확률</th></tr>
+</thead>
+<tbody>
+<tr><td>강세 / 저위험</td><td>3,201일</td><td>83.7%</td><td>96.5%</td></tr>
+<tr><td>약세 / 고위험</td><td>622일</td><td>16.3%</td><td>81.8%</td></tr>
+</tbody>
+</table>
+
+<p>두 국면은 평균 수익률, 변동성, VIX 수준, 모멘텀, 낙폭에서 모두 갈렸다. Welch t-검정 p값이 전부 0.001 미만이고, Cohen's d는 최대 2.94에 달한다. 효과크기 2.94는 통상 "매우 큼"으로 분류하는 0.8을 크게 넘는다. 군집이 우연히 생긴 분할이 아니라는 뜻이다.</p>
+
+<h3>5.2 다음 날 국면 예측</h3>
+
+<table>
+<thead>
+<tr><th>방법</th><th>표본외 정확도</th><th>지속 규칙 대비</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>지속 규칙 (벤치마크)</strong></td><td><strong>93.55%</strong></td><td>&mdash;</td></tr>
+<tr><td>랜덤 포레스트</td><td>91.89%</td><td>-1.66%p</td></tr>
+<tr><td>로지스틱 회귀</td><td>89.80%</td><td>-3.75%p</td></tr>
+<tr><td>그래디언트 부스팅</td><td>89.01%</td><td>-4.54%p</td></tr>
+</tbody>
+</table>
+
+<p>세 모델 모두 벤치마크에 졌다. 저자는 이를 근거로 "지도학습이 단순 지속 규칙보다 나은 익일 국면 예측을 제공한다"는 가설을 기각한다.</p>
+
+<p>원인은 국면의 끈적함에 있다. 전체 관측의 83.7%가 강세이고 강세 지속 확률이 96.5%다. 이런 구조에서는 아무것도 안 하는 규칙이 이미 매우 강하다. 학습 모델이 조금이라도 잘못 뒤집으면 그만큼 손해다.</p>
+
+<h3>5.3 택티컬 전략 성과</h3>
+
+<table>
+<thead>
+<tr><th>지표</th><th>국면 연동 전략</th><th>매수후보유</th><th>차이</th></tr>
+</thead>
+<tbody>
+<tr><td>연복리수익률(CAGR)</td><td>5.80%</td><td>12.68%</td><td>-6.88%p</td></tr>
+<tr><td>샤프지수</td><td>0.546</td><td>0.780</td><td>-0.234</td></tr>
+<tr><td>최대낙폭</td><td>-28.20%</td><td>-33.92%</td><td>+5.72%p 개선</td></tr>
+</tbody>
+</table>
+
+<p>낙폭은 줄었지만 수익과 위험조정 성과는 모두 나빠졌다. 방어에는 성공하고 성장에는 실패한 셈이다.</p>
+
+<h3>5.4 왜 수익이 깎였나</h3>
+
+<p>선행 수익률 분석이 답을 준다. 약세·고위험 국면 다음의 평균 수익률이 강세·저위험 국면 다음보다 높았다. 1일, 5일, 20일 세 구간에서 모두 그랬다.</p>
+
+<p>해석은 직관적이다. 약세 국면은 이미 변동성이 터지고 낙폭이 깊어진 뒤에 잡힌다. 그 지점에서 빠져나가면 반등 구간을 통째로 놓친다. 국면 신호는 위험을 사후에 확인해 주지, 앞으로의 수익을 예고하지 않는다.</p>
+
+<h3>5.5 변수를 늘린 보강 검증</h3>
+
+<p>저자는 일부러 뺐던 원계열 가격·거래량·이동평균을 되살려 변수를 29개로 늘렸다. 결과는 더 나빠졌다. 4국면 해가 나왔지만 품질이 떨어졌고, 학습 구간과 검증 구간의 분포가 크게 어긋났다. 표본외 예측 성능은 무너졌다.</p>
+
+<p>수준 변수를 넣으면 군집이 "시장 상태"가 아니라 "몇 년도인가"를 학습한다. 지수 수준이 계속 오르는 표본에서는 필연적인 결과다. 이 음의 결과가 원래 변수 설계를 뒷받침한다.</p>
+
+<h2>6. 한계와 주의점</h2>
+
+<h3>6.1 저자가 밝힌 한계</h3>
+
+<ul>
+<li>국면을 찾아내는 일과 국면을 예측하는 일은 다르다. 이 논문은 후자에서 실패를 보고한다.</li>
+<li>국면 식별이 통계적으로 견고해도 위험조정 성과 개선으로 이어지지 않는다.</li>
+<li>변수 집합을 넓히면 학습·검증 분포가 어긋나며 성능이 붕괴한다.</li>
+</ul>
+
+<h3>6.2 재현과 실전에서 걸릴 지점</h3>
+
+<ul>
+<li><strong>라벨 자체가 사후적이다.</strong> K-평균은 전체 표본으로 학습한 라벨을 만든다. 초록만으로는 군집화 단계에 전방편의(look-ahead bias)가 있는지 확인할 수 없다. 예측 단계는 시계열 순서를 지켰다고 밝혔지만, 라벨 생성 단계가 전 구간 정보를 썼다면 정확도 93.55%의 의미는 달라진다. 실전 적용 전에 반드시 확인할 대목이다.</li>
+<li><strong>표본 구간이 유리하다.</strong> 2010년 10월부터 2025년 말은 대체로 강세장이다. 이 구간에서는 어떤 방어 전략이든 매수후보유에 지기 쉽다. 결론을 일반화하려면 2000~2009년 같은 구간을 덧붙여야 한다.</li>
+<li><strong>정확도는 오해를 부르는 지표다.</strong> 강세가 83.7%인 불균형 데이터에서 정확도 하나만 보면 안 된다. 약세 국면 재현율, F1, 균형정확도를 봐야 실제 능력이 드러난다. 초록에는 정확도만 나온다.</li>
+<li><strong>2국면은 거칠다.</strong> 실무에서는 "저변동 상승", "고변동 상승", "패닉", "회복" 같은 3~4국면이 더 유용한 경우가 많다. 실루엣 점수는 분리도만 보고 경제적 유용성은 보지 않는다.</li>
+<li><strong>전략 설계가 극단적이다.</strong> 0% 또는 100%라는 이진 포지션은 국면 신호의 가치를 시험하기에 가혹하다. 비중 조절이나 옵션 헤지로 바꾸면 결론이 달라질 수 있다(추정).</li>
+<li><strong>변수 목록이 공개되지 않았다.</strong> 초록만으로는 16개 변수를 특정할 수 없다. 재현하려면 본문 Section IV를 확인해야 한다.</li>
+</ul>
+
+<h2>7. 실무 적용 아이디어</h2>
+
+<h3>7.1 국면 신호를 무엇에 쓸 것인가</h3>
+
+<p>이 논문의 실무적 함의는 명확하다. 국면 신호를 <em>알파 신호</em>로 쓰면 진다. <em>위험 관리 신호</em>로 써야 한다.</p>
+
+<ul>
+<li><strong>레버리지 조절.</strong> 약세 국면에서 익스포저를 0으로 만들지 말고 30~50% 줄인다. 반등 참여를 유지하면서 낙폭만 깎는다.</li>
+<li><strong>리스크 한도 관리.</strong> 약세 국면에서 VaR 한도, 종목별 비중 상한, 신규 진입 규모를 조인다. 수익 목표가 아니라 손실 통제가 목적이다.</li>
+<li><strong>헤지 비용 배분.</strong> 강세 국면에서 옵션 헤지가 싸다. 그때 미리 사두고 약세 국면에서 소진한다.</li>
+<li><strong>모델 스위칭.</strong> 국면별로 다른 팩터 가중을 쓴다. 약세에서 퀄리티·저변동, 강세에서 모멘텀·베타를 키우는 식이다.</li>
+<li><strong>리포팅.</strong> 국면 라벨은 운용보고서에서 시장 상태를 설명하는 언어로 쓰기 좋다. 해석 가능성이 이 방법의 진짜 강점이다.</li>
+</ul>
+
+<h3>7.2 어떻게 구축할 것인가</h3>
+
+<ol>
+<li><strong>변수는 수준이 아니라 상태로 만든다.</strong> 지수 가격 대신 수익률, 실현변동성, VIX 수준과 기간구조, 드로다운 비율, 신용스프레드, 기간스프레드, 달러지수 변화율을 쓴다. 원계열 가격·거래량·이동평균은 넣지 않는다. 논문의 보강 검증이 그 이유를 보여준다.</li>
+<li><strong>확장 윈도로 학습한다.</strong> 군집화도 확장 윈도나 롤링 윈도로 돌린다. 그래야 라벨에 미래 정보가 들어가지 않는다. 새 데이터가 들어올 때 라벨이 뒤집히는 정도를 따로 기록한다. 이것이 실전 운용의 최대 리스크다.</li>
+<li><strong>지속 규칙을 항상 베이스라인으로 둔다.</strong> 어떤 모델이든 "내일은 오늘과 같다"를 이기지 못하면 배포하지 않는다. 논문이 준 가장 실용적인 교훈이다.</li>
+<li><strong>평가 지표를 바꾼다.</strong> 정확도 대신 약세 국면 재현율과 신호 전환 지연일수를 본다. 약세 진입을 며칠 늦게 잡는지가 실제 손익을 좌우한다.</li>
+<li><strong>비용을 보수적으로 잡는다.</strong> 10bp는 대형 ETF 기준으로도 낙관적이다. 슬리피지와 시장충격을 더한 뒤에도 낙폭 개선이 남는지 확인한다.</li>
+</ol>
+
+<h3>7.3 검증 체크리스트</h3>
+
+<table>
+<thead>
+<tr><th>확인 항목</th><th>합격 기준(제안)</th></tr>
+</thead>
+<tbody>
+<tr><td>지속 규칙 대비 정확도</td><td>표본외에서 유의하게 상회</td></tr>
+<tr><td>라벨 안정성</td><td>데이터 추가 시 과거 라벨 재작성 비율이 낮을 것</td></tr>
+<tr><td>약세 재현율</td><td>주요 급락 구간을 놓치지 않을 것</td></tr>
+<tr><td>비용 반영 후 낙폭</td><td>매수후보유 대비 유의미하게 개선</td></tr>
+<tr><td>구간별 강건성</td><td>2008년 이전 구간을 포함해도 결론 유지</td></tr>
+<tr><td>거래 빈도</td><td>연간 신호 전환 횟수가 감당 가능한 수준</td></tr>
+</tbody>
+</table>
+
+<h2>8. 함께 볼 만한 개념</h2>
+
+<ul>
+<li><strong>마르코프 전환 모형(Markov-switching model)</strong> — Hamilton(1989). 국면 전환을 모수적으로 다루는 고전. 이 논문의 전이행렬과 직접 비교할 만하다.</li>
+<li><strong>은닉 마르코프 모형(HMM)</strong> — 국면을 잠재 상태로 두고 추정한다. K-평균과 달리 시계열 구조를 모형에 내장한다.</li>
+<li><strong>변동성 타깃팅(volatility targeting)</strong> — 이진 진입·청산 대신 변동성 역수로 비중을 조절한다. 낙폭 개선과 수익 유지를 함께 노린다.</li>
+<li><strong>실루엣 점수 대안</strong> — Davies-Bouldin 지수, Calinski-Harabasz 지수, GMM의 BIC. 군집 수 선택 기준을 바꾸면 결과가 달라진다.</li>
+<li><strong>공변량 분포 이동(covariate shift)</strong> — 논문의 29변수 실험이 겪은 문제. 학습과 검증의 분포가 어긋나는 상황을 다루는 이론이다.</li>
+<li><strong>클래스 불균형 학습</strong> — 약세 국면이 16.3%뿐인 문제. 리샘플링, 비용민감 학습, 임계값 조정이 표준 대응이다.</li>
+<li><strong>Combinatorial Purged Cross-Validation</strong> — López de Prado. 금융 시계열에서 정보 누출을 막는 검증 설계다.</li>
+<li><strong>Deflated Sharpe Ratio</strong> — 여러 전략을 시험한 뒤의 다중검정 편의를 보정한다.</li>
+<li><strong>Turbulence Index / Absorption Ratio</strong> — Kritzman &amp; Li. 상관 구조로 시장 스트레스를 측정하는 실무형 국면 지표다.</li>
+<li><strong>검색 키워드</strong> — "market regime detection", "unsupervised regime clustering", "persistence benchmark forecasting", "regime-switching asset allocation", "drawdown control".</li>
+</ul>
+  <div class="abs" style="margin-top:32px"><b>ORIGINAL ABSTRACT</b>This paper investigates whether unsupervised machine learning can identify economically meaningful regimes in the US equity market and whether such regimes provide genuine forecasting or investment value. Using a daily dataset of 3,823 observations spanning 18 October 2010 to 31 December 2025, sixteen standardized market, volatility, and macro-financial features are reduced via Principal Component Analysis (eight components explaining 92.1% of variance) and partitioned using K-Means clustering, validated against a Gaussian Mixture Model. The optimal solution, selected by silhouette score, identifies two statistically and economically distinct regimes, subsequently labelled Bull / Low-Risk (n = 3,201; 83.7% of observations) and Bear / High-Risk (n = 622; 16.3%). The regimes differ significantly across mean return, volatility, VIX level, momentum, and drawdown (Welch t-tests, all p &lt; .001; Cohen&#x27;s d up to 2.94), and exhibit strong persistence, with Bull-to-Bull and Bear-to-Bear transition probabilities of 96.5% and 81.8% respectively. A chronological, one-step-ahead out-of-sample forecasting exercise compares Logistic Regression, Random Forest, and Gradient Boosting classifiers against a naive persistence benchmark (&quot;tomorrow&#x27;s regime equals today&#x27;s regime&quot;). The persistence benchmark achieved the highest out-of-sample accuracy (93.55%), exceeding Random Forest (91.89%), Logistic Regression (89.80%), and Gradient Boosting (89.01%). This finding does not support the hypothesis that supervised machine learning provides superior next-day regime forecasting relative to a simple persistence rule. A regime-conditioned tactical investment strategy (fully invested in Bull, fully divested in Bear, signal lagged by one day, 10 basis point transaction costs) reduced maximum drawdown relative to buy-and-hold (-28.20% versus-33.92%) but underperformed on both compound annual growth rate (5.80% versus 12.68%) and Sharpe ratio (0.546 versus 0.780). Forward-return analysis indicates that returns following Bear/High-Risk observations were, on average, higher than returns following Bull/Low-Risk observations at 1-, 5-, and 20-day horizons, offering a plausible explanation for the strategy&#x27;s return shortfall despite its lower drawdown. The study concludes that regime identification is statistically robust and economically interpretable, but that regime identification is not equivalent to reliable regime forecasting or to superior risk-adjusted investment performance. The paper&#x27;s contribution lies in this explicit separation of unsupervised classification, supervised forecasting, and economic usefulness-three distinct questions that are frequently conflated in applied machine learning finance research. A supplementary robustness check (Section XI.J), which widens the feature set to twenty-nine variables by restoring the raw price, volume, and moving-average series the main specification deliberately excludes, produces a weaker four-regime solution and a severe train/test distribution shift that collapses out-of-sample forecasting performance-a negative result that, if anything, reinforces the original feature-exclusion rationale in Section IV.</div>
+  <footer><p>로컬 Claude Code 로 생성한 요약 리포트입니다. 인용 전 반드시 원문을 확인하세요.</p></footer>
+</div>
+</body>
+</html>
