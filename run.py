@@ -195,10 +195,12 @@ def cmd_summarize(args, day_filter: list[str] | None = None) -> None:
     print(f"summaries: {ok} ok, {fail} failed")
 
 
-def _build_report(args, day_filter: list[str] | None = None):
+def _build_report(args, day_filter: list[str] | None = None, all_sources: bool = False):
+    """Render the digest. `all_sources` ignores --source, which is a fetch filter."""
     seen = store.load()
     days = day_filter if (day_filter and not args.all) else None
-    out = render.build(seen, days=days, sources=_sources(args) if args.source != "all" else None)
+    sources = None if (all_sources or args.source == "all") else _sources(args)
+    out = render.build(seen, days=days, sources=sources)
     render.build_index(seen)
     return out
 
@@ -441,9 +443,16 @@ def main() -> None:
         cmd_status(args)
     else:
         days = cmd_fetch(args)
+        # Fetching and summarizing are scoped to this run; rendering never is.
+        # A narrow run (`--source arxiv --days 1`) must not republish a digest
+        # containing only what it happened to fetch — that silently deletes
+        # everything else from the published page.
         cmd_summarize(args, day_filter=days)
         cmd_deep(args, day_filter=days)
-        cmd_report(args, day_filter=days)
+        out = _build_report(args, day_filter=None, all_sources=True)
+        print(f"report: {out}")
+        if not args.no_open:
+            webbrowser.open(out.resolve().as_uri())
         if args.push:
             cmd_publish(args)
 

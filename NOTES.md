@@ -1,5 +1,25 @@
 # Working notes
 
+## 2026-08-31 — A narrow run deleted the published digest
+
+First real Actions run (`--source arxiv --days 1`) committed
+`2 files changed, 38 insertions(+), 1786 deletions(-)`. The store was fine; the
+**rendered page** had been rebuilt containing only the 4 papers that run touched,
+replacing the 80-item digest.
+
+Cause: `run.py all` passed its own `--source` and the dates it had just fetched
+into `render.build()`. Fetching and summarizing *should* be scoped to a run.
+Rendering never should — the whole point of `seen.json` is accumulation, and the
+page has filters and date sections anyway.
+
+Fix: `all` now renders the entire store (`day_filter=None`, sources ignored).
+`_build_report()` grew an `all_sources` flag so `--source` stays a fetch filter
+and cannot narrow the output. The standalone `report` command keeps its filters
+for ad-hoc use.
+
+Lesson for any future scheduled job here: **a partial input must never produce a
+smaller published artifact.** Check the diff stat on the first automated commit.
+
 A running log of decisions, dead ends and measurements. [DESIGN.md](DESIGN.md)
 describes the system as it stands now; this file records *how it got there* and
 what was tried and rejected, so the same ground is not re-covered later.
