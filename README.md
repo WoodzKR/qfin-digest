@@ -178,10 +178,17 @@ Pages picks the change up a minute or two after the push. If `git` is not on PAT
 - It also runs on a schedule: 06:00 KST, weekdays.
 - Inputs let you pick sources, how many dates, how many deep reports and which language.
 
-One-time setup: add an `ANTHROPIC_API_KEY` secret under
-**Settings → Secrets and variables → Actions**. The summarizer is the Claude Code CLI,
-and a CI runner has no interactive login to fall back on, so usage is billed to that
-API key.
+One-time setup — the summarizer is the Claude Code CLI and a CI runner has no
+interactive login, so it needs a credential in
+**Settings → Secrets and variables → Actions**. Either works:
+
+| Secret | Where it comes from |
+|---|---|
+| `CLAUDE_CODE_OAUTH_TOKEN` | Run `claude setup-token` locally and paste the result. Uses your Claude subscription — **no API key needed.** Preferred. |
+| `ANTHROPIC_API_KEY` | A pay-as-you-go API key. Only used if the token above is absent. |
+
+Only `workflow_dispatch` and `schedule` trigger this workflow, so a pull request from a
+fork can never reach those secrets.
 
 Two caveats worth knowing:
 

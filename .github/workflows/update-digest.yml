@@ -6,8 +6,16 @@ name: Update digest
 #   - "Run workflow" on the Actions tab triggers it by hand (works from a phone).
 #   - The schedule below runs it on weekday mornings, Seoul time.
 #
-# Requires an ANTHROPIC_API_KEY repository secret: the summarizer is the Claude
-# Code CLI, and a CI runner has no interactive login to fall back on.
+# The summarizer is the Claude Code CLI, and a CI runner has no interactive login,
+# so it needs one of these repository secrets:
+#
+#   CLAUDE_CODE_OAUTH_TOKEN   a Claude subscription. Run `claude setup-token`
+#                             locally and paste the result. Preferred.
+#   ANTHROPIC_API_KEY         a pay-as-you-go API key. Used only if the token is
+#                             absent.
+#
+# Only workflow_dispatch and schedule trigger this, so no pull request from a
+# fork can ever reach those secrets.
 #
 # SSRN is best-effort here. Its Cloudflare challenge is usually refused from
 # datacentre IPs, so the default source list leaves it out; the run does not fail
@@ -75,15 +83,23 @@ jobs:
 
       - name: Run the pipeline
         env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           SOURCE: ${{ inputs.source || 'arxiv,quantpedia,man' }}
           DAYS: ${{ inputs.days || '2' }}
           DEEP: ${{ inputs.deep || '0' }}
           LANG_OPT: ${{ inputs.lang || 'both' }}
         run: |
-          if [ -z "$ANTHROPIC_API_KEY" ]; then
-            echo "::error::ANTHROPIC_API_KEY secret is not set."
-            echo "Add it under Settings > Secrets and variables > Actions."
+          if [ -n "$CLAUDE_CODE_OAUTH_TOKEN" ]; then
+            # Subscription auth wins; drop the API key so it cannot take over.
+            unset ANTHROPIC_API_KEY
+            echo "Authenticating with the Claude subscription token."
+          elif [ -n "$ANTHROPIC_API_KEY" ]; then
+            echo "Authenticating with ANTHROPIC_API_KEY."
+          else
+            echo "::error::No Claude credentials."
+            echo "Add CLAUDE_CODE_OAUTH_TOKEN (run 'claude setup-token' locally)"
+            echo "or ANTHROPIC_API_KEY under Settings > Secrets and variables > Actions."
             exit 1
           fi
           RUN="python run.py all --source $SOURCE --days $DAYS --deep $DEEP \

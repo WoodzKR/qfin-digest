@@ -168,9 +168,16 @@ python run.py publish -m "메모"
 - 스케줄로도 돈다: 평일 오전 6시(KST).
 - 입력값으로 출처, 날짜 수, 상세 리포트 개수, 언어를 고를 수 있다.
 
-최초 1회 설정: **Settings → Secrets and variables → Actions** 에서 `ANTHROPIC_API_KEY`
-시크릿을 등록한다. 요약 엔진이 Claude Code CLI 인데 CI 러너에는 대화형 로그인이 없어서
-API 키가 필요하고, 사용량은 그 키로 과금된다.
+최초 1회 설정 — 요약 엔진이 Claude Code CLI 인데 CI 러너에는 대화형 로그인이 없어서
+**Settings → Secrets and variables → Actions** 에 인증 수단을 등록해야 한다. 둘 중 하나면 된다.
+
+| 시크릿 | 발급 방법 |
+|---|---|
+| `CLAUDE_CODE_OAUTH_TOKEN` | 로컬에서 `claude setup-token` 을 돌려 나온 값을 붙여넣는다. Claude 구독을 그대로 쓰므로 **API 키가 필요 없다.** 이쪽을 권한다. |
+| `ANTHROPIC_API_KEY` | 종량제 API 키. 위 토큰이 없을 때만 쓰인다. |
+
+이 워크플로는 `workflow_dispatch` 와 `schedule` 로만 돈다. fork 에서 올린 PR 은
+시크릿에 접근할 수 없다.
 
 알아둘 점 두 가지
 

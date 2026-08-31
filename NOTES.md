@@ -68,11 +68,26 @@ Deep reports get one button per language and land at
 `report/paper/{id}.{lang}.html`. Existing `{id}.html` files were renamed to
 `{id}.ko.html`.
 
+## 2026-08-31 — CI auth without an API key
+
+No API subscription here, only the Claude Code CLI. That is fine everywhere:
+
+- **Locally** — nothing to change. The whole pipeline already shells out to
+  `claude -p`, which uses whatever the CLI is logged in as.
+- **In CI** — `claude setup-token` (present in CLI 2.1.251, "requires Claude
+  subscription") mints a long-lived token. Verified `CLAUDE_CODE_OAUTH_TOKEN`
+  is a real env var by finding the string in the 207 MB native binary, since it
+  is not mentioned in `--help`.
+
+The workflow now takes either secret and prefers the token, explicitly
+`unset`ting `ANTHROPIC_API_KEY` when both are present so the key cannot quietly
+take over. Only `workflow_dispatch` and `schedule` trigger it, so a fork's pull
+request can never reach the secrets.
+
 ## 2026-08-31 — Cloud updates without a machine running
 
 `.github/workflows/update-digest.yml`: `workflow_dispatch` plus a weekday
-06:00 KST schedule. Needs an `ANTHROPIC_API_KEY` secret — a CI runner has no
-interactive Claude login to fall back on.
+06:00 KST schedule.
 
 Two limits worth stating plainly:
 
