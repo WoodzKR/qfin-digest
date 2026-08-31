@@ -68,6 +68,31 @@ Deep reports get one button per language and land at
 `report/paper/{id}.{lang}.html`. Existing `{id}.html` files were renamed to
 `{id}.ko.html`.
 
+## 2026-08-31 — Who may trigger the workflow: decided, nobody new
+
+`workflow_dispatch` is restricted by GitHub to accounts with **write access**.
+On a public repo everyone can read the Actions tab and the run logs, but the
+"Run workflow" button simply is not there for them. `repository_dispatch` needs a
+PAT, so it is no more open.
+
+Options considered for letting outsiders run it, and why the answer is no:
+
+| Route | Who | Cost |
+|---|---|---|
+| leave as is | owner + collaborators | — |
+| add a collaborator | that person | also grants push |
+| `issues` trigger + username allowlist | listed accounts | run-only access, but a list to maintain |
+| `issues` trigger, ungated | anyone | **anyone can burn the Claude subscription quota** |
+| fork | anyone | on their own token, not ours |
+
+Note that issue-triggered workflows **do** get repository secrets, unlike a pull
+request from a fork. Opening one ungated is a known abuse path: one spam issue,
+one run, one bite out of the subscription.
+
+Decision: leave it. Reading the digest needs no permissions at all — Pages is
+public — and anyone who wants to *run* it forks and brings their own token,
+which the READMEs' Quick start already covers.
+
 ## 2026-08-31 — CI auth without an API key
 
 No API subscription here, only the Claude Code CLI. That is fine everywhere:
