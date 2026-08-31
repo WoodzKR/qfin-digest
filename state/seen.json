@@ -2997,6 +2997,9 @@
     "id": "qp-sectoral-intramonth-momentum-cycle",
     "listed_date": "2026-08-17",
     "pdf_url": "",
+    "report_paths": {
+      "ko": "qp-sectoral-intramonth-momentum-cycle.ko.html"
+    },
     "src": "quantpedia",
     "src_cats": [
       "QP"
