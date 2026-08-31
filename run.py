@@ -13,6 +13,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 import webbrowser
 from collections import Counter
@@ -249,6 +250,65 @@ def cmd_paper(args) -> None:
         store.save(seen)
 
 
+def _git_exe() -> str | None:
+    import shutil
+    from pathlib import Path
+
+    found = shutil.which("git")
+    if found:
+        return found
+    # winget 설치가 UAC 로 막혀 PortableGit 을 사용자 폴더에 푼 경우
+    portable = Path(os.path.expandvars(r"%LOCALAPPDATA%\Programs\PortableGit\cmd\git.exe"))
+    return str(portable) if portable.exists() else None
+
+
+def cmd_publish(args) -> None:
+    """생성물을 커밋하고 origin 에 올린다 (GitHub Pages 갱신)."""
+    import subprocess
+    from datetime import date
+
+    from arxiv_digest.config import PAPER_DIR, ROOT
+
+    git = _git_exe()
+    if not git:
+        print("! git 을 찾지 못했습니다. PATH 를 확인하거나 --no-push 로 건너뛰세요.", file=sys.stderr)
+        return
+
+    def run(*cmd, check=True):
+        return subprocess.run([git, *cmd], cwd=ROOT, capture_output=True, text=True,
+                              encoding="utf-8", errors="replace", check=check)
+
+    if run("rev-parse", "--git-dir", check=False).returncode != 0:
+        print("! git 저장소가 아닙니다. `git init` 이 필요합니다.", file=sys.stderr)
+        return
+
+    run("add", "-A")
+    if not run("diff", "--cached", "--name-only").stdout.strip():
+        print("올릴 변경사항이 없습니다.")
+        return
+
+    seen = store.load()
+    done = sum(1 for e in seen.values() if not store.needs_summary(e))
+    papers = len(list(PAPER_DIR.glob("*.html")))
+    message = args.message or f"digest {date.today():%Y-%m-%d} — 요약 {done}편, 상세 리포트 {papers}편"
+    run("commit", "-m", message)
+    print(f"커밋: {message}")
+
+    if run("remote", "get-url", "origin", check=False).returncode != 0:
+        print("origin 원격이 없어 push 는 건너뜁니다.")
+        return
+    push = run("push", check=False)
+    if push.returncode == 0:
+        print("push 완료 —", (push.stderr or push.stdout).strip().splitlines()[-1:] or "ok")
+        url = run("remote", "get-url", "origin").stdout.strip()
+        if "github.com" in url:
+            owner_repo = url.split("github.com")[-1].lstrip(":/").removesuffix(".git")
+            owner, _, repo = owner_repo.partition("/")
+            print(f"  https://{owner.lower()}.github.io/{repo}/  (반영까지 1~2분)")
+    else:
+        print(f"! push 실패:\n{push.stderr.strip()[:500]}", file=sys.stderr)
+
+
 def cmd_status(_args) -> None:
     seen = store.load()
     done = [e for e in seen.values() if not store.needs_summary(e)]
@@ -266,7 +326,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="퀀트 논문 다이제스트 (arXiv + SSRN)")
     ap.add_argument("cmd", nargs="?", default="all",
                     choices=["all", "fetch", "summarize", "report", "deep", "serve",
-                             "paper", "status"])
+                             "paper", "publish", "status"])
     ap.add_argument("ids", nargs="*", help="paper 명령에 넘길 논문 ID")
     ap.add_argument("--source", default="all", choices=["all", "arxiv", "ssrn"])
     ap.add_argument("--days", type=int, default=RECENT_DAYS, help="출처별 최근 N개 날짜 (기본 2)")
@@ -281,6 +341,9 @@ def main() -> None:
     ap.add_argument("--deep", type=int, default=0, metavar="N",
                     help="★ 상위 N편의 상세 리포트를 미리 생성 (기본 0)")
     ap.add_argument("--port", type=int, default=8765, help="serve 포트 (기본 8765)")
+    ap.add_argument("--push", action="store_true",
+                    help="all 실행 후 생성물을 커밋하고 origin 에 push")
+    ap.add_argument("-m", "--message", default=None, help="publish 커밋 메시지")
     args = ap.parse_args()
 
     if args.cmd == "fetch":
@@ -297,6 +360,8 @@ def main() -> None:
         if not args.ids:
             ap.error("paper 명령에는 논문 ID 가 필요합니다.")
         cmd_paper(args)
+    elif args.cmd == "publish":
+        cmd_publish(args)
     elif args.cmd == "status":
         cmd_status(args)
     else:
@@ -304,6 +369,8 @@ def main() -> None:
         cmd_summarize(args, day_filter=days)
         cmd_deep(args, day_filter=days)
         cmd_report(args, day_filter=days)
+        if args.push:
+            cmd_publish(args)
 
 
 if __name__ == "__main__":

@@ -1,5 +1,7 @@
 # 퀀트 논문 다이제스트 (arXiv + SSRN)
 
+**리포트 보기 → https://woodzkr.github.io/qfin-digest/**
+
 arXiv q-fin.PM/ST/TR 과 SSRN 7개 eJournal 에서 **최근 2개 날짜** 논문을 모아
 한국어로 요약하고 HTML 리포트로 만든다. 이미 요약한 논문은 자동으로 건너뛴다.
 
@@ -137,11 +139,14 @@ q-fin.TR(Trading & Market Microstructure). 초록은 arXiv Atom API 에서 받�
 날짜별 다이제스트와 상세 리포트 목록을 담는다. GitHub Pages 의 진입점이다.
 
 ```powershell
-python run.py --deep 5     # 수집 → 요약 → 상세 리포트 → 리포트/인덱스 생성
-git add -A
-git commit -m "digest: 2026-08-31"
-git push
+python run.py --deep 5 --push   # 수집 → 요약 → 상세 리포트 → 리포트 생성 → 커밋 & push
+python run.py publish           # 지금 있는 생성물만 커밋 & push
+python run.py publish -m "메모"  # 커밋 메시지 직접 지정
 ```
+
+`publish` 는 커밋 메시지를 `digest 2026-08-31 — 요약 43편, 상세 리포트 3편` 처럼
+자동으로 만든다. push 하고 1~2분이면 Pages 에 반영된다.
+`git` 이 PATH 에 없으면 `%LOCALAPPDATA%\Programs\PortableGit` 도 함께 찾는다.
 
 ## 파일
 
