@@ -45,6 +45,21 @@ class SsrnError(RuntimeError):
     pass
 
 
+class SsrnBlocked(SsrnError):
+    """Cloudflare refused this network outright — retrying the next paper is pointless."""
+
+
+# Markers that mean the challenge page is still up. Its title is localised, so
+# never match on that; these appear in the challenge markup itself.
+_CHALLENGE_MARKERS = ("challenges.cloudflare.com", "cf-browser-verification",
+                      "__cf_chl", "cf_chl_opt")
+
+# Consecutive blocked papers before the whole SSRN phase gives up. Datacentre
+# IPs (GitHub Actions) are refused for every paper, so waiting out the per-page
+# timeout each time just burns minutes.
+BLOCK_STREAK = 2
+
+
 def _clean(text: str) -> str:
     return " ".join(html.unescape(_TAG_RE.sub(" ", text or "")).split())
 
@@ -212,21 +227,35 @@ class SsrnBrowser:
                 pass
 
     # -- internals ---------------------------------------------------
-    def _wait_content(self, selector: str, timeout: int = 90) -> bool:
+    def _wait_content(self, selector: str, timeout: int = 90,
+                      challenge_grace: int = 25) -> bool:
         """Wait for real content rather than for the challenge to disappear.
 
         The interstitial's title is localised by browser language (it reads
         "잠시만 기다리십시오…" on a Korean Chrome), so title matching is unreliable.
         Waiting on the target selector is not.
+
+        A challenge that clears at all clears in a few seconds. If the challenge
+        markup is still there after ``challenge_grace``, waiting out the full
+        timeout only wastes it, so give up early.
         """
-        for _ in range(timeout):
+        for elapsed in range(timeout):
             try:
                 if self._page.locator(selector).count() > 0:
                     return True
             except Exception:
                 pass
+            if elapsed == challenge_grace and self._challenge_up():
+                return False
             time.sleep(1)
         return False
+
+    def _challenge_up(self) -> bool:
+        try:
+            page = self._page.content()
+        except Exception:
+            return False
+        return any(marker in page for marker in _CHALLENGE_MARKERS)
 
     def cookies(self) -> dict[str, str]:
         jar = self._browser.contexts[0].cookies("https://papers.ssrn.com")
@@ -246,7 +275,10 @@ class SsrnBrowser:
         url = entry.get("abs_url") or SSRN_ABS_URL.format(id=entry["ext_id"])
         self._page.goto(url, wait_until="domcontentloaded", timeout=120_000)
         if not self._wait_content("div.abstract-text", timeout):
-            raise SsrnError("Cloudflare challenge not cleared (no abstract element).")
+            if self._challenge_up():
+                raise SsrnBlocked("Cloudflare refused this network "
+                                  "(datacentre IPs are normally blocked).")
+            raise SsrnError("No abstract element on the page.")
 
         text = self._page.locator("div.abstract-text").first.inner_text()
         text = re.sub(r"^\s*abstract\s*\n+", "", text, flags=re.I).strip()
@@ -291,7 +323,7 @@ def fetch_abstracts(entries: list[dict], browser: SsrnBrowser | None = None,
         return 0, 0
     own = browser is None
     ctx = SsrnBrowser() if own else browser
-    ok = fail = 0
+    ok = fail = streak = 0
     try:
         if own:
             ctx.__enter__()
@@ -299,11 +331,24 @@ def fetch_abstracts(entries: list[dict], browser: SsrnBrowser | None = None,
             try:
                 ctx.fetch_abstract(entry)
                 ok += 1
+                streak = 0
                 if verbose:
                     print(f"  [{i}/{len(todo)}] ok   {entry['ext_id']} "
                           f"{entry.get('title', '')[:52]}")
+            except SsrnBlocked as exc:
+                fail += 1
+                streak += 1
+                print(f"  [{i}/{len(todo)}] blocked {entry['ext_id']} — {exc}",
+                      file=sys.stderr)
+                if streak >= BLOCK_STREAK:
+                    # Every remaining paper would fail the same way.
+                    raise SsrnBlocked(
+                        f"Cloudflare blocked {streak} papers in a row; skipping the "
+                        f"remaining {len(todo) - i}. Run SSRN from a residential "
+                        f"network, or drop it from --source.") from exc
             except Exception as exc:  # noqa: BLE001
                 fail += 1
+                streak = 0
                 print(f"  [{i}/{len(todo)}] FAIL {entry['ext_id']} — {str(exc)[:140]}",
                       file=sys.stderr)
     finally:

@@ -1,5 +1,41 @@
 # Working notes
 
+## 2026-09-01 — SSRN in CI: blocked, and slow about it
+
+A workflow run with SSRN in the source list hung. The log:
+
+```
+[1/9] FAIL 7370498 — Cloudflare challenge not cleared (no abstract element).
+[2/9] FAIL 7370460 — Cloudflare challenge not cleared (no abstract element).
+...
+```
+
+Being blocked from a datacentre IP was expected and is documented. Waiting **90
+seconds per paper** to rediscover it was not — nine papers meant thirteen minutes
+of a runner doing nothing, and the run was still going when it got cancelled.
+
+Two fixes, both about failing fast rather than failing differently:
+
+1. **Detect the challenge, do not just time out.** `_challenge_up()` looks for
+   `challenges.cloudflare.com` / `cf_chl_opt` in the live DOM. A challenge that
+   clears at all clears in seconds, so if the markup is still there after a 25s
+   grace, stop waiting. (Still never match on the title — it is localised.)
+2. **Circuit breaker.** Two consecutive `SsrnBlocked` and the whole SSRN abstract
+   phase raises, skipping the rest. Every remaining paper would fail identically.
+
+Worst case drops from ~13 min to ~50s. Abstracts already fetched are kept, and
+`cmd_fetch` isolates sources, so the other five still land.
+
+`SsrnBlocked` is a distinct exception from `SsrnError` precisely so "this network
+is refused" can be told apart from "this one page was odd" — only the former
+should abort the batch.
+
+Verified the happy path is unharmed: two papers from a residential network, 16s,
+both abstracts fetched.
+
+The workflow default now lists `arxiv,quantpedia,man,alphaarchitect,quantocracy`
+— everything that works without a real browser. SSRN and Macrosynergy are local-only.
+
 ## 2026-08-31 — Two external skills: one wired in, one kept optional
 
 Installed both under `~/.claude/skills`, cloned to `~/.claude/vendor` so updates

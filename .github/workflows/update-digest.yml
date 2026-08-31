@@ -17,16 +17,20 @@ name: Update digest
 # Only workflow_dispatch and schedule trigger this, so no pull request from a
 # fork can ever reach those secrets.
 #
-# SSRN is best-effort here. Its Cloudflare challenge is usually refused from
-# datacentre IPs, so the default source list leaves it out; the run does not fail
-# if you opt in and it gets blocked.
+# SSRN does not work here. Cloudflare refuses GitHub's datacentre IPs, measured:
+# every paper fails the challenge. It is left out of the default source list. If
+# you opt it in anyway the run still succeeds — the fetcher gives up after two
+# blocked papers instead of waiting out a per-page timeout on each one — but you
+# will get no SSRN abstracts. Collect those from a residential network.
+#
+# Macrosynergy needs the same real browser, so it is out of the default too.
 
 on:
   workflow_dispatch:
     inputs:
       source:
-        description: "Sources (all, or a comma-separated list)"
-        default: "arxiv,quantpedia,man"
+        description: "Sources (comma-separated). SSRN is blocked from CI — run it locally."
+        default: "arxiv,quantpedia,man,alphaarchitect,quantocracy"
         type: string
       days:
         description: "Recent listing dates per paper source"
