@@ -1,5 +1,44 @@
 # Working notes
 
+## 2026-09-01 — Two SSRN reports were written from the abstract, not the PDF
+
+Asked whether a specific report came from the original PDF. It did not:
+
+```
+ssrn-7375498 | PDF unavailable — PDF download failed (HTTP 403, 5988 bytes). (abstract only)
+ssrn-7363482 | PDF unavailable — PDF download failed (HTTP 403, 5988 bytes). (abstract only)
+2608.28399   | arXiv HTML full text
+qp-*         | Quantpedia article
+```
+
+5,988 bytes is a Cloudflare block page. `ssrn-7363482` had said "SSRN PDF full
+text" when first built on 08-31, so the bulk regeneration on 09-01 **downgraded**
+both — the reports got shorter and thinner without anything failing loudly.
+
+Cause, in `fetch_fulltext`:
+
+```python
+if not entry.get("abstract") or not entry.get("pdf_url"):
+    ctx.fetch_abstract(entry)   # ← the only thing that visits SSRN
+data = ctx.download_pdf(entry)  # ← needs the cookie that visit earns
+```
+
+The download borrows `cf_clearance` from the browser, but that cookie only
+exists once the browser has actually been to SSRN. On the first build the
+abstract was missing, so the navigation happened and the cookie was there. On the
+rebuild everything was cached, the guard skipped the navigation, and the download
+went out with no clearance. **The clearance was a side effect of a step that was
+conditional; the step that depended on it was not.**
+
+`download_pdf` now owns its precondition: `warm()` before the request when no
+`cf_clearance` is held, and once more on a failed response, since a stale cookie
+is indistinguishable from a missing one. Verified against the cached entry that
+used to fail — 67,141 characters of PDF text in 16s.
+
+The reports did disclose "abstract only" in the header and in section 1, which is
+what the prompt requires. Honest, but the fallback was still silent enough to
+survive a regeneration. Worth checking `본문 출처` on any report that reads thin.
+
 ## 2026-09-01 — Prompt changes do not reach existing output
 
 Asked directly: when a prompt changes, does old output get rebuilt? No. Both

@@ -58,6 +58,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "KellyBoost: Growth-Optimal Portfolio Construction with Gradient-Boosted Trees",
     "updated": "2026-08-24T15:38:36Z"
   },
@@ -119,6 +120,7 @@
       },
       "relevance": 2
     },
+    "summary_version": "2026-09-01",
     "title": "The Axiomatic Trader: Latent Regularity, Information Budgets, and the Canonical Form of a Quantitative Investment System",
     "updated": "2026-08-24T15:58:15Z"
   },
@@ -182,6 +184,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "Minimum-Distortion Wealth Taxation, I: Information-Theoretic versus Transport-Geometric Optimality on the Proportional Class",
     "updated": "2026-07-08T18:18:15Z"
   },
@@ -245,6 +248,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "Generalizing Markowitz Portfolio Optimization by a Quadratic Risk Measure",
     "updated": "2026-08-25T12:04:22Z"
   },
@@ -306,6 +310,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "A Statistical-Finance Benchmark for Same-Day Directional Stock Prediction: Walk-Forward Evidence from SPY",
     "updated": "2026-05-01T15:47:15Z"
   },
@@ -368,6 +373,7 @@
       },
       "relevance": 4
     },
+    "summary_version": "2026-09-01",
     "title": "Option-Implied Signals and Crash Risk: Predictability and Machine-Learning Evidence from U.S. Equity Options",
     "updated": "2026-06-10T10:13:06Z"
   },
@@ -431,6 +437,7 @@
       },
       "relevance": 4
     },
+    "summary_version": "2026-09-01",
     "title": "From electricity prices to profits: multidimensional probabilistic forecasting for BESS trading",
     "updated": "2026-06-20T14:36:04Z"
   },
@@ -496,6 +503,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "Graph-Based Modeling of Financial Volatility Dynamics",
     "updated": "2026-06-23T01:31:09Z"
   },
@@ -557,6 +565,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "Analysis of the Principal Components of Correlation Matrices of S&P 500 Financial Data from an Econophysics Perspective",
     "updated": "2026-06-23T02:30:50Z"
   },
@@ -622,6 +631,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "A Frequency-Controlled Comparison of Tick- and Minute-Based Information Bars for Cryptocurrency Markets",
     "updated": "2026-07-07T11:40:08Z"
   },
@@ -687,6 +697,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "Forecasting Economically Significant Bitcoin Moves: A Multi-Scale TCN with Profit-Optimized Thresholds",
     "updated": "2026-07-25T06:45:21Z"
   },
@@ -750,6 +761,7 @@
       },
       "relevance": 4
     },
+    "summary_version": "2026-09-01",
     "title": "Tabular Deep Learning for Algorithmic Trading: Cross-Regime Bayesian Optimisation for Equity Signal Generation",
     "updated": "2026-08-27T13:01:32Z"
   },
@@ -811,6 +823,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "What survives honest evaluation? Leakage-safe, search-aware assessment of LLM-driven trading strategy discovery",
     "updated": "2026-08-27T21:50:28Z"
   },
@@ -838,6 +851,9 @@
     "report_path": "2608.28399.html",
     "report_paths": {
       "ko": "2608.28399.ko.html"
+    },
+    "report_versions": {
+      "ko": "2026-09-01"
     },
     "src": "arxiv",
     "src_cats": [
@@ -881,6 +897,7 @@
       },
       "relevance": 2
     },
+    "summary_version": "2026-09-01",
     "title": "RetailAgent: Structured Adverse Timing in Self-Conditioned Multimodal LLM Trading Agents",
     "updated": "2026-08-28T14:53:08Z"
   },
@@ -941,6 +958,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "Skewness as a Hidden Driver of Anomaly Returns"
   },
   "aa-chatgpt-forecast-stock-price": {
@@ -1000,6 +1018,7 @@
       },
       "relevance": 2
     },
+    "summary_version": "2026-09-01",
     "title": "Can ChatGPT Forecast Stock Price Movements?"
   },
   "aa-financial-technology": {
@@ -1058,6 +1077,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "Fintech plus Education equals better outcomes for consumers"
   },
   "aa-good-idea-or-bad-idea-private-equity-for-pension-plans": {
@@ -1117,6 +1137,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "Good Idea or Bad Idea: Private equity for pension plans?"
   },
   "aa-llm-fiduciary": {
@@ -1175,6 +1196,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "AI should assist advisors, but AI is NOT a fiduciary"
   },
   "aa-vix-trend-following-out-of-sample": {
@@ -1234,6 +1256,7 @@
       },
       "relevance": 4
     },
+    "summary_version": "2026-09-01",
     "title": "VIX and Trend Following Revisited: Nearly a Decade of Out-of-Sample Evidence"
   },
   "man-2026-h2-credit-outlook": {
@@ -1291,6 +1314,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "H2 2026 Credit Outlook: The AI Buildout – Boom or Bubble?"
   },
   "man-captial-market-assumptions": {
@@ -1346,6 +1370,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "Capital Market Assumptions: Redefined"
   },
   "man-global-regime-shift": {
@@ -1403,6 +1428,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "Deglobalisation: Insights on a Regime Shift"
   },
   "man-gold-bugs-bears-myths": {
@@ -1458,6 +1484,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "Gold: Bugs, Bears and Myths"
   },
   "man-h2-2026-technology-outlook": {
@@ -1513,6 +1540,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "Technology Outlook H2 2026: Still Dancing, But Moving Closer to the Door?"
   },
   "man-portable-alpha-ask-the-hard-questions": {
@@ -1568,6 +1596,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "Portable Alpha: Ask the Hard Questions"
   },
   "man-reducing-emissions": {
@@ -1623,6 +1652,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "(De)-Carbonara: A Better Recipe for Reducing Emissions"
   },
   "man-ri-podcast-cecilia-tam": {
@@ -1678,6 +1708,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "Cecilia Tam on the IEA's 2026 World Energy Investment Report"
   },
   "man-ri-podcast-james-talbot": {
@@ -1733,6 +1764,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "James Talbot, Bank of England, on Climate Shocks and Monetary Policy"
   },
   "man-road-ahead-andy-burnham": {
@@ -1788,6 +1820,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "Andy Burnham, Can You Hear Me?"
   },
   "man-the-early-view-july-2026": {
@@ -1845,6 +1878,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "Looking for AI Alpha Without AI Beta"
   },
   "man-views-from-the-floor-2026-14-july": {
@@ -1900,6 +1934,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "Chips Down, Then What?"
   },
   "man-views-from-the-floor-2026-21-July": {
@@ -1956,6 +1991,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "The VIX Isn't Worried, But Maybe It Should Be"
   },
   "man-views-from-the-floor-2026-28-July": {
@@ -1975,6 +2011,10 @@
     "report_paths": {
       "en": "man-views-from-the-floor-2026-28-July.en.html",
       "ko": "man-views-from-the-floor-2026-28-July.ko.html"
+    },
+    "report_versions": {
+      "en": "2026-09-01",
+      "ko": "2026-09-01"
     },
     "src": "man",
     "src_cats": [
@@ -2016,6 +2056,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "The Yield Trap Hiding in Junior Bank Bonds"
   },
   "man-will-ai-make-firms-bigger-or-smaller": {
@@ -2073,6 +2114,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "Will AI Make Firms Bigger or Smaller?"
   },
   "ms-bond-indices-and-systematic-duration-management": {
@@ -2133,6 +2175,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "Bond indices and systematic duration management"
   },
   "ms-economic-surprises-and-global-asset-class-returns": {
@@ -2194,6 +2237,7 @@
       },
       "relevance": 2
     },
+    "summary_version": "2026-09-01",
     "title": "Economic surprises and global asset class returns"
   },
   "ms-enhancing-bond-index-returns-with-systematic-fx-hedging": {
@@ -2253,6 +2297,7 @@
       },
       "relevance": 4
     },
+    "summary_version": "2026-09-01",
     "title": "Enhancing bond index returns with systematic FX hedging"
   },
   "ms-macro-aware-equity-indices-construction-guide-and-example": {
@@ -2312,6 +2357,7 @@
       },
       "relevance": 2
     },
+    "summary_version": "2026-09-01",
     "title": "How to build macro-aware equity indices"
   },
   "ms-portfolio-optimization-with-macro-factors-and-neural-networks": {
@@ -2373,6 +2419,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "Portfolio optimization with macro factors and neural networks"
   },
   "ms-systematic-macro-trading-with-regression-learning-and-transaction-cost-analysis": {
@@ -2433,6 +2480,7 @@
       },
       "relevance": 4
     },
+    "summary_version": "2026-09-01",
     "title": "Systematic FX trading with regression learning and transaction cost analysis"
   },
   "ms-the-sharpe-stability-ratio-of-trading-strategies": {
@@ -2493,6 +2541,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "The Sharpe stability ratio of trading strategies"
   },
   "ms-wealth-management-with-macro-factors": {
@@ -2553,6 +2602,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "Wealth management with macro factors"
   },
   "qc-aligrithm-crypto-isnt-structurally-alien-roll-vpin-amihud-predict-distribution-s": {
@@ -2611,6 +2661,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "Crypto Isn't Structurally Alien: Roll/VPIN/Amihud Predict Distribution Shifts"
   },
   "qc-aligrithm-fx-edge-lives-in-other-markets-cross-asset-series": {
@@ -2666,6 +2717,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "FX Edge Lives in Other Markets (cross-asset series)"
   },
   "qc-allocatesmartly-does-trading-taa-strategies-more-often-improve-performance": {
@@ -2723,6 +2775,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "Does Trading TAA Strategies More Often Improve Performance?"
   },
   "qc-blog-sec-form-4-insider-trading-python-event-study": {
@@ -2781,6 +2834,7 @@
       },
       "relevance": 2
     },
+    "summary_version": "2026-09-01",
     "title": "Form 4 Insider Trading in Python: A Filing-Date Event Study"
   },
   "qc-equibles-what-happens-after-congress-buys-or-sells-a-stock-evidence-from-17-859-": {
@@ -2837,6 +2891,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "What Happens After Congress Buys or Sells a Stock? Evidence..."
   },
   "qc-miktul-dual-momentum-for-a-collapsing-currency": {
@@ -2895,6 +2950,7 @@
       },
       "relevance": 4
     },
+    "summary_version": "2026-09-01",
     "title": "Dual Momentum for a Collapsing Currency"
   },
   "qc-quantbeckman-from-market-problems-to-quantitative": {
@@ -2952,6 +3008,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "Podcast: From market problems to quantitative trading systems"
   },
   "qc-quanterlab-one-half-of-the-magic-formula-beat-the-whole-thing-greenblatt-s-two-r": {
@@ -3010,6 +3067,7 @@
       },
       "relevance": 4
     },
+    "summary_version": "2026-09-01",
     "title": "Magic Formula tested against each half: quality alone beat the combination"
   },
   "qc-quanterlab-the-crash-switch-worked-and-the-strategy-starved-anyway-keller-s-menu": {
@@ -3068,6 +3126,7 @@
       },
       "relevance": 4
     },
+    "summary_version": "2026-09-01",
     "title": "The Crash Switch Worked and the Strategy Starved Anyway: Keller's Menu Tested"
   },
   "qc-spatium-novum-five-hundred-years-of-data": {
@@ -3124,6 +3183,7 @@
       },
       "relevance": 2
     },
+    "summary_version": "2026-09-01",
     "title": "Markowitz, Estimation Error and 1/N"
   },
   "qp-boundaries-of-time-series-momentum": {
@@ -3146,6 +3206,10 @@
     "report_paths": {
       "en": "qp-boundaries-of-time-series-momentum.en.html",
       "ko": "qp-boundaries-of-time-series-momentum.ko.html"
+    },
+    "report_versions": {
+      "en": "2026-09-01",
+      "ko": "2026-09-01"
     },
     "src": "quantpedia",
     "src_cats": [
@@ -3189,6 +3253,7 @@
       },
       "relevance": 4
     },
+    "summary_version": "2026-09-01",
     "title": "Boundaries of Time Series Momentum"
   },
   "qp-from-backtest-to-benchmark-validating-new-strategies-with-quantpedia-api": {
@@ -3250,6 +3315,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "From Backtest to Benchmark: Validating New Strategies with Quantpedia API"
   },
   "qp-getting-the-target-right-in-return-prediction": {
@@ -3309,6 +3375,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "Getting the Target Right in Return Prediction"
   },
   "qp-is-trend-still-your-friend-a-microstructural-account-of-the-demise-of-short-term": {
@@ -3369,6 +3436,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "Is Trend Still Your Friend?: A Microstructural Account of the Demise of Short-Term Trend-Following"
   },
   "qp-quantpedia-api-for-peer-group-strategy-analysis": {
@@ -3430,6 +3498,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "Quantpedia API for Peer Group Strategy Analysis"
   },
   "qp-quantpedia-in-july-2026": {
@@ -3487,6 +3556,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "Quantpedia in July 2026"
   },
   "qp-quantpedia-premium-update-august-29th": {
@@ -3542,6 +3612,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "Quantpedia Premium Update – August 29th"
   },
   "qp-quantpedia-premium-update-july-30th": {
@@ -3599,6 +3670,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "Quantpedia Premium Update – July 30th"
   },
   "qp-sectoral-intramonth-momentum-cycle": {
@@ -3620,6 +3692,9 @@
     "pdf_url": "",
     "report_paths": {
       "ko": "qp-sectoral-intramonth-momentum-cycle.ko.html"
+    },
+    "report_versions": {
+      "ko": "2026-09-01"
     },
     "src": "quantpedia",
     "src_cats": [
@@ -3663,6 +3738,7 @@
       },
       "relevance": 5
     },
+    "summary_version": "2026-09-01",
     "title": "Sectoral Intramonth Momentum Cycle: Exploiting Turn-of-the-Month Patterns in Sector ETF Strategies"
   },
   "ssrn-7346819": {
@@ -3730,6 +3806,7 @@
       },
       "relevance": 2
     },
+    "summary_version": "2026-09-01",
     "title": "Geospatial Imagery and Machine Learning in Commercial Real Estate Valuation"
   },
   "ssrn-7355099": {
@@ -3794,6 +3871,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "Chip-Backed Securities: Structural Risk in GPU-Collateralised Lending and the Vendor-Circular Financing Problem"
   },
   "ssrn-7355943": {
@@ -3858,6 +3936,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "Financial Technology, Investment Management, and Capital Market Services"
   },
   "ssrn-7355962": {
@@ -3922,6 +4001,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "Financial Technology Infrastructure"
   },
   "ssrn-7356059": {
@@ -3985,6 +4065,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "From Digital Case Files to Input Integrity: Pre-Filing Document Management as a Guarantee of Procedural Efficiency in Digital Justice"
   },
   "ssrn-7356758": {
@@ -4049,6 +4130,7 @@
       },
       "relevance": 4
     },
+    "summary_version": "2026-09-01",
     "title": "The Pre-BOJ Announcement Drift: Evidence from Japanese Equity Indices"
   },
   "ssrn-7356939": {
@@ -4113,6 +4195,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "Control, Custody and Conflict of Laws: Private International Law and the Regulation of Crypto-assets in the European Union"
   },
   "ssrn-7357138": {
@@ -4177,6 +4260,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "Where does Title Live? Tokenised Fund Units, Control and the Conflict of Laws in the DIFC 1"
   },
   "ssrn-7359658": {
@@ -4243,6 +4327,7 @@
       },
       "relevance": 2
     },
+    "summary_version": "2026-09-01",
     "title": "Multi-Agent Deep Reinforcement Learning for Maximal Extractable Value Allocation under Proposer-Builder Separation"
   },
   "ssrn-7359662": {
@@ -4306,6 +4391,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "EcoTechnoPolitical Citizenship"
   },
   "ssrn-7359698": {
@@ -4370,6 +4456,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "5G Deployment in India"
   },
   "ssrn-7363041": {
@@ -4434,6 +4521,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "Gravity and the Arch: Implementation Tests and Findings"
   },
   "ssrn-7363442": {
@@ -4498,6 +4586,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "The Omega Block: Correlation-Network Features that Improve Systemic Tail-Loss Attribution Beyond Downside Beta and Conditional MES"
   },
   "ssrn-7363443": {
@@ -4562,6 +4651,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "What Drives Institutional Asset Allocation? Survey Evidence from Pension Fund Advisors"
   },
   "ssrn-7363482": {
@@ -4587,6 +4677,9 @@
     "report_path": "ssrn-7363482.html",
     "report_paths": {
       "ko": "ssrn-7363482.ko.html"
+    },
+    "report_versions": {
+      "ko": "2026-09-01"
     },
     "src": "ssrn",
     "src_cats": [
@@ -4630,6 +4723,7 @@
       },
       "relevance": 5
     },
+    "summary_version": "2026-09-01",
     "title": "The Tail Is the Only Signal: Flush Reversion in Equity Indices and Crypto Perpetual Futures"
   },
   "ssrn-7364940": {
@@ -4693,6 +4787,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "Blockchain Adoption and Transaction Transparency in Banking: Empirical Evidence from the Industry 4.0 Paradigm"
   },
   "ssrn-7365578": {
@@ -4757,6 +4852,7 @@
       },
       "relevance": 2
     },
+    "summary_version": "2026-09-01",
     "title": "Attributing Apparent AI Alpha: Factor Exposure, Leakage, Complexity, and Reasoning in Agentic Equity Research"
   },
   "ssrn-7365579": {
@@ -4823,6 +4919,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "What Lies Behind Investment Banking, Shadow Banking, and High-Frequency Trading? A Risky, Dangerous, Secretive, or Reputable Business?"
   },
   "ssrn-7365822": {
@@ -4887,6 +4984,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "Satellite-to-Ground Quantum Key Distribution: Simulated and Hardware-Validated Effects of Atmospheric Loss on Secure Fleet and Aircraft-to-Base Communications"
   },
   "ssrn-7365979": {
@@ -4954,6 +5052,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "The Nation-State in a Triple Crisis Spiral: Demographic Decline, Automation, and Climate Disruption at the Intersection of Regulatory Stakeholder Capitalism"
   },
   "ssrn-7366094": {
@@ -5020,6 +5119,7 @@
       },
       "relevance": 2
     },
+    "summary_version": "2026-09-01",
     "title": "Investor attention and the cross-border e-commerce consignment shift: Textual evidence from investor interaction platforms​"
   },
   "ssrn-7366218": {
@@ -5084,6 +5184,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "Intraday Liquidity Cascades, Order Book Imbalance, and Gamma Explosions: A Quantitative Analysis of the 3:00 PM Regime Shift in NSE Index Derivatives"
   },
   "ssrn-7366638": {
@@ -5149,6 +5250,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "Climate Policy Uncertainty and Ambiguity-Aware Strategic Asset Allocation"
   },
   "ssrn-7367199": {
@@ -5221,6 +5323,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "Predictive Analytics for Stock Market Trends Using Ensemble Machine Learning Models"
   },
   "ssrn-7369760": {
@@ -5291,6 +5394,7 @@
       },
       "relevance": 4
     },
+    "summary_version": "2026-09-01",
     "title": "What Can and Cannot Be Tuned in a Heuristic Equity Screen: Separable Gate Optimization, a Failed Weight Search, and an Explicit Look-Ahead Audit"
   },
   "ssrn-7370018": {
@@ -5356,6 +5460,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "Unpacking Perpetual Decentralized Exchanges"
   },
   "ssrn-7370460": {
@@ -5422,6 +5527,7 @@
       },
       "relevance": 2
     },
+    "summary_version": "2026-09-01",
     "title": "Measuring Analyst Risk Perception in M&A: Evidence from Conference Calls and LLMs"
   },
   "ssrn-7370498": {
@@ -5486,6 +5592,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "Quantifying Market Synchronization During Financial Crises: A Rolling Z-Score Analysis of Cross-Sector Equity Correlations in U.S. Markets (1980-2025)"
   },
   "ssrn-7371699": {
@@ -5550,6 +5657,7 @@
       },
       "relevance": 2
     },
+    "summary_version": "2026-09-01",
     "title": "Balance-Sheet Drivers of Bank Resilience Across Five Systemic Shocks: A Cross-Country, Two-Window Event Study"
   },
   "ssrn-7372261": {
@@ -5618,6 +5726,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "Pre-Expiration Liquidity and Price Reactions to IPO Lockup Expirations"
   },
   "ssrn-7372321": {
@@ -5683,6 +5792,7 @@
       },
       "relevance": 2
     },
+    "summary_version": "2026-09-01",
     "title": "Is Gold a Safe Haven? Crisis-Specific and Long-Run Evidence from Return Correlations in India"
   },
   "ssrn-7372430": {
@@ -5746,6 +5856,7 @@
       },
       "relevance": 1
     },
+    "summary_version": "2026-09-01",
     "title": "A Quantitative Analysis of the Equity Return Consequences of Sovereign Default Risk"
   },
   "ssrn-7375459": {
@@ -5816,6 +5927,7 @@
       },
       "relevance": 3
     },
+    "summary_version": "2026-09-01",
     "title": "Half the Signal: Retail Attention and the Price of Volatility"
   },
   "ssrn-7375498": {
@@ -5841,6 +5953,9 @@
     "report_path": "ssrn-7375498.html",
     "report_paths": {
       "ko": "ssrn-7375498.ko.html"
+    },
+    "report_versions": {
+      "ko": "2026-09-01"
     },
     "src": "ssrn",
     "src_cats": [
@@ -5884,6 +5999,7 @@
       },
       "relevance": 4
     },
+    "summary_version": "2026-09-01",
     "title": "Identifying and Forecasting US Equity Market Regimes: An Unsupervised and Supervised Machine Learning Analysis of Bull and Bear Market States, 2010-2025 A Research Paper on Quantitative Finance and Market Regime Classification"
   },
   "ssrn-7375618": {
@@ -5949,6 +6065,7 @@
       },
       "relevance": 2
     },
+    "summary_version": "2026-09-01",
     "title": "Who Gets Credit When Carbon Scores Fall?"
   },
   "ssrn-7375738": {
@@ -6016,6 +6133,7 @@
       },
       "relevance": 2
     },
+    "summary_version": "2026-09-01",
     "title": "Passive Investing and the Supply of New Shares"
   },
   "ssrn-7376118": {
@@ -6080,6 +6198,7 @@
       },
       "relevance": 4
     },
+    "summary_version": "2026-09-01",
     "title": "Volatility and Returns to Leveraged ETFs"
   },
   "ssrn-7379518": {
@@ -6148,6 +6267,7 @@
       },
       "relevance": 2
     },
+    "summary_version": "2026-09-01",
     "title": "The Global Rise of Index-Based Ownership of Firms"
   }
 }

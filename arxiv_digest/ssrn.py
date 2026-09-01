@@ -300,19 +300,45 @@ class SsrnBrowser:
         return entry
 
     def download_pdf(self, entry: dict) -> bytes:
-        """Fetch the PDF using the cf_clearance cookie the browser earned."""
+        """Fetch the PDF using the cf_clearance cookie the browser earned.
+
+        The cookie only exists once this browser has actually been to SSRN. When
+        the abstract is already cached the caller skips that navigation, so warm
+        the session here rather than relying on it having happened.
+        """
         url = entry.get("pdf_url") or SSRN_PDF_URL.format(id=entry["ext_id"])
-        sess = requests.Session()
-        sess.headers.update({
-            "User-Agent": self.user_agent(),
-            "Accept": "application/pdf,*/*",
-            "Referer": entry.get("abs_url", "https://papers.ssrn.com/"),
-        })
-        resp = sess.get(url, cookies=self.cookies(), timeout=180, allow_redirects=True)
+
+        def attempt() -> requests.Response:
+            sess = requests.Session()
+            sess.headers.update({
+                "User-Agent": self.user_agent(),
+                "Accept": "application/pdf,*/*",
+                "Referer": entry.get("abs_url", "https://papers.ssrn.com/"),
+            })
+            return sess.get(url, cookies=self.cookies(), timeout=180, allow_redirects=True)
+
+        if "cf_clearance" not in self.cookies():
+            self.warm(entry)
+        resp = attempt()
+        if resp.status_code != 200 or not resp.content.startswith(b"%PDF"):
+            # A stale clearance looks exactly like this. Re-earn it and retry once.
+            self.warm(entry)
+            resp = attempt()
         if resp.status_code != 200 or not resp.content.startswith(b"%PDF"):
             raise SsrnError(f"PDF download failed (HTTP {resp.status_code}, "
                             f"{len(resp.content)} bytes).")
         return resp.content
+
+    def warm(self, entry: dict, timeout: int = 60) -> bool:
+        """Visit the abstract page so this browser holds a live cf_clearance."""
+        from .config import SSRN_ABS_URL
+
+        url = entry.get("abs_url") or SSRN_ABS_URL.format(id=entry["ext_id"])
+        try:
+            self._page.goto(url, wait_until="domcontentloaded", timeout=120_000)
+            return self._wait_content("div.abstract-text", timeout)
+        except Exception:
+            return False
 
 
 def fetch_abstracts(entries: list[dict], browser: SsrnBrowser | None = None,
