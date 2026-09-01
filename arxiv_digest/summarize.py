@@ -72,7 +72,10 @@ KO_STYLE = """한국어 문체 규칙 — 번역체와 AI 문체를 쓰지 마�
 지켜야 할 것
 - 전문 용어는 처음 나올 때만 한국어(영문) 병기. 예: 평균-분산(mean-variance).
 - 문장 끝은 '~다'로 통일.
-- 원문이 "~할 수 있다"로 유보한 주장을 "~한다"로 단정하지 마세요. 확신의 세기를 그대로."""
+- 원문이 "~할 수 있다"로 유보한 주장을 "~한다"로 단정하지 마세요. 확신의 세기를 그대로.
+- 흔한 말로 쓰세요. 더 고유한 한국어처럼 보이려고 덜 쓰이는 어휘를 고르지 마세요.
+  ("비교했다"를 "견주었다"로 바꾸는 식은 가독성만 떨어뜨립니다.)
+- 한 요약 안에서 같은 개념은 같은 단어로 부르세요."""
 
 EN_STYLE = """English style rules — write for a practitioner skimming 40 papers.
 - Plain, direct sentences under 20 words. No throat-clearing.

@@ -1,5 +1,30 @@
 # Working notes
 
+## 2026-09-01 — Dropped the polish pass; translate natively instead
+
+The humanize-korean second pass is gone. It rewrote a finished HTML fragment
+without the paper behind it, and it showed: terminology drifted between sections
+because the rewriter could not know that "타이밍 알파" in section 3 and the phrase
+it reached for in section 6 were the same defined quantity. It also reached for
+less common words to sound more native — "비교했다" → "견주었다" — which reads worse,
+not better. Both are failure modes of editing text you cannot see the source of.
+
+The taxonomy stays, as **rules in the generation prompt**. Writing the whole
+report in one pass means the model has the paper, the reviewer notes and all
+eight sections in view while choosing words, which is exactly the context a
+standalone rewriter lacks. Two rules added off the back of this:
+
+- Terminology consistency — one translation per concept, held across sections;
+  follow the paper's own definitions even when a smoother word exists.
+- Prefer common words. Do not pick rarer vocabulary to seem more idiomatic.
+
+`--no-polish` is removed; there is nothing to skip. `--review` stays — that pass
+reads the *full paper*, so it has the context this one lacked, and it measurably
+sharpened the analysis.
+
+The general lesson: a post-hoc rewriter is the wrong tool when the constraint is
+semantic rather than stylistic. Give the rules to whoever is holding the context.
+
 ## 2026-09-01 — SSRN in CI: blocked, and slow about it
 
 A workflow run with SSRN in the source list hung. The log:

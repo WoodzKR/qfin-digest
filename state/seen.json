@@ -4165,6 +4165,9 @@
     "page_count": 22,
     "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7363482.pdf?abstractid=7363482&mirid=1",
     "report_path": "ssrn-7363482.html",
+    "report_paths": {
+      "ko": "ssrn-7363482.ko.html"
+    },
     "src": "ssrn",
     "src_cats": [
       "QM"
@@ -4948,6 +4951,9 @@
     "page_count": 23,
     "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7375498.pdf?abstractid=7375498&mirid=1",
     "report_path": "ssrn-7375498.html",
+    "report_paths": {
+      "ko": "ssrn-7375498.ko.html"
+    },
     "src": "ssrn",
     "src_cats": [
       "QM"

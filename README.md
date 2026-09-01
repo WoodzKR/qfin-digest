@@ -78,7 +78,6 @@ python run.py paper <id> --lang en
 | `--deep N` | pre-build deep reports for the top N by star |
 | `--days N` | recent listing dates per paper source (default 2) |
 | `--review` | critique pass before writing a deep report (one extra call) |
-| `--no-polish` | skip the Korean polish pass |
 | `--force` | redo work that is already done |
 | `--push` | publish after a full run |
 
@@ -115,11 +114,14 @@ arXiv HTML edition, the SSRN PDF or the blog article — the abstract only as a 
 and the page says so when that happens. Math keeps its original LaTeX and renders with
 MathJax.
 
-Korean reports run through [humanize-korean](https://github.com/epoko77-ai/im-not-ai)
-as a second pass, so the prose is not translationese. Add `--review` to run a critique
-pass first — claims, identifying assumptions, validity threats, the strongest
-counterargument — which feeds the results and limitations sections. Both skills install
-under `~/.claude/skills`.
+Korean reports are written directly in Korean, in one pass over the whole paper, under
+style rules distilled from [humanize-korean](https://github.com/epoko77-ai/im-not-ai).
+There is no separate rewriting step: a rewriter that only sees the finished fragment
+cannot keep terminology consistent across sections.
+
+Add `--review` to run a critique pass first — claims, identifying assumptions, validity
+threats, the strongest counterargument — which feeds the results and limitations
+sections. That pass reads the full paper, so it has the context a rewriter lacks.
 
 ---
 

@@ -84,11 +84,20 @@ KO_STYLE = """문체 규칙 — 번역체와 AI 문체를 쓰지 마세요. 한�
 - "-적/-성/-화"를 겹쳐 쓰지 마세요. ("전략적 함의" → "전략상 의미")
 - 나열·비교는 문장 대신 <ul> 이나 <table> 로 빼세요.
 
+용어 일관성 — 리포트 전체를 한 번에 쓰는 이점을 살리세요.
+- 한 개념에는 한 번 정한 번역어를 끝까지 씁니다. 3번 섹션에서 "타이밍 알파"라고 했으면
+  6번 섹션에서 "시점 초과수익"으로 바꾸지 마세요.
+- 논문이 정의한 기호와 이름은 그 논문의 용법을 따릅니다. 더 자연스러운 말이 떠올라도
+  정의된 용어를 바꾸지 마세요.
+- 앞 섹션에서 설명한 개념은 뒤에서 다시 풀어 쓰지 말고 그대로 지칭하세요.
+
 지켜야 할 것
 - 전문 용어는 처음 나올 때만 한국어(영문) 병기하고, 그 뒤로는 한국어만.
 - 문장 끝은 '~다'로 통일. 구어체와 수사 의문문은 쓰지 마세요.
 - 원문이 "~할 수 있다"로 유보한 주장을 "~한다"로 단정하지 마세요. 확신의 세기를 그대로.
-- 원문에 없는 비유나 상투구를 새로 만들어 넣지 마세요."""
+- 원문에 없는 비유나 상투구를 새로 만들어 넣지 마세요.
+- 흔한 말로 쓰세요. 더 고유한 한국어처럼 보이려고 덜 쓰이는 어휘를 고르지 마세요.
+  ("비교했다"를 "견주었다"로 바꾸는 식은 가독성만 떨어뜨립니다.)"""
 
 KO_FACTS = """사실 규칙:
 - 본문에 없는 수치나 결과를 지어내지 마세요. 근거가 없으면 "본문에 명시되지 않음"이라고 쓰세요.
@@ -239,43 +248,6 @@ def review_paper(entry: dict, body: str, origin: str, exe: str, timeout: int = 9
     return critique if len(critique) > 200 else ""
 
 
-POLISH_PROMPT = """humanize-korean 스킬을 써서 아래 HTML 조각의 한국어를 윤문하세요.
-
-규칙:
-- HTML 구조는 그대로 둡니다. 태그, 속성, 순서를 바꾸지 마세요.
-- 수식(\\( \\), \\[ \\]), 숫자, 고유명사, 영어 용어, <code> 안의 내용은 한 글자도 건드리지 마세요.
-- 뜻을 바꾸지 마세요. 유보한 주장을 단정으로 바꾸지 마세요.
-- 윤문한 HTML 조각만 출력하세요. 설명도 코드펜스도 붙이지 마세요.
-
-<fragment>
-{fragment}
-</fragment>
-"""
-
-
-def polish_korean(fragment: str, exe: str, timeout: int = 900) -> str:
-    """Run the locally installed humanize-korean skill over a Korean fragment.
-
-    Falls back to the original whenever the result looks wrong. The skill is a
-    rewriter, so a large size swing means it did something other than polish.
-    """
-    try:
-        stdout = _run_cli(exe, POLISH_PROMPT.format(fragment=fragment), timeout)
-        envelope = _extract_json(stdout)
-        polished = _clean_fragment(
-            envelope.get("result") if isinstance(envelope.get("result"), str) else "")
-    except Exception as exc:  # noqa: BLE001 - polishing is optional, never fatal
-        print(f"      polish skipped: {str(exc)[:110]}")
-        return fragment
-
-    ratio = len(polished) / max(1, len(fragment))
-    if not (0.7 <= ratio <= 1.3) or polished.count("<h2") != fragment.count("<h2"):
-        print(f"      polish rejected (size x{ratio:.2f}, headings "
-              f"{fragment.count('<h2')}->{polished.count('<h2')})")
-        return fragment
-    return polished
-
-
 def _clean_fragment(text: str) -> str:
     text = text.strip()
     fence = re.search(r"```(?:html)?\s*(.*?)```", text, re.S)
@@ -336,7 +308,7 @@ paper's own framing. Do not copy it verbatim and do not add claims it does not m
 
 
 def build_report(entry: dict, body: str, source: str, lang: str = "ko",
-                 timeout: int = 900, polish: bool = True, review: bool = False) -> Path:
+                 timeout: int = 900, review: bool = False) -> Path:
     """Turn body text into a deep report page in ``lang``."""
     ensure_dirs()
     spec = LANG_SPEC[lang]
@@ -370,12 +342,6 @@ def build_report(entry: dict, body: str, source: str, lang: str = "ko",
         envelope.get("result") if isinstance(envelope.get("result"), str) else "")
     if len(fragment) < 200:
         raise SummarizerError(f"{pid}: report body came back empty.")
-
-    # Korean long-form gets a second pass through the humanize-korean skill.
-    # It runs last, so it is the step that gets starved when a --review chain has
-    # already been going for twenty minutes. Give it its own, larger budget.
-    if polish and lang == "ko":
-        fragment = polish_korean(fragment, exe, max(timeout, 1800))
 
     one_liner = summary_text(entry, lang).get("one_liner", "")
     tags = ", ".join(entry.get("categories") or entry.get("src_cats") or [])
@@ -420,7 +386,7 @@ def build_report(entry: dict, body: str, source: str, lang: str = "ko",
 
 def build_paper_report(entry: dict, session: requests.Session | None = None,
                        timeout: int = 900, ssrn_browser=None, lang: str = "ko",
-                       polish: bool = True, review: bool = False) -> Path:
+                       review: bool = False) -> Path:
     """Get the body from the right place for this source, then write the report."""
     src = entry.get("src", "arxiv")
     if src == "ssrn":
@@ -439,5 +405,4 @@ def build_paper_report(entry: dict, session: requests.Session | None = None,
         if not body:
             raise SummarizerError(f"{entry['id']}: no full text and no abstract.")
         source = source or "abstract only"
-    return build_report(entry, body, source, lang=lang, timeout=timeout, polish=polish,
-                        review=review)
+    return build_report(entry, body, source, lang=lang, timeout=timeout, review=review)
