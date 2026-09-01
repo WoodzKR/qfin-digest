@@ -14,12 +14,24 @@ SEEN_PATH = STATE_DIR / "seen.json"
 LANGS = ("ko", "en")
 LANG_LABEL = {"ko": "한국어", "en": "English"}
 
-# Bump when a prompt changes in a way that makes older output worth redoing —
-# the star rubric, the style rules, the deep-report sections. Existing work is
-# never redone automatically; `--stale` is what acts on a bump, and
-# `run.py status` shows what is behind.
+# Two independent version stamps, so a change to one never drags the other into
+# a rerun. Bump only the one you actually changed:
+#
+#   SUMMARY_VERSION  summarize.py — the card summaries and the star rubric.
+#                    100 calls to redo.
+#   REPORT_VERSION   paper.py — the eight deep-report sections and their style.
+#                    A handful of calls to redo, since reports are on-demand.
+#
+# Bump for a change that makes older output worth redoing; leave it alone for
+# wording fixes. Nothing is redone automatically — `--stale` acts on a bump and
+# `run.py status` shows what does not match.
 SUMMARY_VERSION = "2026-09-01"   # bilingual + trading rubric + style rules
 REPORT_VERSION = "2026-09-01"    # native Korean, no rewrite pass
+
+# What output written before version stamping existed is credited with. A fixed
+# literal, never the constants above: adopting "whatever is current" would
+# re-stamp legacy entries on every load and they could never go stale.
+LEGACY_VERSION = "2026-09-01"
 
 # ── arXiv ────────────────────────────────────────────────────────────────
 CATEGORIES = {

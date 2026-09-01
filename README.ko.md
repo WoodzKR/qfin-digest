@@ -85,7 +85,25 @@ python run.py status           # 현재 누적 상태
 | `--deep N` | ★ 상위 N편 상세 리포트를 미리 생성 |
 | `--days N` | 논문 출처별 최근 날짜 수 (기본 2) |
 | `--review` | 상세 리포트를 쓰기 전 비평 패스 |
+| `--stale` | 구버전 프롬프트가 만든 것만 다시 처리 |
 | `--force` | 이미 처리한 것도 다시 처리 |
+
+### 프롬프트를 바꿨을 때
+
+기존 결과물은 자동으로 다시 만들어지지 않는다 — 문구 하나 고쳤다고 100번 호출이
+돌면 곤란하다. 요약과 리포트마다 어떤 프롬프트가 만들었는지 기록하고,
+`run.py status` 가 현황을 보여준다.
+
+```
+current prompts — summary 2026-09-01, report 2026-09-01
+  summaries   : 2026-09-01 100
+  deep reports: 2026-09-01 8
+  everything is on the current prompts
+```
+
+옛 결과물에도 적용할 만한 변경이면 `arxiv_digest/config.py` 의 `SUMMARY_VERSION`
+이나 `REPORT_VERSION` 을 올리고 `--stale` 로 안 맞는 것만 다시 돌린다. 둘은 서로
+독립이라, **상세 리포트 프롬프트를 바꿔도 요약은 건드리지 않는다.**
 | `--push` | 전체 실행 후 발행 |
 
 ## 수집 대상

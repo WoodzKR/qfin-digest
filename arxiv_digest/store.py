@@ -19,7 +19,8 @@ import shutil
 from datetime import datetime, timezone
 from pathlib import Path
 
-from .config import LANGS, SEEN_PATH, ensure_dirs
+from .config import (LANGS, LEGACY_VERSION, REPORT_VERSION, SEEN_PATH, SUMMARY_VERSION,
+                     ensure_dirs)
 
 # Per-language fields; ``relevance`` and ``keywords`` are shared across languages.
 TEXT_FIELDS = ("one_liner", "bullets", "method", "data", "takeaway", "relevance_why")
@@ -62,6 +63,16 @@ def _migrate(data: dict[str, dict]) -> dict[str, dict]:
         if isinstance(summary, dict) and "one_liner" in summary:
             korean = {k: summary.pop(k) for k in TEXT_FIELDS if k in summary}
             summary["ko"] = korean
+
+        # Output that predates version stamping is adopted as current rather than
+        # flagged. It was all produced by the prompts as they stand, and marking
+        # it unknown would nag for a hundred-call rerun that changes nothing.
+        # Only these existing entries are ever touched: everything written from
+        # now on is stamped at write time.
+        if is_summarized(entry):
+            entry.setdefault("summary_version", LEGACY_VERSION)
+        if entry.get("report_paths") and "report_versions" not in entry:
+            entry["report_versions"] = {lang: LEGACY_VERSION for lang in entry["report_paths"]}
     return data
 
 
@@ -112,19 +123,11 @@ def needs_summary(entry: dict, langs: tuple[str, ...] = LANGS) -> bool:
 
 
 def summary_version(entry: dict) -> str | None:
-    """The prompt version that produced this summary, or None if unrecorded.
-
-    None means "made before versioning existed", which is not the same as
-    "known to be old" — we cannot tell. Both are worth redoing, but only the
-    first is worth claiming as a fact.
-    """
     return entry.get("summary_version")
 
 
 def summary_stale(entry: dict) -> bool:
-    """Summarized by something other than the current prompt, or unverifiable."""
-    from .config import SUMMARY_VERSION
-
+    """Summarized by an older summary prompt. Independent of the report prompt."""
     return not needs_summary(entry) and summary_version(entry) != SUMMARY_VERSION
 
 
@@ -133,9 +136,7 @@ def report_version(entry: dict, lang: str) -> str | None:
 
 
 def report_stale(entry: dict, lang: str) -> bool:
-    """A deep report for this language was not made by the current prompt."""
-    from .config import REPORT_VERSION
-
+    """A deep report made by an older report prompt. Independent of summaries."""
     return report_version(entry, lang) != REPORT_VERSION
 
 

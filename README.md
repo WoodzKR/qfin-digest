@@ -87,7 +87,26 @@ python run.py status           # what is in the store
 | `--deep N` | pre-build deep reports for the top N by star |
 | `--days N` | recent listing dates per paper source (default 2) |
 | `--review` | critique pass before writing a deep report |
+| `--stale` | redo only what an older prompt produced |
 | `--force` | redo work that is already done |
+
+### When a prompt changes
+
+Existing output is never rebuilt automatically — a wording tweak should not cost a
+hundred calls. Each summary and report records which prompt made it, and
+`run.py status` shows the split:
+
+```
+current prompts — summary 2026-09-01, report 2026-09-01
+  summaries   : 2026-09-01 100
+  deep reports: 2026-09-01 8
+  everything is on the current prompts
+```
+
+Bump `SUMMARY_VERSION` or `REPORT_VERSION` in `arxiv_digest/config.py` when a change
+is worth applying to old output, then `--stale` redoes only the mismatches. The two
+are independent: changing the deep-report prompt flags the reports and leaves the
+summaries alone.
 | `--push` | publish after a full run |
 
 ## What it reads

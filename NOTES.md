@@ -28,6 +28,31 @@ it. `--stale` includes them because unverifiable is a reason to redo, but the
 status text says "may already match" rather than asserting they are behind.
 Claiming false staleness would push a pointless hundred-call rerun.
 
+**Resolved the same day.** Everything currently in the store *was* produced by
+the prompts as they stand, so the migration now adopts it as current rather than
+flagging it. The nag is gone and a future bump means something.
+
+The two stamps are deliberately independent. Changing the deep-report prompt
+flags the eight reports and leaves the hundred summaries alone — verified by
+bumping `REPORT_VERSION` alone:
+
+```
+current prompts — summary 2026-09-01, report 2026-09-02-TEST
+  summaries   : 2026-09-01 100
+  deep reports: 2026-09-01 8
+  8 deep reports predate REPORT_VERSION:
+     python run.py deep --deep 8 --stale --lang both
+```
+
+`summarize --stale` in that state prints "nothing to summarize", which is the
+whole point: deep-report work should never drag summaries into a rerun.
+
+One trap the test caught. The migration first credited legacy entries with
+`SUMMARY_VERSION`/`REPORT_VERSION` — *the current constants*. Since it re-runs on
+every load and `status` does not save, bumping a version silently re-stamped the
+old entries as new, and nothing could ever go stale. The backfill has to use a
+fixed literal, `LEGACY_VERSION`, so a bump actually bites.
+
 ## 2026-09-01 — Local-only, git as the publishing channel
 
 Deleted `.github/workflows/`. The cloud runner is gone, along with the split

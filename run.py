@@ -419,15 +419,17 @@ def cmd_status(_args) -> None:
 
     stale_sum = sum(1 for e in summarized if store.summary_stale(e))
     stale_rep = sum(1 for e, lang in reports if store.report_stale(e, lang))
-    if stale_sum or stale_rep:
-        print(f"  {stale_sum} summaries and {stale_rep} reports were not made by the "
-              f"current prompts.")
-        print(f"  'unrecorded' predates version tracking — it may already match. Redo with:")
-        print(f"     python run.py summarize --stale        ({stale_sum} calls)")
-        if stale_rep:
-            print(f"     python run.py deep --deep {stale_rep} --stale --lang both")
-    else:
+    if not (stale_sum or stale_rep):
         print("  everything is on the current prompts")
+        return
+    # The two stamps are independent: a deep-report change never asks you to
+    # redo a hundred summaries, and vice versa.
+    if stale_sum:
+        print(f"  {stale_sum} summaries predate SUMMARY_VERSION:")
+        print(f"     python run.py summarize --stale        ({stale_sum} calls)")
+    if stale_rep:
+        print(f"  {stale_rep} deep reports predate REPORT_VERSION:")
+        print(f"     python run.py deep --deep {stale_rep} --stale --lang both")
 
 
 def main() -> None:
