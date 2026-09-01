@@ -111,6 +111,34 @@ def needs_summary(entry: dict, langs: tuple[str, ...] = LANGS) -> bool:
     return not all(has_lang(entry, lang) for lang in langs)
 
 
+def summary_version(entry: dict) -> str | None:
+    """The prompt version that produced this summary, or None if unrecorded.
+
+    None means "made before versioning existed", which is not the same as
+    "known to be old" — we cannot tell. Both are worth redoing, but only the
+    first is worth claiming as a fact.
+    """
+    return entry.get("summary_version")
+
+
+def summary_stale(entry: dict) -> bool:
+    """Summarized by something other than the current prompt, or unverifiable."""
+    from .config import SUMMARY_VERSION
+
+    return not needs_summary(entry) and summary_version(entry) != SUMMARY_VERSION
+
+
+def report_version(entry: dict, lang: str) -> str | None:
+    return (entry.get("report_versions") or {}).get(lang)
+
+
+def report_stale(entry: dict, lang: str) -> bool:
+    """A deep report for this language was not made by the current prompt."""
+    from .config import REPORT_VERSION
+
+    return report_version(entry, lang) != REPORT_VERSION
+
+
 def is_summarized(entry: dict) -> bool:
     """True once at least one language is present (enough to render a card)."""
     return any(has_lang(entry, lang) for lang in LANGS)

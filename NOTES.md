@@ -1,5 +1,33 @@
 # Working notes
 
+## 2026-09-01 — Prompt changes do not reach existing output
+
+Asked directly: when a prompt changes, does old output get rebuilt? No. Both
+stages skip finished work — `cmd_summarize` on `needs_summary`, `cmd_deep` on the
+report file existing. That is the right default (a prompt tweak should not
+silently trigger a hundred calls) but it was invisible, so the store quietly
+accumulated output from several prompt generations with nothing to tell them
+apart. `summarized_at` recorded *when*, never *by what*.
+
+Added `SUMMARY_VERSION` and `REPORT_VERSION` in config, stamped onto each entry
+as it is written, surfaced by `run.py status`, and acted on by `--stale`:
+
+```
+current prompts — summary 2026-09-01, report 2026-09-01
+  summaries   : unrecorded 100
+  deep reports: unrecorded 8
+```
+
+Bump the constant when a prompt changes in a way worth redoing; leave it alone
+for wording fixes. `--stale` redoes only what does not match. `--force` still
+redoes everything.
+
+One distinction worth keeping: **"unrecorded" is not "old"**. Everything already
+in the store predates the stamp, so we genuinely cannot tell which prompt made
+it. `--stale` includes them because unverifiable is a reason to redo, but the
+status text says "may already match" rather than asserting they are behind.
+Claiming false staleness would push a pointless hundred-call rerun.
+
 ## 2026-09-01 — Local-only, git as the publishing channel
 
 Deleted `.github/workflows/`. The cloud runner is gone, along with the split

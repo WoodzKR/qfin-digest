@@ -14,7 +14,7 @@ import subprocess
 import sys
 from concurrent.futures import ThreadPoolExecutor
 
-from .config import LANGS
+from .config import LANGS, SUMMARY_VERSION
 from .store import TEXT_FIELDS
 
 # ``relevance`` measures one thing only: can this be coded up as a systematic
@@ -254,6 +254,7 @@ def summarize_many(entries: list[dict], workers: int = 3,
             if summary:
                 entry["summary"] = summary
                 entry["summarized_at"] = now_iso()
+                entry["summary_version"] = SUMMARY_VERSION
                 ok += 1
                 print(f"  [{i}/{len(entries)}] ok   {entry['id']} {title}")
             else:

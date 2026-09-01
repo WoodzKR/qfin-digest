@@ -14,6 +14,13 @@ SEEN_PATH = STATE_DIR / "seen.json"
 LANGS = ("ko", "en")
 LANG_LABEL = {"ko": "한국어", "en": "English"}
 
+# Bump when a prompt changes in a way that makes older output worth redoing —
+# the star rubric, the style rules, the deep-report sections. Existing work is
+# never redone automatically; `--stale` is what acts on a bump, and
+# `run.py status` shows what is behind.
+SUMMARY_VERSION = "2026-09-01"   # bilingual + trading rubric + style rules
+REPORT_VERSION = "2026-09-01"    # native Korean, no rewrite pass
+
 # ── arXiv ────────────────────────────────────────────────────────────────
 CATEGORIES = {
     "q-fin.PM": "Portfolio Management",

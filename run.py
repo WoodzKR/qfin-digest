@@ -26,8 +26,8 @@ import requests
 
 from arxiv_digest import api, listing, render, store
 from arxiv_digest.config import (BLOG_LABELS, BLOG_LIMIT, BLOG_SOURCES, CATEGORIES, LANGS,
-                                 RECENT_DAYS, SOURCES, SSRN_JOURNALS, USER_AGENT, ensure_dirs,
-                                 report_name)
+                                 RECENT_DAYS, REPORT_VERSION, SOURCES, SSRN_JOURNALS,
+                                 SUMMARY_VERSION, USER_AGENT, ensure_dirs, report_name)
 
 
 def _session() -> requests.Session:
@@ -184,7 +184,8 @@ def cmd_summarize(args, day_filter: list[str] | None = None) -> None:
     srcs = set(_sources(args))
     targets = [e for e in seen.values()
                if e.get("abstract") and e.get("src", "arxiv") in srcs
-               and (args.force or store.needs_summary(e))
+               and (args.force or store.needs_summary(e)
+                    or (args.stale and store.summary_stale(e)))
                and (not day_filter or e.get("listed_date") in set(day_filter))]
     if not targets:
         print("nothing to summarize.")
@@ -225,7 +226,8 @@ def cmd_deep(args, day_filter: list[str] | None = None) -> None:
     pool = [e for e in seen.values()
             if store.is_summarized(e) and e.get("src", "arxiv") in srcs
             and (not day_filter or e.get("listed_date") in set(day_filter))
-            and any(not (PAPER_DIR / report_name(e["id"], lang)).exists() for lang in langs)]
+            and any(not (PAPER_DIR / report_name(e["id"], lang)).exists()
+                    or (args.stale and store.report_stale(e, lang)) for lang in langs)]
     pool.sort(key=lambda e: ((e.get("summary") or {}).get("relevance", 3),
                              e.get("listed_date", "")), reverse=True)
     targets = pool[:args.deep]
@@ -243,13 +245,15 @@ def cmd_deep(args, day_filter: list[str] | None = None) -> None:
             star = (entry.get("summary") or {}).get("relevance", 3)
             print(f"  [{i}/{len(targets)}] *{star} {entry['id']} {entry.get('title', '')[:48]}")
             for lang in langs:
-                if (PAPER_DIR / report_name(entry["id"], lang)).exists():
+                if (PAPER_DIR / report_name(entry["id"], lang)).exists() and not (
+                        args.stale and store.report_stale(entry, lang)):
                     continue
                 try:
                     out = paper.build_paper_report(entry, session=_session(), timeout=args.timeout,
                                                    ssrn_browser=browser, lang=lang,
                                                    review=args.review)
                     entry.setdefault("report_paths", {})[lang] = out.name
+                    entry.setdefault("report_versions", {})[lang] = REPORT_VERSION
                     print(f"      {lang}: {out.name}")
                 except Exception as exc:  # noqa: BLE001
                     print(f"      {lang}: FAILED {str(exc)[:130]}", file=sys.stderr)
@@ -311,6 +315,7 @@ def cmd_paper(args) -> None:
                     print(f"! {pid} ({lang}) failed: {exc}", file=sys.stderr)
                     continue
                 entry.setdefault("report_paths", {})[lang] = out.name
+                entry.setdefault("report_versions", {})[lang] = REPORT_VERSION
                 print(f"  {lang}: {out}")
                 if not args.no_open:
                     webbrowser.open(out.resolve().as_uri())
@@ -395,6 +400,35 @@ def cmd_status(_args) -> None:
     print("SSRN:   ", ", ".join(f"{s} {by_cat.get(s, 0)}" for s, _ in SSRN_JOURNALS.values()))
     print("blogs:  ", ", ".join(f"{s} {by_cat.get(s, 0)}" for s in BLOG_LABELS))
 
+    from arxiv_digest.config import PAPER_DIR
+
+    print()
+    print(f"current prompts — summary {SUMMARY_VERSION}, report {REPORT_VERSION}")
+
+    def _tally(values):
+        counts = Counter(v or "unrecorded" for v in values)
+        return ", ".join(f"{v} {n}" for v, n in sorted(counts.items()))
+
+    summarized = [e for e in seen.values() if store.is_summarized(e)]
+    print("  summaries   :", _tally(store.summary_version(e) for e in summarized))
+
+    reports = [(e, lang) for e in seen.values() for lang in LANGS
+               if (PAPER_DIR / report_name(e["id"], lang)).exists()]
+    if reports:
+        print("  deep reports:", _tally(store.report_version(e, lang) for e, lang in reports))
+
+    stale_sum = sum(1 for e in summarized if store.summary_stale(e))
+    stale_rep = sum(1 for e, lang in reports if store.report_stale(e, lang))
+    if stale_sum or stale_rep:
+        print(f"  {stale_sum} summaries and {stale_rep} reports were not made by the "
+              f"current prompts.")
+        print(f"  'unrecorded' predates version tracking — it may already match. Redo with:")
+        print(f"     python run.py summarize --stale        ({stale_sum} calls)")
+        if stale_rep:
+            print(f"     python run.py deep --deep {stale_rep} --stale --lang both")
+    else:
+        print("  everything is on the current prompts")
+
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Quant paper digest (arXiv + SSRN)")
@@ -413,6 +447,9 @@ def main() -> None:
     ap.add_argument("--workers", type=int, default=3, help="parallel summaries (default 3)")
     ap.add_argument("--timeout", type=int, default=900, help="claude call timeout in seconds")
     ap.add_argument("--force", action="store_true", help="redo work that is already done")
+    ap.add_argument("--stale", action="store_true",
+                    help="redo only what an older prompt version produced "
+                         "(see `status` for the counts)")
     ap.add_argument("--all", action="store_true", help="report over everything, not just today")
     ap.add_argument("--no-open", action="store_true", help="do not open a browser")
     ap.add_argument("--show-browser", action="store_true",
