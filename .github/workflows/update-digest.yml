@@ -3,8 +3,10 @@ name: Update digest
 # Runs the whole pipeline on GitHub's servers, so the digest refreshes whether or
 # not any particular machine is switched on.
 #
-#   - "Run workflow" on the Actions tab triggers it by hand (works from a phone).
-#   - The schedule below runs it on weekday mornings, Seoul time.
+# Manual only: "Run workflow" on the Actions tab, which works from a phone. There
+# is deliberately no schedule — every run spends the Claude subscription quota, so
+# it fires when someone asks for it and not otherwise. The full local run is
+# `update.bat`, which also covers SSRN and Macrosynergy.
 #
 # The summarizer is the Claude Code CLI, and a CI runner has no interactive login,
 # so it needs one of these repository secrets:
@@ -45,10 +47,6 @@ on:
         default: "both"
         type: choice
         options: [ko, en, both]
-  schedule:
-    # 21:00 UTC = 06:00 KST, Monday to Friday
-    - cron: "0 21 * * 1-5"
-
 permissions:
   contents: write
 
