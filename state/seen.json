@@ -1177,6 +1177,106 @@
     },
     "title": "VIX and Trend Following Revisited: Nearly a Decade of Out-of-Sample Evidence"
   },
+  "man-2026-h2-credit-outlook": {
+    "abs_url": "https://www.man.com/insights/2026-h2-credit-outlook",
+    "abstract": "AI supply is breaking records, but bubble risks are mounting.",
+    "authors": [
+      "Man Group"
+    ],
+    "categories": [
+      "Man Group"
+    ],
+    "ext_id": "2026-h2-credit-outlook",
+    "first_seen": "2026-09-01T00:12:32+00:00",
+    "id": "man-2026-h2-credit-outlook",
+    "listed_date": "",
+    "pdf_url": "",
+    "src": "man",
+    "src_cats": [
+      "MAN"
+    ],
+    "title": "H2 2026 Credit Outlook: The AI Buildout – Boom or Bubble?"
+  },
+  "man-captial-market-assumptions": {
+    "abs_url": "https://www.man.com/insights/captial-market-assumptions",
+    "abstract": "Capital markets assumptions are both commonplace and prone to inaccuracy. Rather than gaze into the crystal ball, in this paper we aim to help you improve on CMAs for yourselves.",
+    "authors": [
+      "Man Group"
+    ],
+    "categories": [
+      "Man Group"
+    ],
+    "ext_id": "captial-market-assumptions",
+    "first_seen": "2026-09-01T00:12:32+00:00",
+    "id": "man-captial-market-assumptions",
+    "listed_date": "",
+    "pdf_url": "",
+    "src": "man",
+    "src_cats": [
+      "MAN"
+    ],
+    "title": "Capital Market Assumptions: Redefined"
+  },
+  "man-global-regime-shift": {
+    "abs_url": "https://www.man.com/insights/global-regime-shift",
+    "abstract": "The era of neoliberal globalism has peaked, giving way to a populist age of deglobalisation. This regime shift brings profound effects, not least on investor portfolios.",
+    "authors": [
+      "Man Group"
+    ],
+    "categories": [
+      "Man Group"
+    ],
+    "ext_id": "global-regime-shift",
+    "first_seen": "2026-09-01T00:12:32+00:00",
+    "id": "man-global-regime-shift",
+    "listed_date": "",
+    "pdf_url": "",
+    "src": "man",
+    "src_cats": [
+      "MAN"
+    ],
+    "title": "Deglobalisation: Insights on a Regime Shift"
+  },
+  "man-gold-bugs-bears-myths": {
+    "abs_url": "https://www.man.com/insights/gold-bugs-bears-myths",
+    "abstract": "Despite reaching record prices, gold can play a valuable role in global portfolios as a diversifier and risk mitigator.",
+    "authors": [
+      "Man Group"
+    ],
+    "categories": [
+      "Man Group"
+    ],
+    "ext_id": "gold-bugs-bears-myths",
+    "first_seen": "2026-09-01T00:12:32+00:00",
+    "id": "man-gold-bugs-bears-myths",
+    "listed_date": "",
+    "pdf_url": "",
+    "src": "man",
+    "src_cats": [
+      "MAN"
+    ],
+    "title": "Gold: Bugs, Bears and Myths"
+  },
+  "man-h2-2026-technology-outlook": {
+    "abs_url": "https://www.man.com/insights/h2-2026-technology-outlook",
+    "abstract": "The music is still playing, but for how much longer? Here is what technology investors need to know for the second half of 2026.",
+    "authors": [
+      "Man Group"
+    ],
+    "categories": [
+      "Man Group"
+    ],
+    "ext_id": "h2-2026-technology-outlook",
+    "first_seen": "2026-09-01T00:12:32+00:00",
+    "id": "man-h2-2026-technology-outlook",
+    "listed_date": "",
+    "pdf_url": "",
+    "src": "man",
+    "src_cats": [
+      "MAN"
+    ],
+    "title": "Technology Outlook H2 2026: Still Dancing, But Moving Closer to the Door?"
+  },
   "man-portable-alpha-ask-the-hard-questions": {
     "abs_url": "https://www.man.com/insights/portable-alpha-ask-the-hard-questions",
     "abstract": "Five questions to ask when allocating to portable alpha.",
@@ -1231,6 +1331,46 @@
       "relevance": 1
     },
     "title": "Portable Alpha: Ask the Hard Questions"
+  },
+  "man-reducing-emissions": {
+    "abs_url": "https://www.man.com/insights/reducing-emissions",
+    "abstract": "How can investors help reduce rising carbon emissions while maintaining attractive returns?",
+    "authors": [
+      "Man Group"
+    ],
+    "categories": [
+      "Man Group"
+    ],
+    "ext_id": "reducing-emissions",
+    "first_seen": "2026-09-01T00:12:32+00:00",
+    "id": "man-reducing-emissions",
+    "listed_date": "",
+    "pdf_url": "",
+    "src": "man",
+    "src_cats": [
+      "MAN"
+    ],
+    "title": "(De)-Carbonara: A Better Recipe for Reducing Emissions"
+  },
+  "man-ri-podcast-cecilia-tam": {
+    "abs_url": "https://www.man.com/insights/ri-podcast-cecilia-tam",
+    "abstract": "Cecilia Tam, IEA Head of Energy Investment Unit, explains why energy security has become one of the most powerful drivers of the clean energy transition.",
+    "authors": [
+      "Man Group"
+    ],
+    "categories": [
+      "Man Group"
+    ],
+    "ext_id": "ri-podcast-cecilia-tam",
+    "first_seen": "2026-09-01T00:12:32+00:00",
+    "id": "man-ri-podcast-cecilia-tam",
+    "listed_date": "",
+    "pdf_url": "",
+    "src": "man",
+    "src_cats": [
+      "MAN"
+    ],
+    "title": "Cecilia Tam on the IEA's 2026 World Energy Investment Report"
   },
   "man-ri-podcast-james-talbot": {
     "abs_url": "https://www.man.com/insights/ri-podcast-james-talbot",
@@ -2925,6 +3065,61 @@
       "relevance": 1
     },
     "title": "Quantpedia in July 2026"
+  },
+  "qp-quantpedia-premium-update-august-29th": {
+    "abs_url": "https://quantpedia.com/quantpedia-premium-update-august-29th/",
+    "abstract": "Five new strategies have been added. Two new related research paper have been included into existing strategy reviews and three new short free blog posts have been published during last few weeks. Plus, four trading strategies have been backtested in QuantConnect in the previous two weeks.",
+    "authors": [
+      "ivana.dragonova@quantpedia.com"
+    ],
+    "categories": [
+      "Quantpedia"
+    ],
+    "ext_id": "quantpedia-premium-update-august-29th",
+    "first_seen": "2026-09-01T00:12:32+00:00",
+    "id": "qp-quantpedia-premium-update-august-29th",
+    "listed_date": "2026-08-29",
+    "pdf_url": "",
+    "src": "quantpedia",
+    "src_cats": [
+      "QP"
+    ],
+    "summarized_at": "2026-09-01T00:12:52+00:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Lists site updates rather than describing any single strategy",
+          "Five new strategies and three blog posts added in recent weeks",
+          "Four strategies were backtested in QuantConnect during the period"
+        ],
+        "data": "No dataset or backtest window given here; content sits behind a paid subscription.",
+        "method": "No methodology is described; it's a bulleted update log.",
+        "one_liner": "This is a Quantpedia newsletter announcing platform updates, not a strategy paper.",
+        "relevance_why": "Nothing tradeable is disclosed and the actual content is paywalled, so there's nothing to automate.",
+        "takeaway": "Follow the links to the underlying strategy reports before considering implementation."
+      },
+      "keywords": [
+        "Quantpedia",
+        "strategy database",
+        "newsletter",
+        "backtesting update",
+        "premium subscription"
+      ],
+      "ko": {
+        "bullets": [
+          "새로 추가된 개별 전략 소개가 아니라 플랫폼 업데이트 공지다",
+          "지난 2주간 신규 전략 5건과 블로그 글 3건을 올렸다",
+          "퀀트커넥트(QuantConnect)로 전략 4건을 백테스트했다고 밝혔다"
+        ],
+        "data": "이론 연구도 아니고 실증 데이터도 없는 뉴스레터 공지다.",
+        "method": "구체적 기법 설명 없이 업데이트 목록만 나열한다.",
+        "one_liner": "퀀트피디아가 신규 전략 5건과 백테스트 결과를 정리한 소식지다.",
+        "relevance_why": "전략 내용 자체가 없고 유료 구독 뒤에 있어 자동화할 근거가 전혀 없다.",
+        "takeaway": "링크된 원본 전략 리포트를 찾아 개별로 검토해야 실제 트레이딩에 쓸 수 있다."
+      },
+      "relevance": 1
+    },
+    "title": "Quantpedia Premium Update – August 29th"
   },
   "qp-quantpedia-premium-update-july-30th": {
     "abs_url": "https://quantpedia.com/quantpedia-premium-update-july-30th/",
