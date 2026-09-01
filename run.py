@@ -448,11 +448,11 @@ def main() -> None:
         cmd_status(args)
     else:
         days = cmd_fetch(args)
-        # Fetching and summarizing are scoped to this run; rendering never is.
-        # A narrow run (`--source arxiv --days 1`) must not republish a digest
-        # containing only what it happened to fetch — that silently deletes
-        # everything else from the published page.
-        cmd_summarize(args, day_filter=days)
+        # Only fetching is scoped to this run. Summarizing and rendering heal the
+        # whole store: a narrow run must neither leave older entries permanently
+        # unsummarized (a blog post can rotate off its landing page and never be
+        # fetched again) nor republish a digest containing only what it fetched.
+        cmd_summarize(args, day_filter=None)
         cmd_deep(args, day_filter=days)
         out = _build_report(args, day_filter=None, all_sources=True)
         print(f"report: {out}")

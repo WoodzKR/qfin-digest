@@ -1,5 +1,26 @@
 # Working notes
 
+## 2026-09-01 — The same scoping bug, one stage earlier
+
+After merging a scheduled run: `88 papers · 81 summarized`. Seven Man Group
+articles sat in the store with abstracts and no summary.
+
+Same shape as the digest-shrinking bug, caught one stage earlier in the pipeline.
+`run.py all` was calling `cmd_summarize(day_filter=days)` — only the dates *this
+run* fetched. Anything already in the store but outside that window stays
+unsummarized forever, and blog posts make that permanent: once an article rotates
+off Man's landing page it is never fetched again, so its date never reappears in
+`days`, so it is never picked up.
+
+Now only **fetching** is scoped to a run. Summarizing and rendering both heal the
+whole store. Stated as a rule since it has now bitten twice:
+
+> Scope the step that talks to the network. Never scope the steps that maintain
+> the store — they exist to make it whole.
+
+Backfilled the seven by hand with `run.py summarize`, which needed no arguments:
+the store already knew what was missing. That is the property worth preserving.
+
 ## 2026-09-01 — Dropped the polish pass; translate natively instead
 
 The humanize-korean second pass is gone. It rewrote a finished HTML fragment
