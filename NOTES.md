@@ -1,5 +1,33 @@
 # Working notes
 
+## 2026-09-01 — Manual only, and one entry point
+
+Removed the `schedule:` block. Every run spends Claude subscription quota, and a
+06:00 cron spends it whether or not anyone is going to read the result. It also
+caused the only merge conflict this repo has had: the bot pushed generated files
+while local work was in flight. `workflow_dispatch` stays, so the phone button
+still works.
+
+`update.bat` is now the one thing to run at the machine. It exists because the
+full update is four steps that are easy to get wrong in the wrong order —
+pull, `run.py all --source all`, publish — and because the cloud path covers only
+five of seven sources. SSRN and Macrosynergy need a real browser.
+
+Batch, not PowerShell: the execution policy here blocks unsigned `.ps1`, which is
+what broke `claude setup-token` earlier. A `.bat` double-clicks and runs.
+
+Details that matter:
+
+- Prepends `%LOCALAPPDATA%\Programs\PortableGit\cmd` when `git` is missing from
+  PATH, since a terminal opened before the install has a stale PATH.
+- `chcp 65001` and `PYTHONIOENCODING=utf-8`, or the Korean output is mojibake.
+- `%*` passes arguments through and *overrides* the default `--source all`,
+  so `update.bat --source ssrn` narrows it.
+- A failed pull prints the conflict recipe rather than a raw git error, and says
+  the plainly true thing: everything under `report/` and `index.html` can be
+  thrown away and rebuilt from `seen.json`.
+- Ends in `pause` so a double-clicked window does not vanish on error.
+
 ## 2026-09-01 — The same scoping bug, one stage earlier
 
 After merging a scheduled run: `88 papers · 81 summarized`. Seven Man Group

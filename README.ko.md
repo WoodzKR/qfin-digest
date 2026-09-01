@@ -8,19 +8,36 @@ arXiv q-fin, SSRN, 실무 블로그 5곳의 새 연구를 한국어와 영어로
 | | |
 |---|---|
 | **읽기만 할 때** | 위 링크를 열면 된다. 설치할 것 없음. |
-| **어느 기기에서든 갱신할 때** | [워크플로 실행](#어디서든-갱신하기) — 버튼 하나, 로컬 설정 불필요. |
-| **직접 돌릴 때** | [내 PC에 설치](#내-pc에서-돌리기). |
+| **PC 앞에서 갱신할 때** | `update.bat` 더블클릭. 전체 출처 수집 후 발행. |
+| **밖에서 갱신할 때** | [워크플로 실행](#휴대폰에서-갱신하기) — 7개 중 5개 출처. |
+| **내 사본을 만들 때** | [내 PC에 설치](#내-pc에서-돌리기). |
+
+자동 실행은 없다. 요청할 때만 갱신된다.
 
 ---
 
-## 어디서든 갱신하기
+## 전체 갱신 — `update.bat`
+
+클라우드가 못 건드리는 두 출처까지 포함한 전체 실행이다.
+
+```powershell
+update.bat                 # 7개 출처 전부 수집 후 발행
+update.bat --deep 3        # 위 + ★ 상위 3편 상세 리포트 미리 생성
+update.bat --source ssrn   # 특정 출처만
+```
+
+pull 먼저 하고, 수집 → 신규 요약 → 페이지 재생성 → push 순서로 돈다. SSRN 과
+Macrosynergy 때문에 Chrome 이 잠깐 뜨는데 화면 밖이라 방해되지 않고 알아서 닫힌다.
+중간에 실패하면 아무것도 발행하지 않고, 수집한 것은 `state/seen.json` 에 남으므로
+다시 돌리면 멈춘 지점부터 이어간다.
+
+## 휴대폰에서 갱신하기
 
 **[Actions → Update digest → Run workflow](https://github.com/WoodzKR/qfin-digest/actions/workflows/update-digest.yml)**
 
-GitHub 서버에서 돌기 때문에 내 컴퓨터는 꺼져 있어도 된다. 휴대폰에서도 눌린다.
-평일 오전 6시(KST)에는 자동으로도 돈다.
-
-입력값은 출처, 최근 날짜 수, 상세 리포트 개수, 언어. 기본값 그대로 두면 된다.
+GitHub 서버에서 돌기 때문에 내 컴퓨터는 꺼져 있어도 된다. arXiv, Quantpedia,
+Man Group, Alpha Architect, Quantocracy 를 다룬다. **SSRN 과 Macrosynergy 는 안 된다** —
+진짜 브라우저가 필요한데 Cloudflare 가 데이터센터 IP 를 거부한다. 그 둘은 `update.bat` 로.
 
 저장소 소유자로 로그인해야 버튼이 보인다. GitHub 은 방문자에게 워크플로 실행을 열어주지
 않는다. 남이 돌리고 싶으면 fork 해서 자기 인증 수단을 쓰면 된다.

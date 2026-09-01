@@ -8,20 +8,37 @@ and English. One page, switch languages with a click, no sign-in.
 | | |
 |---|---|
 | **Just want to read it?** | Open the link above. Nothing to install. |
-| **Want to refresh it from any device?** | [Run the workflow](#refresh-it-from-anywhere) — a button, no local setup. |
-| **Want to run it yourself?** | [Set it up locally](#run-it-on-your-own-machine). |
+| **Updating at the machine?** | Double-click `update.bat`. Every source, then publish. |
+| **Updating away from it?** | [Run the workflow](#refresh-it-from-a-phone) — five of the seven sources. |
+| **Want your own copy?** | [Set it up locally](#run-it-on-your-own-machine). |
+
+Nothing runs on a schedule. It updates when you ask it to.
 
 ---
 
-## Refresh it from anywhere
+## Update everything — `update.bat`
+
+The full run, including the two sources the cloud cannot reach:
+
+```powershell
+update.bat                 # all seven sources, then publish
+update.bat --deep 3        # ... and pre-build the top 3 deep reports
+update.bat --source ssrn   # just one source
+```
+
+Pulls first, collects, summarizes what is new, rebuilds the page, pushes. Chrome
+flashes for SSRN and Macrosynergy — it is parked off-screen and closes itself. On an
+error nothing is published, and whatever was collected stays in `state/seen.json`, so
+re-running picks up where it stopped.
+
+## Refresh it from a phone
 
 **[Actions → Update digest → Run workflow](https://github.com/WoodzKR/qfin-digest/actions/workflows/update-digest.yml)**
 
-Runs on GitHub's servers, so nothing of yours has to be switched on. The button works
-from a phone. It also runs automatically at 06:00 KST on weekdays.
-
-Inputs: which sources, how many recent dates, how many deep reports, which language.
-Defaults are fine.
+Runs on GitHub's servers, so nothing of yours has to be switched on. Covers arXiv,
+Quantpedia, Man Group, Alpha Architect and Quantocracy — **not SSRN or Macrosynergy**,
+which need a real browser that Cloudflare will not accept from a datacentre IP.
+`update.bat` is the way to get those.
 
 Signing in as the repository owner is required — GitHub does not offer workflow
 triggers to visitors. Anyone else who wants to run it can fork and use their own
