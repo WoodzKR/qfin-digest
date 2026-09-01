@@ -1,5 +1,35 @@
 # Working notes
 
+## 2026-09-01 — Local-only, git as the publishing channel
+
+Deleted `.github/workflows/`. The cloud runner is gone, along with the split
+brain it created: two places that could collect and push, one of which could only
+reach five of seven sources and needed its own credential in a repository secret.
+
+The model now is one sentence: **everything runs here, git publishes the result.**
+
+- `setup.bat` — once per machine. Python packages, Chromium, the Claude CLI, the
+  login. Checks each piece and names what is missing instead of dying halfway.
+- `update.bat` — the pipeline. All sources, summarize, rebuild, push.
+- `run.py publish` — the distribution step, and now the only writer to the remote.
+
+What this buys, beyond simplicity:
+
+- **No more merge conflicts.** Every conflict this repo has had came from the bot
+  pushing generated files while local work was in flight.
+- **No credential in a secret.** The CI path needed `CLAUDE_CODE_OAUTH_TOKEN`
+  stored on GitHub; a local run just uses the CLI's own login. The secret can be
+  deleted from repo settings — nothing reads it now.
+- **One source list.** No more "cloud does five, local does seven".
+
+What it costs: no updating from a phone. That was the workflow button's one real
+advantage. Reversible — the workflow file is one `git revert` away, and the
+secret still exists until deleted.
+
+`state/seen.json` staying committed is what makes "download and run" work: a
+clone on a second machine already knows everything summarized so far and pays for
+none of it again.
+
 ## 2026-09-01 — Manual only, and one entry point
 
 Removed the `schedule:` block. Every run spends Claude subscription quota, and a

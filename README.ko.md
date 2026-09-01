@@ -5,20 +5,23 @@
 arXiv q-fin, SSRN, 실무 블로그 5곳의 새 연구를 한국어와 영어로 요약한다.
 한 페이지에서 클릭 한 번으로 언어를 바꾸고, 로그인은 필요 없다.
 
-| | |
-|---|---|
-| **읽기만 할 때** | 위 링크를 열면 된다. 설치할 것 없음. |
-| **PC 앞에서 갱신할 때** | `update.bat` 더블클릭. 전체 출처 수집 후 발행. |
-| **밖에서 갱신할 때** | [워크플로 실행](#휴대폰에서-갱신하기) — 7개 중 5개 출처. |
-| **내 사본을 만들 때** | [내 PC에 설치](#내-pc에서-돌리기). |
+모든 실행은 내 PC 에서 한다. git 은 완성된 페이지를 배포하는 통로일 뿐이고,
+클라우드에서 수집하거나 요약하는 것은 없다.
 
-자동 실행은 없다. 요청할 때만 갱신된다.
+## 실행하기
 
----
+```powershell
+git clone https://github.com/WoodzKR/qfin-digest
+cd qfin-digest
+setup.bat      # PC 당 한 번
+update.bat     # 새 논문을 받고 싶을 때마다
+```
 
-## 전체 갱신 — `update.bat`
+`setup.bat` 은 파이썬 패키지, Chromium, Claude Code CLI 를 설치하고 로그인까지 시킨다.
+각 항목을 확인하고 빠진 게 있으면 중간에 실패하는 대신 무엇이 없는지 알려준다.
 
-클라우드가 못 건드리는 두 출처까지 포함한 전체 실행이다.
+`update.bat` 이 파이프라인 전체다. 전체 출처 수집 → 신규 요약 → 페이지 재생성 → push.
+더블클릭해도 되고 터미널에서 실행해도 된다.
 
 ```powershell
 update.bat                 # 7개 출처 전부 수집 후 발행
@@ -26,64 +29,53 @@ update.bat --deep 3        # 위 + ★ 상위 3편 상세 리포트 미리 생�
 update.bat --source ssrn   # 특정 출처만
 ```
 
-pull 먼저 하고, 수집 → 신규 요약 → 페이지 재생성 → push 순서로 돈다. SSRN 과
-Macrosynergy 때문에 Chrome 이 잠깐 뜨는데 화면 밖이라 방해되지 않고 알아서 닫힌다.
 중간에 실패하면 아무것도 발행하지 않고, 수집한 것은 `state/seen.json` 에 남으므로
 다시 돌리면 멈춘 지점부터 이어간다.
 
-## 휴대폰에서 갱신하기
+### 필요한 것
 
-**[Actions → Update digest → Run workflow](https://github.com/WoodzKR/qfin-digest/actions/workflows/update-digest.yml)**
-
-GitHub 서버에서 돌기 때문에 내 컴퓨터는 꺼져 있어도 된다. arXiv, Quantpedia,
-Man Group, Alpha Architect, Quantocracy 를 다룬다. **SSRN 과 Macrosynergy 는 안 된다** —
-진짜 브라우저가 필요한데 Cloudflare 가 데이터센터 IP 를 거부한다. 그 둘은 `update.bat` 로.
-
-저장소 소유자로 로그인해야 버튼이 보인다. GitHub 은 방문자에게 워크플로 실행을 열어주지
-않는다. 남이 돌리고 싶으면 fork 해서 자기 인증 수단을 쓰면 된다.
-
-<details>
-<summary>최초 1회 설정 (이 저장소는 완료됨)</summary>
-
-**Settings → Secrets and variables → Actions** 에 둘 중 하나를 등록한다.
-
-| 시크릿 | 발급 방법 |
+| | |
 |---|---|
-| `CLAUDE_CODE_OAUTH_TOKEN` | `claude setup-token` — Claude 구독을 그대로 쓴다. API 키 불필요 |
-| `ANTHROPIC_API_KEY` | 종량제 API 키. 위 토큰이 없을 때만 쓰인다 |
+| Python 3.10+, Node.js | `setup.bat` 이 확인하고 설치 링크를 알려준다 |
+| Claude 구독 | 요약 엔진이 Claude Code CLI 다. API 키는 필요 없다 |
+| Chrome 또는 Edge | Cloudflare 뒤에 있는 SSRN, Macrosynergy 에만 필요 |
 
-기본 출처에서 SSRN 은 빠져 있다. Cloudflare 가 데이터센터 IP 를 거의 막기 때문이다.
-다시 켜도 막히면 그 소스만 건너뛰고 나머지는 정상 수집된다.
-</details>
+## 상세 리포트
 
-## 내 PC에서 돌리기
+8개 섹션. 본문은 arXiv HTML 판, SSRN PDF, 블로그 아티클에서 가져오고, 다 안 되면
+초록만 쓰되 그 사실을 리포트에 적는다. 수식은 원본 LaTeX 를 살려 MathJax 로 렌더한다.
 
 ```powershell
-git clone https://github.com/WoodzKR/qfin-digest
-cd qfin-digest
-
-pip install requests playwright pypdf
-python -m playwright install chromium
-npm i -g @anthropic-ai/claude-code
-claude login
-
-python run.py --source arxiv,quantpedia,man,alphaarchitect,macrosynergy,quantocracy
-python run.py serve      # http://127.0.0.1:8765 에서 상세 리포트 원클릭
+python run.py serve
 ```
 
-SSRN 은 Chrome 이나 Edge 가 추가로 필요하다. 설치돼 있으면 `--source all` 로 켠다.
-`state/seen.json` 이 clone 에 함께 오므로 이미 요약된 것을 다시 요약하지 않는다.
+리포트 버튼이 살아 있는 상태로 다이제스트가 열린다. 카드의 `📄 한국어` 나
+`📄 English` 를 누르면 그 자리에서 생성된다. 끝나면 `Ctrl+C`, 그다음 `update.bat` 으로 발행.
 
-내 저장소로 발행하려면 `python run.py publish`.
+정말 읽을 논문이라면 `--review` 를 붙인다. 비평 패스가 논문 전문을 먼저 읽고 —
+실제로 기대는 주장, 식별 가정, 타당성 위협, 가장 강한 반론 — 결과·한계 섹션에
+반영한다. 편당 약 27분.
+
+```powershell
+python run.py paper ssrn-7363482 --lang ko --review
+```
+
+한국어는 논문 전체를 한 번에 보면서 처음부터 한국어로 쓴다. 문체 규칙은
+[humanize-korean](https://github.com/epoko77-ai/im-not-ai) 의 택소노미에서 뽑아
+생성 프롬프트에 넣었다. 별도 윤문 단계는 두지 않는다 — 완성된 조각만 보는 윤문기는
+섹션 사이 용어를 일관되게 유지하지 못한다.
 
 ## 명령어
 
+보통은 `update.bat` 이면 된다. 그 아래는 이렇다.
+
 ```powershell
 python run.py                  # 수집 → 요약 → 페이지 생성 후 열기
-python run.py --deep 5 --push  # 위 + ★ 상위 5편 상세 리포트 + 발행
-python run.py serve            # 원클릭 모드
+python run.py fetch            # 수집만
+python run.py summarize        # 요약이 빠진 것만 요약
+python run.py report --all     # 페이지 재생성
+python run.py publish          # 커밋 & push
 python run.py status           # 현재 누적 상태
-python run.py paper <id> --lang en
 ```
 
 | 옵션 | |
@@ -92,7 +84,7 @@ python run.py paper <id> --lang en
 | `--lang` | `ko` / `en` / `both` — 상세 리포트 언어 |
 | `--deep N` | ★ 상위 N편 상세 리포트를 미리 생성 |
 | `--days N` | 논문 출처별 최근 날짜 수 (기본 2) |
-| `--review` | 상세 리포트를 쓰기 전 비평 패스 (호출 1회 추가) |
+| `--review` | 상세 리포트를 쓰기 전 비평 패스 |
 | `--force` | 이미 처리한 것도 다시 처리 |
 | `--push` | 전체 실행 후 발행 |
 
@@ -122,19 +114,14 @@ Quantocracy 는 모음집이라, 직접 수집하는 사이트와 겹치는 항�
 데이터를 구할 수 없으면 2 이하로 묶인다. 모든 점수에는 **필요한 데이터를 명시한**
 한 줄 근거가 붙는다. 카드를 펼치면 보인다.
 
-## 상세 리포트
+## 배포
 
-8개 섹션. 본문은 arXiv HTML 판, SSRN PDF, 블로그 아티클에서 가져오고, 다 안 되면
-초록만 쓰되 그 사실을 리포트에 적는다. 수식은 원본 LaTeX 를 살려 MathJax 로 렌더한다.
+`state/seen.json` 을 생성된 페이지와 함께 커밋한다. 이 파일이 같은 논문을 두 번
+요약하지 않게 막으므로, 다른 PC 에서 clone 하면 이어서 작업할 수 있다. 루트의
+`index.html` 이 GitHub Pages 진입점이고 실행할 때마다 다시 만들어진다.
 
-한국어 리포트는 논문 전체를 한 번에 보면서 처음부터 한국어로 쓴다. 문체 규칙은
-[humanize-korean](https://github.com/epoko77-ai/im-not-ai) 의 택소노미에서 뽑아
-생성 프롬프트에 넣었다. 별도 윤문 단계는 두지 않는다 — 완성된 조각만 보는 윤문기는
-섹션 사이 용어를 일관되게 유지하지 못한다.
-
-`--review` 를 붙이면 먼저 비평 패스가 돈다 — 논문이 실제로 기대는 주장, 식별 가정,
-타당성 위협, 가장 강한 반론을 뽑아 결과·한계 섹션에 반영한다. 이 패스는 논문 전문을
-읽으므로 윤문기에 없던 문맥을 갖는다.
+`state/chrome_profile/` 은 절대 커밋하지 않는다 — `cf_clearance` 세션 쿠키가 들어 있다.
+`.gitignore` 에 이미 들어가 있다.
 
 ---
 

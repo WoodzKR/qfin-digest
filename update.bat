@@ -1,14 +1,16 @@
 @echo off
 rem ---------------------------------------------------------------------------
-rem  Quant digest - full local update.
+rem  Quant digest - the update.
 rem
-rem  Collects every source (SSRN and Macrosynergy included, which the cloud
-rem  workflow cannot do), summarizes what is new, rebuilds the page and pushes.
+rem  Everything runs here. Collects every source, summarizes what is new,
+rem  rebuilds the page, then pushes so the published site catches up.
 rem
 rem  Double-click it, or from a terminal:
 rem      update.bat                 collect, summarize, publish
 rem      update.bat --deep 3        ... and pre-build the top 3 deep reports
 rem      update.bat --source ssrn   just one source
+rem
+rem  First time on a machine? Run setup.bat once.
 rem ---------------------------------------------------------------------------
 setlocal
 chcp 65001 >nul
@@ -33,7 +35,7 @@ echo   off-screen; leave it alone and it closes itself.
 echo ===========================================================
 echo.
 
-echo [1/3] Syncing with GitHub
+echo [1/3] Pulling anything published from another machine
 git pull --rebase --autostash
 if errorlevel 1 goto :conflict
 echo.
@@ -58,8 +60,8 @@ goto :done
 
 :conflict
 echo.
-echo [!] The pull did not apply cleanly - somebody pushed while you were away.
-echo     Usually the cloud workflow. Resolve with:
+echo [!] The pull did not apply cleanly - another machine published in between.
+echo     Resolve with:
 echo         git status
 echo         git rebase --continue      (after fixing the listed files)
 echo     Generated files under report\ and index.html can always be thrown away

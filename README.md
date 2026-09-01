@@ -5,20 +5,23 @@
 New research from arXiv q-fin, SSRN and five practitioner blogs, summarized in Korean
 and English. One page, switch languages with a click, no sign-in.
 
-| | |
-|---|---|
-| **Just want to read it?** | Open the link above. Nothing to install. |
-| **Updating at the machine?** | Double-click `update.bat`. Every source, then publish. |
-| **Updating away from it?** | [Run the workflow](#refresh-it-from-a-phone) — five of the seven sources. |
-| **Want your own copy?** | [Set it up locally](#run-it-on-your-own-machine). |
+Everything runs on your own machine. Git is only how the finished page gets published —
+nothing collects or summarizes in the cloud.
 
-Nothing runs on a schedule. It updates when you ask it to.
+## Get it running
 
----
+```powershell
+git clone https://github.com/WoodzKR/qfin-digest
+cd qfin-digest
+setup.bat      # once per machine
+update.bat     # every time you want fresh papers
+```
 
-## Update everything — `update.bat`
+`setup.bat` installs Python packages, Chromium, the Claude Code CLI, and signs you in.
+It checks each piece and tells you what is missing rather than failing halfway.
 
-The full run, including the two sources the cloud cannot reach:
+`update.bat` is the whole pipeline: collect every source, summarize what is new,
+rebuild the page, push. Double-click it or run it from a terminal.
 
 ```powershell
 update.bat                 # all seven sources, then publish
@@ -26,66 +29,55 @@ update.bat --deep 3        # ... and pre-build the top 3 deep reports
 update.bat --source ssrn   # just one source
 ```
 
-Pulls first, collects, summarizes what is new, rebuilds the page, pushes. Chrome
-flashes for SSRN and Macrosynergy — it is parked off-screen and closes itself. On an
-error nothing is published, and whatever was collected stays in `state/seen.json`, so
-re-running picks up where it stopped.
+On an error nothing is published, and whatever was collected stays in
+`state/seen.json`, so re-running picks up where it stopped.
 
-## Refresh it from a phone
+### What you need
 
-**[Actions → Update digest → Run workflow](https://github.com/WoodzKR/qfin-digest/actions/workflows/update-digest.yml)**
-
-Runs on GitHub's servers, so nothing of yours has to be switched on. Covers arXiv,
-Quantpedia, Man Group, Alpha Architect and Quantocracy — **not SSRN or Macrosynergy**,
-which need a real browser that Cloudflare will not accept from a datacentre IP.
-`update.bat` is the way to get those.
-
-Signing in as the repository owner is required — GitHub does not offer workflow
-triggers to visitors. Anyone else who wants to run it can fork and use their own
-credentials.
-
-<details>
-<summary>One-time setup (already done for this repo)</summary>
-
-Add one of these under **Settings → Secrets and variables → Actions**:
-
-| Secret | Where it comes from |
+| | |
 |---|---|
-| `CLAUDE_CODE_OAUTH_TOKEN` | `claude setup-token` — uses a Claude subscription, no API key needed |
-| `ANTHROPIC_API_KEY` | A pay-as-you-go API key, used only if the token is absent |
+| Python 3.10+, Node.js | `setup.bat` checks both and links to the installers |
+| A Claude subscription | The summarizer is the Claude Code CLI. No API key needed. |
+| Chrome or Edge | Only for SSRN and Macrosynergy, which sit behind Cloudflare |
 
-SSRN is left out of the default source list: its Cloudflare challenge is usually
-refused from datacentre IPs. Opting it back in will not fail the run.
-</details>
+## Deep reports
 
-## Run it on your own machine
+Eight sections, from "at a glance" to the systematic-trading angle, built from the
+arXiv HTML edition, the SSRN PDF or the blog article — the abstract only as a fallback,
+and the page says so when that happens. Math keeps its original LaTeX and renders with
+MathJax.
 
 ```powershell
-git clone https://github.com/WoodzKR/qfin-digest
-cd qfin-digest
-
-pip install requests playwright pypdf
-python -m playwright install chromium
-npm i -g @anthropic-ai/claude-code
-claude login
-
-python run.py --source arxiv,quantpedia,man,alphaarchitect,macrosynergy,quantocracy
-python run.py serve      # one-click deep reports at http://127.0.0.1:8765
+python run.py serve
 ```
 
-SSRN additionally needs Chrome or Edge installed; add `--source all` once you have it.
-`state/seen.json` comes with the clone, so nothing already summarized is paid for twice.
+Opens the digest with the report buttons live: click `📄 한국어` or `📄 English` on a
+card and it builds on the spot. `Ctrl+C` when done, then `update.bat` to publish.
 
-To publish your own copy: `python run.py publish`.
+For a paper you actually care about, add `--review`. A critique pass reads the full
+paper first — claims, identifying assumptions, validity threats, the strongest
+counterargument — and feeds the results and limitations sections. About 27 minutes.
+
+```powershell
+python run.py paper ssrn-7363482 --lang ko --review
+```
+
+Korean is written directly in Korean, in one pass over the whole paper, under style
+rules distilled from [humanize-korean](https://github.com/epoko77-ai/im-not-ai). There
+is no separate rewriting step: a rewriter that only sees the finished fragment cannot
+keep terminology consistent across sections.
 
 ## Commands
 
+`update.bat` covers the normal case. Underneath:
+
 ```powershell
-python run.py                  # collect, summarize, build the page, open it
-python run.py --deep 5 --push  # ... plus deep reports for the top 5, then publish
-python run.py serve            # one-click mode
+python run.py                  # collect, summarize, rebuild, open
+python run.py fetch            # collect only
+python run.py summarize        # summarize anything missing one
+python run.py report --all     # rebuild the page
+python run.py publish          # commit and push
 python run.py status           # what is in the store
-python run.py paper <id> --lang en
 ```
 
 | Flag | |
@@ -94,7 +86,7 @@ python run.py paper <id> --lang en
 | `--lang` | `ko`, `en` or `both` — language of deep reports |
 | `--deep N` | pre-build deep reports for the top N by star |
 | `--days N` | recent listing dates per paper source (default 2) |
-| `--review` | critique pass before writing a deep report (one extra call) |
+| `--review` | critique pass before writing a deep report |
 | `--force` | redo work that is already done |
 | `--push` | publish after a full run |
 
@@ -124,21 +116,15 @@ Quantocracy is an aggregator, so entries duplicating a site read directly are dr
 enough to read anyway. Data you cannot obtain caps the score at 2. Every score carries a
 one-line reason naming the data it needs — expand a card to see it.
 
-## Deep reports
+## Publishing
 
-Eight sections, from "at a glance" to the systematic-trading angle, built from the
-arXiv HTML edition, the SSRN PDF or the blog article — the abstract only as a fallback,
-and the page says so when that happens. Math keeps its original LaTeX and renders with
-MathJax.
+`state/seen.json` is committed along with the generated pages. It is what stops a
+paper being summarized twice, so a clone on another machine starts where this one left
+off. `index.html` at the repository root is the GitHub Pages entry point and is
+rebuilt on every run.
 
-Korean reports are written directly in Korean, in one pass over the whole paper, under
-style rules distilled from [humanize-korean](https://github.com/epoko77-ai/im-not-ai).
-There is no separate rewriting step: a rewriter that only sees the finished fragment
-cannot keep terminology consistent across sections.
-
-Add `--review` to run a critique pass first — claims, identifying assumptions, validity
-threats, the strongest counterargument — which feeds the results and limitations
-sections. That pass reads the full paper, so it has the context a rewriter lacks.
+Never commit `state/chrome_profile/` — it holds a `cf_clearance` session cookie.
+`.gitignore` already excludes it.
 
 ---
 
