@@ -270,7 +270,7 @@ def cmd_serve(args) -> None:
 
     httpd = server.serve(port=args.port, timeout=args.timeout, show_browser=args.show_browser,
                          chrome=args.chrome, on_done=lambda: _build_report(args, None))
-    url = f"http://127.0.0.1:{args.port}/{out.name}"
+    url = f"http://127.0.0.1:{args.port}/report/{out.name}"
     print(f"serving {url}")
     print("  the report buttons build on click. Ctrl+C to stop.")
     if not args.no_open:

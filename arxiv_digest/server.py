@@ -1,14 +1,19 @@
 """Local report server — makes the digest's report buttons one-click.
 
 A static page cannot call Claude, which is why the first design queued ids in
-localStorage and made you paste a command into a terminal. This serves
-``report/`` as-is and bolts a tiny API onto it::
+localStorage and made you paste a command into a terminal. This serves the
+**repository root** — so ``index.html`` and everything under ``report/`` are
+reachable by the same origin — and bolts a tiny API onto it::
 
     GET  /api/ping                     is anything listening
-    POST /api/report {id, lang}        queue a deep report
+    GET  /api/reports                  which deep reports exist on disk
+    POST /api/report {id, lang}        queue one
     GET  /api/status?id=...&lang=...   poll it
 
-The page probes ``api/ping`` on load; with no answer (opened as a file, or on
+Serving only ``report/`` was the earlier mistake: the root ``index.html`` was
+then outside the server, so opening it got a page with no API behind it.
+
+The page probes ``/api/ping`` on load; with no answer (opened as a file, or on
 GitHub Pages) it silently falls back to the copy-a-command flow.
 """
 
@@ -23,7 +28,7 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 
 from . import store
-from .config import LANGS, PAPER_DIR, REPORT_DIR, report_name
+from .config import LANGS, PAPER_DIR, REPORT_DIR, ROOT, report_name
 
 
 class JobManager:
@@ -65,7 +70,7 @@ class JobManager:
         with self.lock:
             state = self.jobs.get(key, {}).get("state")
             if state != "running" and (PAPER_DIR / report_name(paper_id, lang)).exists():
-                return {"state": "done", "url": f"paper/{report_name(paper_id, lang)}",
+                return {"state": "done", "url": f"/report/paper/{report_name(paper_id, lang)}",
                         "note": "", "error": ""}
             return dict(self.jobs.get(key, {"state": "idle", "note": "", "url": "", "error": ""}))
 
@@ -102,7 +107,7 @@ class JobManager:
                                                    ssrn_browser=browser, lang=lang)
                 entry.setdefault("report_paths", {})[lang] = out.name
                 store.save(seen)
-                self._set(key, state="done", note="", url=f"paper/{out.name}")
+                self._set(key, state="done", note="", url=f"/report/paper/{out.name}")
                 print(f"  [server] built {paper_id} ({lang}) -> {out.name}")
                 if self.on_done:
                     try:
@@ -140,6 +145,8 @@ class Handler(SimpleHTTPRequestHandler):
         route = urlparse(self.path)
         if route.path == "/api/ping":
             return self._json({"ok": True})
+        if route.path == "/api/reports":
+            return self._json({"reports": [p.name for p in sorted(PAPER_DIR.glob("*.html"))]})
         if route.path == "/api/status":
             params = parse_qs(route.query)
             paper_id = (params.get("id") or [""])[0]
@@ -179,6 +186,6 @@ def serve(port: int = 8765, timeout: int = 900, show_browser: bool = False,
     manager.on_done = on_done
     Handler.manager = manager
     httpd = ThreadingHTTPServer(("127.0.0.1", port),
-                                partial(Handler, directory=str(REPORT_DIR)))
+                                partial(Handler, directory=str(ROOT)))
     httpd.manager = manager  # type: ignore[attr-defined]
     return httpd

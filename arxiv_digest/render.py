@@ -214,7 +214,7 @@ const saveQ=v=>{try{localStorage.setItem(QKEY,JSON.stringify(v))}catch(e){}};
 
 let LIVE=false;
 async function detectLive(){
-  try{const r=await fetch('api/ping',{cache:'no-store'});LIVE=r.ok;}catch(e){LIVE=false;}
+  try{const r=await fetch('/api/ping',{cache:'no-store'});LIVE=r.ok;}catch(e){LIVE=false;}
   document.getElementById('livebadge').hidden=!LIVE;
   paint();
 }
@@ -241,6 +241,29 @@ function toggleReq(id,lang){
   saveQ(q); paint();
 }
 
+function linkify(btn,url){
+  const a=document.createElement('a');
+  a.className='btn done'; a.href=url; a.target='_blank'; a.rel='noopener';
+  a.textContent='📄 '+btn.dataset.label;
+  btn.replaceWith(a);
+  return a;
+}
+
+// A report built in another tab, or in an earlier session, should appear here
+// without rebuilding the page. Cheap, so re-run it whenever the window is focused.
+async function syncReports(){
+  if(!LIVE)return;
+  let names=[];
+  try{names=(await (await fetch('/api/reports',{cache:'no-store'})).json()).reports||[];}
+  catch(e){return;}
+  const have=new Set(names);
+  document.querySelectorAll('.js-req').forEach(b=>{
+    if(b.dataset.busy)return;
+    const file=b.dataset.id+'.'+b.dataset.lang+'.html';
+    if(have.has(file))linkify(b,'/report/paper/'+file);
+  });
+}
+
 async function genReport(btn){
   if(btn.dataset.busy)return;
   const id=btn.dataset.id, lang=btn.dataset.lang;
@@ -249,19 +272,14 @@ async function genReport(btn){
   const fail=msg=>{btn.classList.remove('queued');btn.classList.add('failed');
     btn.textContent=T('failed');btn.title=msg||'';delete btn.dataset.busy;};
   try{
-    const r=await fetch('api/report',{method:'POST',
+    const r=await fetch('/api/report',{method:'POST',
       headers:{'Content-Type':'application/json'},body:JSON.stringify({id,lang})});
     if(!r.ok)return fail('request rejected ('+r.status+')');
     for(;;){
       await new Promise(res=>setTimeout(res,2000));
-      const s=await (await fetch('api/status?id='+encodeURIComponent(id)+'&lang='+lang,
+      const s=await (await fetch('/api/status?id='+encodeURIComponent(id)+'&lang='+lang,
         {cache:'no-store'})).json();
-      if(s.state==='done'){
-        const a=document.createElement('a');
-        a.className='btn done'; a.href=s.url; a.target='_blank'; a.rel='noopener';
-        a.textContent='📄 '+btn.dataset.label;
-        btn.replaceWith(a); a.click(); return;
-      }
+      if(s.state==='done'){ linkify(btn,s.url).click(); return; }
       if(s.state==='error')return fail(s.error);
       if(s.note)btn.textContent='⏳ '+s.note+'…';
     }
@@ -338,7 +356,9 @@ document.addEventListener('click',e=>{
 });
 document.getElementById('q').addEventListener('input',filter);
 document.getElementById('sort').addEventListener('change',e=>sortBy(e.target.value));
-applyLang();detectLive();
+applyLang();
+detectLive().then(syncReports);
+window.addEventListener('focus',syncReports);
 """
 
 

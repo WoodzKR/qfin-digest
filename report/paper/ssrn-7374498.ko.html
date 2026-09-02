@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calendar Effects of Asset Pricing Factors — 상세 리포트</title>
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --panel-2:#fbfcfd; --ink:#16191d; --muted:#5c6672;
+  --line:#e2e6ea; --accent:#3b6ef0; --accent-soft:#eaf0fe;
+  --pm:#3b6ef0; --st:#0f9d76; --tr:#d4791f; --ssrn:#8b5cf6; --other:#7a68c9;
+  --qp:#c0392b; --man:#0f766e; --aa:#1d4ed8; --ms:#a16207; --qc:#6d28d9;
+  --star:#f0a91b; --shadow:0 1px 2px rgba(16,24,40,.06),0 4px 14px rgba(16,24,40,.05);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#101317; --panel:#181c22; --panel-2:#1e232a; --ink:#e7ebf0; --muted:#98a3b0;
+    --line:#2a3038; --accent:#7ea3ff; --accent-soft:#1d2637;
+    --pm:#7ea3ff; --st:#4bd6a8; --tr:#f0ad5e; --ssrn:#b18cff; --other:#b0a0f0;
+    --qp:#f08a7c; --man:#3fc4b4; --aa:#8fb2ff; --ms:#e3b341; --qc:#c4a6ff;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.25);
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:15px/1.65 -apple-system,"Segoe UI","Malgun Gothic",Roboto,"Helvetica Neue",sans-serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:32px 20px 140px}
+a{color:var(--accent)}
+
+/* language switching: only the active language is displayed */
+[data-l]{display:none}
+html[data-lang="ko"] [data-l="ko"]{display:revert}
+html[data-lang="en"] [data-l="en"]{display:revert}
+
+header.top{margin-bottom:24px}
+h1{font-size:26px;margin:0 0 6px;letter-spacing:-.02em}
+.sub{color:var(--muted);font-size:13.5px;margin:0}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:9px 13px;font-size:13px;box-shadow:var(--shadow)}
+.stat b{font-size:16px;margin-right:5px}
+
+.controls{position:sticky;top:0;z-index:20;background:var(--bg);
+  padding:12px 0 10px;margin:20px 0 8px;border-bottom:1px solid var(--line)}
+.row{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:7px}
+.row:last-child{margin-bottom:0}
+.rowlabel{font-size:11.5px;color:var(--muted);font-weight:700;letter-spacing:.06em;min-width:38px}
+.chip{border:1px solid var(--line);background:var(--panel);color:var(--muted);
+  border-radius:999px;padding:5px 12px;font-size:12.5px;cursor:pointer;
+  font-family:inherit;transition:.12s;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);
+  color:var(--accent);font-weight:600}
+.chip:hover{border-color:var(--accent)}
+.langsel{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.langsel button{border:0;background:var(--panel);color:var(--muted);padding:5px 13px;
+  font:inherit;font-size:12.5px;cursor:pointer;transition:.12s}
+.langsel button[aria-pressed="true"]{background:var(--accent);color:#fff;font-weight:700}
+#q{flex:1;min-width:180px;padding:7px 12px;border:1px solid var(--line);border-radius:8px;
+  background:var(--panel);color:var(--ink);font:inherit;font-size:13.5px}
+#q:focus{outline:2px solid var(--accent);outline-offset:-1px}
+select{padding:7px 10px;border:1px solid var(--line);border-radius:8px;
+  background:var(--panel);color:var(--ink);font:inherit;font-size:13.5px}
+.count{color:var(--muted);font-size:12.5px;margin-left:auto}
+
+h2.day{font-size:15px;margin:30px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--line);
+  color:var(--muted);font-weight:600;letter-spacing:.02em}
+h2.day span.d{color:var(--ink)}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow)}
+.card.hide{display:none}
+.badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+.badge{font-size:11px;font-weight:700;letter-spacing:.04em;padding:2.5px 8px;
+  border-radius:5px;color:#fff}
+.b-PM{background:var(--pm)} .b-ST{background:var(--st)} .b-TR{background:var(--tr)}
+.b-ssrn{background:var(--ssrn)} .b-qp{background:var(--qp)} .b-man{background:var(--man)}
+.b-aa{background:var(--aa)} .b-ms{background:var(--ms)} .b-qc{background:var(--qc)}
+.b-XX{background:var(--other)}
+.badge.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);font-weight:600}
+.stars{color:var(--star);font-size:12.5px;letter-spacing:1px;margin-left:auto}
+.stars i{color:var(--line);font-style:normal}
+
+.title{font-size:16.5px;font-weight:650;line-height:1.4;margin:0 0 6px;letter-spacing:-.01em}
+.title a{color:var(--ink);text-decoration:none}
+.title a:hover{color:var(--accent)}
+.oneliner{margin:0 0 8px;font-size:14.5px;color:var(--ink)}
+.oneliner::before{content:"\25B8 ";color:var(--accent)}
+.authors{margin:0;color:var(--muted);font-size:12.5px}
+
+.detail{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+.detail[hidden]{display:none}
+.detail ul{margin:0 0 12px;padding-left:19px}
+.detail li{margin-bottom:4px}
+.kv{display:grid;grid-template-columns:92px 1fr;gap:5px 10px;font-size:13.5px;margin-bottom:12px}
+.kv dt{color:var(--muted);font-weight:600}
+.kv dd{margin:0}
+.keys{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.key{font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);
+  border-radius:5px;padding:2px 7px;color:var(--muted)}
+.abs{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;
+  padding:11px 13px;font-size:13px;color:var(--muted);line-height:1.7}
+.abs b{color:var(--ink);display:block;margin-bottom:4px;font-size:12px;letter-spacing:.03em}
+
+.actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;align-items:center}
+.actions .sep{width:1px;height:18px;background:var(--line);margin:0 2px}
+.btn{border:1px solid var(--line);background:var(--panel);color:var(--muted);
+  border-radius:7px;padding:5.5px 12px;font-size:12.5px;cursor:pointer;
+  font-family:inherit;text-decoration:none;display:inline-block;transition:.12s}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{filter:brightness(1.08);color:#fff}
+.btn.queued{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);
+  font-weight:600}
+.btn.done{border-color:var(--st);color:var(--st)}
+.btn.failed{border-color:var(--tr);color:var(--tr)}
+#livebadge{font-size:11.5px;color:var(--st);font-weight:700;letter-spacing:.03em;
+  display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+#livebadge::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--st);
+  animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--panel);
+  border-top:1px solid var(--line);box-shadow:0 -4px 20px rgba(0,0,0,.10);
+  padding:12px 20px;display:none}
+.bar.on{display:block}
+.bar-in{max-width:1000px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.bar pre{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;
+  padding:6px 9px;font-size:12px;flex:1;min-width:200px;overflow:auto;margin:0;
+  white-space:pre;line-height:1.5}
+.empty{color:var(--muted);text-align:center;padding:50px 0}
+footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);
+  color:var(--muted);font-size:12px}
+@media print{.controls,.bar,.actions{display:none!important}.detail{display:block!important}
+  .card{break-inside:avoid;box-shadow:none}}
+
+.doc{max-width:780px}
+.doc h1{font-size:24px;line-height:1.35;margin:0 0 10px}
+.doc h2{font-size:19px;margin:38px 0 12px;padding-bottom:7px;border-bottom:2px solid var(--accent);
+  letter-spacing:-.01em}
+.doc h3{font-size:15.5px;margin:22px 0 8px;color:var(--accent)}
+.doc p{margin:0 0 14px}
+.doc ul,.doc ol{margin:0 0 16px;padding-left:22px}
+.doc li{margin-bottom:7px}
+.doc blockquote{margin:0 0 18px;padding:14px 18px;border-left:3px solid var(--accent);
+  background:var(--accent-soft);border-radius:0 8px 8px 0;font-size:15.5px}
+.doc blockquote p:last-child{margin-bottom:0}
+.doc table{width:100%;border-collapse:collapse;margin:0 0 18px;font-size:13.5px;
+  display:block;overflow-x:auto}
+.doc th,.doc td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+.doc th{background:var(--panel-2);font-weight:650;white-space:nowrap}
+.doc code{background:var(--panel-2);border:1px solid var(--line);border-radius:4px;
+  padding:1px 5px;font-size:13px}
+.doc mjx-container[display="true"]{margin:16px 0;overflow-x:auto;overflow-y:hidden;padding:2px 0}
+.doc .meta-head{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;margin:18px 0 26px;box-shadow:var(--shadow)}
+.doc .meta-head .sub{margin-bottom:4px}
+.doc .langlinks{float:right;font-size:12.5px}
+</style>
+
+<script>
+window.MathJax={
+  tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]'],['$$','$$']],processEscapes:true},
+  options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']},
+  chtml:{scale:0.98}
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+</head>
+<body>
+<div class="wrap doc">
+  <p class="sub"><span class="langlinks"></span>
+     <a href="javascript:history.back()">← 돌아가기</a></p>
+  <h1>Calendar Effects of Asset Pricing Factors</h1>
+  <div class="meta-head">
+    <p class="sub">Jiawei Fan, Sida Li, Wanyu Miao</p>
+    <p class="sub">SSRN abstract_id 7374498 · Capital Markets: Asset Pricing &amp; Valuation</p>
+    <p class="sub">본문 출처: SSRN PDF full text</p>
+    <div class="actions">
+      <a class="btn" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7374498" target="_blank" rel="noopener">원문 페이지</a>
+      <a class="btn" href="https://papers.ssrn.com/sol3/Delivery.cfm/7374498.pdf?abstractid=7374498&amp;mirid=1" target="_blank" rel="noopener">원문 PDF</a>
+    </div>
+  </div>
+  <blockquote><p>롱숏 팩터 프리미엄은 주식이 잘 오르는 달력 구간에서 오히려 줄어든다</p></blockquote>
+  <h2>1. 한눈에 보기</h2>
+
+<blockquote>153개 롱숏 팩터를 복제해 보니 팩터 프리미엄은 야간, 금요일, 1월, 월말 전환기, 매크로 발표 구간에서 체계적으로 낮아진다. 이 구간들은 시장 전체 수익률이 높기로 알려진 바로 그 구간이고, 그래서 캘린더 효과가 시장과 횡단면에서 정반대 방향으로 작동한다.</blockquote>
+
+<ul>
+  <li>평균 팩터는 야간에 −2.01bp를 잃고 장중에 5.45bp를 번다. 차이 −7.46bp에 t = −8.54다.</li>
+  <li>요일별로는 월요일 5.77bp, 주중 3.44bp, 금요일 1.24bp다. 1월은 하루 0.22bp로 나머지 달 3.71bp에 한참 못 미친다.</li>
+  <li>종합 팩터 시그널의 예측력을 회귀로 재보면 금요일에는 거의 사라지고 1월에는 부호가 뒤집힌다. 월말 전환기에서 약 65%, 매크로 발표 창에서 약 30% 줄어든다.</li>
+  <li>각 팩터의 원논문 표본 밖 구간에서 다시 계산하면 효과가 줄지만 여전히 유의하다. 뉴스 심리 지수가 높은 날에 약화 폭이 커진다.</li>
+</ul>
+
+<h2>2. 문제의식과 배경</h2>
+
+<p>캘린더 효과는 금융에서 가장 오래된 정형화된 사실 축에 든다. 미국 주식 수익률은 장중보다 야간에, 월요일보다 금요일에, 다른 달보다 1월에 높다. 월말 전환기와 FOMC·GDP·고용지표·ISM 같은 예정된 매크로 발표일에도 수익률이 높고 FOMC 직전에는 별도의 드리프트가 붙는다.</p>
+
+<p>기존 문헌은 이 패턴을 거의 전부 시장 전체 수익률, 즉 주식 프리미엄 차원에서 다뤘다. 재고 위험, 야간 정보 처리, 월말 기관 자금 결제 주기, 발표일 베타 프라이싱, 투자자 기분 같은 설명이 제시됐지만 설명 대상은 시장 지수였다.</p>
+
+<p>횡단면 쪽에서 캘린더 패턴을 본 연구는 셋뿐이고 각각 한 축만 다뤘다. Lou, Polk, and Skouras(2019)는 14개 팩터로 야간과 장중의 줄다리기를 제시했다. Hendershott, Livdan, and Rösch(2020)는 CAPM 베타 프리미엄이 야간에 발생하고 장중에 되돌려진다고 봤다. Birru(2018)는 19개 이상현상으로 월요일에 높고 금요일에 낮은 요일 패턴을 기분 가설로 설명했다.</p>
+
+<p>저자들의 기여는 규모와 통합이다. 153개 팩터와 다섯 개 캘린더 축을 한 틀에 넣어 앞선 두 발견이 하나의 넓은 현상의 두 사례임을 보인다. 시장 프리미엄이 높은 창에서 팩터 프리미엄이 낮다는 규칙성이 축을 가리지 않고 반복된다.</p>
+
+<h2>3. 방법론</h2>
+
+<h3>3.1 세 가지 로그 수익률</h3>
+
+<p>일별 수익률을 종가-종가, 장중, 야간 셋으로 쪼갠다.</p>
+
+\[ \text{Close-to-close return} = \log(RET_t + 1) \]
+\[ \text{Intraday return} = \log\left(\frac{close_t}{open_t}\right) \]
+\[ \text{Overnight return} = \log\left(\frac{open_t}{close_t} \times (RET_t + 1)\right) \]
+
+<p>\(RET_t\)는 배당·액면분할·기타 기업행위를 반영한 CRSP의 표준 일별 수익률, \(open_t\)와 \(close_t\)는 시가와 종가다. 정의상 야간 수익률은 종가-종가에서 장중을 뺀 값이어서 배당과 기업행위 효과가 전부 야간 구간에 실린다.</p>
+
+<h3>3.2 팩터 포트폴리오와 종합 시그널 Net</h3>
+
+<ol>
+  <li>Jensen, Kelly, and Pedersen(2023)의 153개 횡단면 팩터 특성을 CRSP·Compustat에서 만든다.</li>
+  <li>매월 각 특성으로 종목을 정렬하고 양 극단 3분위를 롱·숏으로 삼는다. 각 사이드 안에서는 동일가중이고 리밸런싱은 월 1회다.</li>
+  <li>종목별로 153개 롱 사이드 비중 합을 <code>Long</code>, 숏 사이드 비중 합을 <code>Short</code>로 정의한다. 둘 다 양수 크기로 잰다.</li>
+  <li>종합 팩터 시그널을 \( Net = Long - Short \)로 둔다. 팩터들이 집단으로 선호하는 종목에서 양수, 반대로 베팅하는 종목에서 음수다.</li>
+</ol>
+
+<h3>3.3 예측력 회귀</h3>
+
+<p>Engelberg, McLean, and Pontiff(2018)의 설정을 캘린더 창에 맞춰 고친다.</p>
+
+\[ ret_{i,t} = \alpha_i + \beta_1 Net_{i,t} + \beta_2 Net_{i,t} \times event_t + \beta_3 event_t + \sum_{j=1}^{10}\gamma_j ret_{i,t-j} + \sum_{j=1}^{10}\delta_j ret^2_{i,t-j} + \sum_{j=1}^{10}\rho_j volume_{i,t-j} + \epsilon_{i,t} \]
+
+<p>\(ret_{i,t}\)는 종목 i의 t일 종가-종가 수익률(bp), \(\alpha_i\)는 기업 고정효과, \(event_t\)는 해당 캘린더 구간 더미다. 통제변수로 수익률·제곱수익률·거래량을 각각 10기 시차까지 넣는다. 관심 계수는 \(\beta_2\)이고 이 값이 음수면 그 구간에서 팩터 예측력이 약해진다.</p>
+
+<h3>3.4 시그널의 양·음 분해</h3>
+
+<p>어느 쪽 다리가 패턴을 끌고 가는지 보려고 \( Net^+ = \max(0, Net) \), \( Net^- = \min(0, Net) \)로 나눠 각각에 이벤트 교차항을 붙인다. 두 성분은 각각 롱 사이드와 숏 사이드의 대리변수지만 완전히 같지는 않다. Net이 종목 단위로 롱과 숏 비중을 상계하기 때문이다.</p>
+
+<h3>3.5 심리 삼중 교차항</h3>
+
+<p>식 (1)에 일별 뉴스 심리를 넣어 \( Net \times event \times sentiment \) 삼중 교차항까지 추정한다. 하위 교차항과 주효과는 모두 포함한다. 이 계수가 \( Net \times event \)와 같은 부호로 나오면 캘린더 창의 효과가 심리가 높은 날 더 커진다는 뜻이다.</p>
+
+<h2>4. 데이터와 실험 설계</h2>
+
+<table>
+  <thead>
+    <tr><th>항목</th><th>내용</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>수익률 데이터</td><td>CRSP US Daily, 상장폐지 수익률은 Shumway(1997) 방식 보정</td></tr>
+    <tr><td>표본 기간</td><td>1992년 6월 ~ 2024년 12월 (시가·종가가 CRSP에 널리 실리는 시점부터)</td></tr>
+    <tr><td>관측치</td><td>종목-일 41,856,826개, 회귀 표본 41,659,031~41,659,040개</td></tr>
+    <tr><td>팩터</td><td>Jensen, Kelly, and Pedersen(2023) 153개, 3분위 롱숏, 동일가중, 월간 리밸런싱</td></tr>
+    <tr><td>매크로 이벤트</td><td>FOMC(연준), GDP(ALFRED의 BEA 발표일), NFP(BLS 고용상황), ISM 제조업 PMI(발표 규칙으로 복원)</td></tr>
+    <tr><td>이벤트 창</td><td>발표일 t 기준 [t−1, t+1] 3일. 창 안의 비거래일은 제외</td></tr>
+    <tr><td>월말 전환기(TOM)</td><td>매월 마지막 3영업일이 아니라 마지막 3<em>달력</em>일. 평균 약 2거래일</td></tr>
+    <tr><td>심리 지표</td><td>샌프란시스코 연준 Daily News Sentiment Index(DNSI), Shapiro, Sudhof, and Wilson(2022)</td></tr>
+    <tr><td>표준오차</td><td>Table III는 일자 클러스터, Table IV·VI는 로버스트</td></tr>
+  </tbody>
+</table>
+
+<p>이벤트가 표본에서 차지하는 비중도 정리해 둘 만하다. FOMC일 3.8%, GDP일 5.3%, NFP일 4.6%, ISM일 4.6%이고 3일 창으로 넓히면 각각 11.0%, 13.8%, 9.4%, 11.2%다. TOM은 9.9%다. Net의 표준편차는 \(9.75 \times 10^{-5}\)이고 1퍼센타일이 \(-2.23 \times 10^{-4}\), 99퍼센타일이 \(2.36 \times 10^{-4}\)다.</p>
+
+<p>표본 전체에서 동일가중 종목 로그수익률 평균은 종가-종가 −6.3bp, 장중 −6.6bp, 야간 +0.3bp다. 세 값 모두 음수이거나 0에 가깝다는 점은 뒤에서 다시 짚는다.</p>
+
+<h2>5. 주요 결과</h2>
+
+<h3>5.1 원시 수익률 비교</h3>
+
+<table>
+  <thead>
+    <tr><th>비교</th><th>팩터 (1)</th><th>팩터 (2)</th><th>팩터 차이</th><th>t</th><th>평균 종목 차이</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>야간 vs 장중</td><td>−2.01</td><td>5.45</td><td>−7.46</td><td>−8.54</td><td>+5.91</td></tr>
+    <tr><td>금요일 vs 주중</td><td>1.24</td><td>3.44</td><td>−2.20</td><td>−5.34</td><td>+8.85</td></tr>
+    <tr><td>주중 vs 월요일</td><td>3.44</td><td>5.77</td><td>−2.33</td><td>−7.06</td><td>+10.72</td></tr>
+    <tr><td>1월 vs 비1월</td><td>0.22</td><td>3.71</td><td>−3.49</td><td>−3.66</td><td>+11.10</td></tr>
+    <tr><td>월말 전환기 vs 기타</td><td>1.89</td><td>3.61</td><td>−1.72</td><td>−6.01</td><td>+13.33</td></tr>
+    <tr><td>매크로 창 vs 기타</td><td>2.99</td><td>3.71</td><td>−0.72</td><td>−4.62</td><td>+7.75</td></tr>
+  </tbody>
+</table>
+
+<p>단위는 bp, 마지막 열은 동일가중 종목 로그수익률 기준 같은 비교의 차이다. 여섯 행 모두에서 팩터와 시장의 부호가 정확히 반대다. 야간과 장중 비교는 짝 t검정, 나머지는 이표본 t검정이다.</p>
+
+<p>크기로 보면 야간-장중 축이 −7.46bp로 가장 크고 1월이 −3.49bp로 뒤를 잇는다. 매크로 창은 −0.72bp로 가장 작지만 t = −4.62로 유의하다.</p>
+
+<h3>5.2 예측력 회귀</h3>
+
+<p>Net 계수는 모든 설정에서 양수이고 대략 35,000에서 56,000 사이다. 표준편차 \(9.75 \times 10^{-5}\)를 곱하면 Net 1표준편차 상승이 일별 수익률 3.5~5.5bp에 대응한다.</p>
+
+<table>
+  <thead>
+    <tr><th>이벤트</th><th>Net</th><th>Net × Event</th><th>Event 더미</th><th>예측력 변화</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>월요일</td><td>35,565</td><td>+51,975 (t=4.74)</td><td>−13.32</td><td>강화</td></tr>
+    <tr><td>금요일</td><td>56,462</td><td>−55,604 (t=−5.91)</td><td>+13.88</td><td>−98%, 거의 소멸</td></tr>
+    <tr><td>1월</td><td>51,603</td><td>−79,585 (t=−4.80)</td><td>+15.53</td><td>부호 역전</td></tr>
+    <tr><td>월말 전환기</td><td>48,483</td><td>−31,568 (t=−2.48)</td><td>+16.49</td><td>−65%</td></tr>
+    <tr><td>매크로 발표일</td><td>47,596</td><td>−12,551 (t=−1.20)</td><td>+13.50</td><td>유의하지 않음</td></tr>
+    <tr><td>매크로 3일 창</td><td>51,142</td><td>−15,132 (t=−1.81)</td><td>+8.43</td><td>−30%, 10% 유의</td></tr>
+  </tbody>
+</table>
+
+<p>1월의 교차항 절댓값이 기저 계수를 넘어선다. 예측력이 약해지는 데 그치지 않고 팩터가 선호하는 종목이 1월에 오히려 못 간다는 뜻이다. 이벤트 더미 자체는 시장 수익률이 높은 구간에서 전부 양수이고 월요일에서만 음수여서 기업 고정효과와 시차 통제를 넣고도 시장 쪽 캘린더 패턴이 그대로 재현된다.</p>
+
+<h3>5.3 양·음 성분 분해</h3>
+
+<p>\(Net^+\)와 \(Net^-\) 모두 단독으로 수익률을 예측한다. 기저 계수는 \(Net^-\) 쪽이 일관되게 크다. 금요일 기준으로 \(Net^+\) 36,162 대 \(Net^-\) 78,456이다.</p>
+
+<ul>
+  <li>금요일: \(Net^+\) 교차항 −75,658로 부호 역전, \(Net^-\)는 −34,730으로 약 44% 완만해진다.</li>
+  <li>1월: \(Net^+\)가 −110,241로 더 강하게 역전되고 \(Net^-\)는 약 64% 평탄해진다.</li>
+  <li>매크로 창: \(Net^+\) 약 33%, \(Net^-\) 약 28% 감소한다.</li>
+  <li>월요일: 두 교차항 모두 양수(+68,116, +35,164)로 약화 구간의 거울상이다.</li>
+  <li>월말 전환기: \(Net^+\)는 −76,803으로 역전되지만 \(Net^-\) 교차항은 +15,503으로 기울기가 약 22% 가팔라진다.</li>
+</ul>
+
+<p>월말 전환기의 \(Net^-\) 결과는 해석이 갈린다. \(Net^-\)는 구성상 0 이하여서 기울기가 가팔라지면 시그널이 가장 나쁜 종목이 더 낮은 수익률을 낸다. 숏 사이드 베팅은 오히려 잘 먹힌다는 말이다. 다만 \(Net^+\) 쪽 악화가 훨씬 커서 전체 예측력은 여전히 약해진다.</p>
+
+<h3>5.4 표본 밖 검증</h3>
+
+<p>각 팩터의 원논문 표본에 포함된 연도를 표본 내, 나머지를 표본 밖으로 분류하고 해당 날짜에 자격이 있는 팩터만 평균해 두 포트폴리오를 만든다.</p>
+
+<table>
+  <thead>
+    <tr><th>비교</th><th>전체 표본</th><th>표본 내</th><th>표본 밖</th><th>표본 밖 t</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>야간 − 장중</td><td>−7.46</td><td>−8.39</td><td>−7.63</td><td>−7.82</td></tr>
+    <tr><td>금요일 − 주중</td><td>−2.20</td><td>−4.33</td><td>−1.06</td><td>−3.65</td></tr>
+    <tr><td>주중 − 월요일</td><td>−2.33</td><td>−3.49</td><td>−1.44</td><td>−5.83</td></tr>
+    <tr><td>1월 − 비1월</td><td>−3.49</td><td>−4.58</td><td>−3.02</td><td>−3.53</td></tr>
+    <tr><td>TOM − 기타</td><td>−1.72</td><td>−2.01</td><td>−1.57</td><td>−5.46</td></tr>
+    <tr><td>매크로 창 − 기타</td><td>−0.72</td><td>−0.76</td><td>−1.03</td><td>−4.82</td></tr>
+  </tbody>
+</table>
+
+<p>요일 효과가 가장 크게 줄어 금요일 스프레드는 −4.33bp에서 −1.06bp로 4분의 1 수준이 된다. McLean and Pontiff(2016)가 말한 발표 후 수익 감소와 맞물린다. 반면 매크로 창은 표본 밖에서 오히려 커진다. 여섯 축 모두 표본 밖에서 1% 유의를 유지해서 데이터 마이닝만으로는 전부 설명되지 않는다.</p>
+
+<h3>5.5 뉴스 심리</h3>
+
+<p>\(Net \times Sentiment\) 계수는 모든 설정에서 양수다. 심리가 높은 날 팩터 예측력이 무조건부로는 더 높다. 그런데 삼중 교차항은 캘린더 창의 방향을 그대로 증폭한다.</p>
+
+<table>
+  <thead>
+    <tr><th>이벤트</th><th>Net × Event × Sentiment</th><th>t</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>월요일</td><td>+66,834</td><td>5.72</td></tr>
+    <tr><td>금요일</td><td>−125,434</td><td>−12.06</td></tr>
+    <tr><td>1월</td><td>−40,117</td><td>−2.66</td></tr>
+    <tr><td>월말 전환기</td><td>−37,983</td><td>−2.61</td></tr>
+    <tr><td>매크로 발표일</td><td>−89,061</td><td>−7.77</td></tr>
+    <tr><td>매크로 3일 창</td><td>−21,927</td><td>−2.43</td></tr>
+  </tbody>
+</table>
+
+<p>이중 교차항에서 유의하지 않던 매크로 발표일이 삼중 교차항에서는 −89,061, t = −7.77로 강하게 잡힌다. 발표일 효과가 심리 상태에 따라 갈린다는 신호로 읽을 수 있다. 저자들은 DNSI가 투자자 수요나 관심이 아니라 경제 뉴스의 논조를 재는 지표라는 점을 들어 이 증거가 심리 기반 미스프라이싱과 부합하지만 그 자체로 식별하지는 않는다고 선을 긋는다.</p>
+
+<h2>6. 한계와 주의점</h2>
+
+<h3>6.1 저자가 밝힌 한계</h3>
+
+<ul>
+  <li>DNSI는 뉴스 논조 측정치다. 투자자 심리나 관심의 직접 측정이 아니어서 행태 메커니즘을 식별하지 못한다.</li>
+  <li>\(Net^+\)와 \(Net^-\)는 롱·숏 사이드의 대리변수일 뿐이다. Net이 종목 단위로 상계된 뒤의 잔차이기 때문이다.</li>
+  <li>표본 밖에서 대부분의 효과가 줄어든다. 데이터 마이닝이 전부는 아니지만 일부는 설명한다는 뜻으로 읽힌다.</li>
+</ul>
+
+<h3>6.2 재현과 실전에서 걸릴 지점</h3>
+
+<p>야간·장중 분해는 Table I과 Table V에만 나오고 회귀 분석(Table III, IV, VI)의 종속변수는 종가-종가 수익률이다. 가장 큰 −7.46bp 효과가 예측력 회귀와 심리 상호작용 검증을 거치지 않았다. 야간 수익률에 배당과 기업행위가 전부 실린다는 정의도 부담이다. 배당락 처리가 야간 구간 수익률을 구조적으로 왜곡할 여지가 있다.</p>
+
+<p>Panel B의 동일가중 종목 로그수익률이 표본 평균에서 −6.3bp다. 하루 −6bp가 넘는 음수는 로그 변환과 동일가중, 초소형주 편입이 겹친 결과로 보인다. 캘린더 구간 간 <em>차이</em>는 이 수준 효과에 덜 민감하지만 Panel B의 절대 수치를 시장 프리미엄으로 읽어서는 안 된다.</p>
+
+<p>TOM 정의가 문헌 표준과 다르다. Lakonishok and Smidt(1988)와 McConnell and Xu(2008)는 당월 마지막 거래일부터 익월 처음 세 거래일까지를 쓰는데 이 논문은 마지막 3달력일만 쓴다. 익월 초반의 상승 구간이 빠져 있어서 기존 결과와 직접 비교하기 어렵다.</p>
+
+<p>포트폴리오 구성이 3분위 동일가중이다. 소형주 비중이 높아 실제 집행 가능성이 떨어지고 야간 대 장중을 실현하려면 매일 시가와 종가에 전 종목을 뒤집어야 한다. 논문에는 거래비용 분석이 없다. bp 단위 효과 대부분이 비용에 흡수될 가능성을 따로 점검해야 한다.</p>
+
+<p>회귀 R제곱이 전부 0.013이다. 일별 개별 종목 수익률 회귀에서 이상한 값은 아니지만 4,100만 관측치에서 나온 t값의 크기를 경제적 중요도로 곧장 옮겨 읽지 않는 편이 좋다. Table IV와 VI은 로버스트 표준오차만 쓰고 일자 클러스터를 쓰지 않아서 t값이 부풀려졌을 수 있다. 캘린더 이벤트는 정의상 날짜 단위 공통 충격이다.</p>
+
+<p>심리 결과의 해석에도 긴장이 있다. \(Net \times Sentiment\)가 양수라는 것은 심리가 좋은 날 팩터가 잘 먹힌다는 말이고, 심리가 높을 때 미스프라이싱이 커진다는 이야기와 방향이 어긋난다. 저자들의 주장은 어디까지나 삼중 교차항, 즉 캘린더 창 안에서의 차등 효과에 기댄다.</p>
+
+<h2>7. 시스템 트레이딩 적용 아이디어</h2>
+
+<h3>7.1 익스포저 스케일링 오버레이</h3>
+
+<p>기존 멀티팩터 롱숏 북을 그대로 두고 총 익스포저만 캘린더로 조절하는 방식이 가장 현실성 있다. 신호 자체를 건드리지 않아 리밸런싱 회전율이 늘지 않는다.</p>
+
+<ul>
+  <li>금요일과 1월 거래일에 그로스를 축소한다. 회귀상 금요일 예측력은 −98%, 1월은 부호 역전이다.</li>
+  <li>월요일에 그로스를 확대한다. 팩터 수익 5.77bp로 주중 3.44bp를 앞선다.</li>
+  <li>월말 마지막 3달력일에 축소한다. 다만 \(Net^-\) 기울기가 가팔라지므로 숏 사이드는 유지하고 롱 사이드만 줄이는 비대칭 조정도 검토할 만하다.</li>
+  <li>FOMC·GDP·NFP·ISM의 [t−1, t+1] 창에서 완만하게 축소한다. 효과가 −0.72bp로 작아 비용 대비 이득을 따로 계산해야 한다.</li>
+</ul>
+
+<h3>7.2 심리 조건부 게이팅</h3>
+
+<p>DNSI를 일별로 받아 z-score로 정규화하고 캘린더 축소 폭을 심리 수준의 함수로 만든다. 삼중 교차항이 전 축에서 이중 교차항과 같은 부호이므로 심리가 높은 날 축소 폭을 키우고 낮은 날 줄이는 단조 규칙이 자연스럽다. 실행 전에 DNSI의 실제 배포 시각과 개정 여부를 확인해야 한다. 논문에는 발표 지연이 명시되지 않았다.</p>
+
+<h3>7.3 집행 시각 배치</h3>
+
+<p>야간에 −2.01bp, 장중에 5.45bp라는 결과는 팩터 북을 낮에 들고 밤에 비우는 구성을 시사하지만 왕복 거래비용이 하루 7.46bp를 넘길 공산이 크다. 현실적인 절충은 리밸런싱 집행 시각 조정이다. 신규 편입은 개장 근처에서, 청산은 종가 근처에서 처리하면 야간 구간의 음수 프리미엄을 일부 피한다. 야간 익스포저 자체를 줄이려면 개별 종목 대신 지수 선물이나 ETF로 순 델타를 헤지하는 편이 비용상 유리하다.</p>
+
+<h3>7.4 구현 데이터와 주기</h3>
+
+<table>
+  <thead>
+    <tr><th>구성요소</th><th>데이터</th><th>갱신 주기</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>팩터 특성</td><td>CRSP·Compustat 또는 상용 대체(JKP 오픈소스 팩터 라이브러리)</td><td>월 1회</td></tr>
+    <tr><td>Net 시그널</td><td>월간 롱·숏 비중 합의 차</td><td>월 1회 산출, 일별 매칭</td></tr>
+    <tr><td>캘린더 더미</td><td>거래소 캘린더 + FOMC·BEA·BLS·ISM 발표 일정</td><td>사전에 연 단위 확정, 일별 조회</td></tr>
+    <tr><td>심리</td><td>샌프란시스코 연준 DNSI</td><td>일별</td></tr>
+    <tr><td>익스포저 조정</td><td>스케일 팩터 계산 후 집행</td><td>일별, 장 시작 전</td></tr>
+  </tbody>
+</table>
+
+<h3>7.5 검증 절차</h3>
+
+<p>캘린더 규칙은 데이터 마이닝 위험이 크다. 논문의 표본 밖 검증을 그대로 흉내 내서 규칙 도출 구간과 평가 구간을 연도 단위로 분리하고, 축별로 따로 검증한 뒤 결합한다. 축소 규칙이 실제로 정보비율을 올리는지는 비용 차감 후 수익률로만 판정한다. 특히 금요일 효과는 표본 밖에서 4분의 1로 줄어든 축이라 최근 구간에 별도 가중을 둬 재확인할 필요가 있다.</p>
+
+<h2>8. 함께 볼 만한 개념</h2>
+
+<ul>
+  <li>야간 대 장중 줄다리기 — Lou, Polk, and Skouras(2019), Hendershott, Livdan, and Rösch(2020), Boyarchenko, Larsen, and Whelan(2023)의 overnight drift</li>
+  <li>요일별 기분 가설 — Birru(2018), Hirshleifer, Jiang, and DiGiovanni(2020)의 mood beta</li>
+  <li>투자자 심리와 이상현상의 숏 사이드 — Stambaugh, Yu, and Yuan(2012), Baker and Wurgler(2006, 2007)</li>
+  <li>예정 발표일 프라이싱 — Savor and Wilson(2013, 2014, 2016), Lucca and Moench(2015)의 pre-FOMC drift</li>
+  <li>월말 유동성 수요 — Ogden(1990), Etula, Rinne, Suominen, and Vaittinen(2020)의 dash for cash</li>
+  <li>1월 효과와 세금손실 매도 — Keim(1983), Reinganum(1983), Grundy and Martin(2001)의 모멘텀 1월 부진</li>
+  <li>수익률 계절성 일반 — Heston and Sadka(2008), Keloharju, Linnainmaa, and Nyberg(2016)</li>
+  <li>팩터 대규모 복제와 다중검정 — Harvey, Liu, and Zhu(2016), Hou, Xue, and Zhang(2020), Jensen, Kelly, and Pedersen(2023)</li>
+  <li>발표 후 수익 감소 — McLean and Pontiff(2016), 캘린더 규칙 데이터 마이닝은 Sullivan, Timmermann, and White(2001)</li>
+  <li>팩터 수익의 시점 집중 — Engelberg, McLean, and Pontiff(2018), Bowles, Reed, Ringgenberg, and Thornock(2024)의 anomaly time</li>
+  <li>뉴스 심리 텍스트 지수 — Shapiro, Sudhof, and Wilson(2022)</li>
+</ul>
+  <div class="abs" style="margin-top:32px"><b>ORIGINAL ABSTRACT</b>U.S. equity returns are known to be higher overnight, on Fridays, in January, around the turn of the month, and during macroeconomic announcement windows. We replicate 153 long-short factors and document the mirror image of these patterns: factor premia are systematically lower in exactly the same periods. On average, a factor loses 2.01 bps overnight but earns 5.45 bps intraday; it earns 5.77 bps on Mondays versus 1.24 bps on Fridays; and its returns are significantly lower in January, at the turn of the month, and around macroeconomic announcements. The reversed calendar effects persist out of sample and strengthen when news sentiment is elevated, consistent with sentiment-driven mispricing.</div>
+  <footer><p>로컬 Claude Code 로 생성한 요약 리포트입니다. 인용 전 반드시 원문을 확인하세요.</p></footer>
+</div>
+</body>
+</html>

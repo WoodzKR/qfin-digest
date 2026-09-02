@@ -47,12 +47,13 @@ arXiv HTML edition, the SSRN PDF or the blog article — the abstract only as a 
 and the page says so when that happens. Math keeps its original LaTeX and renders with
 MathJax.
 
-```powershell
-python run.py serve
-```
+Double-click **`report.bat`**. It starts the local server and opens the digest with
+the report buttons live: click `📄 한국어` or `📄 English` on a card and it builds on the
+spot — no terminal. Close the window when done, then `update.bat` to publish.
 
-Opens the digest with the report buttons live: click `📄 한국어` or `📄 English` on a
-card and it builds on the spot. `Ctrl+C` when done, then `update.bat` to publish.
+The button becomes a link to the finished report as soon as it is built, and any other
+open tab picks it up when you switch back to it. (`python run.py serve` is the same
+thing without the wrapper.)
 
 For a paper you actually care about, add `--review`. A critique pass reads the full
 paper first — claims, identifying assumptions, validity threats, the strongest
@@ -89,6 +90,7 @@ python run.py status           # what is in the store
 | `--review` | critique pass before writing a deep report |
 | `--stale` | redo only what an older prompt produced |
 | `--force` | redo work that is already done |
+| `--push` | publish after a full run |
 
 ### When a prompt changes
 
@@ -107,7 +109,6 @@ Bump `SUMMARY_VERSION` or `REPORT_VERSION` in `arxiv_digest/config.py` when a ch
 is worth applying to old output, then `--stale` redoes only the mismatches. The two
 are independent: changing the deep-report prompt flags the reports and leaves the
 summaries alone.
-| `--push` | publish after a full run |
 
 ## What it reads
 

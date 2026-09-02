@@ -7509,6 +7509,12 @@
     "listed_date": "2026-09-01",
     "page_count": 26,
     "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7374498.pdf?abstractid=7374498&mirid=1",
+    "report_paths": {
+      "ko": "ssrn-7374498.ko.html"
+    },
+    "report_versions": {
+      "ko": "2026-09-01"
+    },
     "src": "ssrn",
     "src_cats": [
       "APV"

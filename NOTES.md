@@ -1,5 +1,35 @@
 # Working notes
 
+## 2026-09-03 — The server was rooted one directory too deep
+
+A deep report built through `serve` did not show up on the page you already had
+open. Two separate causes, one obvious in hindsight.
+
+**The server rooted at `report/`.** So `index.html`, which sits at the repository
+root, was outside the server entirely. Open it and you get a page with no API
+behind it — it falls back to copy-a-command and stays that way. Rooted at the
+repository now, so both the index and everything under `report/` share one origin.
+The API paths moved from relative to absolute (`/api/ping`), because relative ones
+resolved differently depending on which page was asking.
+
+**Nothing told an already-open page.** The generating tab swapped its own button
+for a link, but any other tab kept showing a stale button until the next rebuild.
+Added `GET /api/reports`, listing what exists on disk, and a `syncReports()` that
+runs on load and on window focus: switch back to an old tab and its buttons
+become links. `linkify()` is shared by both paths so they cannot drift.
+
+Also `report.bat`, so the whole thing is a double-click. No terminal:
+
+    report.bat  ->  server starts, browser opens, click KO / EN on a card
+
+**Data loss, narrowly avoided.** A `python - <<'PY'` rewrite of `render.py` died
+mid-write on a `UnicodeEncodeError` — `io.open(p, "w")` had already truncated the
+file to zero bytes. Recovered with `git checkout`. When a scripted rewrite touches
+a file with emoji or escape sequences, encode to a temp buffer *before* opening
+the destination, or just use an editor that does. Committing often is what made
+this a non-event.
+
+
 ## 2026-09-01 — Two SSRN reports were written from the abstract, not the PDF
 
 Asked whether a specific report came from the original PDF. It did not:
