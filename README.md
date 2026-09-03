@@ -2,7 +2,7 @@
 
 **[Read the digest →](https://woodzkr.github.io/qfin-digest/)** · [한국어](README.ko.md)
 
-New research from arXiv q-fin, SSRN and five practitioner blogs, summarized in Korean
+New research from arXiv q-fin, SSRN and four practitioner blogs, summarized in Korean
 and English. One page, switch languages with a click, no sign-in.
 
 Everything runs on your own machine. Git is only how the finished page gets published —
@@ -115,10 +115,15 @@ summaries alone.
 | | Source | Recent means |
 |---|---|---|
 | arXiv | q-fin.PM, q-fin.ST, q-fin.TR | 2 latest listing dates per category |
-| SSRN | 7 eJournals — QM, TI, GIS, GEX, APV, MEF, MMS | 2 latest approval dates per journal |
-| Blogs | Quantpedia, Man Group, Alpha Architect, Macrosynergy, Quantocracy | newest 8 posts each |
+| SSRN | 6 eJournals — QM, GIS, GEX, APV, MEF, MMS | 2 latest approval dates per journal |
+| Blogs | Quantpedia, Alpha Architect, Macrosynergy, Quantocracy | newest 8 posts each |
 
 Quantocracy is an aggregator, so entries duplicating a site read directly are dropped.
+
+Man Group and SSRN's *Technology & Investing* were removed after scoring them: 17 of 17
+Man Group pieces and 18 of 23 TI papers came out at ★1. Both publish real work — macro
+commentary and non-financial technology research — but nothing this tool can rate, so
+they only weighed down the averages and the sort.
 
 ## The star rating
 

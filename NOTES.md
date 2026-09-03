@@ -1,5 +1,42 @@
 # Working notes
 
+## 2026-09-03 — Scored the sources, then dropped two of them
+
+Averaged the star rating by source and by field over 210 items. Two results were
+not close:
+
+| | n | mean | 5/4/3/2/1 |
+|---|---:|---:|---|
+| Man Group | 17 | **1.00** | 0/0/0/0/**17** |
+| TI (Technology & Investing) | 23 | **1.30** | 0/0/2/3/18 |
+| ...everything else | | 2.0–3.1 | |
+
+Man Group scoring 1.00 with **zero variance** is the tell. The reasons were
+consistent and correct — "매매 규칙도 신호도 없는 실무 에세이라 1점이다" — because Man
+Group publishes macro commentary, not strategies. The rubric was not failing; it
+was being pointed at something outside its domain. Same for TI, which carries
+5G and quantum-communications papers alongside finance.
+
+Both removed from collection. 17 Man Group entries and 17 TI-only papers deleted,
+175 left. Three details that mattered:
+
+- **Cross-listed papers survive.** Six TI papers also sit in QM/MEF/GIS/GEX; they
+  keep their other badges and only lose `TI`. Deleting by badge rather than by
+  membership would have thrown away six papers we still want.
+- **The aggregator had to be told too.** Quantocracy links to man.com, so
+  excluding Man Group as a *source* would have let it back in through the side
+  door. `EXCLUDED_DOMAINS` is separate from `AGGREGATED_DOMAINS` because the two
+  mean different things: one is "we already have it", the other is "we do not
+  want it". One such entry was purged.
+- `run.py status` crashed on a plain cmd console — `UnicodeEncodeError`, cp949
+  versus an em-dash. `update.bat` sets `PYTHONIOENCODING`, so it only showed up
+  when running Python directly. Now reconfigured in `run.py` itself.
+
+Worth remembering that this only became visible by *measuring*. Both sources
+looked reasonable when they were added; a whole source pinned to the floor of the
+scale is what says it does not belong.
+
+
 ## 2026-09-03 — The server was rooted one directory too deep
 
 A deep report built through `serve` did not show up on the page you already had

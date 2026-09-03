@@ -13,7 +13,7 @@ from datetime import datetime
 from pathlib import Path
 
 from .config import (ABS_URL, ALPHAARCH_LABEL, BLOG_LABELS, BLOG_SOURCES, CATEGORIES, LANGS,
-                     MACROSYNERGY_LABEL, MAN_LABEL, PAPER_DIR, PDF_URL, QUANTOCRACY_LABEL,
+                     MACROSYNERGY_LABEL, PAPER_DIR, PDF_URL, QUANTOCRACY_LABEL,
                      QUANTPEDIA_LABEL, REPORT_DIR, SOURCES, SSRN_ABS_URL, SSRN_JOURNALS,
                      SSRN_PDF_URL, ensure_dirs, report_name)
 from .store import text as summary_text
@@ -22,9 +22,9 @@ CAT_SHORT = {"q-fin.PM": "PM", "q-fin.ST": "ST", "q-fin.TR": "TR"}
 SSRN_SHORTS = {short: name for short, name in SSRN_JOURNALS.values()}
 BLOG_SHORTS = dict(BLOG_LABELS)
 SRC_LABEL = {"arxiv": "arXiv", "ssrn": "SSRN", "quantpedia": QUANTPEDIA_LABEL,
-             "man": MAN_LABEL, "alphaarchitect": ALPHAARCH_LABEL,
+             "alphaarchitect": ALPHAARCH_LABEL,
              "macrosynergy": MACROSYNERGY_LABEL, "quantocracy": QUANTOCRACY_LABEL}
-SRC_BADGE_CLASS = {"ssrn": "b-ssrn", "quantpedia": "b-qp", "man": "b-man",
+SRC_BADGE_CLASS = {"ssrn": "b-ssrn", "quantpedia": "b-qp",
                    "alphaarchitect": "b-aa", "macrosynergy": "b-ms",
                    "quantocracy": "b-qc"}
 LANG_BUTTON = {"ko": "한국어", "en": "English"}

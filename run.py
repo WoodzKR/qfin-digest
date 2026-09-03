@@ -24,6 +24,15 @@ from collections import Counter
 
 import requests
 
+# The output is Korean and uses em-dashes; a default Windows console is cp949
+# and would raise UnicodeEncodeError mid-report. update.bat sets this too, but
+# `python run.py` typed directly into cmd must not crash.
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
+
 from arxiv_digest import api, listing, render, store
 from arxiv_digest.config import (BLOG_LABELS, BLOG_LIMIT, BLOG_SOURCES, CATEGORIES, LANGS,
                                  RECENT_DAYS, REPORT_VERSION, SOURCES, SSRN_JOURNALS,

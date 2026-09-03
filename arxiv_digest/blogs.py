@@ -1,17 +1,11 @@
 """Practitioner blogs.
 
-Five sites, four shapes:
+Four sites, three shapes:
 
 Plain RSS — Quantpedia, Alpha Architect
     ``/feed/`` gives title, link, ``pubDate`` and a description that already
     reads as an abstract. Alpha Architect's *blog page* is Cloudflare-protected
     while its feed is not, which is why the feed is the entry point everywhere.
-
-Article pages — Man Group
-    ``/insights`` lists current articles but shows no dates. Each article page
-    has the title in ``<h1>``, an abstract in ``<meta name="description">`` and
-    the date as a bare ``<p>28 July 2026</p>``. The landing page supplies the
-    candidate set; one request per article fills in the rest.
 
 Behind Cloudflare — Macrosynergy
     Both the blog page and the feed answer 403 to plain requests. Clearing the
@@ -36,7 +30,6 @@ from __future__ import annotations
 
 import html
 import re
-from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from email.utils import parsedate_to_datetime
 from urllib.parse import urlsplit
@@ -45,15 +38,12 @@ import requests
 
 from .config import (ALPHAARCH_FEED_URL, ALPHAARCH_LABEL, BLOG_LIMIT, BROWSER_UA,
                      MACROSYNERGY_CDP_PORT, MACROSYNERGY_FEED_URL, MACROSYNERGY_LABEL,
-                     MAN_INSIGHTS_URL, MAN_LABEL, QUANTOCRACY_LABEL, QUANTOCRACY_URL,
+                     QUANTOCRACY_LABEL, QUANTOCRACY_URL,
                      QUANTPEDIA_FEED_URL, QUANTPEDIA_LABEL)
 
 _TAG_RE = re.compile(r"<[^>]+>")
 _SCRIPT_RE = re.compile(r"<(script|style|noscript)\b.*?</\1>", re.S | re.I)
 _BLOCK_RE = re.compile(r"</(p|div|section|h[1-6]|li|tr|table|figure|blockquote)\s*>", re.I)
-_MAN_DATE_RE = re.compile(
-    r"<p>\s*(\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|"
-    r"October|November|December)\s+20\d\d)\s*</p>")
 _QO_ENTRY_RE = re.compile(r"<article class='qo-entry'>(.*?)</article>", re.S)
 _QO_TITLE_RE = re.compile(r"<a class='qo-title' href='([^']+)'[^>]*>(.*?)</a>", re.S)
 _QO_DESC_RE = re.compile(r"<summary class='qo-description'>(.*?)</summary>", re.S)
@@ -61,12 +51,15 @@ _QO_DATE_RE = re.compile(r'<span class="qo-500-ignore">,\s*(\d{1,2} \w{3} \d{4})
 
 MAX_CHARS = 90_000
 
+# Sites dropped from collection on purpose. Quantocracy links to them, so the
+# aggregator would quietly re-admit what we just excluded.
+EXCLUDED_DOMAINS = {"man.com"}
+
 # Quantocracy links to these, and we collect them at the source instead.
 AGGREGATED_DOMAINS = {
     "quantpedia.com": "quantpedia",
     "alphaarchitect.com": "alphaarchitect",
     "macrosynergy.com": "macrosynergy",
-    "man.com": "man",
 }
 
 
@@ -185,62 +178,6 @@ def list_macrosynergy(limit: int = BLOG_LIMIT, session: requests.Session | None 
     return parse_feed(resp.text, "ms", "macrosynergy", "MS", MACROSYNERGY_LABEL, limit)
 
 
-# ── Man Group ────────────────────────────────────────────────────────────
-
-def _man_article(url: str, session: requests.Session) -> dict | None:
-    try:
-        resp = session.get(url, timeout=60)
-        resp.raise_for_status()
-    except requests.RequestException:
-        return None
-    page = resp.text
-
-    title = re.search(r"<h1[^>]*>(.*?)</h1>", page, re.S)
-    desc = re.search(r'<meta name="description" content="([^"]*)"', page)
-    date_match = _MAN_DATE_RE.search(page)
-    kind = re.search(r'class="meta-text[^"]*">\s*(.*?)\s*<', page, re.S)
-
-    day = ""
-    if date_match:
-        try:
-            day = datetime.strptime(date_match.group(1), "%d %B %Y").date().isoformat()
-        except ValueError:
-            day = ""
-    tags = [t.strip() for t in _clean(kind.group(1)).split("|")] if kind else []
-    tags = [t for t in tags if t and not t.lower().endswith("min") and t.lower() != "article"]
-
-    slug = _slug(url)
-    return {
-        "id": f"man-{slug}",
-        "ext_id": slug,
-        "src": "man",
-        "title": _clean(title.group(1)) if title else slug,
-        "authors": ["Man Group"],
-        "abstract": html.unescape(desc.group(1)).strip() if desc else "",
-        "listed_date": day,
-        "src_cats": ["MAN"],
-        "categories": tags or [MAN_LABEL],
-        "abs_url": url,
-        "pdf_url": "",
-    }
-
-
-def list_man(limit: int = BLOG_LIMIT, session: requests.Session | None = None,
-             workers: int = 4, **_kw) -> list[dict]:
-    sess = _session(session)
-    resp = sess.get(MAN_INSIGHTS_URL, timeout=60)
-    resp.raise_for_status()
-    links = sorted(set(re.findall(r'href="(https://www\.man\.com/insights/[^"#?]+)"', resp.text)))
-    if not links:
-        return []
-
-    with ThreadPoolExecutor(max_workers=max(1, workers)) as pool:
-        articles = [a for a in pool.map(lambda u: _man_article(u, sess), links) if a]
-    # The landing page is not date-ordered, so sort before trimming.
-    articles.sort(key=lambda a: a["listed_date"], reverse=True)
-    return [a for a in articles if a["abstract"]][:limit]
-
-
 # ── Quantocracy (aggregator) ─────────────────────────────────────────────
 
 def list_quantocracy(limit: int = BLOG_LIMIT, session: requests.Session | None = None,
@@ -255,8 +192,9 @@ def list_quantocracy(limit: int = BLOG_LIMIT, session: requests.Session | None =
         if not title_match:
             continue
         url = html.unescape(title_match.group(1))
-        if _host(url) in skip:
-            continue                      # already collected at the source
+        host = _host(url)
+        if host in skip or host in EXCLUDED_DOMAINS:
+            continue          # collected at the source, or excluded on purpose
         raw_title = _clean(title_match.group(2))
         # Titles read "Some Headline [Originating Blog]".
         origin = ""
@@ -301,7 +239,6 @@ def list_quantocracy(limit: int = BLOG_LIMIT, session: requests.Session | None =
 
 LISTERS = {
     "quantpedia": (QUANTPEDIA_LABEL, list_quantpedia),
-    "man": (MAN_LABEL, list_man),
     "alphaarchitect": (ALPHAARCH_LABEL, list_alphaarchitect),
     "macrosynergy": (MACROSYNERGY_LABEL, list_macrosynergy),
     "quantocracy": (QUANTOCRACY_LABEL, list_quantocracy),

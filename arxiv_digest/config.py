@@ -53,7 +53,6 @@ API_SLEEP = 3.0
 # journal_id -> (badge, full journal name)
 SSRN_JOURNALS = {
     "4058861": ("QM", "Quantitative Methods in Investing & Financial Statement Analysis"),
-    "4058853": ("TI", "Technology & Investing"),
     "4058857": ("GIS", "Global Investment Strategy"),
     "4058865": ("GEX", "Global Equities, Exchanges & Investment Indices"),
     "1508951": ("APV", "Capital Markets: Asset Pricing & Valuation"),
@@ -75,8 +74,6 @@ SSRN_NAV_SLEEP = 1.2         # seconds between abstract page loads
 QUANTPEDIA_FEED_URL = "https://quantpedia.com/feed/"
 QUANTPEDIA_BLOG_URL = "https://quantpedia.com/blog/"
 QUANTPEDIA_LABEL = "Quantpedia"
-MAN_INSIGHTS_URL = "https://www.man.com/insights"
-MAN_LABEL = "Man Group"
 ALPHAARCH_FEED_URL = "https://alphaarchitect.com/feed/"
 ALPHAARCH_LABEL = "Alpha Architect"
 MACROSYNERGY_FEED_URL = "https://macrosynergy.com/feed/"
@@ -93,12 +90,11 @@ MACROSYNERGY_CDP_PORT = 9334
 # "the two most recent listing dates".
 BLOG_LIMIT = 8
 
-BLOG_SOURCES = ("quantpedia", "man", "alphaarchitect", "macrosynergy", "quantocracy")
+BLOG_SOURCES = ("quantpedia", "alphaarchitect", "macrosynergy", "quantocracy")
 
 # Blog badge -> full site name, used for chips and card badges.
 BLOG_LABELS = {
     "QP": QUANTPEDIA_LABEL,
-    "MAN": MAN_LABEL,
     "AA": ALPHAARCH_LABEL,
     "MS": MACROSYNERGY_LABEL,
     "QC": QUANTOCRACY_LABEL,
@@ -111,7 +107,7 @@ USER_AGENT = "qfin-digest/0.4 (personal research digest)"
 BROWSER_UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
               "(KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36")
 
-SOURCES = ("arxiv", "ssrn", "quantpedia", "man", "alphaarchitect", "macrosynergy",
+SOURCES = ("arxiv", "ssrn", "quantpedia", "alphaarchitect", "macrosynergy",
            "quantocracy")
 PAPER_SOURCES = ("arxiv", "ssrn")
 

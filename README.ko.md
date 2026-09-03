@@ -2,7 +2,7 @@
 
 **[다이제스트 보기 →](https://woodzkr.github.io/qfin-digest/)** · [English](README.md)
 
-arXiv q-fin, SSRN, 실무 블로그 5곳의 새 연구를 한국어와 영어로 요약한다.
+arXiv q-fin, SSRN, 실무 블로그 4곳의 새 연구를 한국어와 영어로 요약한다.
 한 페이지에서 클릭 한 번으로 언어를 바꾸고, 로그인은 필요 없다.
 
 모든 실행은 내 PC 에서 한다. git 은 완성된 페이지를 배포하는 통로일 뿐이고,
@@ -111,10 +111,14 @@ current prompts — summary 2026-09-01, report 2026-09-01
 | | 출처 | "최근"의 기준 |
 |---|---|---|
 | arXiv | q-fin.PM, q-fin.ST, q-fin.TR | 카테고리별 최근 2개 게시일 |
-| SSRN | 7개 eJournal — QM, TI, GIS, GEX, APV, MEF, MMS | 저널별 최근 2개 승인일 |
-| 블로그 | Quantpedia, Man Group, Alpha Architect, Macrosynergy, Quantocracy | 각 최근 8개 글 |
+| SSRN | 6개 eJournal — QM, GIS, GEX, APV, MEF, MMS | 저널별 최근 2개 승인일 |
+| 블로그 | Quantpedia, Alpha Architect, Macrosynergy, Quantocracy | 각 최근 8개 글 |
 
 Quantocracy 는 모음집이라, 직접 수집하는 사이트와 겹치는 항목은 버린다.
+
+Man Group 과 SSRN 의 *Technology & Investing* 은 점수를 매겨 본 뒤 제외했다. Man Group 은
+17건 전부, TI 는 23건 중 18건이 ★1이었다. 둘 다 제대로 된 글을 내지만 — 매크로 논평과
+비금융 기술 연구 — 이 도구가 잴 수 있는 대상이 아니라 평균과 정렬만 끌어내렸다.
 
 ## ★ 점수
 
