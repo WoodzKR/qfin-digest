@@ -1,5 +1,34 @@
 # Working notes
 
+## 2026-09-03 — Split the digest: one page per date, one page for everything
+
+The dated files were all built with `--all`, so every one of them contained the
+whole store. Clicking "31 Aug" and getting all 175 papers is not browsing by date.
+
+Now `render.build_all()` writes three things: the combined view
+(`qfin-digest-all.html`), one page per listing date holding only that date, and
+the index. Every digest carries a `← Index` link back.
+
+`build(flat=True)` is the combined view — no date sections, ranked by star. The
+JS still expects a `section.day > .list` wrapper, so the section stays and only
+the heading goes; that kept filtering, sorting and the report buttons working
+untouched.
+
+Two things that needed deciding rather than coding:
+
+- **Stale dated files.** The old ones covered every date at once, so leaving them
+  would mean pages that silently disagree with the new ones. `build_all` deletes
+  any `qfin-digest-*.html` it did not just write.
+- **28 dates, 18 of them with one or two items.** Macrosynergy carries posts back
+  to May, so the date list had a long thin tail. The recent 10 are listed and the
+  rest fold into a `<details>`. Hiding them entirely would have been a lie about
+  what is in the store; the counts are on every row.
+
+`--all` on `report` still means "the whole site"; an explicit single-date rebuild
+(`report` with a day filter and no `--all`) writes just that page and leaves the
+rest alone.
+
+
 ## 2026-09-03 — Scored the sources, then dropped two of them
 
 Averaged the star rating by source and by field over 210 items. Two results were

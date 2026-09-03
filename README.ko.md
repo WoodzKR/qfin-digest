@@ -140,7 +140,9 @@ Man Group 과 SSRN 의 *Technology & Investing* 은 점수를 매겨 본 뒤 제
 
 `state/seen.json` 을 생성된 페이지와 함께 커밋한다. 이 파일이 같은 논문을 두 번
 요약하지 않게 막으므로, 다른 PC 에서 clone 하면 이어서 작업할 수 있다. 루트의
-`index.html` 이 GitHub Pages 진입점이고 실행할 때마다 다시 만들어진다.
+`index.html` 이 GitHub Pages 진입점이고 실행할 때마다 다시 만들어진다. 여기서
+전체 보기(날짜 무관, ★ 순)와 날짜별 페이지로 갈라진다. 날짜별 페이지는 그 날짜 것만
+담고, 각 다이제스트에는 `← 목록` 버튼이 있다.
 
 `state/chrome_profile/` 은 절대 커밋하지 않는다 — `cf_clearance` 세션 쿠키가 들어 있다.
 `.gitignore` 에 이미 들어가 있다.

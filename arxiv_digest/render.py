@@ -29,6 +29,10 @@ SRC_BADGE_CLASS = {"ssrn": "b-ssrn", "quantpedia": "b-qp",
                    "quantocracy": "b-qc"}
 LANG_BUTTON = {"ko": "한국어", "en": "English"}
 
+# The combined view. Named, not dated, so the index can tell it apart from
+# the per-date files it globs.
+ALL_STEM = "qfin-digest-all"
+
 
 def abs_url(entry: dict) -> str:
     src = entry.get("src", "arxiv")
@@ -490,26 +494,77 @@ LANG_SELECTOR = ('<div class="langsel">'
                  '</div>')
 
 
+def build_all(seen: dict[str, dict], sources: list[str] | None = None) -> Path:
+    """Write the combined view, one page per listing date, and the index.
+
+    Each dated page holds only that date. Browsing by date should show the day,
+    not the whole store — that is what the combined page is for.
+    """
+    ensure_dirs()
+    entries = [e for e in seen.values()
+               if any((e.get("summary") or {}).get(lang, {}).get("one_liner") for lang in LANGS)]
+    if sources:
+        entries = [e for e in entries if e.get("src", "arxiv") in set(sources)]
+
+    combined = build(seen, sources=sources, flat=True,
+                     out_path=REPORT_DIR / f"{ALL_STEM}.html")
+
+    days = sorted({e.get("listed_date", "") for e in entries if e.get("listed_date")})
+    fresh = set()
+    for day in days:
+        stamp = day.replace("-", "")
+        build(seen, days=[day], sources=sources,
+              out_path=REPORT_DIR / f"qfin-digest-{stamp}.html")
+        fresh.add(f"qfin-digest-{stamp}.html")
+
+    # Dated pages left over from before this split covered every date at once;
+    # they would now be stale duplicates of the combined view.
+    for path in REPORT_DIR.glob("qfin-digest-*.html"):
+        if path.stem != ALL_STEM and path.name not in fresh:
+            path.unlink()
+
+    build_index(seen)
+    return combined
+
+
 def build_index(seen: dict[str, dict] | None = None) -> Path:
     """Repository-root index.html — the GitHub Pages entry point."""
     from .config import ROOT
 
     ensure_dirs()
-    digests = sorted(REPORT_DIR.glob("qfin-digest-*.html"), reverse=True)
+    entries = [e for e in (seen or {}).values()
+               if any((e.get("summary") or {}).get(lang, {}).get("one_liner") for lang in LANGS)]
+    per_day = Counter(e.get("listed_date", "unknown") for e in entries)
+    digests = sorted((p for p in REPORT_DIR.glob("qfin-digest-*.html")
+                      if p.stem != ALL_STEM), reverse=True)
     papers = sorted(PAPER_DIR.glob("*.html"), key=lambda p: p.stat().st_mtime, reverse=True)
     titles = {e["id"]: e.get("title", e["id"]) for e in (seen or {}).values()}
     now = datetime.now()
 
-    rows = ""
-    for i, path in enumerate(digests):
+    def _row(path, i):
         stamp = path.stem.replace("qfin-digest-", "")
         try:
             day = datetime.strptime(stamp, "%Y%m%d")
-            label = _bi(day.strftime("%Y년 %m월 %d일 다이제스트"), day.strftime("%d %b %Y digest"))
+            label = _bi(day.strftime("%Y년 %m월 %d일"), day.strftime("%d %b %Y"))
+            count = per_day.get(day.strftime("%Y-%m-%d"), 0)
         except ValueError:
-            label = _esc(stamp)
+            label, count = _esc(stamp), 0
         tag = f' <span class="badge b-ssrn">{_bi("최신", "latest")}</span>' if i == 0 else ""
-        rows += f'<li><a href="report/{path.name}">{label}</a>{tag}</li>'
+        n = f' <span class="key">{count}{_bi("건", "")}</span>' if count else ""
+        return f'<li><a href="report/{path.name}">{label}</a>{n}{tag}</li>'
+
+    # A blog post dated in May puts a one-item date on the list. Show the recent
+    # run and fold the long thin tail rather than making the index scroll.
+    RECENT = 10
+    rows = "".join(_row(p, i) for i, p in enumerate(digests[:RECENT]))
+    older = digests[RECENT:]
+    older_block = ""
+    if older:
+        older_block = (
+            f'<details><summary class="more">'
+            f'{_bi(f"이전 {len(older)}개 날짜", f"{len(older)} older dates")}</summary>'
+            f'<ul class="idx">{"".join(_row(p, i + RECENT) for i, p in enumerate(older))}</ul>'
+            f'</details>')
 
     plist = ""
     for path in papers:
@@ -535,6 +590,12 @@ ul.idx li{{padding:11px 14px;border:1px solid var(--line);border-radius:9px;
 ul.idx a{{text-decoration:none;font-weight:600}}
 ul.idx a:hover{{text-decoration:underline}}
 h2.sec{{font-size:15px;color:var(--muted);margin:0 0 12px;letter-spacing:.02em}}
+ul.idx li.all{{border-color:var(--accent);background:var(--accent-soft)}}
+ul.idx li.all a{{color:var(--accent);font-size:15.5px}}
+summary.more{{cursor:pointer;color:var(--muted);font-size:13px;padding:6px 2px;
+  margin-bottom:10px}}
+summary.more:hover{{color:var(--accent)}}
+details[open] summary.more{{margin-bottom:12px}}
 </style>
 </head>
 <body>
@@ -551,8 +612,15 @@ h2.sec{{font-size:15px;color:var(--muted);margin:0 0 12px;letter-spacing:.02em}}
     <div class="row" style="margin-top:14px">{LANG_SELECTOR}</div>
   </header>
 
-  <h2 class="sec">{_bi("날짜별 다이제스트", "Daily digests")}</h2>
+  <ul class="idx">
+    <li class="all"><a href="report/{ALL_STEM}.html">{
+      _bi("전체 보기 — 날짜 무관, ★ 순 정렬", "Everything — all dates, ranked by star")}</a>
+      <span class="key">{len(entries)}{_bi("건", "")}</span></li>
+  </ul>
+
+  <h2 class="sec">{_bi("날짜별 다이제스트", "By date")}</h2>
   <ul class="idx">{rows or f'<li>{_bi("아직 없습니다.", "Nothing yet.")}</li>'}</ul>
+  {older_block}
 
   <h2 class="sec">{_bi("상세 리포트", "Deep reports")}</h2>
   <ul class="idx">{plist or f'<li>{_bi("아직 없습니다.", "Nothing yet.")}</li>'}</ul>
@@ -581,8 +649,13 @@ h2.sec{{font-size:15px;color:var(--muted);margin:0 0 12px;letter-spacing:.02em}}
 
 
 def build(seen: dict[str, dict], days: list[str] | None = None,
-          sources: list[str] | None = None, out_path: Path | None = None) -> Path:
-    """Render every summarized paper into one digest page."""
+          sources: list[str] | None = None, out_path: Path | None = None,
+          flat: bool = False) -> Path:
+    """Render summarized papers into one digest page.
+
+    ``flat`` drops the per-date sections and ranks everything by star instead —
+    the combined view, where the date is not what you are browsing by.
+    """
     ensure_dirs()
     entries = [e for e in seen.values()
                if any((e.get("summary") or {}).get(lang, {}).get("one_liner") for lang in LANGS)]
@@ -590,8 +663,13 @@ def build(seen: dict[str, dict], days: list[str] | None = None,
         entries = [e for e in entries if e.get("src", "arxiv") in set(sources)]
     if days:
         entries = [e for e in entries if e.get("listed_date") in set(days)]
-    entries.sort(key=lambda e: (e.get("listed_date", ""),
-                                int((e.get("summary") or {}).get("relevance", 3))), reverse=True)
+    if flat:
+        entries.sort(key=lambda e: (int((e.get("summary") or {}).get("relevance", 3)),
+                                    e.get("listed_date", "")), reverse=True)
+    else:
+        entries.sort(key=lambda e: (e.get("listed_date", ""),
+                                    int((e.get("summary") or {}).get("relevance", 3))),
+                     reverse=True)
 
     by_day: dict[str, list[dict]] = {}
     for entry in entries:
@@ -621,19 +699,28 @@ def build(seen: dict[str, dict], days: list[str] | None = None,
                        for s in SOURCES if src_counts.get(s)))
 
     sections, idx = "", 0
-    for day in sorted(by_day, reverse=True):
+    if flat:
+        # One list, star-ranked. The JS still expects a section wrapper and a
+        # .list child, so keep the shape and drop only the heading.
         cards = ""
-        for entry in by_day[day]:
+        for entry in entries:
             cards += _card(entry, idx)
             idx += 1
-        try:
-            parsed = datetime.strptime(day, "%Y-%m-%d")
-            label = _bi(parsed.strftime("%Y년 %m월 %d일"), parsed.strftime("%A, %d %b %Y"))
-        except ValueError:
-            label = _esc(day)
-        sections += (f'<section class="day"><h2 class="day"><span class="d">{label}</span>'
-                     f' — {len(by_day[day])}{_bi("편", "")}</h2>'
-                     f'<div class="list">{cards}</div></section>')
+        sections = f'<section class="day"><div class="list">{cards}</div></section>'
+    else:
+        for day in sorted(by_day, reverse=True):
+            cards = ""
+            for entry in by_day[day]:
+                cards += _card(entry, idx)
+                idx += 1
+            try:
+                parsed = datetime.strptime(day, "%Y-%m-%d")
+                label = _bi(parsed.strftime("%Y년 %m월 %d일"), parsed.strftime("%A, %d %b %Y"))
+            except ValueError:
+                label = _esc(day)
+            sections += (f'<section class="day"><h2 class="day"><span class="d">{label}</span>'
+                         f' — {len(by_day[day])}{_bi("편", "")}</h2>'
+                         f'<div class="list">{cards}</div></section>')
 
     # A range, not a list: the store spans many dates and enumerating them all
     # made the header unreadable.
@@ -644,6 +731,14 @@ def build(seen: dict[str, dict], days: list[str] | None = None,
         day_line = ordered_days[0]
     else:
         day_line = f"{ordered_days[0]} ~ {ordered_days[-1]}"
+    if flat:
+        heading = _bi("퀀트 논문 다이제스트 — 전체", "Quant Paper Digest — everything")
+        dateline = _bi(f"★ 순 · 날짜 무관 · {_esc(day_line)}",
+                       f"ranked by star, all dates · {_esc(day_line)}")
+    else:
+        heading = _bi("퀀트 논문 다이제스트", "Quant Paper Digest")
+        dateline = f'{_bi("대상 날짜", "Dates")} {_esc(day_line)}'
+
     out = out_path or (REPORT_DIR / f"qfin-digest-{now:%Y%m%d}.html")
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(f"""<!doctype html>
@@ -651,14 +746,15 @@ def build(seen: dict[str, dict], days: list[str] | None = None,
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Quant Paper Digest {now:%Y-%m-%d}</title>
+<title>Quant Paper Digest {_esc(day_line)}</title>
 <style>{CSS}</style>
 </head>
 <body>
 <div class="wrap">
 <header class="top">
-  <h1>{_bi("퀀트 논문 다이제스트", "Quant Paper Digest")}</h1>
-  <p class="sub">{_bi("대상 날짜", "Dates")} {_esc(day_line)} ·
+  <p class="sub"><a class="btn" href="../index.html">{_bi("← 목록", "← Index")}</a></p>
+  <h1>{heading}</h1>
+  <p class="sub">{dateline} ·
      {_bi("생성", "built")} {now:%Y-%m-%d %H:%M}<br>
      arXiv q-fin.PM/ST/TR · SSRN {len(SSRN_JOURNALS)} eJournals ·
      {_bi(f"블로그 {len(BLOG_LABELS)}곳", f"{len(BLOG_LABELS)} blogs")}<br>

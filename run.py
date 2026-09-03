@@ -208,11 +208,11 @@ def cmd_summarize(args, day_filter: list[str] | None = None) -> None:
 def _build_report(args, day_filter: list[str] | None = None, all_sources: bool = False):
     """Render the digest. `all_sources` ignores --source, which is a fetch filter."""
     seen = store.load()
-    days = day_filter if (day_filter and not args.all) else None
     sources = None if (all_sources or args.source == "all") else _sources(args)
-    out = render.build(seen, days=days, sources=sources)
-    render.build_index(seen)
-    return out
+    if day_filter and not args.all:
+        # An explicit single-date rebuild; leave the rest of the site alone.
+        return render.build(seen, days=day_filter, sources=sources)
+    return render.build_all(seen, sources=sources)
 
 
 def cmd_report(args, day_filter: list[str] | None = None) -> None:

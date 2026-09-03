@@ -146,7 +146,9 @@ one-line reason naming the data it needs — expand a card to see it.
 `state/seen.json` is committed along with the generated pages. It is what stops a
 paper being summarized twice, so a clone on another machine starts where this one left
 off. `index.html` at the repository root is the GitHub Pages entry point and is
-rebuilt on every run.
+rebuilt on every run. It links a combined view — every paper, ranked by star,
+dates ignored — and one page per listing date holding only that date. Each digest
+has a `← Index` link back.
 
 Never commit `state/chrome_profile/` — it holds a `cf_clearance` session cookie.
 `.gitignore` already excludes it.

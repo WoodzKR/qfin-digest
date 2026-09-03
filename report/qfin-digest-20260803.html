@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="ko" data-lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quant Paper Digest 2026-08-03</title>
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --panel-2:#fbfcfd; --ink:#16191d; --muted:#5c6672;
+  --line:#e2e6ea; --accent:#3b6ef0; --accent-soft:#eaf0fe;
+  --pm:#3b6ef0; --st:#0f9d76; --tr:#d4791f; --ssrn:#8b5cf6; --other:#7a68c9;
+  --qp:#c0392b; --man:#0f766e; --aa:#1d4ed8; --ms:#a16207; --qc:#6d28d9;
+  --star:#f0a91b; --shadow:0 1px 2px rgba(16,24,40,.06),0 4px 14px rgba(16,24,40,.05);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#101317; --panel:#181c22; --panel-2:#1e232a; --ink:#e7ebf0; --muted:#98a3b0;
+    --line:#2a3038; --accent:#7ea3ff; --accent-soft:#1d2637;
+    --pm:#7ea3ff; --st:#4bd6a8; --tr:#f0ad5e; --ssrn:#b18cff; --other:#b0a0f0;
+    --qp:#f08a7c; --man:#3fc4b4; --aa:#8fb2ff; --ms:#e3b341; --qc:#c4a6ff;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.25);
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:15px/1.65 -apple-system,"Segoe UI","Malgun Gothic",Roboto,"Helvetica Neue",sans-serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:32px 20px 140px}
+a{color:var(--accent)}
+
+/* language switching: only the active language is displayed */
+[data-l]{display:none}
+html[data-lang="ko"] [data-l="ko"]{display:revert}
+html[data-lang="en"] [data-l="en"]{display:revert}
+
+header.top{margin-bottom:24px}
+h1{font-size:26px;margin:0 0 6px;letter-spacing:-.02em}
+.sub{color:var(--muted);font-size:13.5px;margin:0}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:9px 13px;font-size:13px;box-shadow:var(--shadow)}
+.stat b{font-size:16px;margin-right:5px}
+
+.controls{position:sticky;top:0;z-index:20;background:var(--bg);
+  padding:12px 0 10px;margin:20px 0 8px;border-bottom:1px solid var(--line)}
+.row{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:7px}
+.row:last-child{margin-bottom:0}
+.rowlabel{font-size:11.5px;color:var(--muted);font-weight:700;letter-spacing:.06em;min-width:38px}
+.chip{border:1px solid var(--line);background:var(--panel);color:var(--muted);
+  border-radius:999px;padding:5px 12px;font-size:12.5px;cursor:pointer;
+  font-family:inherit;transition:.12s;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);
+  color:var(--accent);font-weight:600}
+.chip:hover{border-color:var(--accent)}
+.langsel{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.langsel button{border:0;background:var(--panel);color:var(--muted);padding:5px 13px;
+  font:inherit;font-size:12.5px;cursor:pointer;transition:.12s}
+.langsel button[aria-pressed="true"]{background:var(--accent);color:#fff;font-weight:700}
+#q{flex:1;min-width:180px;padding:7px 12px;border:1px solid var(--line);border-radius:8px;
+  background:var(--panel);color:var(--ink);font:inherit;font-size:13.5px}
+#q:focus{outline:2px solid var(--accent);outline-offset:-1px}
+select{padding:7px 10px;border:1px solid var(--line);border-radius:8px;
+  background:var(--panel);color:var(--ink);font:inherit;font-size:13.5px}
+.count{color:var(--muted);font-size:12.5px;margin-left:auto}
+
+h2.day{font-size:15px;margin:30px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--line);
+  color:var(--muted);font-weight:600;letter-spacing:.02em}
+h2.day span.d{color:var(--ink)}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow)}
+.card.hide{display:none}
+.badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+.badge{font-size:11px;font-weight:700;letter-spacing:.04em;padding:2.5px 8px;
+  border-radius:5px;color:#fff}
+.b-PM{background:var(--pm)} .b-ST{background:var(--st)} .b-TR{background:var(--tr)}
+.b-ssrn{background:var(--ssrn)} .b-qp{background:var(--qp)} .b-man{background:var(--man)}
+.b-aa{background:var(--aa)} .b-ms{background:var(--ms)} .b-qc{background:var(--qc)}
+.b-XX{background:var(--other)}
+.badge.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);font-weight:600}
+.stars{color:var(--star);font-size:12.5px;letter-spacing:1px;margin-left:auto}
+.stars i{color:var(--line);font-style:normal}
+
+.title{font-size:16.5px;font-weight:650;line-height:1.4;margin:0 0 6px;letter-spacing:-.01em}
+.title a{color:var(--ink);text-decoration:none}
+.title a:hover{color:var(--accent)}
+.oneliner{margin:0 0 8px;font-size:14.5px;color:var(--ink)}
+.oneliner::before{content:"\25B8 ";color:var(--accent)}
+.authors{margin:0;color:var(--muted);font-size:12.5px}
+
+.detail{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+.detail[hidden]{display:none}
+.detail ul{margin:0 0 12px;padding-left:19px}
+.detail li{margin-bottom:4px}
+.kv{display:grid;grid-template-columns:92px 1fr;gap:5px 10px;font-size:13.5px;margin-bottom:12px}
+.kv dt{color:var(--muted);font-weight:600}
+.kv dd{margin:0}
+.keys{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.key{font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);
+  border-radius:5px;padding:2px 7px;color:var(--muted)}
+.abs{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;
+  padding:11px 13px;font-size:13px;color:var(--muted);line-height:1.7}
+.abs b{color:var(--ink);display:block;margin-bottom:4px;font-size:12px;letter-spacing:.03em}
+
+.actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;align-items:center}
+.actions .sep{width:1px;height:18px;background:var(--line);margin:0 2px}
+.btn{border:1px solid var(--line);background:var(--panel);color:var(--muted);
+  border-radius:7px;padding:5.5px 12px;font-size:12.5px;cursor:pointer;
+  font-family:inherit;text-decoration:none;display:inline-block;transition:.12s}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{filter:brightness(1.08);color:#fff}
+.btn.queued{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);
+  font-weight:600}
+.btn.done{border-color:var(--st);color:var(--st)}
+.btn.failed{border-color:var(--tr);color:var(--tr)}
+#livebadge{font-size:11.5px;color:var(--st);font-weight:700;letter-spacing:.03em;
+  display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+#livebadge::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--st);
+  animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--panel);
+  border-top:1px solid var(--line);box-shadow:0 -4px 20px rgba(0,0,0,.10);
+  padding:12px 20px;display:none}
+.bar.on{display:block}
+.bar-in{max-width:1000px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.bar pre{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;
+  padding:6px 9px;font-size:12px;flex:1;min-width:200px;overflow:auto;margin:0;
+  white-space:pre;line-height:1.5}
+.empty{color:var(--muted);text-align:center;padding:50px 0}
+footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);
+  color:var(--muted);font-size:12px}
+@media print{.controls,.bar,.actions{display:none!important}.detail{display:block!important}
+  .card{break-inside:avoid;box-shadow:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <p class="sub"><a class="btn" href="../index.html"><span data-l="ko">← 목록</span><span data-l="en">← Index</span></a></p>
+  <h1><span data-l="ko">퀀트 논문 다이제스트</span><span data-l="en">Quant Paper Digest</span></h1>
+  <p class="sub"><span data-l="ko">대상 날짜</span><span data-l="en">Dates</span> 2026-08-03 ·
+     <span data-l="ko">생성</span><span data-l="en">built</span> 2026-09-03 16:35<br>
+     arXiv q-fin.PM/ST/TR · SSRN 6 eJournals ·
+     <span data-l="ko">블로그 4곳</span><span data-l="en">4 blogs</span><br>
+     <span data-l="ko">★ = 시스템 트레이딩 구현 가능성 (표준 데이터로 규칙을 코딩해 자동매매로 돌릴 수 있는가)</span><span data-l="en">★ = systematic-trading implementability (can it be coded into rules on standard data?)</span></p>
+  <div class="stats"><div class="stat"><b>1</b><span data-l="ko">건</span><span data-l="en"> items</span></div><div class="stat"><b>1</b><span data-l="ko">개 날짜</span><span data-l="en"> dates</span></div><div class="stat"><b>1</b>Quantpedia</div></div>
+</header>
+
+<div class="controls">
+  <div class="row"><div class="langsel"><button data-act="lang" data-val="ko" aria-pressed="true">한국어</button><button data-act="lang" data-val="en" aria-pressed="false">English</button></div>
+    <span class="rowlabel"><span data-l="ko">출처</span><span data-l="en">Source</span></span><button class="chip" data-act="chip" data-kind="src" data-val="quantpedia" aria-pressed="false">Quantpedia (1)</button>
+    <input id="q" type="search">
+    <select id="sort"><option value="rel"></option><option value="orig"></option></select>
+  </div>
+  <div class="row"><span class="rowlabel"><span data-l="ko">분야</span><span data-l="en">Field</span></span><button class="chip" data-act="chip" data-kind="cat" data-val="QP" aria-pressed="false" title="Quantpedia">QP (1)</button>
+    <button class="chip" data-act="reset"><span data-l="ko">필터 해제</span><span data-l="en">Clear</span></button>
+    <button class="chip" id="expandBtn" data-act="expand"></button>
+    <span class="count" id="count"></span>
+    <span id="livebadge" hidden><span data-l="ko">로컬 서버 연결됨</span><span data-l="en">local server connected</span></span>
+  </div>
+</div>
+
+<section class="day"><h2 class="day"><span class="d"><span data-l="ko">2026년 08월 03일</span><span data-l="en">Monday, 03 Aug 2026</span></span> — 1<span data-l="ko">편</span><span data-l="en"></span></h2><div class="list">
+<article class="card" data-src="quantpedia" data-cats="QP"
+         data-rel="1" data-idx="0" data-title="Quantpedia in July 2026"
+         data-text="quantpedia in july 2026 hello all, we hope you&#x27;re enjoying the middle of summer. here&#x27;s a quick recap of the latest improvements and additions we&#x27;ve prepared for quantpedia during the past month – api users can now directly download the full research papers written by quantpedia – 10 new quantpedia premium strategies – 2 new related research papers – 7 new backtests – and finally, 5 new posts on our quantpedia blog 이론 연구 연구 방법이 없다. 신규 콘텐츠 건수를 나열한 공지다. 퀀트피디아가 7월 한 달간의 서비스 업데이트를 정리한 소식이다. 매매 규칙이 전혀 없고 실제 전략 내용은 유료 구독이라야 봐서 데이터 확보도 막힌다. 구독자라면 새로 올라온 전략 10건과 백테스트 7건만 확인하면 된다. theory only no method. it lists counts of newly published content. quantpedia recaps its july 2026 product and content updates. zero trading rules here, and the actual strategies sit behind a paid subscription. skim the 10 new strategies and 7 backtests if you already subscribe. quantpedia newsletter strategy database backtests api radovan vojtko">
+  <div class="badges"><span class="badge ghost">Quantpedia</span><span class="badge b-qp" title="Quantpedia">QP</span><span class="badge ghost">Quantpedia</span>
+    <span class="badge ghost">quantpedia-in-july-2026</span>
+    <span class="stars" title="systematic-trading implementability 1/5">★<i>★★★★</i></span>
+  </div>
+  <h3 class="title"><a href="https://quantpedia.com/quantpedia-in-july-2026/" target="_blank"
+      rel="noopener">Quantpedia in July 2026</a></h3>
+  <p class="oneliner" data-l="ko">퀀트피디아가 7월 한 달간의 서비스 업데이트를 정리한 소식이다.</p><p class="oneliner" data-l="en">Quantpedia recaps its July 2026 product and content updates.</p>
+  <p class="authors">Radovan Vojtko</p>
+  <div class="detail" hidden>
+    <div data-l="ko"><ul><li>논문이 아니라 유료 서비스의 월간 안내문이다</li><li>API로 자체 리서치 논문 원문을 내려받게 했다</li><li>프리미엄 전략 10건과 백테스트 7건을 새로 올렸다</li><li>관련 연구 2건, 블로그 글 5건도 추가했다</li></ul><dl class='kv'><dt>방법</dt><dd>연구 방법이 없다. 신규 콘텐츠 건수를 나열한 공지다.</dd><dt>데이터</dt><dd>이론 연구</dd><dt>시사점</dt><dd>구독자라면 새로 올라온 전략 10건과 백테스트 7건만 확인하면 된다.</dd><dt>적용도 1/5</dt><dd>매매 규칙이 전혀 없고 실제 전략 내용은 유료 구독이라야 봐서 데이터 확보도 막힌다.</dd></dl></div><div data-l="en"><ul><li>A vendor newsletter, not a research paper</li><li>API users can now pull full Quantpedia research papers</li><li>Added 10 Premium strategies and 7 new backtests</li><li>Also added 2 related papers and 5 blog posts</li></ul><dl class='kv'><dt>Method</dt><dd>No method. It lists counts of newly published content.</dd><dt>Data</dt><dd>theory only</dd><dt>Use</dt><dd>Skim the 10 new strategies and 7 backtests if you already subscribe.</dd><dt>Score 1/5</dt><dd>Zero trading rules here, and the actual strategies sit behind a paid subscription.</dd></dl></div>
+    <div class="keys"><span class="key">Quantpedia</span><span class="key">newsletter</span><span class="key">strategy database</span><span class="key">backtests</span><span class="key">API</span></div>
+    <div class="abs"><b>ORIGINAL ABSTRACT</b>Hello all, We hope you&#x27;re enjoying the middle of summer. Here&#x27;s a quick recap of the latest improvements and additions we&#x27;ve prepared for Quantpedia during the past month – API users can now directly download the full research papers written by Quantpedia – 10 new Quantpedia Premium strategies – 2 new related research papers – 7 new backtests – and finally, 5 new posts on our Quantpedia blog</div>
+  </div>
+  <div class="actions">
+    <button class="btn" data-act="toggle">▾</button>
+    <a class="btn" href="https://quantpedia.com/quantpedia-in-july-2026/" target="_blank" rel="noopener">source</a>
+    
+    <span class="sep"></span><button class="btn js-req" data-act="req" data-id="qp-quantpedia-in-july-2026" data-lang="ko" data-label="한국어">📄 한국어</button><button class="btn js-req" data-act="req" data-id="qp-quantpedia-in-july-2026" data-lang="en" data-label="English">📄 English</button>
+  </div>
+</article></div></section>
+<p class="empty" id="none" hidden><span data-l="ko">조건에 맞는 논문이 없습니다.</span><span data-l="en">No papers match.</span></p>
+
+<footer>
+  <p><span data-l="ko">초록 출처: arXiv Atom API · SSRN abstract 페이지 · 요약: 로컬 Claude Code</span><span data-l="en">Abstracts: arXiv Atom API and SSRN abstract pages. Summaries generated locally with Claude Code.</span>
+     <span data-l="ko">원문 저작권은 각 저자에게 있습니다.</span><span data-l="en">Papers remain their authors’ copyright.</span></p>
+</footer>
+</div>
+
+<div class="bar" id="bar"><div class="bar-in">
+  <strong><span id="qn">0</span></strong>
+  <span data-l="ko">편 상세 리포트 요청 대기</span><span data-l="en">deep reports queued</span>
+  <pre id="qcmd"></pre>
+  <button class="btn primary" data-act="copy"></button>
+  <button class="btn" data-act="clear"><span data-l="ko">비우기</span><span data-l="en">Clear</span></button>
+</div></div>
+
+<script>
+const LKEY='qfin-digest-lang', QKEY='qfin-digest-queue';
+const I18N={
+  ko:{search:'제목·요약·저자·키워드 검색',rel:'★ 구현 가능성 순',orig:'기본 순서',
+      expand:'전체 펼치기',collapse:'전체 접기',shown:'편 표시',more:'▾ 자세히',
+      less:'▴ 접기',copy:'요청 목록 복사',copied:'✓ 복사됨',
+      queuedFor:'편 대기 중',waiting:'대기 중',failed:'⚠ 실패 — 다시 시도'},
+  en:{search:'Search title, summary, author, keyword',rel:'★ Implementability',orig:'Listed order',
+      expand:'Expand all',collapse:'Collapse all',shown:'shown',more:'▾ Details',
+      less:'▴ Hide',copy:'Copy commands',copied:'✓ Copied',
+      queuedFor:'queued',waiting:'queued',failed:'⚠ Failed — retry'}};
+let LANG=(()=>{try{return localStorage.getItem(LKEY)||'ko'}catch(e){return 'ko'}})();
+const T=k=>I18N[LANG][k];
+
+function applyLang(){
+  document.documentElement.setAttribute('data-lang',LANG);
+  document.documentElement.setAttribute('lang',LANG);
+  try{localStorage.setItem(LKEY,LANG)}catch(e){}
+  document.querySelectorAll('.langsel button').forEach(b=>
+    b.setAttribute('aria-pressed',String(b.dataset.val===LANG)));
+  document.getElementById('q').placeholder=T('search');
+  const s=document.getElementById('sort');
+  s.options[0].textContent=T('rel'); s.options[1].textContent=T('orig');
+  document.querySelectorAll('[data-act="toggle"]').forEach(b=>{
+    b.textContent=b.closest('.card').querySelector('.detail').hidden?T('more'):T('less');});
+  document.querySelector('[data-act="copy"]').textContent=T('copy');
+  syncExpandLabel(); filter(); paint();
+}
+
+const loadQ=()=>{try{return JSON.parse(localStorage.getItem(QKEY)||'[]')}catch(e){return []}};
+const saveQ=v=>{try{localStorage.setItem(QKEY,JSON.stringify(v))}catch(e){}};
+
+let LIVE=false;
+async function detectLive(){
+  try{const r=await fetch('/api/ping',{cache:'no-store'});LIVE=r.ok;}catch(e){LIVE=false;}
+  document.getElementById('livebadge').hidden=!LIVE;
+  paint();
+}
+
+function paint(){
+  const q=LIVE?[]:loadQ();
+  document.querySelectorAll('.js-req').forEach(b=>{
+    if(b.dataset.busy)return;
+    const on=q.includes(b.dataset.id+'|'+b.dataset.lang);
+    b.classList.toggle('queued',on);
+    b.textContent=(on?'✓ ':'📄 ')+b.dataset.label;
+  });
+  document.getElementById('bar').classList.toggle('on',q.length>0);
+  document.getElementById('qn').textContent=q.length;
+  const byLang={};
+  q.forEach(item=>{const [id,lang]=item.split('|');(byLang[lang]=byLang[lang]||[]).push(id);});
+  document.getElementById('qcmd').textContent=
+    Object.entries(byLang).map(([l,ids])=>'python run.py paper --lang '+l+' '+ids.join(' '))
+      .join('\n');
+}
+function toggleReq(id,lang){
+  const key=id+'|'+lang, q=loadQ(), i=q.indexOf(key);
+  if(i<0)q.push(key); else q.splice(i,1);
+  saveQ(q); paint();
+}
+
+function linkify(btn,url){
+  const a=document.createElement('a');
+  a.className='btn done'; a.href=url; a.target='_blank'; a.rel='noopener';
+  a.textContent='📄 '+btn.dataset.label;
+  btn.replaceWith(a);
+  return a;
+}
+
+// A report built in another tab, or in an earlier session, should appear here
+// without rebuilding the page. Cheap, so re-run it whenever the window is focused.
+async function syncReports(){
+  if(!LIVE)return;
+  let names=[];
+  try{names=(await (await fetch('/api/reports',{cache:'no-store'})).json()).reports||[];}
+  catch(e){return;}
+  const have=new Set(names);
+  document.querySelectorAll('.js-req').forEach(b=>{
+    if(b.dataset.busy)return;
+    const file=b.dataset.id+'.'+b.dataset.lang+'.html';
+    if(have.has(file))linkify(b,'/report/paper/'+file);
+  });
+}
+
+async function genReport(btn){
+  if(btn.dataset.busy)return;
+  const id=btn.dataset.id, lang=btn.dataset.lang;
+  btn.dataset.busy='1'; btn.classList.add('queued');
+  btn.textContent='⏳ '+T('waiting')+'…';
+  const fail=msg=>{btn.classList.remove('queued');btn.classList.add('failed');
+    btn.textContent=T('failed');btn.title=msg||'';delete btn.dataset.busy;};
+  try{
+    const r=await fetch('/api/report',{method:'POST',
+      headers:{'Content-Type':'application/json'},body:JSON.stringify({id,lang})});
+    if(!r.ok)return fail('request rejected ('+r.status+')');
+    for(;;){
+      await new Promise(res=>setTimeout(res,2000));
+      const s=await (await fetch('/api/status?id='+encodeURIComponent(id)+'&lang='+lang,
+        {cache:'no-store'})).json();
+      if(s.state==='done'){ linkify(btn,s.url).click(); return; }
+      if(s.state==='error')return fail(s.error);
+      if(s.note)btn.textContent='⏳ '+s.note+'…';
+    }
+  }catch(e){fail(String(e));}
+}
+
+const cards=[...document.querySelectorAll('.card')];
+const pressed=sel=>[...document.querySelectorAll(sel)]
+  .filter(c=>c.getAttribute('aria-pressed')==='true').map(c=>c.dataset.val);
+const visible=()=>[...document.querySelectorAll('.card:not(.hide)')];
+const anyCollapsed=()=>visible().some(c=>c.querySelector('.detail').hidden);
+function syncExpandLabel(){
+  document.getElementById('expandBtn').textContent=anyCollapsed()?T('expand'):T('collapse');
+}
+function filter(){
+  const srcs=pressed('.chip[data-kind="src"]');
+  const cats=pressed('.chip[data-kind="cat"]');
+  const term=document.getElementById('q').value.trim().toLowerCase();
+  let n=0;
+  cards.forEach(c=>{
+    const okSrc=!srcs.length||srcs.includes(c.dataset.src);
+    const okCat=!cats.length||cats.some(k=>c.dataset.cats.split('|').includes(k));
+    const okTerm=!term||c.dataset.text.includes(term);
+    const show=okSrc&&okCat&&okTerm;
+    c.classList.toggle('hide',!show);
+    if(show)n++;
+  });
+  document.querySelectorAll('section.day').forEach(s=>{
+    s.style.display=s.querySelectorAll('.card:not(.hide)').length?'':'none';});
+  document.getElementById('count').textContent=n+' / '+cards.length+' '+T('shown');
+  document.getElementById('none').hidden=n>0;
+  syncExpandLabel();
+}
+function sortBy(mode){
+  document.querySelectorAll('section.day .list').forEach(list=>{
+    [...list.children].sort((a,b)=>mode==='rel'
+      ? (+b.dataset.rel)-(+a.dataset.rel)||a.dataset.title.localeCompare(b.dataset.title)
+      : (+a.dataset.idx)-(+b.dataset.idx)).forEach(el=>list.appendChild(el));
+  });
+}
+
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-act]');
+  if(!t)return;
+  const act=t.dataset.act;
+  if(act==='lang'){LANG=t.dataset.val;applyLang();}
+  else if(act==='req'){ if(LIVE)genReport(t); else toggleReq(t.dataset.id,t.dataset.lang); }
+  else if(act==='toggle'){
+    const d=t.closest('.card').querySelector('.detail');
+    d.hidden=!d.hidden; t.textContent=d.hidden?T('more'):T('less'); syncExpandLabel();
+  }
+  else if(act==='chip'){
+    t.setAttribute('aria-pressed',t.getAttribute('aria-pressed')==='true'?'false':'true');
+    filter();
+  }
+  else if(act==='reset'){
+    document.querySelectorAll('.chip[data-kind]').forEach(c=>c.setAttribute('aria-pressed','false'));
+    document.getElementById('q').value=''; filter();
+  }
+  else if(act==='copy'){
+    navigator.clipboard.writeText(document.getElementById('qcmd').textContent)
+      .then(()=>{t.textContent=T('copied');setTimeout(()=>t.textContent=T('copy'),1400);});
+  }
+  else if(act==='clear'){saveQ([]);paint();}
+  else if(act==='expand'){
+    const open=anyCollapsed();
+    visible().forEach(c=>{
+      c.querySelector('.detail').hidden=!open;
+      const b=c.querySelector('[data-act="toggle"]');
+      if(b)b.textContent=open?T('less'):T('more');
+    });
+    syncExpandLabel();
+  }
+});
+document.getElementById('q').addEventListener('input',filter);
+document.getElementById('sort').addEventListener('change',e=>sortBy(e.target.value));
+applyLang();
+detectLive().then(syncReports);
+window.addEventListener('focus',syncReports);
+</script>
+</body>
+</html>
