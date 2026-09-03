@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Cost of Sector Constraints in Cross-Sectional Momentum: Evidence from the Nifty 500 — 상세 리포트</title>
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --panel-2:#fbfcfd; --ink:#16191d; --muted:#5c6672;
+  --line:#e2e6ea; --accent:#3b6ef0; --accent-soft:#eaf0fe;
+  --pm:#3b6ef0; --st:#0f9d76; --tr:#d4791f; --ssrn:#8b5cf6; --other:#7a68c9;
+  --qp:#c0392b; --man:#0f766e; --aa:#1d4ed8; --ms:#a16207; --qc:#6d28d9;
+  --star:#f0a91b; --shadow:0 1px 2px rgba(16,24,40,.06),0 4px 14px rgba(16,24,40,.05);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#101317; --panel:#181c22; --panel-2:#1e232a; --ink:#e7ebf0; --muted:#98a3b0;
+    --line:#2a3038; --accent:#7ea3ff; --accent-soft:#1d2637;
+    --pm:#7ea3ff; --st:#4bd6a8; --tr:#f0ad5e; --ssrn:#b18cff; --other:#b0a0f0;
+    --qp:#f08a7c; --man:#3fc4b4; --aa:#8fb2ff; --ms:#e3b341; --qc:#c4a6ff;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.25);
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:15px/1.65 -apple-system,"Segoe UI","Malgun Gothic",Roboto,"Helvetica Neue",sans-serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:32px 20px 140px}
+a{color:var(--accent)}
+
+/* language switching: only the active language is displayed */
+[data-l]{display:none}
+html[data-lang="ko"] [data-l="ko"]{display:revert}
+html[data-lang="en"] [data-l="en"]{display:revert}
+
+header.top{margin-bottom:24px}
+h1{font-size:26px;margin:0 0 6px;letter-spacing:-.02em}
+.sub{color:var(--muted);font-size:13.5px;margin:0}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:9px 13px;font-size:13px;box-shadow:var(--shadow)}
+.stat b{font-size:16px;margin-right:5px}
+
+.controls{position:sticky;top:0;z-index:20;background:var(--bg);
+  padding:12px 0 10px;margin:20px 0 8px;border-bottom:1px solid var(--line)}
+.row{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:7px}
+.row:last-child{margin-bottom:0}
+.rowlabel{font-size:11.5px;color:var(--muted);font-weight:700;letter-spacing:.06em;min-width:38px}
+.chip{border:1px solid var(--line);background:var(--panel);color:var(--muted);
+  border-radius:999px;padding:5px 12px;font-size:12.5px;cursor:pointer;
+  font-family:inherit;transition:.12s;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);
+  color:var(--accent);font-weight:600}
+.chip:hover{border-color:var(--accent)}
+.langsel{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.langsel button{border:0;background:var(--panel);color:var(--muted);padding:5px 13px;
+  font:inherit;font-size:12.5px;cursor:pointer;transition:.12s}
+.langsel button[aria-pressed="true"]{background:var(--accent);color:#fff;font-weight:700}
+#q{flex:1;min-width:180px;padding:7px 12px;border:1px solid var(--line);border-radius:8px;
+  background:var(--panel);color:var(--ink);font:inherit;font-size:13.5px}
+#q:focus{outline:2px solid var(--accent);outline-offset:-1px}
+select{padding:7px 10px;border:1px solid var(--line);border-radius:8px;
+  background:var(--panel);color:var(--ink);font:inherit;font-size:13.5px}
+.count{color:var(--muted);font-size:12.5px;margin-left:auto}
+
+h2.day{font-size:15px;margin:30px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--line);
+  color:var(--muted);font-weight:600;letter-spacing:.02em}
+h2.day span.d{color:var(--ink)}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow)}
+.card.hide{display:none}
+.badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+.badge{font-size:11px;font-weight:700;letter-spacing:.04em;padding:2.5px 8px;
+  border-radius:5px;color:#fff}
+.b-PM{background:var(--pm)} .b-ST{background:var(--st)} .b-TR{background:var(--tr)}
+.b-ssrn{background:var(--ssrn)} .b-qp{background:var(--qp)} .b-man{background:var(--man)}
+.b-aa{background:var(--aa)} .b-ms{background:var(--ms)} .b-qc{background:var(--qc)}
+.b-XX{background:var(--other)}
+.badge.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);font-weight:600}
+.stars{color:var(--star);font-size:12.5px;letter-spacing:1px;margin-left:auto}
+.stars i{color:var(--line);font-style:normal}
+
+.title{font-size:16.5px;font-weight:650;line-height:1.4;margin:0 0 6px;letter-spacing:-.01em}
+.title a{color:var(--ink);text-decoration:none}
+.title a:hover{color:var(--accent)}
+.oneliner{margin:0 0 8px;font-size:14.5px;color:var(--ink)}
+.oneliner::before{content:"\25B8 ";color:var(--accent)}
+.authors{margin:0;color:var(--muted);font-size:12.5px}
+
+.detail{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+.detail[hidden]{display:none}
+.detail ul{margin:0 0 12px;padding-left:19px}
+.detail li{margin-bottom:4px}
+.kv{display:grid;grid-template-columns:92px 1fr;gap:5px 10px;font-size:13.5px;margin-bottom:12px}
+.kv dt{color:var(--muted);font-weight:600}
+.kv dd{margin:0}
+.keys{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.key{font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);
+  border-radius:5px;padding:2px 7px;color:var(--muted)}
+.abs{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;
+  padding:11px 13px;font-size:13px;color:var(--muted);line-height:1.7}
+.abs b{color:var(--ink);display:block;margin-bottom:4px;font-size:12px;letter-spacing:.03em}
+
+.actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;align-items:center}
+.actions .sep{width:1px;height:18px;background:var(--line);margin:0 2px}
+.btn{border:1px solid var(--line);background:var(--panel);color:var(--muted);
+  border-radius:7px;padding:5.5px 12px;font-size:12.5px;cursor:pointer;
+  font-family:inherit;text-decoration:none;display:inline-block;transition:.12s}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{filter:brightness(1.08);color:#fff}
+.btn.queued{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);
+  font-weight:600}
+.btn.done{border-color:var(--st);color:var(--st)}
+.btn.failed{border-color:var(--tr);color:var(--tr)}
+#livebadge{font-size:11.5px;color:var(--st);font-weight:700;letter-spacing:.03em;
+  display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+#livebadge::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--st);
+  animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--panel);
+  border-top:1px solid var(--line);box-shadow:0 -4px 20px rgba(0,0,0,.10);
+  padding:12px 20px;display:none}
+.bar.on{display:block}
+.bar-in{max-width:1000px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.bar pre{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;
+  padding:6px 9px;font-size:12px;flex:1;min-width:200px;overflow:auto;margin:0;
+  white-space:pre;line-height:1.5}
+.empty{color:var(--muted);text-align:center;padding:50px 0}
+footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);
+  color:var(--muted);font-size:12px}
+@media print{.controls,.bar,.actions{display:none!important}.detail{display:block!important}
+  .card{break-inside:avoid;box-shadow:none}}
+
+.doc{max-width:780px}
+.doc h1{font-size:24px;line-height:1.35;margin:0 0 10px}
+.doc h2{font-size:19px;margin:38px 0 12px;padding-bottom:7px;border-bottom:2px solid var(--accent);
+  letter-spacing:-.01em}
+.doc h3{font-size:15.5px;margin:22px 0 8px;color:var(--accent)}
+.doc p{margin:0 0 14px}
+.doc ul,.doc ol{margin:0 0 16px;padding-left:22px}
+.doc li{margin-bottom:7px}
+.doc blockquote{margin:0 0 18px;padding:14px 18px;border-left:3px solid var(--accent);
+  background:var(--accent-soft);border-radius:0 8px 8px 0;font-size:15.5px}
+.doc blockquote p:last-child{margin-bottom:0}
+.doc table{width:100%;border-collapse:collapse;margin:0 0 18px;font-size:13.5px;
+  display:block;overflow-x:auto}
+.doc th,.doc td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+.doc th{background:var(--panel-2);font-weight:650;white-space:nowrap}
+.doc code{background:var(--panel-2);border:1px solid var(--line);border-radius:4px;
+  padding:1px 5px;font-size:13px}
+.doc mjx-container[display="true"]{margin:16px 0;overflow-x:auto;overflow-y:hidden;padding:2px 0}
+.doc .meta-head{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;margin:18px 0 26px;box-shadow:var(--shadow)}
+.doc .meta-head .sub{margin-bottom:4px}
+.doc .langlinks{float:right;font-size:12.5px}
+</style>
+
+<script>
+window.MathJax={
+  tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]'],['$$','$$']],processEscapes:true},
+  options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']},
+  chtml:{scale:0.98}
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+</head>
+<body>
+<div class="wrap doc">
+  <p class="sub"><span class="langlinks"></span>
+     <a href="javascript:history.back()">← 돌아가기</a></p>
+  <h1>The Cost of Sector Constraints in Cross-Sectional Momentum: Evidence from the Nifty 500</h1>
+  <div class="meta-head">
+    <p class="sub">Harsh Pandhe</p>
+    <p class="sub">SSRN abstract_id 7376218 · Capital Markets: Asset Pricing &amp; Valuation, Capital Markets: Market Efficiency</p>
+    <p class="sub">본문 출처: SSRN PDF full text</p>
+    <div class="actions">
+      <a class="btn" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7376218" target="_blank" rel="noopener">원문 페이지</a>
+      <a class="btn" href="https://papers.ssrn.com/sol3/Delivery.cfm/7376218.pdf?abstractid=7376218&amp;mirid=1" target="_blank" rel="noopener">원문 PDF</a>
+    </div>
+  </div>
+  <blockquote><p>롱온리 모멘텀에 섹터 상한을 걸면 연 8.59%p 손해다.</p></blockquote>
+  <h2>1. 한눈에 보기</h2>
+
+<blockquote>
+인도 Nifty 500 유니버스에서 롱온리 횡단면 모멘텀 전략에 섹터 집중도 제약을 걸면, 검증한 다섯 가지 제약 설정이 모두 무제약 벤치마크보다 낮은 복리 수익률과 샤프 비율을 냈다. 특히 섹터당 3종목 상한은 CAGR을 42.56%에서 33.97%로 8.59%p 깎으면서도 최대낙폭은 전혀 개선하지 못했다(-26.79% 대 -26.44%).
+</blockquote>
+
+<ul>
+<li>제약 강도가 셀수록 섹터 집중도(HHI)는 0.169에서 0.063까지 내려가지만 수익률도 함께 내려간다. 다만 Cap 2가 Cap 3보다 나은 비단조 구간이 있다.</li>
+<li>변동성은 20.66%에서 18.23%로 조금 낮아진다. 그런데 최대낙폭이 그대로라 소르티노(2.684→2.298)와 칼마(1.610→1.268)는 오히려 나빠진다.</li>
+<li>저자는 원인을 <strong>팩터 희석(factor dilution)</strong>으로 설명한다. 상한 때문에 상승 섹터의 4~6위 종목을 버리고 부진 업종의 저순위 종목을 사면서, 선택 종목의 평균 모멘텀 순위가 15.5위에서 48.2위로 밀린다.</li>
+<li>통계 검정은 조심스럽다. Cap 3의 샤프 저하는 비보정 기준 유의하지만(부트스트랩 p=0.0204), Holm 보정 후에는 p=0.1020으로 5% 문턱을 넘지 못한다.</li>
+</ul>
+
+<h2>2. 문제의식과 배경</h2>
+
+<p>퀀트 주식 운용의 표준 관행은 단일 팩터 포트폴리오를 산업·섹터 중립으로 만드는 것이다. Moskowitz and Grinblatt(1999)가 산업 모멘텀이 개별주 모멘텀 수익의 상당 부분을 설명한다고 밝힌 뒤, 산업 통제 없는 모멘텀은 보상받지 못하는 거시 베팅을 품는다는 주장이 굳어졌다. 1999년 기술주, 2022년 에너지처럼 무제약 모멘텀은 소수 섹터에 자본을 몰아넣고, 사이클이 돌면 모멘텀 크래시를 맞는다.</p>
+
+<p>Ehsani, Harvey, and Li(2023)는 이 합의를 정면으로 반박했다. 팩터 성과를 산업 내부(intra-industry) 성분과 산업 간(inter-industry) 성분으로 분해하면, 롱숏에서는 중립화가 스프레드를 넓히지만 롱온리에서는 산업 간 성분을 통째로 없앤다. 숏이 금지된 상태에서 섹터 중립을 걸면 하락 업종을 팔 수 없는 채로 상승 업종에 기울 자유만 뺏긴다. 결과적으로 구조적으로 쇠퇴하는 산업의 '최선 종목'에 자금이 흘러간다.</p>
+
+<p>인도 시장은 이 논리가 증폭되기 쉬운 환경이다. 국가 주도 인프라 투자, 방산 국산화, 산업 정책 전환이 다년간의 설비투자 사이클을 만들면서 업종 간 수익률 분산이 크고 오래 간다. 2021~2024년 공기업(PSU)·자본재·인프라 확장 국면이 대표 사례다. 그런데 기존 문헌은 롱온리 모멘텀에 <em>이산적 파라미터 상한</em>을 걸었을 때 현실적 거래비용 아래에서 얼마를 잃는지를 신흥국 유니버스에서 직접 재보지 않았다. 이 논문이 채우려는 빈칸이 그 지점이다.</p>
+
+<h2>3. 방법론</h2>
+
+<h3>3.1 신호 구성</h3>
+
+<p>신호는 변동성 조정 12-1 모멘텀이다. 형성일 \(t\)에서 직전 21거래일(1개월)을 건너뛰어 단기 반전 효과를 피한다.</p>
+
+\[ M_{i,t} = \frac{P_{i,t-21} - P_{i,t-252}}{P_{i,t-252}} \]
+
+<p>\(P_{i,\tau}\)는 액면분할·배당을 조정한 종가, \(M_{i,t}\)는 12개월 전부터 1개월 전까지의 누적 수익률이다.</p>
+
+\[ \sigma_{i,t} = \sqrt{252} \cdot \sqrt{\frac{1}{251}\sum_{\tau=1}^{252}\left(r_{i,t-\tau} - \bar{r}_{i,t}\right)^2} \]
+
+<p>\(\sigma_{i,t}\)는 직전 252거래일 일간 수익률로 계산한 연율화 변동성, \(r_{i,\tau}\)는 일간 산술 수익률, \(\bar{r}_{i,t}\)는 그 표본평균이다.</p>
+
+\[ S_{i,t} = \frac{M_{i,t}}{\sigma_{i,t}} \]
+
+<p>\(S_{i,t}\)가 최종 횡단면 점수다. 위험조정 모멘텀이라 변동성이 큰 종목의 원시 수익률 우위를 깎는다.</p>
+
+<h3>3.2 선택 알고리즘</h3>
+
+<p>목표 보유 종목 수는 \(N=30\), 비중은 전부 동일가중 \(w_{i,t}=1/30\)이다. 무제약 기준선은 점수 상위 30종목을 그대로 담는다.</p>
+
+\[ H^{\text{cap }C}_t = \arg\max_{H \subset \{1,\dots,M_t\}} \sum_{i \in H} S_{i,t} \quad \text{s.t.} \ |H|=N, \ |\{i \in H : \mathrm{Sec}(i)=k\}| \le C \ \ \forall k \]
+
+<p>\(M_t\)는 리밸런스 시점 \(t\)의 적격 종목 수, \(\mathrm{Sec}(i)\)는 종목 \(i\)의 섹터, \(C\)는 섹터당 종목 상한이다. 저자는 이 문제를 탐욕적 순위 선택으로 푼다. 점수 내림차순으로 훑으면서 해당 섹터의 카운트가 \(C\)에 도달하지 않았으면 편입하고, 30종목이 찰 때까지 반복한다. 점수가 단조이고 비중이 동일가중이면 이 탐욕 해가 최적이라고 각주에서 밝힌다.</p>
+
+<p>\(C=2\)는 순수한 형태로는 성립하지 않는다. 섹터가 \(K=14\)개이므로 \(14 \times 2 = 28 < 30\)이다. 그래서 전 섹터에 2종목씩 채운 뒤 남은 2슬롯을 잔여 후보 중 최고점 종목으로 메운다. 논문은 이를 "2-per-Sector + 2 Overflow"라 부른다.</p>
+
+<p>섹터 균형 상위-k 방식은 다르게 접근한다. 활성 섹터 \(K_t\)개마다 독립적으로 점수 순위를 매기고 \(N_{\text{slots}} = \lfloor N/K_t \rfloor\)개씩 뽑는다. 유동 종목이 모자란 섹터는 있는 만큼만 담고, 남은 슬롯은 후보가 남은 섹터의 최고점 종목으로 채운다.</p>
+
+<h3>3.3 순수익률</h3>
+
+\[ r^{\text{net}}_{p,t} = r^{\text{gross}}_{p,t} - c \cdot \text{Turnover}_t, \quad \text{Turnover}_t = \tfrac{1}{2}\sum_{i=1}^{M_t}|w_{i,t} - w_{i,t^-}| \]
+
+<p>\(c \approx 0.4234\%\)는 왕복 마찰비용, \(\text{Turnover}_t\)는 단측 회전율, \(w_{i,t^-}\)는 리밸런스 직전 비중이다.</p>
+
+<h2>4. 데이터와 실험 설계</h2>
+
+<table>
+<thead>
+<tr><th>항목</th><th>내용</th></tr>
+</thead>
+<tbody>
+<tr><td>유니버스</td><td>NSE Nifty 500 시점기준(point-in-time) 구성종목, 매월 첫 거래일 재구성</td></tr>
+<tr><td>전체 표본</td><td>2018-01-01 ~ 2026-02-26 (8년)</td></tr>
+<tr><td>아웃오브샘플</td><td>10개 연속 폴드, 각 126거래일, 합계 1,260일(5.0년), 2021-01-21 시작</td></tr>
+<tr><td>유동성 필터</td><td>직전 20일 평균 거래대금 \(ADV_{20} \ge\) INR 5천만(약 5 Cr)</td></tr>
+<tr><td>섹터 분류</td><td>NSE 공식 분류 14개 대분류(금융, IT, 석유가스, FMCG, 자동차, 헬스케어, 자본재, 금속광물, 건설, 화학, 전력, 내구소비재, 통신, 서비스)</td></tr>
+<tr><td>보유 종목</td><td>30종목, 동일가중, 월간 리밸런스</td></tr>
+<tr><td>벤치마크</td><td>Nifty 500 TRI, 그리고 무제약 모멘텀 기준선</td></tr>
+<tr><td>초기 자본</td><td>INR 10 Lakh</td></tr>
+<tr><td>평가지표</td><td>CAGR, 샤프, 연율 변동성, 최대낙폭, 소르티노, 칼마, 월 회전율, 비용 드래그, 평균 HHI</td></tr>
+</tbody>
+</table>
+
+<p>거래비용 모형이 이 논문의 강점 중 하나다. 브로커 수수료를 뭉뚱그리지 않고 인도 시장의 법정 부과금을 항목별로 쌓았다.</p>
+
+<table>
+<thead>
+<tr><th>비용 항목</th><th>매수</th><th>매도</th></tr>
+</thead>
+<tbody>
+<tr><td>증권거래세(STT)</td><td>0.1000%</td><td>0.1000%</td></tr>
+<tr><td>거래소 수수료(NSE)</td><td>0.00345%</td><td>0.00345%</td></tr>
+<tr><td>SEBI 회전 부과금</td><td>0.00010%</td><td>0.00010%</td></tr>
+<tr><td>통합 GST(18%)</td><td>0.00062%</td><td>0.00062%</td></tr>
+<tr><td>인지세</td><td>0.0150%</td><td>0.0000%</td></tr>
+<tr><td>체결 슬리피지(가정)</td><td>0.1000%</td><td>0.1000%</td></tr>
+<tr><td><strong>합계</strong></td><td><strong>21.92bp</strong></td><td><strong>20.42bp</strong></td></tr>
+</tbody>
+</table>
+
+<p>왕복 42.34bp다. 슬리피지 10bp는 관측값이 아니라 가정치라는 점을 저자가 명시한다.</p>
+
+<p>폴드 설계에서 짚을 대목이 하나 있다. 이 전략에는 추정할 머신러닝 파라미터가 없다. 그래서 확장 정보창은 학습 구간이 아니라 롤링 원점 평가 구조를 정의하는 장치일 뿐이라고 저자가 직접 밝힌다. 252일 변동성 스케일링이 국면 적응 역할을 대신한다.</p>
+
+<h2>5. 주요 결과</h2>
+
+<h3>5.1 성과 비교</h3>
+
+<table>
+<thead>
+<tr><th>전략</th><th>CAGR</th><th>샤프</th><th>연율 변동성</th><th>최대낙폭</th><th>소르티노</th><th>칼마</th><th>월 회전율</th><th>평균 HHI</th><th>기말 자산(INR)</th></tr>
+</thead>
+<tbody>
+<tr><td>기준선(무제약)</td><td>42.56%</td><td>1.728</td><td>20.66%</td><td>-26.44%</td><td>2.684</td><td>1.610</td><td>32.1%</td><td>0.1689</td><td>5,888,599</td></tr>
+<tr><td>Cap 5</td><td>40.08%</td><td>1.682</td><td>19.78%</td><td>-26.66%</td><td>2.610</td><td>1.503</td><td>31.8%</td><td>0.1132</td><td>5,392,917</td></tr>
+<tr><td>Cap 4</td><td>38.89%</td><td>1.640</td><td>19.58%</td><td>-26.82%</td><td>2.535</td><td>1.450</td><td>31.5%</td><td>0.1001</td><td>5,169,139</td></tr>
+<tr><td>Cap 3</td><td>33.97%</td><td>1.497</td><td>18.23%</td><td>-26.79%</td><td>2.298</td><td>1.268</td><td>30.9%</td><td>0.0835</td><td>4,314,943</td></tr>
+<tr><td>2-per-Sector + 2 Overflow</td><td>36.61%</td><td>1.630</td><td>18.34%</td><td>-25.79%</td><td>2.492</td><td>1.419</td><td>30.4%</td><td>0.0630</td><td>4,757,942</td></tr>
+<tr><td>섹터 균형 상위-k</td><td>38.69%</td><td>1.680</td><td>18.99%</td><td>-25.71%</td><td>2.571</td><td>1.505</td><td>31.2%</td><td>0.0834</td><td>5,131,395</td></tr>
+<tr><td>Nifty 500 TRI</td><td>14.82%</td><td>0.782</td><td>15.12%</td><td>-23.10%</td><td>1.102</td><td>0.642</td><td>—</td><td>0.2104</td><td>1,995,420</td></tr>
+</tbody>
+</table>
+
+<p>Cap 3의 손실은 5년 뒤 최종 자산에서 INR 15.74 Lakh, 즉 26.7% 차이로 벌어진다. 변동성이 2.43%p 줄었는데 최대낙폭은 0.35%p 더 나빠졌다. 리스크 축소가 꼬리 위험이 아니라 상승 변동성만 깎았다는 뜻이다.</p>
+
+<p>Cap 2가 Cap 3보다 나은 역전은 저자도 예상 밖으로 다룬다. 그럴듯한 설명 하나를 제시하는데, U자형 폭-분산 상호작용이다. Cap 2에서는 30종목이 14개 섹터 전부에 강제로 흩어져(HHI 0.0630) 주변 업종의 2차 모멘텀 돌파를 잡는다. Cap 3은 10개 섹터를 3종목씩 채우는 데 그쳐, 고모멘텀 클러스터는 잘리고 섹터 폭은 완성되지 않는 어중간한 위치에 놓인다. 저자는 이를 확정 설명이 아니라 하나의 가설로 제시한다.</p>
+
+<h3>5.2 통계 검정</h3>
+
+<p>정상 블록 부트스트랩(Politis and Romano 1994) 2만 회, 평균 블록 길이 21거래일의 기하분포로 페어드 샤프 차이를 검정했다. 여기에 Jobson-Korkie-Memmel 점근 검정을 병행했다.</p>
+
+<table>
+<thead>
+<tr><th>전략</th><th>Δ샤프</th><th>95% 부트스트랩 CI</th><th>부트스트랩 p</th><th>JKM p</th><th>Holm 보정 p</th></tr>
+</thead>
+<tbody>
+<tr><td>Cap 3</td><td>-0.2314</td><td>[-0.4368, -0.0335]</td><td>0.0204</td><td>0.0281</td><td>0.1020</td></tr>
+<tr><td>Cap 4</td><td>-0.0879</td><td>[-0.2423, +0.0692]</td><td>0.2718</td><td>0.3106</td><td>1.0000</td></tr>
+<tr><td>Cap 5</td><td>-0.0465</td><td>[-0.1691, +0.0679]</td><td>0.4190</td><td>0.4484</td><td>1.0000</td></tr>
+<tr><td>2-per-Sector + 2 Overflow</td><td>-0.0985</td><td>[-0.3920, +0.1832]</td><td>0.4943</td><td>0.4826</td><td>1.0000</td></tr>
+<tr><td>섹터 균형 상위-k</td><td>-0.0482</td><td>[-0.2781, +0.1774]</td><td>0.6720</td><td>0.6552</td><td>1.0000</td></tr>
+</tbody>
+</table>
+
+<p>Cap 3 하나만 비보정 5% 수준에서 유의하다. 다섯 개 탐색적 설정에 Holm-Bonferroni 단계적 하강 보정을 걸면 p=0.1020으로 밀려 가족단위 오류율 5% 기준을 통과하지 못한다. 저자는 이 사실을 숨기지 않고, 대신 -8.59%p라는 경제적 크기가 배분 담당자에게는 여전히 크다고 덧붙인다. 나머지 네 설정은 샤프 차이가 통계적으로 구분되지 않는다.</p>
+
+<h3>5.3 팩터 희석 메커니즘</h3>
+
+<p>순위 손실(Rank Loss)을 다음처럼 정의한다.</p>
+
+\[ \Delta \text{Rank}_t = \overline{\text{Rank}}(H^{\text{constrained}}_t) - 15.5 \]
+
+<p>\(\overline{\text{Rank}}(H_t)\)는 선택 바스켓의 평균 횡단면 모멘텀 순위이고, 15.5는 무제약 기준선이 상위 30종목을 담을 때의 평균 순위 \((1+30)/2\)다.</p>
+
+<table>
+<thead>
+<tr><th>전략</th><th>평균 선택 순위</th></tr>
+</thead>
+<tbody>
+<tr><td>기준선</td><td>15.5</td></tr>
+<tr><td>Cap 5</td><td>22.4</td></tr>
+<tr><td>Cap 4</td><td>28.1</td></tr>
+<tr><td>Cap 3</td><td>48.2</td></tr>
+<tr><td>2-per-Sector + 2 Overflow</td><td>34.6</td></tr>
+<tr><td>섹터 균형 상위-k</td><td>29.3</td></tr>
+</tbody>
+</table>
+
+<p>순위 손실과 이후 성과 격차의 관계는 60개 월간 관측치의 시계열 회귀로 검정했다.</p>
+
+\[ R^{\text{baseline}}_{p,t+1} - R^{\text{Cap 3}}_{p,t+1} = \alpha + \beta \cdot \Delta \text{Rank}_t + \epsilon_{t+1} \]
+
+<p>좌변은 다음 보유기간의 상대 수익률 격차, 우변의 \(\Delta \text{Rank}_t\)는 포트폴리오 형성 시점에 관측된 순위 손실이다. 설명변수를 형성 시점에서 잡아 종속변수와 시점이 겹치지 않게 했다.</p>
+
+<p>Newey-West HAC 표준오차(절단 시차 \(L=3\)) 추정 결과는 \(\hat{\beta} = +0.0384\), HAC SE 0.0159, \(t=2.41\), \(p=0.018\), 95% CI [+0.0072, +0.0696], \(R^2 = 0.096\), \(N=60\)이다. 평균 선택 순위가 10위 밀릴 때 이후 한 달 상대 성과가 약 38.4bp 낮아진다는 계산이다. 절편 \(\hat{\alpha}=-0.0042\)는 유의하지 않다(p=0.18).</p>
+
+<h3>5.4 국면별 분해</h3>
+
+<table>
+<thead>
+<tr><th>전략</th><th>2021–2022 (회복)</th><th>2023–2024 (설비투자/PSU)</th><th>2025–2026 (성숙)</th><th>전체 5년</th></tr>
+</thead>
+<tbody>
+<tr><td>기준선</td><td>44.2% / 1.84</td><td>49.8% / 1.96</td><td>31.2% / 1.38</td><td>42.6% / 1.73</td></tr>
+<tr><td>Cap 5</td><td>41.6% / 1.78</td><td>46.5% / 1.88</td><td>29.8% / 1.34</td><td>40.1% / 1.68</td></tr>
+<tr><td>Cap 4</td><td>40.1% / 1.72</td><td>45.1% / 1.82</td><td>29.1% / 1.31</td><td>38.9% / 1.64</td></tr>
+<tr><td>Cap 3</td><td>35.8% / 1.58</td><td>39.2% / 1.62</td><td>24.8% / 1.18</td><td>34.0% / 1.50</td></tr>
+<tr><td>2-per-Sector + 2 Overflow</td><td>38.2% / 1.69</td><td>42.4% / 1.75</td><td>27.0% / 1.29</td><td>36.6% / 1.63</td></tr>
+<tr><td>섹터 균형 상위-k</td><td>40.5% / 1.76</td><td>44.8% / 1.85</td><td>28.5% / 1.32</td><td>38.7% / 1.68</td></tr>
+<tr><td>Nifty 500 TRI</td><td>16.4% / 0.84</td><td>21.2% / 1.02</td><td>7.1% / 0.42</td><td>14.8% / 0.78</td></tr>
+</tbody>
+</table>
+
+<p>세 국면 모두에서 기준선이 앞선다. 격차가 가장 벌어진 구간은 2023~2024년 설비투자 사이클이고, 성숙 국면인 2025~2026년에도 순서는 뒤집히지 않는다.</p>
+
+<h2>6. 한계와 주의점</h2>
+
+<h3>6.1 저자가 밝힌 한계</h3>
+<ul>
+<li>-8.59%p라는 페널티 크기는 표본 기간 인도의 높은 업종 간 분산에 힘입은 값이다. 섹터 분산이 낮고 평균회귀가 강한 선진국에서는 약해질 수 있다.</li>
+<li>추적오차 한도나 고객 분산 요건에 묶인 기관은 섹터 제약을 받아들일 수밖에 없다. 이 논문은 그 제약의 명시적 기회비용을 계산할 뿐이다.</li>
+<li>\(ADV_{20} \ge\) INR 5 Cr 필터는 중형 펀드 기준이다. 수십억 달러 규모 배분은 집중된 모멘텀 종목에서 훨씬 큰 시장충격을 맞는다.</li>
+</ul>
+
+<h3>6.2 재현·실전에서 걸릴 지점</h3>
+<ul>
+<li><strong>표본 길이가 짧다.</strong> 아웃오브샘플이 5년, 월간 관측치가 60개다. 모멘텀 크래시 한 번이 결론을 뒤집을 수 있는 크기다. 2021~2026년은 인도 증시의 강한 상승 국면과 겹친다. 최대낙폭 -26%대는 2008년이나 2009년 3월 같은 모멘텀 붕괴를 겪지 않은 표본이라는 뜻이다.</li>
+<li><strong>다중검정을 통과하지 못했다.</strong> Holm 보정 p=0.1020이다. 다섯 설정 중 가장 나쁜 하나를 뽑아 본 결과이므로, 사전에 Cap 3을 지목할 근거가 없었다면 선택 편의가 남는다.</li>
+<li><strong>Cap 2 역전은 설명되지 않았다.</strong> 제약이 셀수록 나빠진다는 단조 관계가 깨진다. U자 가설은 사후 해석이고 검정되지 않았다. 상한 파라미터에 대한 성과 곡면이 매끄럽지 않다면 실전에서 어느 값을 고를지도 불안정하다.</li>
+<li><strong>15.5라는 기준값이 정의상 고정이다.</strong> 무제약 기준선의 평균 순위는 알고리즘상 항상 15.5다. 따라서 \(\Delta \text{Rank}_t\)의 시계열 변동은 전적으로 제약 포트폴리오 쪽에서 나온다. 회귀의 \(R^2\)가 0.096으로 낮은 점도 함께 볼 대목이다.</li>
+<li><strong>슬리피지 10bp는 가정치다.</strong> 회전율이 월 30% 안팎이라 슬리피지 가정을 두 배로 올리면 연 비용 드래그가 160bp 근처에서 크게 올라간다. 다만 제약군과 기준선의 회전율이 비슷해(30.4~32.1%) 상대 비교 결론은 비용 가정에 덜 민감할 것으로 추정된다.</li>
+<li><strong>데이터 접근성.</strong> NSE 시점기준 편입 이력과 정정 계수는 공개 아카이브에서 재구성해야 한다. 논문은 재현용 백테스트 하니스를 AlgoTrade Research가 보유한다고만 밝히고 공개 링크를 주지 않는다.</li>
+<li><strong>벤치마크 대비 성격.</strong> 무제약 전략의 HHI 0.169는 Nifty 500 TRI의 0.210보다 낮다. 즉 지수 자체도 섹터 집중도가 높다. "무제약이 위험하다"는 통념을 이 수치가 어느 정도 완화한다.</li>
+</ul>
+
+<h2>7. 시스템 트레이딩 적용 아이디어</h2>
+
+<h3>7.1 그대로 옮기는 최소 구성</h3>
+<ul>
+<li><strong>신호:</strong> 12-1 모멘텀 \(M_{i,t}\)를 252일 연율 변동성으로 나눈 \(S_{i,t}\). 조정 종가만 있으면 계산된다.</li>
+<li><strong>주기:</strong> 매월 첫 거래일 리밸런스. 형성일 종가로 순위를 확정하고 다음 세션에 체결하는 식으로 룩어헤드를 차단한다.</li>
+<li><strong>필터:</strong> 20일 평균 거래대금 하한. 한국 시장이라면 KOSPI200+KOSDAQ150 유니버스에 20일 ADV 하한을 걸어 대응한다.</li>
+<li><strong>비중:</strong> 30종목 동일가중. 변동성 조정은 신호 단계에서 이미 들어갔으므로 비중 단계에서 또 걸면 중복이다.</li>
+</ul>
+
+<h3>7.2 제약 관련 설계 선택</h3>
+<p>논문 결과를 액면 그대로 받아들이면 섹터 상한을 걸지 않는 쪽이 유리하다. 다만 실무에서는 무제약이 규정상 불가능한 경우가 많다. 그럴 때 논문이 제시하는 순서는 이렇다.</p>
+<ul>
+<li>상한을 걸어야 한다면 Cap 5처럼 느슨한 값이 손실이 가장 작다(CAGR -2.48%p, Δ샤프 -0.0465).</li>
+<li>중간값 Cap 3이 가장 나쁘다. 어중간한 상한을 피하라는 것이 이 논문의 실무 메시지다.</li>
+<li>매우 타이트한 제약이 불가피하면 2-per-Sector 방식이 Cap 3보다 낫다는 결과가 나왔지만, 이 역전은 표본 하나에서 관측된 것이라 그대로 신뢰하기는 이르다.</li>
+</ul>
+
+<h3>7.3 운영 단계에서 붙일 장치</h3>
+<ul>
+<li><strong>순위 손실 모니터링.</strong> \(\Delta \text{Rank}_t\)를 리밸런스마다 로그로 남긴다. 제약 때문에 버린 종목의 순위와 대신 담은 종목의 순위를 함께 기록하면, 제약이 실제로 얼마를 깎고 있는지 실시간으로 계량된다. 논문 회귀에 따르면 10위당 월 38.4bp가 대략의 환산율이다.</li>
+<li><strong>동적 상한.</strong> 업종 간 수익률 분산이 클 때는 상한을 풀고, 분산이 좁아지면 조이는 식의 국면 스위칭을 검토할 만하다. 다만 논문은 이런 동적 규칙을 검정하지 않았으므로 별도 검증이 필요하다.</li>
+<li><strong>모멘텀 크래시 방어.</strong> 표본에 크래시 국면이 없다는 점을 감안해 Barroso and Santa-Clara(2015) 방식의 변동성 스케일링을 포트폴리오 레벨에 얹는 편이 안전하다.</li>
+<li><strong>비용 모델.</strong> 인도 STT처럼 시장별 법정 부과금을 항목별로 넣는 접근을 그대로 가져오면 된다. 한국이라면 증권거래세, 농특세, 유관기관 수수료를 매도 측에 분리 반영한다.</li>
+</ul>
+
+<h3>7.4 재현 순서</h3>
+<ol>
+<li>시점기준 편입 이력과 조정 가격 시계열 확보. 이 단계가 가장 오래 걸린다.</li>
+<li>월별 적격 유니버스 생성 → \(S_{i,t}\) 계산 → 상위 30종목 선택 → 순수익률 시뮬레이션.</li>
+<li>제약 변형별로 같은 파이프라인을 돌려 페어드 일간 수익률 시계열을 만든다.</li>
+<li>정상 블록 부트스트랩(블록 평균 21일, 2만 회)으로 샤프 차이 검정, Holm 보정까지 함께 보고한다.</li>
+</ol>
+
+<h2>8. 함께 볼 만한 개념</h2>
+<ul>
+<li>Ehsani, Harvey, Li (2023), "Is Sector Neutrality in Factor Investing a Mistake?", <em>FAJ</em> — 이 논문의 이론적 출발점. 산업 내부/산업 간 성분 분해</li>
+<li>Moskowitz and Grinblatt (1999) 산업 모멘텀, Asness, Porter, Stevens (2000) 산업 상대 지표</li>
+<li>Barroso and Santa-Clara (2015), Daniel and Moskowitz (2016) — 모멘텀 크래시와 변동성 스케일링</li>
+<li>Grundy and Martin (2001) — 모멘텀의 동적 팩터 노출</li>
+<li>Politis and Romano (1994) 정상 블록 부트스트랩, Jobson-Korkie (1981)·Memmel (2003) 샤프 비율 검정</li>
+<li>Holm-Bonferroni 단계적 하강 절차, Newey-West HAC 표준오차</li>
+<li>Chui, Titman, Wei (2010) — 국가별 모멘텀 강도와 문화·차익거래 한계</li>
+<li>키워드: sector neutrality, long-only factor construction, factor dilution, Herfindahl-Hirschman Index, point-in-time universe, cardinality-constrained portfolio selection, emerging market momentum</li>
+</ul>
+  <div class="abs" style="margin-top:32px"><b>ORIGINAL ABSTRACT</b>Institutional quantitative equity frameworks routinely mandate sector concentration limits or industry neutrality to eliminate uncompensated macroeconomic sector bets. While developedmarket long-short literature often supports neutralization, recent asset pricing theory [e.g., 6] demonstrates that long-only factor portfolios are systematically impaired by sector constraints because shorting decaying industries is disallowed. We provide an out-of-sample empirical investigation of this hypothesis in the Indian equity market using point-in-time National Stock Exchange (NSE) Nifty 500 constituent data across an 8-year historical sample (January 1, 2018 to February 26, 2026). Evaluating four parametric sector-cap regimes (C ∈ {2, 3, 4, 5}) and one sector-balanced selection regime against an unconstrained benchmark across 10 contiguous out-of-sample evaluation folds (1260 trading days / 5.0 trading years) under realistic transaction costs (42.34 bps round-trip friction including Securities Transaction Tax, stamp duty, exchange levies, and assumed 10 bps execution slippage), we document that all evaluated constrained configurations produce lower realized compound returns and Sharpe ratios than the unconstrained benchmark. An unconstrained 30-stock volatility-adjusted momentum strategy delivers an out-of-sample CAGR of 42.56% and a Sharpe ratio of 1.728. Capping sector allocations to 3 stocks compresses the Herfindahl-Hirschman Index (HHI) from 0.169 to 0.084, but reduces CAGR to 33.97% (a-8.59pp annual drag) and Sharpe to 1.497 (unadjusted bootstrap p = 0.0204; Holm-adjusted bootstrap p = 0.1020; JKM p = 0.0281), with no improvement in maximum drawdown (-26.79% vs.-26.44%). We find evidence consistent with a factor dilution mechanism: sector caps exclude high-conviction momentum leaders in trending macro sectors, replacing them with lower-ranked securities from lagging industries (average selected momentum rank deteriorates from 15.5 to 48.2), which is positively associated with subsequent relative performance drag in Newey-West HAC predictive regressions (t = 2.41, p = 0.018).</div>
+  <footer><p>로컬 Claude Code 로 생성한 요약 리포트입니다. 인용 전 반드시 원문을 확인하세요.</p></footer>
+</div>
+</body>
+</html>
