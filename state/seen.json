@@ -3270,6 +3270,63 @@
     "summary_version": "2026-09-01",
     "title": "All Weather built and tested against inverse vol, ERC and a 60/40"
   },
+  "qc-quanterlab-dalio-s-holy-grail-measured-and-then-walked-at-five-breadths-three-fi": {
+    "abs_url": "https://quanterlab.com/research/dalio-s-holy-grail-measured-and-then-walked-at-five-breadths-three-five-seven-te",
+    "abstract": "The most liquid fund shelf a person can buy holds 3.3 independent bets. Dalio's chart needs fifteen. The Holy Grail of investing, in his words: find fifteen good, uncorrelated return streams and risk falls by roughly eighty percent while return stands still. At correlation zero, fifteen equal",
+    "authors": [
+      "Quanter Lab"
+    ],
+    "categories": [
+      "Quanter Lab"
+    ],
+    "ext_id": "quanterlab-dalio-s-holy-grail-measured-and-then-walked-at-five-breadths-three-fi",
+    "first_seen": "2026-09-04T09:50:11+09:00",
+    "id": "qc-quanterlab-dalio-s-holy-grail-measured-and-then-walked-at-five-breadths-three-fi",
+    "listed_date": "2026-09-03",
+    "pdf_url": "",
+    "src": "quantocracy",
+    "src_cats": [
+      "QC"
+    ],
+    "summarized_at": "2026-09-04T09:50:28+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Dalio's chart needs 15 bets; the liquid shelf holds 3.3",
+          "Counts independent bets in buyable, most-liquid funds",
+          "At zero correlation, 15 streams cut risk about 80%"
+        ],
+        "data": "Most liquid retail-buyable fund shelf, 2008-2025.",
+        "method": "Counts independent (uncorrelated) return streams and maps them to risk reduction.",
+        "one_liner": "Tests Dalio's fifteen-uncorrelated-bets claim on a real fund shelf.",
+        "relevance_why": "Listed fund prices are easy to source, but the paper gives no entry or exit rules, so allocation design is on you.",
+        "takeaway": "Target independent bet count, not holding count, when sizing a multi-asset book."
+      },
+      "keywords": [
+        "diversification",
+        "uncorrelated return streams",
+        "risk parity",
+        "independent bets",
+        "portfolio construction",
+        "ETF portfolio"
+      ],
+      "ko": {
+        "bullets": [
+          "달리오 차트는 15개, 현실 펀드는 3.3개뿐이다",
+          "가장 유동성 좋은 펀드로 독립 베팅 수를 센다",
+          "상관 0이면 15개로 위험이 약 80% 준다"
+        ],
+        "data": "개인이 살 수 있는 유동성 상위 펀드, 2008~2025년 구간",
+        "method": "무상관 수익원 개수(독립 베팅 수)를 세어 위험 감소폭을 따진다",
+        "one_liner": "달리오의 15개 무상관 수익원 주장을 실제 ETF로 검증한다",
+        "relevance_why": "데이터는 상장 ETF 가격이라 구하기 쉽지만 매매 규칙이 없어 배분 설계를 따로 해야 한다",
+        "takeaway": "포트폴리오를 짤 때 종목 수 대신 독립 베팅 수를 목표로 잡는다"
+      },
+      "relevance": 3
+    },
+    "summary_version": "2026-09-01",
+    "title": "Dalio Holy Grail walked 2008-2025"
+  },
   "qc-quanterlab-one-half-of-the-magic-formula-beat-the-whole-thing-greenblatt-s-two-r": {
     "abs_url": "https://quanterlab.com/research/one-half-of-the-magic-formula-beat-the-whole-thing-greenblatt-s-two-ranks-tested",
     "abstract": "Joel Greenblatt's Magic Formula ranks companies on two numbers and buys the ones that score well on both. One asks whether a business is cheap. The other asks whether it is any good. The claim in the book is that the pair works better than either number on its own. We tested that claim by",
@@ -3444,6 +3501,179 @@
     },
     "summary_version": "2026-09-01",
     "title": "Markowitz, Estimation Error and 1/N"
+  },
+  "qc-spatium-novum-from-the-frontier-to-the-market": {
+    "abs_url": "https://spatium-novum.com/posts/from-the-frontier-to-the-market",
+    "abstract": "Beta began as a way to compress a covariance matrix. The CAPM turned it into the equilibrium measure of exposure to aggregate market risk, priced by the market premium. Markowitz maps beliefs to portfolios. With common beliefs, a risk-free asset and market clearing, the CAPM adds one decisive",
+    "authors": [
+      "Spatium Novum"
+    ],
+    "categories": [
+      "Spatium Novum"
+    ],
+    "ext_id": "spatium-novum-from-the-frontier-to-the-market",
+    "first_seen": "2026-09-04T09:50:11+09:00",
+    "id": "qc-spatium-novum-from-the-frontier-to-the-market",
+    "listed_date": "2026-09-03",
+    "pdf_url": "",
+    "src": "quantocracy",
+    "src_cats": [
+      "QC"
+    ],
+    "summarized_at": "2026-09-04T09:50:30+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Beta started as a trick to compress a covariance matrix",
+          "Markowitz stops at mapping beliefs to portfolios",
+          "Common beliefs, a risk-free asset and clearing give CAPM",
+          "CAPM then prices beta with the market premium"
+        ],
+        "data": "Theory only",
+        "method": "Layers common beliefs, a risk-free asset and market clearing onto mean-variance choice to reach the CAPM.",
+        "one_liner": "A conceptual account of how beta went from covariance shorthand to an equilibrium price of market risk.",
+        "relevance_why": "Score 1: no rules, no tests, pure exposition — and with no dataset at all, data availability never even enters.",
+        "takeaway": "Use beta as a factor-collapse device in the risk model, not as a source of alpha."
+      },
+      "keywords": [
+        "CAPM",
+        "beta",
+        "mean-variance",
+        "market equilibrium",
+        "market premium",
+        "portfolio choice"
+      ],
+      "ko": {
+        "bullets": [
+          "베타는 원래 공분산 행렬을 줄이려고 만든 값이다",
+          "마코위츠는 믿음을 포트폴리오로 옮기는 데서 멈춘다",
+          "공통 믿음, 무위험자산, 시장청산을 얹으면 CAPM이 나온다",
+          "그 결과 베타가 시장 프리미엄으로 가격이 매겨진다"
+        ],
+        "data": "이론 연구",
+        "method": "평균-분산(mean-variance) 선택 문제에 공통 믿음과 무위험자산, 시장청산 조건을 더해 CAPM을 유도한다.",
+        "one_liner": "베타가 공분산 압축 도구에서 균형가격 척도로 바뀐 과정을 정리한 해설이다.",
+        "relevance_why": "매매 규칙도 실증도 없는 개념 정리라 1점이다. 데이터를 쓰지 않으니 확보 난이도는 문제조차 되지 않는다.",
+        "takeaway": "베타를 리스크 모델의 공통 요인 축소 장치로 쓰되 알파 원천으로 착각하지 않는 선에서 참고한다."
+      },
+      "relevance": 1
+    },
+    "summary_version": "2026-09-01",
+    "title": "CAPM after Markowitz: Portfolio Choice Meets the Market"
+  },
+  "qc-stratproof-crypto-cross-sectional-momentum-does-not-work-anymore": {
+    "abs_url": "https://stratproof.com/blog/crypto-cross-sectional-momentum-does-not-work-anymore",
+    "abstract": "The literature on crypto quant trading keeps citing cross-sectional momentum as a durable edge with Sharpe around 1.1 to 1.5. I built exactly the paper spec, ran it against 303 weekly rebalances across 10 majors, no parameter tuning, no regime filters, no cheating. Annualized Sharpe came out at",
+    "authors": [
+      "Strat Proof"
+    ],
+    "categories": [
+      "Strat Proof"
+    ],
+    "ext_id": "stratproof-crypto-cross-sectional-momentum-does-not-work-anymore",
+    "first_seen": "2026-09-04T09:50:11+09:00",
+    "id": "qc-stratproof-crypto-cross-sectional-momentum-does-not-work-anymore",
+    "listed_date": "2026-09-03",
+    "pdf_url": "",
+    "src": "quantocracy",
+    "src_cats": [
+      "QC"
+    ],
+    "summarized_at": "2026-09-04T09:50:31+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Tests the claimed crypto momentum Sharpe of 1.1 to 1.5",
+          "Implements the exact paper spec, no tuning or regime filters",
+          "303 weekly rebalances across 10 major coins, 5.8 years",
+          "Every year since 2024 came out negative"
+        ],
+        "data": "5.8 years of prices on 10 major coins, 303 weekly rebalances, with per-year performance broken out.",
+        "method": "Straight replication of the published cross-sectional momentum rules, with no parameter search.",
+        "one_liner": "A paper-spec crypto cross-sectional momentum strategy has lost money every year since 2024.",
+        "relevance_why": "Rules are explicit and the only data needed is exchange price history, but the abstract cuts off before the final Sharpe number, so 4.",
+        "takeaway": "Carve out the last two years as a separate check before trading any published crypto momentum spec."
+      },
+      "keywords": [
+        "cross-sectional momentum",
+        "crypto",
+        "weekly rebalance",
+        "out-of-sample failure",
+        "replication"
+      ],
+      "ko": {
+        "bullets": [
+          "크립토 모멘텀 샤프 1.1~1.5 주장을 그대로 검증했다",
+          "파라미터 튜닝도 레짐 필터도 없이 원 스펙만 구현했다",
+          "메이저 10종 주간 리밸런싱 303회를 5.8년간 돌렸다",
+          "2024년 이후로는 해마다 돈을 잃었다"
+        ],
+        "data": "메이저 코인 10종의 5.8년치 가격으로 주간 리밸런싱 303회를 돌렸고 연도별 성과를 따로 봤다.",
+        "method": "논문에 적힌 횡단면 모멘텀(cross-sectional momentum) 규칙을 손대지 않고 그대로 백테스트했다.",
+        "one_liner": "논문 그대로 짠 크립토 횡단면 모멘텀이 2024년부터 매년 손실을 냈다",
+        "relevance_why": "규칙이 명확하고 필요한 데이터가 거래소 가격뿐이라 재현이 쉽지만 최종 샤프 수치가 초록에서 잘려 4점이다.",
+        "takeaway": "크립토 모멘텀을 그대로 쓰기 전에 최근 2년 구간을 따로 떼어 확인하는 게 먼저다."
+      },
+      "relevance": 4
+    },
+    "summary_version": "2026-09-01",
+    "title": "I built paper-spec crypto strategy on 5.8 years of data. It's lost money every year since 2024"
+  },
+  "qc-vertoxquant-eigenscore": {
+    "abs_url": "https://www.vertoxquant.com/p/eigenscore",
+    "abstract": "For the past months, almost every free hour I had went into one thing. Today it’s live. eigenscore.com In quant, everyone claims to be good, and there's no arena to settle it. Competitive programming solved that twenty years ago with rated contests. I built the same thing for us. What it is",
+    "authors": [
+      "Vertox Quant"
+    ],
+    "categories": [
+      "Vertox Quant"
+    ],
+    "ext_id": "vertoxquant-eigenscore",
+    "first_seen": "2026-09-04T09:50:11+09:00",
+    "id": "qc-vertoxquant-eigenscore",
+    "listed_date": "2026-09-03",
+    "pdf_url": "",
+    "src": "quantocracy",
+    "src_cats": [
+      "QC"
+    ],
+    "summarized_at": "2026-09-04T09:50:44+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Quant skill has no public arena to settle claims",
+          "Copies the rated-contest model from competitive programming",
+          "Author built it over months of spare time; live today"
+        ],
+        "data": "Theory only — no dataset, no evaluation window.",
+        "method": "A web platform applying Codeforces-style contest ratings to quant problems.",
+        "one_liner": "An announcement post launching eigenscore.com, a rated contest site for quants.",
+        "relevance_why": "Score 1: a product launch post with no signal, rules, or results, and the contest problems and scoring data are not publicly available to reproduce.",
+        "takeaway": "Nothing to trade; possibly useful for benchmarking your own skill or screening hires."
+      },
+      "keywords": [
+        "quant contest platform",
+        "rated competition",
+        "leaderboard",
+        "community",
+        "no research content"
+      ],
+      "ko": {
+        "bullets": [
+          "퀀트 실력을 겨룰 공개 무대가 없다는 문제 제기",
+          "경쟁 프로그래밍의 레이팅 대회 방식을 그대로 차용",
+          "몇 달간 여가를 쏟아 만든 사이트를 오늘 열었다"
+        ],
+        "data": "데이터셋도 검증 구간도 없다. 서비스 출시 안내글이다.",
+        "method": "코딩 대회식 레이팅 시스템을 퀀트 문제 풀이에 옮긴 웹 서비스다.",
+        "one_liner": "퀀트용 레이팅 경진 플랫폼 eigenscore.com 출시 공지다.",
+        "relevance_why": "매매 규칙도 수익률도 없는 홍보글이라 1점이다. 대회 문제와 채점 데이터는 외부에 공개되지 않아 재현 자체가 불가능하다.",
+        "takeaway": "매매에 쓸 건 없고 실력 검증이나 채용 스크리닝 용도로 참고할 만하다."
+      },
+      "relevance": 1
+    },
+    "summary_version": "2026-09-01",
+    "title": "EigenScore is Live: The First Rated Contest Platform for Quants"
   },
   "qc-yizon-my-backtest-said-survives-the-per": {
     "abs_url": "https://yizon.substack.com/p/my-backtest-said-survives-the-per",
@@ -4116,6 +4346,70 @@
     },
     "summary_version": "2026-09-01",
     "title": "Why Average Strategy Performance Can Mislead Portfolio Research"
+  },
+  "ssrn-3070678": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3070678",
+    "abstract": "A growing body of literature argues that CEOs are irrationally overconfident. I find that the most commonly used measure of overconfidence, holding deep-in-the-money options, may be less of a behavioral bias than previously thought. CEOs who hold deep-in-the-money options make a substantial profit, consistently earning returns above the S\\&P500 with significant Fama-French five-factor alphas. Previous literature has also shown that holding deep-in-the-money options is correlated with increased innovation. I find that the relationship does not seem to be causal.",
+    "affiliations": "",
+    "authors": [
+      "Chris Mace"
+    ],
+    "categories": [
+      "Capital Markets: Asset Pricing & Valuation"
+    ],
+    "downloads": 308,
+    "ext_id": "3070678",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-3070678",
+    "journals": [
+      "Capital Markets: Asset Pricing & Valuation"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 36,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/3070678.pdf?abstractid=3070678&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "APV"
+    ],
+    "summarized_at": "2026-09-04T09:50:49+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Targets the standard overconfidence proxy: holding ITM options",
+          "Measures CEO option returns against S&P500 and factor models",
+          "Finds excess returns and significant Fama-French five-factor alphas",
+          "The option-holding-to-innovation link fails a causality test"
+        ],
+        "data": "Executive stock option holdings and exercise records for US CEOs plus stock returns; the abstract names no sample window.",
+        "method": "Benchmarks returns on CEO-held deep-in-the-money options against the S&P500 and estimates Fama-French five-factor alphas.",
+        "one_liner": "Mace shows CEOs holding deep-in-the-money options earn real money, not bias.",
+        "relevance_why": "Scores 2: the insider-signal angle is tradeable in principle, but executive option holdings require paid data such as ExecuComp, so the sourcing barrier caps it.",
+        "takeaway": "Reread delayed executive option exercise as an insider return signal rather than an overconfidence flag."
+      },
+      "keywords": [
+        "CEO overconfidence",
+        "executive stock options",
+        "behavioral bias",
+        "Fama-French five-factor alpha",
+        "corporate innovation"
+      ],
+      "ko": {
+        "bullets": [
+          "과신 대리변수로 쓰이던 내가격 옵션 보유를 다시 검증한다",
+          "옵션을 오래 쥔 CEO의 실현 수익과 알파를 직접 계산한다",
+          "S&P500을 웃도는 수익과 유의한 5팩터 알파가 나온다",
+          "옵션 보유와 혁신의 상관은 인과로 보기 어렵다"
+        ],
+        "data": "미국 상장사 CEO의 스톡옵션 보유·행사 기록과 주가 수익률을 쓰지만 표본 구간은 초록에 없다",
+        "method": "내가격 옵션을 보유한 CEO의 수익률을 S&P500과 비교하고 파마-프렌치 5팩터(Fama-French five-factor) 알파를 추정한다",
+        "one_liner": "CEO의 옵션 보유는 과신이 아니라 돈이 되는 선택이었다",
+        "relevance_why": "행사 지연을 내부자 신호로 바꿔볼 여지는 있지만 임원 옵션 보유 데이터는 ExecuComp 같은 유료 소스가 필요해 진입 장벽이 높아 2점이다",
+        "takeaway": "임원 옵션 행사 지연을 과신 신호가 아니라 내부자의 수익 전망 신호로 다시 읽는 정도로 쓴다"
+      },
+      "relevance": 2
+    },
+    "summary_version": "2026-09-01",
+    "title": "Revisiting Stock Option Exercise and CEO Overconfidence"
   },
   "ssrn-7355099": {
     "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7355099",
@@ -5525,7 +5819,7 @@
     "categories": [
       "Capital Markets: Market Efficiency"
     ],
-    "downloads": 11,
+    "downloads": 14,
     "ext_id": "7369139",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7369139",
@@ -5590,7 +5884,6 @@
     ],
     "categories": [
       "Quantitative Methods in Investing & Financial Statement Analysis",
-      "Technology & Investing",
       "Capital Markets: Market Efficiency",
       "Capital Markets: Market Microstructure"
     ],
@@ -5600,7 +5893,6 @@
     "id": "ssrn-7369221",
     "journals": [
       "Quantitative Methods in Investing & Financial Statement Analysis",
-      "Technology & Investing",
       "Capital Markets: Market Efficiency",
       "Capital Markets: Market Microstructure"
     ],
@@ -5666,7 +5958,7 @@
       "Quantitative Methods in Investing & Financial Statement Analysis",
       "Capital Markets: Asset Pricing & Valuation"
     ],
-    "downloads": 9,
+    "downloads": 10,
     "ext_id": "7369279",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7369279",
@@ -6670,7 +6962,7 @@
       "Quantitative Methods in Investing & Financial Statement Analysis",
       "Capital Markets: Asset Pricing & Valuation"
     ],
-    "downloads": 14,
+    "downloads": 15,
     "ext_id": "7373238",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7373238",
@@ -6737,7 +7029,7 @@
     "categories": [
       "Quantitative Methods in Investing & Financial Statement Analysis"
     ],
-    "downloads": 12,
+    "downloads": 15,
     "ext_id": "7373459",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7373459",
@@ -7886,7 +8178,7 @@
     "categories": [
       "Capital Markets: Asset Pricing & Valuation"
     ],
-    "downloads": 16,
+    "downloads": 18,
     "ext_id": "7377918",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7377918",
@@ -7951,7 +8243,7 @@
     "categories": [
       "Capital Markets: Asset Pricing & Valuation"
     ],
-    "downloads": 14,
+    "downloads": 16,
     "ext_id": "7377978",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7377978",
@@ -8018,7 +8310,7 @@
     "categories": [
       "Capital Markets: Asset Pricing & Valuation"
     ],
-    "downloads": 11,
+    "downloads": 12,
     "ext_id": "7378378",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7378378",
@@ -8084,7 +8376,7 @@
       "Capital Markets: Market Efficiency",
       "Capital Markets: Market Microstructure"
     ],
-    "downloads": 14,
+    "downloads": 15,
     "ext_id": "7378599",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7378599",
@@ -8152,7 +8444,7 @@
       "Global Equities, Exchanges & Investment Indices",
       "Capital Markets: Asset Pricing & Valuation"
     ],
-    "downloads": 16,
+    "downloads": 19,
     "ext_id": "7378879",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7378879",
@@ -8219,7 +8511,7 @@
     "categories": [
       "Capital Markets: Asset Pricing & Valuation"
     ],
-    "downloads": 11,
+    "downloads": 15,
     "ext_id": "7378919",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7378919",
@@ -8284,7 +8576,7 @@
     "categories": [
       "Capital Markets: Market Efficiency"
     ],
-    "downloads": 12,
+    "downloads": 16,
     "ext_id": "7379018",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7379018",
@@ -8418,7 +8710,7 @@
     "categories": [
       "Quantitative Methods in Investing & Financial Statement Analysis"
     ],
-    "downloads": 18,
+    "downloads": 20,
     "ext_id": "7379779",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7379779",
@@ -8496,6 +8788,12 @@
     "listed_date": "2026-08-31",
     "page_count": 28,
     "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/0d64fc07-ff6e-4dfb-8990-16d13f49f608-MECA.pdf?abstractid=7379989&mirid=1",
+    "report_paths": {
+      "ko": "ssrn-7379989.ko.html"
+    },
+    "report_versions": {
+      "ko": "2026-09-01"
+    },
     "src": "ssrn",
     "src_cats": [
       "GEX",
@@ -8624,7 +8922,7 @@
     "categories": [
       "Capital Markets: Asset Pricing & Valuation"
     ],
-    "downloads": 30,
+    "downloads": 32,
     "ext_id": "7380038",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7380038",
@@ -8689,7 +8987,7 @@
     "categories": [
       "Global Investment Strategy"
     ],
-    "downloads": 7,
+    "downloads": 10,
     "ext_id": "7380538",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7380538",
@@ -8755,7 +9053,7 @@
       "Quantitative Methods in Investing & Financial Statement Analysis",
       "Capital Markets: Market Microstructure"
     ],
-    "downloads": 15,
+    "downloads": 19,
     "ext_id": "7381318",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7381318",
@@ -8953,7 +9251,7 @@
     "categories": [
       "Quantitative Methods in Investing & Financial Statement Analysis"
     ],
-    "downloads": 4,
+    "downloads": 12,
     "ext_id": "7381919",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7381919",
@@ -9220,7 +9518,7 @@
     "categories": [
       "Capital Markets: Asset Pricing & Valuation"
     ],
-    "downloads": 2,
+    "downloads": 11,
     "ext_id": "7382939",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7382939",
@@ -9228,7 +9526,7 @@
       "Capital Markets: Asset Pricing & Valuation"
     ],
     "listed_date": "2026-09-03",
-    "page_count": -1,
+    "page_count": 48,
     "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7382939.pdf?abstractid=7382939&mirid=1",
     "src": "ssrn",
     "src_cats": [
@@ -9288,7 +9586,7 @@
       "Capital Markets: Asset Pricing & Valuation",
       "Capital Markets: Market Efficiency"
     ],
-    "downloads": 16,
+    "downloads": 17,
     "ext_id": "7383119",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7383119",
@@ -9355,7 +9653,7 @@
     "categories": [
       "Capital Markets: Asset Pricing & Valuation"
     ],
-    "downloads": 8,
+    "downloads": 10,
     "ext_id": "7383120",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7383120",
@@ -9483,7 +9781,7 @@
     "categories": [
       "Capital Markets: Market Efficiency"
     ],
-    "downloads": 10,
+    "downloads": 15,
     "ext_id": "7383378",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7383378",
@@ -9621,7 +9919,7 @@
       "Capital Markets: Market Efficiency",
       "Capital Markets: Market Microstructure"
     ],
-    "downloads": 5,
+    "downloads": 11,
     "ext_id": "7383698",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7383698",
@@ -9688,7 +9986,7 @@
     "categories": [
       "Capital Markets: Market Microstructure"
     ],
-    "downloads": 4,
+    "downloads": 10,
     "ext_id": "7383998",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7383998",
@@ -9751,7 +10049,7 @@
     "categories": [
       "Global Equities, Exchanges & Investment Indices"
     ],
-    "downloads": 5,
+    "downloads": 9,
     "ext_id": "7384158",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7384158",
@@ -9817,7 +10115,7 @@
     "categories": [
       "Capital Markets: Asset Pricing & Valuation"
     ],
-    "downloads": 20,
+    "downloads": 30,
     "ext_id": "7384259",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7384259",
@@ -9883,7 +10181,7 @@
       "Capital Markets: Asset Pricing & Valuation",
       "Capital Markets: Market Efficiency"
     ],
-    "downloads": 2,
+    "downloads": 18,
     "ext_id": "7384278",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7384278",
@@ -9951,7 +10249,7 @@
       "Capital Markets: Asset Pricing & Valuation",
       "Capital Markets: Market Efficiency"
     ],
-    "downloads": 5,
+    "downloads": 12,
     "ext_id": "7384279",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7384279",
@@ -10018,7 +10316,7 @@
     "categories": [
       "Capital Markets: Asset Pricing & Valuation"
     ],
-    "downloads": 11,
+    "downloads": 14,
     "ext_id": "7384638",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7384638",
@@ -10089,7 +10387,7 @@
       "Capital Markets: Market Efficiency",
       "Capital Markets: Market Microstructure"
     ],
-    "downloads": 4,
+    "downloads": 26,
     "ext_id": "7384719",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7384719",
@@ -10161,7 +10459,7 @@
     "categories": [
       "Capital Markets: Asset Pricing & Valuation"
     ],
-    "downloads": 89,
+    "downloads": 103,
     "ext_id": "7384838",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7384838",
@@ -10225,7 +10523,7 @@
     "categories": [
       "Quantitative Methods in Investing & Financial Statement Analysis"
     ],
-    "downloads": 3,
+    "downloads": 8,
     "ext_id": "7385238",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7385238",
@@ -10290,7 +10588,7 @@
     "categories": [
       "Capital Markets: Asset Pricing & Valuation"
     ],
-    "downloads": 12,
+    "downloads": 13,
     "ext_id": "7385740",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7385740",
@@ -10351,16 +10649,14 @@
       "Roland Rupprechter"
     ],
     "categories": [
-      "Technology & Investing",
       "Global Investment Strategy",
       "Global Equities, Exchanges & Investment Indices"
     ],
-    "downloads": 6,
+    "downloads": 11,
     "ext_id": "7385778",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7385778",
     "journals": [
-      "Technology & Investing",
       "Global Investment Strategy",
       "Global Equities, Exchanges & Investment Indices"
     ],
@@ -10425,7 +10721,7 @@
     "categories": [
       "Capital Markets: Asset Pricing & Valuation"
     ],
-    "downloads": 6,
+    "downloads": 11,
     "ext_id": "7385839",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7385839",
@@ -10492,7 +10788,7 @@
     "categories": [
       "Capital Markets: Market Efficiency"
     ],
-    "downloads": 4,
+    "downloads": 12,
     "ext_id": "7385978",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7385978",
@@ -10617,6 +10913,139 @@
     "summary_version": "2026-09-01",
     "title": "Price Discovery in Private Credit: Evidence from BDCs"
   },
+  "ssrn-7389238": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7389238",
+    "abstract": "In equity markets characterized by double-sided statutory transaction taxation-such as India's Securities Transaction Tax (STT), state stamp duties, and exchange levies-marginal rank turnover at portfolio inclusion boundaries imposes a persistent frictional drag on crosssectional factor strategies. In a conventional monthly momentum strategy selecting the top N = 30 equities, replacing rank N + 1 with rank N incurs two full execution fee legs (≈ 42.34 bps round-trip) to capture a momentum-score differential that is frequently negligible. We formalize and evaluate an asymmetric Hysteresis Rebalancing (Banded) framework on the Indian Nifty 500 universe using point-in-time constituent data from January 2018 through February 2026, with a primary out-of-sample evaluation period from January 2021 through December 2025 (T = 1, 260 contiguous out-of-sample trading days, evaluated over a 10-fold rolling-origin walk-forward protocol). Under this regime, new entrants must achieve a strict top N = 30 momentum rank, whereas incumbent holdings are retained as long as their score remains within an exploratory upper retention buffer (R t (i) ≤ B, for B ∈ {40, 45, 50, 60}). At B = 60, monthly position churn drops by 51.7% (from 9.57 to 4.62 stocks replaced per month), while net after-cost compound annual growth rate (CAGR) improves from 41.70% to 45.12% and the Sharpe ratio rises from 1.728 to 1.849, with maximum drawdown contracting from-26.44% to-25.41%. Although paired stationary bootstrap testing indicates that the after-cost Sharpe gain (∆Sharpe = +0.121, 95% CI [-0.048, +0.310], p = 0.167) is not statistically distinguishable from zero at conventional significance levels, the observed 51.7% reduction in position churn provides evidence that hysteresis banding can materially reduce execution burden in tax-intensive equity markets.",
+    "affiliations": "",
+    "authors": [
+      "Harsh Pandhe"
+    ],
+    "categories": [
+      "Capital Markets: Asset Pricing & Valuation",
+      "Capital Markets: Market Efficiency"
+    ],
+    "downloads": 12,
+    "ext_id": "7389238",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7389238",
+    "journals": [
+      "Capital Markets: Asset Pricing & Valuation",
+      "Capital Markets: Market Efficiency"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 13,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7389238.pdf?abstractid=7389238&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "APV",
+      "MEF"
+    ],
+    "summarized_at": "2026-09-04T09:50:52+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "India's STT and levies cost 42.34 bps round-trip per swap",
+          "Boundary rank swaps pay full fees for tiny score gaps",
+          "Entrants need rank 30; incumbents held to rank 60",
+          "Churn 9.57 to 4.62 names/month; net CAGR 41.70% to 45.12%"
+        ],
+        "data": "Nifty 500 point-in-time constituents, Jan 2018 to Feb 2026, with 1,260 out-of-sample days (2021-2025) under 10-fold rolling-origin walk-forward.",
+        "method": "Asymmetric hysteresis banding: strict top-30 entry, retention buffer at B in {40, 45, 50, 60}.",
+        "one_liner": "A retention band on a top-30 momentum portfolio halves turnover and lifts net returns.",
+        "relevance_why": "Rules are fully specified and need only index membership and daily prices, but point-in-time Nifty 500 constituents require a paid vendor feed.",
+        "takeaway": "Split entry and exit thresholds in any factor book where statutory taxes make rank churn expensive."
+      },
+      "keywords": [
+        "cross-sectional momentum",
+        "hysteresis rebalancing",
+        "transaction costs",
+        "portfolio turnover",
+        "Indian equities",
+        "walk-forward validation"
+      ],
+      "ko": {
+        "bullets": [
+          "인도는 STT 등 양방향 거래세로 왕복 42.34bp가 든다",
+          "경계선 순위 교체는 미미한 점수 차에 수수료만 낸다",
+          "신규는 30위 이내, 기존은 60위까지 보유하는 비대칭 규칙",
+          "월 교체 9.57→4.62종목, 순 CAGR 41.70%→45.12%"
+        ],
+        "data": "Nifty 500 시점정확(point-in-time) 구성종목 2018년 1월~2026년 2월, 표본외 검증은 2021~2025년 1,260거래일에 10겹 롤링 워크포워드다.",
+        "method": "신규 편입은 상위 30위를 요구하고 기존 종목은 60위까지 남기는 비대칭 이력(hysteresis) 밴드 리밸런싱이다.",
+        "one_liner": "모멘텀 상위 30종목 편입에 이력 밴드를 씌워 회전율을 절반으로 줄였다.",
+        "relevance_why": "규칙이 명확하고 필요한 데이터가 인도 지수 구성종목과 일별 가격뿐이라 재현이 쉽지만, 시점정확 구성종목 이력은 유료 벤더를 거쳐야 한다.",
+        "takeaway": "거래세가 무거운 시장의 팩터 전략에 편입·유지 문턱을 나눠 붙이면 회전율을 바로 깎을 수 있다."
+      },
+      "relevance": 4
+    },
+    "summary_version": "2026-09-01",
+    "title": "Hysteresis Rebalancing in Cross-Sectional Momentum: Reducing Boundary Churn and Transaction-Cost Drag in Indian Equities"
+  },
+  "ssrn-7389258": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7389258",
+    "abstract": "Financial direction prediction is difficult because return distributions are non-stationary, crossasset relationships drift across regimes, and modern classifiers can be substantially overconfident. This paper documents HPT-DTE, a hybrid architecture that combines a time-domain neural sequence encoder, an FFT-based frequency-domain branch, decision-tree regime conditioning, a logistic meta-learner, and held-out isotonic calibration. For an asset, a 20-day window of twelve backward-looking technical and macroeconomic features is transformed into two representations. Time tokens receive a learnable phase-shift tensor, while real and imaginary FFT coefficients provide a harmonic representation. Multi-head cross-attention uses the time branch as query and the frequency branch as key/value; a learned sigmoid gate controls the harmonic residual. A shallow regime tree supplies a one-hot leaf condition, and an equity tree contributes an independent probability to a regularized meta-learner. The calibrated probability is converted into a selective decision with an abstention band. The reported experiment trains on nine equities during 2017-2023 and evaluates without fine-tuning on four unseen equities, three cryptocurrencies, and GLD during 2024-2026. The selective accuracy is 60.0% on TSLA and 51.4-53.6% on the three cryptocurrencies, with 22-46 predictions among 80 evaluation opportunities per asset. We provide mathematical descriptions, proofs of the calibration and selectivity properties, implementationgrounded interpretation, and a candid audit of limitations, including the distinction between trade-conditioned accuracy and unconditional forecasting accuracy.",
+    "affiliations": "affiliation not provided to SSRN",
+    "authors": [
+      "Akhilesh Varma"
+    ],
+    "categories": [
+      "Quantitative Methods in Investing & Financial Statement Analysis"
+    ],
+    "downloads": 7,
+    "ext_id": "7389258",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7389258",
+    "journals": [
+      "Quantitative Methods in Investing & Financial Statement Analysis"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 8,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7389258.pdf?abstractid=7389258&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "QM"
+    ],
+    "summarized_at": "2026-09-04T09:51:04+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Returns drift, cross-asset links shift, classifiers overconfident",
+          "FFT branch fused with time branch via cross-attention",
+          "Selective accuracy 60.0% on TSLA, 51.4-53.6% on crypto",
+          "Fires on only 22-46 of 80 chances per asset"
+        ],
+        "data": "Trains on nine equities, 2017-2023, using 20-day windows of twelve technical and macro features; evaluates zero-shot on four unseen equities, three cryptos and GLD over 2024-2026.",
+        "method": "A sequence encoder and FFT branch fuse through multi-head cross-attention with a sigmoid gate, feeding a regime-tree leaf and an equity-tree probability into a logistic meta-learner with held-out isotonic calibration.",
+        "one_liner": "A time-plus-frequency classifier predicts asset direction and abstains when unsure.",
+        "relevance_why": "Prices and macro series are easy to source, but the architecture is heavy to rebuild and the paper gives no entry, exit or sizing rules, so 3.",
+        "takeaway": "Borrow the calibration-plus-abstention layer as an entry filter on top of your existing direction signals."
+      },
+      "keywords": [
+        "direction prediction",
+        "FFT frequency domain",
+        "cross-attention",
+        "isotonic calibration",
+        "selective prediction",
+        "regime trees"
+      ],
+      "ko": {
+        "bullets": [
+          "수익률 분포가 계속 바뀌고 분류기는 과신한다",
+          "FFT 가지와 시간 가지를 교차어텐션으로 붙였다",
+          "TSLA 선택 정확도 60.0%, 암호화폐 51.4~53.6%",
+          "80번 기회 중 22~46번만 실제로 예측했다"
+        ],
+        "data": "주식 9종의 2017~2023년 12개 기술·거시 지표 20일 창으로 학습하고, 미학습 주식 4종과 암호화폐 3종, GLD를 2024~2026년에 재학습 없이 평가했다.",
+        "method": "시계열 인코더와 FFT 가지를 멀티헤드 교차어텐션으로 묶고, 국면 트리의 리프 조건과 주식 트리 확률을 로지스틱 메타학습기에 넣은 뒤 아이소토닉(isotonic) 보정을 거쳐 기권 구간을 둔다.",
+        "one_liner": "시간-주파수 결합 분류기로 자산 방향을 맞히고, 확률 보정 뒤 애매하면 기권한다",
+        "relevance_why": "가격과 거시 지표만 쓰므로 데이터는 쉽게 구하지만, 아키텍처 재현 부담이 크고 진입·청산 규칙과 포지션 크기가 없어 3점이다.",
+        "takeaway": "보정 확률에 기권 구간을 붙이는 부분만 떼어내 기존 방향 예측 신호의 진입 필터로 쓸 만하다."
+      },
+      "relevance": 3
+    },
+    "summary_version": "2026-09-01",
+    "title": "HPT–DTE: A Code-Grounded Dual-Domain Architecture for Cross-Asset Financial Direction Prediction"
+  },
   "ssrn-7389261": {
     "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7389261",
     "abstract": "Does an unanticipated change in U.S. monetary policy raise the yield on Australian Government Securities, and with it the cost of Australian government borrowing? We show that the answer depends critically on when one asks it. Using the high-frequency shock series of Jarociński and Karadi (2020) and Local Projections across the 2-, 5-, and 10-year AGS maturities over 2013-2024, we find the effect is statistically indistinguishable from zero before 2020, and becomes large and reliable only from the COVID period onward-a shift confirmed by a formal structural break test. A surprise comparable to the largest observed in our sample is associated with an increase of approximately eighteen to twenty basis points in Australian yields at impact, operating substantially through co-movement in the U.S. 10-year Treasury yield. These findings indicate that Australian government borrowing costs have grown considerably more exposed to U.S. monetary policy surprises specifically in the post-2020 environment.",
@@ -10627,7 +11056,7 @@
     "categories": [
       "Capital Markets: Market Efficiency"
     ],
-    "downloads": 8,
+    "downloads": 16,
     "ext_id": "7389261",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7389261",
@@ -10691,15 +11120,13 @@
       "Robert Orozco"
     ],
     "categories": [
-      "Technology & Investing",
       "Capital Markets: Asset Pricing & Valuation"
     ],
-    "downloads": 4,
+    "downloads": 12,
     "ext_id": "7390378",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7390378",
     "journals": [
-      "Technology & Investing",
       "Capital Markets: Asset Pricing & Valuation"
     ],
     "listed_date": "2026-09-03",
@@ -10758,15 +11185,13 @@
       "Roland Rupprechter"
     ],
     "categories": [
-      "Technology & Investing",
       "Global Investment Strategy"
     ],
-    "downloads": 4,
+    "downloads": 13,
     "ext_id": "7390420",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7390420",
     "journals": [
-      "Technology & Investing",
       "Global Investment Strategy"
     ],
     "listed_date": "2026-09-03",
@@ -10828,7 +11253,7 @@
     "categories": [
       "Capital Markets: Asset Pricing & Valuation"
     ],
-    "downloads": 6,
+    "downloads": 18,
     "ext_id": "7390518",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7390518",
@@ -10883,6 +11308,145 @@
     "summary_version": "2026-09-01",
     "title": "Applicant Screening and Firm Value: Evidence from Ban-the-Box Laws"
   },
+  "ssrn-7390699": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7390699",
+    "abstract": "By 2050, the United Nations projects that just over two-thirds of the world's population will live in cities — with almost one billion urban dwellers added along the way. At the same time, the UN changed its counting method in 2025 and thereby redrew the map of the world's cities: under the new, satellite-based delineation, the largest city in the world is no longer Tokyo but Jakarta. This paper — the third of six on the great megatrends — places urbanisation in its economic context: from the agglomeration advantages that make cities more productive than their hinterland, through the housing shortage of the rich world, to the infrastructure gap that consultancies put at more than 100 trillion US dollars through 2040. The paper covers six fields of action of the megatrend: densification and intelligent housing, the green and resilient city, smart cities and digital connectivity, new urban mobility, the demographic change of the ageing city, and the tension between growing metropolises and shrinking regions. Empirically, a twofold picture emerges: the large cities of the rich world face historic scarcity — Germany alone is short of roughly 1.4 million homes and vacancy in its metropolises is close to zero — while at the same time half of Europe's municipalities are shrinking and a third of the world's shrinking cities are in China. For investors, the paper translates the megatrend into listed companies along the entire urban value chain — exclusively large- and mid-cap names, each with its business idea and trading venues — and into an ETF selection based on a fixed checklist: physical replication, fund volume of at least 0.2 billion euros, costs, the currency question, issuer, UCITS status and exchange tradability. One central finding: an ETF that covers the megatrend of urbanisation as a whole does not yet exist in Europe — investors have to assemble it themselves from infrastructure, water, real estate and smart city funds.",
+    "affiliations": "",
+    "authors": [
+      "Roland Rupprechter"
+    ],
+    "categories": [
+      "Global Investment Strategy",
+      "Global Equities, Exchanges & Investment Indices"
+    ],
+    "downloads": 9,
+    "ext_id": "7390699",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7390699",
+    "journals": [
+      "Global Investment Strategy",
+      "Global Equities, Exchanges & Investment Indices"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 38,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7390699.pdf?abstractid=7390699&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "GIS",
+      "GEX"
+    ],
+    "summarized_at": "2026-09-04T09:51:06+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Two-thirds urban by 2050; $100tn infrastructure gap to 2040",
+          "Six action fields, large- and mid-cap names per field",
+          "No single European ETF covers urbanisation whole",
+          "Rich-world metros near zero vacancy; half of EU towns shrink"
+        ],
+        "data": "Cites public statistics: UN urban projections, the 2025 satellite-based city redefinition, Germany's 1.4m housing shortfall.",
+        "method": "Third of six megatrend reports; screens ETFs on a fixed checklist — physical replication, €0.2bn minimum size, cost, currency, issuer, UCITS, tradability.",
+        "one_liner": "A practitioner guide mapping the urbanisation megatrend to listed stocks and ETFs.",
+        "relevance_why": "No signal, no rules, no backtest — nothing to automate; the cited data is public but does not convert into a tradable rule.",
+        "takeaway": "Use it as a starting universe when assembling a thematic basket from infrastructure, water, real estate and smart city funds."
+      },
+      "keywords": [
+        "urbanisation megatrend",
+        "thematic ETF",
+        "infrastructure investing",
+        "real estate",
+        "smart cities",
+        "water utilities"
+      ],
+      "ko": {
+        "bullets": [
+          "2050년 도시 인구 3분의 2, 인프라 부족액 100조 달러",
+          "6개 실행 분야로 나눠 대·중형주와 ETF를 골랐다",
+          "유럽엔 도시화 전체를 담은 ETF가 아직 없다",
+          "선진국 대도시는 품귀, 유럽 절반은 인구가 준다"
+        ],
+        "data": "유엔 도시 인구 전망과 2025년 위성 기반 도시 경계 재정의, 독일 주택 부족 140만 호 같은 공개 통계를 인용한 서술 연구다.",
+        "method": "메가트렌드 6부작 중 세 번째 보고서로, 물리적 복제와 순자산 2억 유로 이상 같은 고정 체크리스트를 ETF 선별에 적용했다.",
+        "one_liner": "도시화 메가트렌드를 상장기업과 ETF 목록으로 옮긴 투자 안내서다.",
+        "relevance_why": "매매 규칙도 백테스트도 없는 투자 해설이라 자동화할 게 없다. 인용 통계는 공개 자료지만 신호로 바꿀 수 없어 1점이다.",
+        "takeaway": "테마 바스켓을 짤 때 인프라·수자원·부동산·스마트시티 ETF를 섞는 출발 목록 정도로 쓴다."
+      },
+      "relevance": 1
+    },
+    "summary_version": "2026-09-01",
+    "title": "Investing in Urbanisation: From the Apartment to the Water Network -How Investors Can Take Part in the Third Megatrend"
+  },
+  "ssrn-7390901": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7390901",
+    "abstract": "Market risk premium forecasts are traditionally evaluated through point forecasts of expected returns, implicitly treating the conditional expectation as a sufficient representation of future uncertainty. This paper examines whether evaluating predictive distributions alongside point forecasts provides additional information for portfolio allocation and risk management. Predictive distributions are generated using a simulation-based geometric Brownian motion framework and evaluated using both statistical and economic criteria. Consistent with the return predictability literature, the conditional expectation exhibits limited forecasting power. The predictive distributions, however, are reasonably well calibrated and satisfy several standard density forecast evaluation criteria. Portfolio analyses indicate that while expectation-based strategies generate the highest terminal wealth and strongest conventional risk-adjusted performance, distribution-based strategies substantially reduce volatility, drawdowns, and tail-risk exposure. The results suggest that forecasting models should be evaluated not only by the accuracy of their point forecasts, but also by how effectively they characterize the uncertainty surrounding future outcomes.",
+    "affiliations": "Bradley University - Department of Finance",
+    "authors": [
+      "Amit Sinha"
+    ],
+    "categories": [
+      "Quantitative Methods in Investing & Financial Statement Analysis",
+      "Capital Markets: Asset Pricing & Valuation",
+      "Capital Markets: Market Microstructure"
+    ],
+    "downloads": 13,
+    "ext_id": "7390901",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7390901",
+    "journals": [
+      "Quantitative Methods in Investing & Financial Statement Analysis",
+      "Capital Markets: Asset Pricing & Valuation",
+      "Capital Markets: Market Microstructure"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 55,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7390901.pdf?abstractid=7390901&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "QM",
+      "APV",
+      "MMS"
+    ],
+    "summarized_at": "2026-09-04T09:51:08+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Point forecasts hide the uncertainty around expected returns",
+          "Simulation-based GBM generates predictive distributions",
+          "Expectation strategies win on wealth, distribution strategies on drawdowns",
+          "Conditional expectation still forecasts poorly; densities calibrate well"
+        ],
+        "data": "The abstract names no dataset or evaluation window.",
+        "method": "A simulation-based geometric Brownian motion framework produces predictive densities, scored on statistical and economic criteria.",
+        "one_liner": "Evaluates market risk premium forecasts as full distributions, not just point estimates.",
+        "relevance_why": "Market return data is trivially available, but the paper gives no entry or exit rules, so a tradable strategy needs substantial extra design.",
+        "takeaway": "Layer distribution simulation on an existing return model to size positions and cap tail-risk exposure."
+      },
+      "keywords": [
+        "market risk premium",
+        "distributional forecasting",
+        "return predictability",
+        "geometric Brownian motion",
+        "tail risk",
+        "portfolio allocation"
+      ],
+      "ko": {
+        "bullets": [
+          "시장위험프리미엄 예측은 조건부 기댓값만 따져왔다",
+          "기하 브라운운동 시뮬레이션으로 예측분포를 만들었다",
+          "기댓값 전략은 최종 부가 크고 분포 전략은 변동성·낙폭이 작다",
+          "예측력은 여전히 약하지만 분포 자체는 무난히 보정됐다"
+        ],
+        "data": "초록에 데이터셋과 검증 구간을 밝히지 않았다",
+        "method": "기하 브라운운동(GBM) 시뮬레이션으로 예측분포를 만들고 통계 기준과 경제 기준으로 함께 평가한다",
+        "one_liner": "수익률 예측을 점추정 대신 분포로 평가해 꼬리위험을 줄였다",
+        "relevance_why": "시장 수익률만 있으면 되니 데이터는 쉽게 구하지만 진입·청산 규칙이 없어 전략으로 옮기려면 설계를 더 해야 한다",
+        "takeaway": "기존 수익률 예측 모형 위에 분포 시뮬레이션을 얹어 포지션 크기와 꼬리위험 한도를 정하는 데 쓴다"
+      },
+      "relevance": 3
+    },
+    "summary_version": "2026-09-01",
+    "title": "Rethinking Predictability: Distributional Forecasts of the Market Risk Premium"
+  },
   "ssrn-7390998": {
     "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7390998",
     "abstract": "The allocation of saving and borrowing between banks and markets and the transmission of shocks through the financial system vary widely across countries and over time. While existing work emphasizes supply-side determinants such as institutions, regulation, and intermediary technology, we study a demand-side determinant: household and firm composition and their demand for imperfectly substitutable financial claims. We build and estimate an equilibrium model of financial intermediation that uses granular household and firm data to recover how financial demand varies with individual characteristics and aggregates across households and firms. Reaggregating over alternative populations changes equilibrium financial structure and shock transmission. Differences in household and firm composition explain nearly all the 1980-2019 decline in banks' share of U.S. private-sector saving and 69 percent of the cross-country variation, but less variation in banks' share of financing. Composition also alters the impact of an increase in Treasury supply by changing which sector absorbs the new debt: under the 1980 distribution of household and firm characteristics, banks absorb twice as much, raising their cost of lending and generating greater crowding out of private credit.",
@@ -10894,7 +11458,7 @@
     "categories": [
       "Capital Markets: Asset Pricing & Valuation"
     ],
-    "downloads": 10,
+    "downloads": 14,
     "ext_id": "7390998",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7390998",
@@ -10960,7 +11524,7 @@
     "categories": [
       "Capital Markets: Asset Pricing & Valuation"
     ],
-    "downloads": 3,
+    "downloads": 13,
     "ext_id": "7391118",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7391118",
@@ -11026,7 +11590,7 @@
     "categories": [
       "Capital Markets: Asset Pricing & Valuation"
     ],
-    "downloads": 2,
+    "downloads": 16,
     "ext_id": "7391119",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7391119",
@@ -11091,7 +11655,7 @@
     "categories": [
       "Capital Markets: Asset Pricing & Valuation"
     ],
-    "downloads": 3,
+    "downloads": 12,
     "ext_id": "7391122",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7391122",
@@ -11146,6 +11710,280 @@
     "summary_version": "2026-09-01",
     "title": "Susceptibility-graded Release Control: Preventing Incomplete-cross-section Leakage in Financial Machine-learning Pipelines without a Blanket Timeliness Penalty"
   },
+  "ssrn-7391818": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7391818",
+    "abstract": "The English Devolution and Community Empowerment Act 2026 provides for the removal of upward-only rent review (UORR) protection from variable rent reviews in most new and renewed business tenancies in England and Wales once Schedule 7A commences. This paper develops an ex-ante, state-contingent valuation framework to quantify the contractual income protection removed. A Monte Carlo expected-cash-flow model compares upward-only and two-way review rules on identical simulated rent paths, using published contemporary market evidence on growth, yields and lease structure, with volatility and rent-process sensitivities. For affected at-market tenyear leases, the geometric Brownian motion (GBM) capital-value effects are 0.47% for lower-risk logistics, 1.19% for prime offices and 3.91% for a weak-growth secondary-office scenario. Their asset-yield equivalents are 6.3, 15.7 and 65.2 basis points. Larger estimates arise in protected legacy stock and adverse contractual states: 6.85% for a legacy 25-year lease and 8.26% for an over-rented retail scenario under full enforcement. In the over-rented retail scenario, 78.46% of fully enforceable value is concentrated where protected rent exceeds 1.60 times the corresponding twoway rent. An illustrative moneyness-dependent realisability stress lowers the over-rented retail scenario estimate to 3.88% under GBM and 4.30% under trend mean reversion. Among modelled leases exposed to at least one review, initial rent state and the number of review opportunities are more informative about UORR value than property sector alone, while cash-flow duration causes capital-value and yield-equivalent rankings to diverge. The estimates are ceteris paribus expected discounted contractual values, before adjustment through rent, incentives, lease design or covenant requirements.",
+    "affiliations": "",
+    "authors": [
+      "Bismark Aha"
+    ],
+    "categories": [
+      "Capital Markets: Asset Pricing & Valuation"
+    ],
+    "downloads": 8,
+    "ext_id": "7391818",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7391818",
+    "journals": [
+      "Capital Markets: Asset Pricing & Valuation"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 38,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7391818.pdf?abstractid=7391818&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "APV"
+    ],
+    "summarized_at": "2026-09-04T09:51:23+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "No ex-ante estimate exists for what Schedule 7A removes",
+          "Monte Carlo compares upward-only vs two-way rules on identical rent paths",
+          "New 10-year leases lose 0.47-3.91% of capital value; legacy 25-year loses 6.85%",
+          "Realisability stress cuts the over-rented retail case from 8.26% to 3.88%"
+        ],
+        "data": "Simulated rent paths calibrated to published market evidence on growth, yields and lease structure.",
+        "method": "Monte Carlo expected-cash-flow model under GBM and trend mean-reverting rent processes.",
+        "one_liner": "Prices the income protection that England and Wales will strip from upward-only rent reviews.",
+        "relevance_why": "Score 1: a legal-reform valuation study with no tradable rule, and lease-level rent-versus-market states are not available in any standard dataset.",
+        "takeaway": "Sizing valuation haircuts on UK commercial property and REIT exposure with over-rented assets."
+      },
+      "keywords": [
+        "upward-only rent review",
+        "commercial lease reform",
+        "Monte Carlo valuation",
+        "real estate cash flow",
+        "option value",
+        "England and Wales"
+      ],
+      "ko": {
+        "bullets": [
+          "Schedule 7A 시행 뒤 사라질 계약상 수입 보호분이 얼마인지 모른다",
+          "동일한 시뮬레이션 임대료 경로에서 상향 전용과 양방향 조항의 기대 현금흐름을 비교한다",
+          "10년 신규 임대는 자본가치 0.47~3.91%, 25년 레거시는 6.85%, 초과 임대 리테일은 8.26%",
+          "실현 가능성 스트레스를 넣으면 초과 임대 리테일이 8.26%에서 3.88%로 내려간다"
+        ],
+        "data": "공표된 성장률·수익률·임대차 구조 시장 자료를 입력으로 쓴 시뮬레이션 연구다",
+        "method": "기하 브라운 운동(GBM)과 추세 평균회귀 임대료 과정을 쓴 몬테카를로 기대 현금흐름 모형이다",
+        "one_liner": "영국 임대차 개혁이 없앨 상향 전용 임대료 조항의 가치를 몬테카를로로 계산한다",
+        "relevance_why": "법 개정을 다룬 정책·평가 논문이라 자동화할 매매 규칙이 없고 임대차 계약별 임대료 상태 자료도 공개돼 있지 않아 1점이다",
+        "takeaway": "영국 상업용 부동산이나 리츠를 들고 있다면 초과 임대 비중이 큰 자산의 밸류에이션 조정 폭을 가늠하는 데 쓴다"
+      },
+      "relevance": 1
+    },
+    "summary_version": "2026-09-01",
+    "title": "The Option Value of Upward-only Rent Review Protection under Commercial Lease Reform in England and Wales"
+  },
+  "ssrn-7392021": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7392021",
+    "abstract": "We present evidence that short sellers in the corporate bond market are primarily dealers, not speculative customers. On the day bond lending increases, dealer sales increase while customer sales decline. Concurrently, the half-spread for customer buy orders and bond prices rise, indicating that short sales reflect customers’ buying pressure. This implies that short-sale constraints that inhibit customers’ buy orders can leave bonds undervalued. Consequently, bond factors generate alphas from both long and short legs. Dealers earn positive profits by shorting bonds on average but are exposed to the risk of a short squeeze. Their short sales improve bond liquidity.",
+    "affiliations": "University of Lausanne, University of Toronto and The University of Sydney",
+    "authors": [
+      "Amit Goyal",
+      "Yoshio Nozawa",
+      "Yancheng Qiu"
+    ],
+    "categories": [
+      "Capital Markets: Asset Pricing & Valuation",
+      "Capital Markets: Market Efficiency",
+      "Capital Markets: Market Microstructure"
+    ],
+    "downloads": 13,
+    "ext_id": "7392021",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7392021",
+    "journals": [
+      "Capital Markets: Asset Pricing & Valuation",
+      "Capital Markets: Market Efficiency",
+      "Capital Markets: Market Microstructure"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 96,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7392021.pdf?abstractid=7392021&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "APV",
+      "MEF",
+      "MMS"
+    ],
+    "summarized_at": "2026-09-04T09:51:24+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Who actually shorts corporate bonds was unclear",
+          "Split dealer vs customer trades on lending-increase days",
+          "Lending up: dealer sales rise, customer sales fall",
+          "Short-sale constraints leave bonds cheap; both legs pay"
+        ],
+        "data": "Bond lending records merged with dealer-customer trade data; the abstract names no sample window.",
+        "method": "Event study around days when bond lending rises, splitting trades by dealer versus customer and tracking half-spreads and prices.",
+        "one_liner": "Corporate bond short sellers are dealers, not speculative customers.",
+        "relevance_why": "Score 2: bond lending data and dealer-tagged trade records are both paid feeds, and the paper leaves entry and exit rules undefined.",
+        "takeaway": "Read a jump in bond lending as customer buying pressure and screen for undervalued bonds to go long."
+      },
+      "keywords": [
+        "corporate bonds",
+        "securities lending",
+        "short selling",
+        "dealer inventory",
+        "bid-ask spread",
+        "bond factors"
+      ],
+      "ko": {
+        "bullets": [
+          "회사채 대차 증가가 누구의 매도인지 불분명했다",
+          "대차 증가일의 딜러·고객 매도와 호가를 갈라 본다",
+          "대차가 늘면 딜러 매도가 늘고 고객 매도는 준다",
+          "공매도 제약이 채권을 저평가로 남겨 롱·숏 양쪽에서 알파가 난다"
+        ],
+        "data": "회사채 대차 데이터와 딜러-고객 거래 기록을 붙여 쓰지만 초록에 표본 구간은 없다",
+        "method": "채권 대차 잔고 변화일을 기준으로 딜러와 고객의 거래 방향, 매수 호가 스프레드, 가격 반응을 나눠 본 사건 분석이다",
+        "one_liner": "회사채 공매도의 주체는 투기 고객이 아니라 딜러다",
+        "relevance_why": "채권 대차 잔고와 딜러-고객 구분 거래 기록이 둘 다 유료 데이터라 확보가 어렵고, 매매 규칙도 직접 설계해야 해서 2점이다",
+        "takeaway": "대차 잔고 급증을 고객 매수 압력 신호로 읽고 저평가 채권 롱 후보를 거르는 데 쓴다"
+      },
+      "relevance": 2
+    },
+    "summary_version": "2026-09-01",
+    "title": "On the Drivers of Corporate Bond Lending"
+  },
+  "ssrn-7392358": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7392358",
+    "abstract": "Asset prices reflect not only whether an event will occur, but when. We recover this timing state from nested prediction claims on the event across deadlines. The arrival curve predicts settlement timing and separates level news from belief duration news. Unexpected acceleration raises related minus control return dispersion by 4.59 basis points, compared with 1.30 for delay. Actual deadline order adds 3.49 basis points, while predetermined business exposure locates it in exposed operations. In oil futures, resolution delay raises near relative to later delivery value. Event time is a traded state linking beliefs, firm adjustment, and physical delivery prices.",
+    "affiliations": "North Carolina State University",
+    "authors": [
+      "Yilun Wang"
+    ],
+    "categories": [
+      "Capital Markets: Asset Pricing & Valuation"
+    ],
+    "downloads": 10,
+    "ext_id": "7392358",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7392358",
+    "journals": [
+      "Capital Markets: Asset Pricing & Valuation"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 42,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7392358.pdf?abstractid=7392358&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "APV"
+    ],
+    "summarized_at": "2026-09-04T09:51:26+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Asset prices embed when an event lands, not only whether",
+          "Nested prediction claims across deadlines yield an arrival curve",
+          "Surprise acceleration moves dispersion 4.59bp vs 1.30bp for delay"
+        ],
+        "data": "Deadline-indexed prediction claim prices, related-firm returns, and oil futures term structure; the abstract names no sample window.",
+        "method": "Recover an arrival curve from nested prediction claims across deadlines, then split level news from belief duration news.",
+        "one_liner": "Prices the timing of an event, not just its odds, and trades the timing news.",
+        "relevance_why": "Scored 2: the signal is well defined, but nested deadline-indexed prediction market price histories are thin and hard to source.",
+        "takeaway": "Build a daily timing-news signal from prediction market term structure and trade exposed-firm long-shorts plus near-versus-deferred oil spreads."
+      },
+      "keywords": [
+        "prediction markets",
+        "event timing",
+        "belief duration",
+        "return dispersion",
+        "oil futures term structure"
+      ],
+      "ko": {
+        "bullets": [
+          "가격은 사건의 발생 여부만이 아니라 시점도 반영한다",
+          "마감일별로 겹쳐진 예측 청구권에서 도착곡선을 뽑아낸다",
+          "예상 밖 앞당김은 4.59bp, 지연은 1.30bp의 수익률 분산을 만든다"
+        ],
+        "data": "마감일별 예측시장 청구권 가격과 관련 종목 수익률, 원유 선물 기간구조를 쓴다. 표본 구간은 초록에 없다",
+        "method": "여러 마감일에 걸친 중첩 예측 청구권 가격에서 도착곡선을 복원해, 사건 수준 뉴스와 시점 뉴스를 분리한다",
+        "one_liner": "사건 발생 시점에 대한 믿음이 바뀔 때 주가와 유가가 어떻게 움직이는지 측정했다",
+        "relevance_why": "신호 정의는 명확하지만 마감일별로 겹치는 예측시장 청구권 가격 이력을 모으기가 어렵고, 유동성도 얇아 2점을 줬다",
+        "takeaway": "예측시장 만기별 가격을 매일 받아 시점 뉴스를 뽑고, 노출 기업 롱숏과 원유 근월-원월 스프레드에 얹는 정도로 쓸 만하다"
+      },
+      "relevance": 2
+    },
+    "summary_version": "2026-09-01",
+    "title": "The Price of When: Belief Duration and Asset Prices"
+  },
+  "ssrn-7393179": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7393179",
+    "abstract": "We examine whether a pooled model or a segmented model more accurately forecasts next-month corporate-bond liquidity. Using TRACE transactions from 2004 to 2024, we construct a Panel Tree that retains splits when segmented forecasts reduce validation MAE. Segmentation raises linear-model out-of-sample R^2 from 1-3% to about 24%, narrowing the gap with pooled nonlinear models, and lowers nonlinear-model MAE. The most frequently selected split variables are the mean daily transaction-price range, time to maturity, yield to maturity, and duration. MAE gains are largest for investment-grade bonds and smallest for high-yield bonds. Segmentation also lowers MAE for several alternative liquidity targets.",
+    "affiliations": "City University of Hong Kong (CityU), City University of Hong Kong (CityU), and",
+    "authors": [
+      "Guanhao Feng",
+      "Jingyu He",
+      "Gregor Schwarzenbrunner",
+      "Yuanzhi Wang"
+    ],
+    "categories": [
+      "Capital Markets: Asset Pricing & Valuation",
+      "Capital Markets: Market Efficiency",
+      "Capital Markets: Market Microstructure"
+    ],
+    "downloads": 9,
+    "ext_id": "7393179",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7393179",
+    "journals": [
+      "Capital Markets: Asset Pricing & Valuation",
+      "Capital Markets: Market Efficiency",
+      "Capital Markets: Market Microstructure"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 51,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7393179.pdf?abstractid=7393179&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "APV",
+      "MEF",
+      "MMS"
+    ],
+    "summarized_at": "2026-09-04T09:51:41+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Pooled linear models barely predict bond liquidity",
+          "A Panel Tree splits bonds, keeping splits that cut validation MAE",
+          "Linear out-of-sample R² jumps from 1-3% to about 24%",
+          "MAE gains peak in investment grade, shrink in high yield"
+        ],
+        "data": "TRACE corporate-bond transactions, 2004 to 2024.",
+        "method": "A Panel Tree keeps a split only when segmented forecasts lower validation MAE, then fits per-segment forecasters.",
+        "one_liner": "Splitting corporate bonds into segments sharply improves next-month liquidity forecasts.",
+        "relevance_why": "Scores 3 because it yields execution features, not entry/exit rules; TRACE needs an academic subscription or a paid feed, so retail access is limited.",
+        "takeaway": "Pre-trade cost and fill-difficulty estimates to size orders and screen out bonds you cannot exit."
+      },
+      "keywords": [
+        "corporate bond liquidity",
+        "Panel Tree",
+        "segmentation",
+        "TRACE",
+        "out-of-sample forecasting",
+        "market microstructure"
+      ],
+      "ko": {
+        "bullets": [
+          "회사채 유동성은 통합 선형 모델로 거의 못 맞힌다",
+          "패널 트리로 채권을 갈라 구간마다 따로 예측한다",
+          "선형 모델 표본외 R²가 1~3%에서 24%로 올랐다",
+          "투자등급에서 오차 개선이 크고 하이일드는 작다"
+        ],
+        "data": "2004년부터 2024년까지 TRACE 회사채 체결 데이터를 쓴다",
+        "method": "검증 MAE를 줄이는 분기만 남기는 패널 트리(Panel Tree)로 채권을 나눈 뒤 구간별 예측 모델을 붙인다",
+        "one_liner": "회사채 유동성 예측을 채권 그룹별로 쪼개면 정확도가 뛴다",
+        "relevance_why": "유동성 예측 자체는 매매 규칙이 아니라 실행 보조 신호라 3점이다. TRACE는 학계 구독이나 유료 라이선스가 필요해 개인이 바로 구하기는 어렵다.",
+        "takeaway": "회사채 매매 전 거래비용과 체결 난이도를 미리 추정해 주문 크기와 종목 선택을 조정하는 데 쓴다"
+      },
+      "relevance": 3
+    },
+    "summary_version": "2026-09-01",
+    "title": "Forecasting Corporate-bond Liquidity: The Value of Segmentation"
+  },
   "ssrn-7393278": {
     "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7393278",
     "abstract": "Water is the only economic good that nothing can replace-and at the same time one of the most underpriced. Four billion people experience severe water scarcity for at least one month a year, two-thirds of the world's river basins now carry too much or too little water, and with the data centres of artificial intelligence a new large consumer has arrived. This paper-the fourth of six on the great megatrends-examines the water megatrend from an investor's perspective: from hydrology through the economics of the value-price paradox to the investment programmes that regulators in Europe and America have already made binding.",
@@ -11157,7 +11995,7 @@
       "Global Investment Strategy",
       "Global Equities, Exchanges & Investment Indices"
     ],
-    "downloads": 15,
+    "downloads": 19,
     "ext_id": "7393278",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7393278",
@@ -11213,6 +12051,335 @@
     "summary_version": "2026-09-01",
     "title": "Investing in Water: From Undervalued Common Good to Regulated Income -How Investors Can Take Part in the Fourth Megatrend"
   },
+  "ssrn-7393978": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7393978",
+    "abstract": "In April 2026 a humanoid robot ran the Beijing half-marathon faster than the human world record-one year after half the machines in the same race had fallen or broken down. Hardly any image captures the pace of this megatrend better. This paper-the fifth of six on the great megatrends-examines automation and robotics from an investor's perspective: from the 542,000 industrial robots newly installed in 2024, through the merging of robotics with artificial intelligence, to the question of what labour market research actually knows about displacement and new employment.",
+    "affiliations": "",
+    "authors": [
+      "Roland Rupprechter"
+    ],
+    "categories": [
+      "Global Investment Strategy",
+      "Global Equities, Exchanges & Investment Indices"
+    ],
+    "downloads": 10,
+    "ext_id": "7393978",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7393978",
+    "journals": [
+      "Global Investment Strategy",
+      "Global Equities, Exchanges & Investment Indices"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 29,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7393978.pdf?abstractid=7393978&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "GIS",
+      "GEX"
+    ],
+    "summarized_at": "2026-09-04T09:51:41+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Asks how investors can access the robotics theme",
+          "Narrative survey of industry data and labour research",
+          "542,000 industrial robots newly installed in 2024",
+          "April 2026: humanoid beat the human half-marathon record"
+        ],
+        "data": "Cites 2024 robot installation counts and an April 2026 Beijing half-marathon result; no backtest window.",
+        "method": "Narrative industry survey. No model, no formal framework.",
+        "one_liner": "Fifth of six megatrend essays, this one surveys automation and robotics for investors.",
+        "relevance_why": "Score 1: no rules, no signal, nothing to automate, and the robot installation counts come from paywalled IFR reports.",
+        "takeaway": "Background reading when assembling a robotics or automation thematic basket."
+      },
+      "keywords": [
+        "automation",
+        "robotics",
+        "megatrend",
+        "thematic investing",
+        "labour market displacement"
+      ],
+      "ko": {
+        "bullets": [
+          "로봇 테마에 투자자가 어떻게 올라탈지가 문제다",
+          "산업 현황과 노동시장 연구를 훑는 서술형 리뷰다",
+          "2024년 산업용 로봇 신규 설치가 54만 2천 대다",
+          "2026년 4월 휴머노이드가 베이징 하프마라톤 인간 세계기록을 깼다"
+        ],
+        "data": "2024년 산업용 로봇 설치 대수와 2026년 4월 베이징 하프마라톤 사례를 인용하며, 백테스트 구간은 없다.",
+        "method": "모델이나 수식 없이 산업 통계와 노동시장 연구를 엮은 서술형 리뷰다.",
+        "one_liner": "자동화·로봇 메가트렌드를 투자자 시각으로 정리한 6부작 중 5편이다.",
+        "relevance_why": "매매 규칙도 신호도 없는 테마 소개 글이라 1점이며, 인용된 로봇 설치 통계는 IFR 유료 보고서라 확보도 번거롭다.",
+        "takeaway": "로봇·자동화 테마 종목 바스켓을 짤 때 배경 지식 정도로만 쓴다."
+      },
+      "relevance": 1
+    },
+    "summary_version": "2026-09-01",
+    "title": "Investing in Automation and Robotics: When Machines Learn to Work -How Investors can Take Part in the Fifth Megatrend"
+  },
+  "ssrn-7393980": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7393980",
+    "abstract": "No megatrend combines as much certainty with as much potential for disappointment as health. The demand is certain: the world spends close to ten trillion US dollars a year on health-roughly one in every ten dollars producedand the ageing of the industrialised world extends that growth for decades to come. Who profits from it is not: within the same two-year window, Eli Lilly became the first health care company in history to exceed one trillion US dollars in market value, while Novo Nordisk-in the same market, with the same class of drugslost almost two thirds of its value. This paper, the sixth on the great megatrends, examines both: the reliability of the trend and the selection risks within it.",
+    "affiliations": "",
+    "authors": [
+      "Roland Rupprechter"
+    ],
+    "categories": [
+      "Global Investment Strategy",
+      "Global Equities, Exchanges & Investment Indices"
+    ],
+    "downloads": 5,
+    "ext_id": "7393980",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7393980",
+    "journals": [
+      "Global Investment Strategy",
+      "Global Equities, Exchanges & Investment Indices"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 32,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7393980.pdf?abstractid=7393980&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "GIS",
+      "GEX"
+    ],
+    "summarized_at": "2026-09-04T09:51:44+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Certain demand, uncertain beneficiaries",
+          "Narrative industry analysis, sixth in a series",
+          "Lilly hit $1T; Novo lost two thirds"
+        ],
+        "data": "Cites ~$10 trillion annual global health spending and the 2-year Lilly/Novo Nordisk divergence.",
+        "method": "Narrative analysis of market size and two contrasting stock outcomes; no model.",
+        "one_liner": "A strategy piece on the health megatrend: demand is certain, winners are not.",
+        "relevance_why": "Score 1: no signal, no rules, no universe or rebalancing spec. The cited data (market caps, spending stats) is trivially available, but nothing here backtests.",
+        "takeaway": "Argues for diversifying health-care thematic exposure instead of concentrating in one drug maker."
+      },
+      "keywords": [
+        "megatrend investing",
+        "health care equities",
+        "GLP-1",
+        "single-stock risk",
+        "thematic allocation"
+      ],
+      "ko": {
+        "bullets": [
+          "수요는 확실한데 수혜 기업은 불확실하다",
+          "메가트렌드 연작 6편, 산업 구조를 서술한다",
+          "릴리는 시총 1조 달러, 노보는 3분의 2 증발"
+        ],
+        "data": "연 10조 달러 규모의 세계 의료비 지출, 그리고 2년 안에 갈린 릴리와 노보 노디스크 주가를 인용한다",
+        "method": "정량 모델 없이 시장 규모와 개별 종목 사례로 트렌드와 선택 위험을 나눠 설명한다",
+        "one_liner": "헬스케어 메가트렌드의 확실성과 종목 선택 위험을 함께 따진 여섯 번째 보고서다",
+        "relevance_why": "매매 규칙도 신호도 없는 투자 전략 논평이라 자동화할 게 없다. 인용 데이터는 시총과 지출 통계뿐이라 확보는 쉽지만 그것만으로 백테스트가 서지 않는다",
+        "takeaway": "헬스케어 테마 비중을 잡을 때 개별 종목 집중을 피하고 분산 폭을 넓히는 근거로 쓴다"
+      },
+      "relevance": 1
+    },
+    "summary_version": "2026-09-01",
+    "title": "Investing in Health: From Curing Illness to the Health Economy -How Investors Can Participate in the Sixth Megatrend"
+  },
+  "ssrn-7394118": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7394118",
+    "abstract": "This paper—the fourth and unifying installment of a four-paper arc—identifies the VIX- of-VIX index (VVIX), observed at minute frequency, as the temperature of the volatility quantum field introduced in Paper III. Whereas Papers I–III constructed, respectively, an equilibrium thermodynamic description (entropy",
+    "affiliations": "",
+    "authors": [
+      "Huzi Sun"
+    ],
+    "categories": [
+      "Quantitative Methods in Investing & Financial Statement Analysis",
+      "Capital Markets: Market Microstructure"
+    ],
+    "downloads": 6,
+    "ext_id": "7394118",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7394118",
+    "journals": [
+      "Quantitative Methods in Investing & Financial Statement Analysis",
+      "Capital Markets: Market Microstructure"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 22,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7394118.pdf?abstractid=7394118&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "QM",
+      "MMS"
+    ],
+    "summarized_at": "2026-09-04T09:51:58+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Targets the lack of a unified physics frame for VIX",
+          "Fuses thermodynamic, quantum and field-theoretic views",
+          "Treats minute-frequency VVIX as field temperature",
+          "Closes a four-paper arc; leans on Papers I-III"
+        ],
+        "data": "Theory only; the abstract cites minute-frequency VVIX but no test sample or window.",
+        "method": "Extends the entropy-based equilibrium thermodynamics and volatility quantum field of the prior papers, casting VVIX as their temperature.",
+        "one_liner": "Maps VVIX onto the temperature of a volatility quantum field.",
+        "relevance_why": "Score 1: a conceptual paper with no rules and no reported results. Minute VIX/VVIX is purchasable, but there is nothing specified to backtest.",
+        "takeaway": "At most, read VVIX as a volatility-regime heat gauge and cut VIX-linked exposure when it runs hot."
+      },
+      "keywords": [
+        "VVIX",
+        "VIX microstructure",
+        "volatility field theory",
+        "thermodynamic analogy",
+        "systemic risk"
+      ],
+      "ko": {
+        "bullets": [
+          "VIX 미시구조를 물리학 언어로 묶어보려는 시도다",
+          "열역학·양자역학·장이론 세 틀을 하나로 합친다",
+          "분 단위 VVIX를 장의 온도로 놓고 논의한다",
+          "4부작의 마지막 편이라 앞 논문 셋을 전제한다"
+        ],
+        "data": "초록만으로는 분 단위 VIX·VVIX를 언급할 뿐 검증 구간이 없어 이론 연구로 본다.",
+        "method": "1~3편의 엔트로피 기반 평형 열역학 서술과 변동성 양자장을 잇고, VVIX를 그 장의 온도로 대응시킨다.",
+        "one_liner": "VVIX를 변동성 양자장의 온도로 해석한 이론 논문이다.",
+        "relevance_why": "매매 규칙도 실증 결과도 없는 개념 논문이라 1점이다. 분 단위 VIX·VVIX 자체는 유료 데이터로 구할 수 있지만 무엇을 검증할지가 없다.",
+        "takeaway": "굳이 쓴다면 VVIX를 변동성 레짐의 과열 지표로 삼아 VIX 관련 포지션의 위험 한도를 조절하는 정도다."
+      },
+      "relevance": 1
+    },
+    "summary_version": "2026-09-01",
+    "title": "VVIX as the Temperature of the Volatility Field: A Preliminary Thermal Unification of Thermodynamic, Quantum, and Field-Theoretic Frameworks for VIX Microstructure Systemic Risk Management System"
+  },
+  "ssrn-7394198": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7394198",
+    "abstract": "Paper IV (Sun, 2026d) introduced minute-frequency VVIX as the temperature of the VIX term-structure field and derived four falsifiable predictions (P1–P4), a thermodynamic–field unification claim, and a candidate tradeable Kramers transition probability. It then reported that its own evidence — four overlapping windows, seven temperature bins each — was too underpowered to evaluate these claims. This paper further the research by using two new assets unavailable to Paper IV.",
+    "affiliations": "",
+    "authors": [
+      "Huzi Sun"
+    ],
+    "categories": [
+      "Quantitative Methods in Investing & Financial Statement Analysis"
+    ],
+    "downloads": 6,
+    "ext_id": "7394198",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7394198",
+    "journals": [
+      "Quantitative Methods in Investing & Financial Statement Analysis"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 12,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7394198.pdf?abstractid=7394198&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "QM"
+    ],
+    "summarized_at": "2026-09-04T09:51:58+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Paper IV admitted its own sample was too underpowered to judge",
+          "Adds two new assets to retest predictions P1-P4",
+          "Delivers a verdict on the thermodynamic-field unification claim"
+        ],
+        "data": "Minute-frequency data on two assets unavailable to the prior paper; the abstract names no evaluation window.",
+        "method": "Treats minute-frequency VVIX as the temperature of the VIX term-structure field and tests four falsifiable predictions plus a Kramers transition probability.",
+        "one_liner": "A follow-up that retests the VVIX-as-temperature claim using two assets the prior paper lacked.",
+        "relevance_why": "Minute-frequency VVIX and VIX term-structure data need a paid vendor, and the abstract states no trading rule, so it caps at 2.",
+        "takeaway": "Check the verdict before building any volatility regime-switch signal on the Kramers transition probability."
+      },
+      "keywords": [
+        "VVIX",
+        "VIX term structure",
+        "thermodynamic analogy",
+        "Kramers transition",
+        "volatility regime",
+        "falsification test"
+      ],
+      "ko": {
+        "bullets": [
+          "이전 논문은 표본이 부족해 자기 주장을 검증하지 못했다",
+          "자산 두 개를 새로 붙여 P1~P4 예측을 다시 시험한다",
+          "열역학-장 통합 주장에 대한 판정을 내놓는다"
+        ],
+        "data": "이전 논문이 쓰지 못한 자산 두 개의 분 단위 변동성 데이터를 추가로 쓴다. 구체적 구간은 초록에 없다.",
+        "method": "분 단위 VVIX를 VIX 기간구조 장의 온도로 놓고, 네 가지 반증 가능 예측과 크라머스(Kramers) 전이 확률을 검정한다.",
+        "one_liner": "VVIX를 변동성 장의 온도로 본 가설을 새 자산 두 개로 재검증한 후속 논문이다.",
+        "relevance_why": "분 단위 VVIX와 VIX 기간구조 데이터는 유료 벤더를 거쳐야 하고 초록에 매매 규칙도 없어 2점이다.",
+        "takeaway": "변동성 레짐 전환 확률을 신호로 쓰려 했다면, 이 논문의 판정을 먼저 확인하고 진입 여부를 정하는 게 낫다."
+      },
+      "relevance": 2
+    },
+    "summary_version": "2026-09-01",
+    "title": "VVIX as the Temperature of the Volatility Field is not Enough: A Verdict on the Prelimanry Thermal Unification"
+  },
+  "ssrn-7394318": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7394318",
+    "abstract": "The verdict paper (Sun, 2026e) established four claims of the VVIX-temperature program survive: the sign of the thermal Kramers law, the priced NEI state variable, and a striking unexamined fact, two independent operationalizations of market temperature, a Boltzmann VIX microstructure-implied temperature Tc and a VVIX-based kinetic temperature Tk, correlate at 0.8277 (0.8288 in trading hours, 0.8286 in event time) while differing radically in observability: Tc is measurable only when the Boltzmann VIX microstructure fit gate is valid (38.4% of trading hours), whereas Tk is continuous. This paper promotes that fact to theory. We model the VIX microstructure field as coupled to two weakly coupled heat baths, the direct analogue of the two-temperature electron-phonon systems of laser physics, with coupling validated by the measured 0.8277, and we show that (i) the unification ceiling observed in Paper V (corr(G, Gfield) = 0.6718 ≤ corr(Tc, Tk) = 0.8277) is a structural consequence of two-thermometer statistics; (ii) the thermometer coverage k(t), the fraction of time the curve carries identifiable critical dynamics, is not a nuisance but an order parameter for the single-mode absorbing state identified in Paper V; (iii) the live regime (T*B = -0.0009, VVIX* = 142.94, ΔU = 5.7106) is exactly the flat-barrier state the theory predicts under thermometer divergence. We derive five falsifiable predictions (Q1-Q5), pre-register their evaluation thresholds for the next twelve months of live data, and specify the kill conditions under which the dual-temperature theory joins P1 and P4 in the refuted column.",
+    "affiliations": "",
+    "authors": [
+      "Huzi Sun"
+    ],
+    "categories": [
+      "Quantitative Methods in Investing & Financial Statement Analysis",
+      "Capital Markets: Market Microstructure"
+    ],
+    "downloads": 9,
+    "ext_id": "7394318",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7394318",
+    "journals": [
+      "Quantitative Methods in Investing & Financial Statement Analysis",
+      "Capital Markets: Market Microstructure"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 12,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7394318.pdf?abstractid=7394318&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "QM",
+      "MMS"
+    ],
+    "summarized_at": "2026-09-04T09:52:04+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "No theory explained why two market-temperature proxies track at 0.8277",
+          "Borrows the electron-phonon two-temperature model from laser physics",
+          "Derives Paper V's 0.6718 unification ceiling from two-thermometer statistics",
+          "Pre-registers five falsifiable predictions (Q1-Q5) and kill conditions"
+        ],
+        "data": "Boltzmann-fit temperature Tc (valid in 38.4% of trading hours) versus continuous VVIX-based Tk, correlating 0.8277 overall, 0.8288 in trading hours, 0.8286 in event time; predictions tested on the next 12 months of live data.",
+        "method": "Two weakly coupled heat baths drive the VIX field; thermometer coverage k(t) acts as the order parameter.",
+        "one_liner": "Models the VIX microstructure field as coupled to two heat baths.",
+        "relevance_why": "Scores 1: a physics-analogy theory with no entry or exit rules, and Tc requires reimplementing the author's proprietary Boltzmann fit gate, so the data is not reproducible.",
+        "takeaway": "At most, track the continuous VVIX-based Tk as a volatility-regime diagnostic."
+      },
+      "keywords": [
+        "VIX microstructure",
+        "VVIX",
+        "two-temperature model",
+        "econophysics",
+        "falsifiable predictions"
+      ],
+      "ko": {
+        "bullets": [
+          "시장 온도 지표 두 개가 왜 0.8277로 붙는지 설명이 없었다",
+          "레이저 물리의 전자-포논 이중온도 모형을 VIX 곡선에 이식했다",
+          "Paper V의 통합 상한 0.6718이 두 온도계 통계에서 나온다고 유도했다",
+          "검증 가능한 예측 다섯 개(Q1~Q5)와 폐기 조건을 미리 등록했다"
+        ],
+        "data": "볼츠만 VIX 미시구조 적합 게이트가 유효한 거래시간 38.4% 구간에서 잰 Tc와 연속 관측되는 VVIX 기반 Tk의 상관(0.8277, 거래시간 0.8288, 이벤트 시간 0.8286), 향후 12개월 실시간 데이터로 사전 등록 검증.",
+        "method": "VIX 미시구조 장을 약하게 결합된 두 열욕에 연결하고, 온도계 관측 가능 구간 비율 k(t)를 질서변수로 놓는다.",
+        "one_liner": "VIX 미시구조를 두 개의 열욕에 붙은 장으로 모형화한 이론 논문이다.",
+        "relevance_why": "매매 규칙도 백테스트도 없는 물리 유비 이론이고, Tc를 재려면 저자만 아는 볼츠만 적합 게이트를 다시 만들어야 해서 데이터 재현 자체가 막힌다.",
+        "takeaway": "당장 매매 규칙은 없고, VVIX 기반 Tk를 변동성 국면 판별 보조 지표로 관찰하는 정도다."
+      },
+      "relevance": 1
+    },
+    "summary_version": "2026-09-01",
+    "title": "Two Thermometers, One Field: A Dual-Temperature Field Theory of the VIX Microstructure"
+  },
   "ssrn-7394718": {
     "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7394718",
     "abstract": "Conditional-moment estimation and dynamic portfolio choice complement each other. Our results support this complementarity in high-dimensional multiperiod problems with transaction costs and constraints. We estimate policies from intertemporal optimality restrictions. An Adversarial Intertemporal Moment (AIM) estimator learns conditional test functions that uncover predictable violations, while a recurrent policy adapts to evolving states. The losscomparison test provides evidence against multiperiod optimality of the myopic policy at every multiperiod horizon. Over a twelve-month investment horizon, the AIM-estimated dynamic policy achieves a 25.7% annualized certaintyequivalent return in out-of-sample results of U.S. equities, compared with 12.1% for its myopic counterpart.",
@@ -11224,7 +12391,7 @@
     "categories": [
       "Capital Markets: Asset Pricing & Valuation"
     ],
-    "downloads": 30,
+    "downloads": 47,
     "ext_id": "7394718",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7394718",
@@ -11279,6 +12446,268 @@
     "summary_version": "2026-09-01",
     "title": "Learning to Rebalance"
   },
+  "ssrn-7394780": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7394780",
+    "abstract": "A common heuristic among index-options traders holds that sudden shifts in open interest (OI) around a price level serve as an early warning of an impending breakout. This paper tests that heuristic against a full year of NIFTY 50 index options data using a fully specified, auditable pipeline: a dynamic, threshold-based swing detector identifies intraday Break-of-Structure and Change-of-Character events at two reversal thresholds. We test three nested hypotheses. H1 (association): the PE-minus-CE open-interest differential around a break is strongly associated with break direction, a result that survives Bonferroni correction across a large battery of tests and is robust to the choice of strike band and OI-measurement window. A placebo/negative-control test addresses a specific concern with H1: that OI might simply track any sufficiently large price move, with confirmed-break status adding nothing on its own. Against magnitude-matched non-break moments, confirmed-break status is associated with a further, incremental OI reaction beyond move size alone, an effect concentrated in smaller moves and narrowing, but not disappearing, as move size grows. H2 (event-time lead-lag pattern, not a causal test): the association builds steadily in the minutes before confirmation and continues strengthening for a few minutes after, then partially declines and plateaus, the signature of a reactive rather than anticipatory relationship. H3 (tradable edge): a real-time predictive signal, conditioned to remove the confound of an already-underway price move, showed an apparently genuine in-sample edge, significant at the conventional level though materially weaker once trades are aggregated to account for within-day dependence. Every parameter of this signal was then locked and applied, without refitting, to a genuinely held-out Jan–Apr 2026 sample. The signal did not hold up out-of-sample, a pattern that is robust across five alternative definitions of the “quiet” conditioning subset used to isolate the signal from the price move it is trying to anticipate. We also went back to two specific null tests written earlier in this project, originally run on an Oct 2025–Apr 2026 dataset, and reran them against our Jan–Jul 2025 data, which those scripts had never touched. On the whole, we find no robust evidence that intraday OI repositioning provides advance predictive information about structural price breaks in this setting. The evidence instead supports interpreting OI repositioning as a state variable of an ongoing price-discovery process, informative about what is happening rather than what will happen next, and not as a forecasting signal.",
+    "affiliations": "",
+    "authors": [
+      "Subhash S"
+    ],
+    "categories": [
+      "Quantitative Methods in Investing & Financial Statement Analysis"
+    ],
+    "downloads": 4,
+    "ext_id": "7394780",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7394780",
+    "journals": [
+      "Quantitative Methods in Investing & Financial Statement Analysis"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 17,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7394780.pdf?abstractid=7394780&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "QM"
+    ],
+    "summarized_at": "2026-09-04T09:52:18+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Traders treat OI jumps near a level as an early breakout warning",
+          "Threshold swing detector flags intraday BoS and CoC events",
+          "In-sample edge vanished on a locked-parameter holdout sample",
+          "OI reacts to price discovery rather than anticipating it"
+        ],
+        "data": "One full year of NIFTY 50 index options, with a genuinely held-out Jan–Apr 2026 sample and null tests rerun on untouched Jan–Jul 2025 data.",
+        "method": "A dynamic threshold-based swing detector labels breaks at two reversal levels; the authors test the PE-minus-CE OI differential with Bonferroni correction and magnitude-matched placebo controls.",
+        "one_liner": "Tests whether intraday open-interest shifts predict price-structure breaks in NIFTY 50 options; they do not.",
+        "relevance_why": "Scores 3: the pipeline is auditable and refutes a popular heuristic, but it needs intraday NIFTY option-chain snapshots and the signal failed out-of-sample.",
+        "takeaway": "Use OI repositioning as a state variable describing the current regime, not as an entry trigger."
+      },
+      "keywords": [
+        "open interest",
+        "index options",
+        "break of structure",
+        "out-of-sample validation",
+        "NIFTY 50",
+        "intraday microstructure"
+      ],
+      "ko": {
+        "bullets": [
+          "OI 급변이 돌파 선행신호라는 트레이더 통념을 검증",
+          "임계값 기반 스윙 탐지로 BoS·CoC 이벤트를 식별",
+          "본표본 우위는 홀드아웃 구간에서 사라졌다",
+          "OI는 예측이 아니라 진행 중인 가격발견의 상태변수다"
+        ],
+        "data": "NIFTY 50 지수옵션 1년치(2025년 1~7월 포함)로 적합하고 2026년 1~4월을 한 번도 안 본 홀드아웃으로 썼다.",
+        "method": "동적 임계값 스윙 탐지기로 일중 구조돌파(BoS)와 성격변화(CoC)를 잡고, PE-CE 미결제약정 차이를 본페로니 보정과 크기 매칭 위약 대조로 검정한다.",
+        "one_liner": "미결제약정 급변으로 돌파를 미리 알 수 있다는 통념을 깬 검증 논문이다.",
+        "relevance_why": "규칙은 명확하지만 NIFTY 옵션 일중 체인 스냅샷을 확보해야 하고 신호가 표본 밖에서 무너져 매매 규칙으로 바로 쓸 수 없어 3점이다.",
+        "takeaway": "OI 재배치를 진입 트리거로 쓰지 말고 현재 국면을 읽는 상태 변수나 필터로만 쓰면 된다."
+      },
+      "relevance": 3
+    },
+    "summary_version": "2026-09-01",
+    "title": "Open Interest Repositioning around Intraday Price-structure Breaks: Evidence from NIFTY 50 Index Options"
+  },
+  "ssrn-7394858": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7394858",
+    "abstract": "Portfolio constraints are known to act as implicit shrinkage on an estimated covariance matrix. We show that the same constraints also compress the differences across the portfolios implied by competing covariance models, so that weight restrictions operate as a form of shrinkage across models rather than within a single estimate. As a consequence, once constraints are in place, the equally weighted 1/M combination of covariance forecasts performs on par with the best individual model, and it does so without requiring the practitioner to identify the best model in advance. We formalize this mechanism analytically by showing that the variance cost of the 1/M rule relative to the oracle-optimal combination vanishes as the cross-sectional dimension grows. Monte Carlo simulations and an empirical application to equity data with up to 1,000 stocks support these predictions. Our findings suggest that, for managers operating under the constraints they typically face, such as no-short-sales or concentration constraints, the cost of forgoing covariance model selection is small.",
+    "affiliations": "and CUNEF Universidad",
+    "authors": [
+      "Alexandre Rubesam",
+      "André Alves Portela Santos"
+    ],
+    "categories": [
+      "Capital Markets: Asset Pricing & Valuation"
+    ],
+    "downloads": 7,
+    "ext_id": "7394858",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7394858",
+    "journals": [
+      "Capital Markets: Asset Pricing & Valuation"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 85,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7394858.pdf?abstractid=7394858&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "APV"
+    ],
+    "summarized_at": "2026-09-04T09:52:18+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Model selection for covariance forecasts may be wasted effort",
+          "Constraints compress differences across competing models",
+          "Equal-weight 1/M combination ties the best single model",
+          "Variance cost vs the oracle vanishes as N grows"
+        ],
+        "data": "Monte Carlo simulations and equity data with up to 1,000 stocks; the abstract gives no sample window.",
+        "method": "Analytical proof that weight constraints act as cross-model shrinkage, plus Monte Carlo tests.",
+        "one_liner": "Under weight constraints, averaging covariance models matches picking the best one.",
+        "relevance_why": "Only standard price data is needed, but you still design the portfolio rules yourself, so 3.",
+        "takeaway": "Skip covariance model selection and equal-weight your estimators when running no-short or concentration limits."
+      },
+      "keywords": [
+        "covariance forecasting",
+        "forecast combination",
+        "portfolio constraints",
+        "shrinkage",
+        "minimum variance",
+        "model selection"
+      ],
+      "ko": {
+        "bullets": [
+          "공분산 모델 선택에 매달릴 가치가 있는지 따진다",
+          "제약이 모델 간 차이를 줄인다는 걸 이론으로 증명한다",
+          "1/M 단순 평균이 최고 개별 모델과 비슷한 성과를 낸다",
+          "종목 수가 늘수록 오라클 대비 분산 손실이 사라진다"
+        ],
+        "data": "몬테카를로 시뮬레이션과 최대 1,000종목 주식 데이터를 쓰지만 검증 구간은 초록에 없다",
+        "method": "가중치 제약이 모델 간 축소(shrinkage)로 작동함을 해석적으로 보이고 몬테카를로로 확인한다",
+        "one_liner": "제약이 걸린 포트폴리오에서는 공분산 모델을 골라봐야 별 이득이 없다",
+        "relevance_why": "주가만 있으면 재현되지만 최소분산 포트폴리오 운용 규칙까지 직접 설계해야 해서 3점이다",
+        "takeaway": "공매도 금지나 집중도 제한이 걸린 포트폴리오라면 여러 공분산 추정치를 그냥 균등 평균해 쓴다"
+      },
+      "relevance": 3
+    },
+    "summary_version": "2026-09-01",
+    "title": "Portfolio Constraints as Cross-model Shrinkage: How Inefficient is the 1/M Covariance Forecast Combination?"
+  },
+  "ssrn-7394980": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7394980",
+    "abstract": "Momentum is among the most durable empirical anomalies in asset pricing, and since 2021 it has entered the mainstream in India. The term is applied loosely to stocks, sectors, indices, even market conditions, which obscures the fact that published momentum definitions rest on beliefs, some incompatible, about how information reaches asset prices. This paper examines ten published momentum specifications on a common Indian equity universe. The definitions span classical total-return formulations (Jegadees-Titman, Carhart), refinements (Barra, MSCI, residual momentum), and alternative measures (Echo-Novy-Marx, Frog-in-the-pan, 52-week high, Industry Momentum). We simulate them using identical portfolio construction so that diWerences in outcomes are attributable to the specific definitions. Every variant outperformed the benchmark Nifty 500 TRI, seven by margins that survive cross-sectional overlap. But dispersion within the family is significant, both on return and downside behaviour. Momentum as a family is robust in India and heterogenous as a set of implementations, but the label alone conveying little about a portfolio's likely behaviour.",
+    "affiliations": "Capitalmind",
+    "authors": [
+      "Anoop Vijaykumar"
+    ],
+    "categories": [
+      "Capital Markets: Market Efficiency"
+    ],
+    "downloads": 8,
+    "ext_id": "7394980",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7394980",
+    "journals": [
+      "Capital Markets: Market Efficiency"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 21,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7394980.pdf?abstractid=7394980&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "MEF"
+    ],
+    "summarized_at": "2026-09-04T09:52:21+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "\"Momentum\" labels ten mutually incompatible signals",
+          "Fixed portfolio construction isolates definition effects",
+          "All ten beat Nifty 500 TRI; seven survive overlap"
+        ],
+        "data": "A common Indian equity universe benchmarked against Nifty 500 TRI; the abstract does not state the sample window.",
+        "method": "Simulates Jegadeesh-Titman, Carhart, Barra, MSCI, residual, Echo, frog-in-the-pan, 52-week high and industry momentum with one shared construction.",
+        "one_liner": "Runs ten published momentum definitions on one Indian equity universe under identical portfolio rules.",
+        "relevance_why": "Score 4: every definition is computable from public price data, but rebalance cadence and portfolio size are left open.",
+        "takeaway": "Pin down which momentum definition your factor uses, and size it on downside behaviour, not just return."
+      },
+      "keywords": [
+        "momentum",
+        "Indian equities",
+        "factor definitions",
+        "residual momentum",
+        "52-week high",
+        "portfolio construction"
+      ],
+      "ko": {
+        "bullets": [
+          "모멘텀이라는 말이 서로 다른 열 가지를 가리킨다",
+          "포트폴리오 구성을 고정해 정의 차이만 남겼다",
+          "전부 Nifty 500 TRI를 이겼지만 편차가 컸다"
+        ],
+        "data": "인도 주식 공통 유니버스, 벤치마크는 Nifty 500 TRI다. 기간은 밝히지 않았다.",
+        "method": "제가디시-티트만, 카하트, Barra, MSCI, 잔차 모멘텀, Echo, 개구리 효과(frog-in-the-pan), 52주 신고가, 산업 모멘텀 등 열 개 정의를 동일한 포트폴리오 구성 규칙으로 시뮬레이션했다.",
+        "one_liner": "모멘텀 정의 10개를 인도 주식에 같은 방식으로 돌려 비교했다",
+        "relevance_why": "가격만 있으면 열 개 정의를 그대로 복제할 수 있어 데이터 확보가 쉽다. 다만 리밸런싱 주기와 종목 수 같은 세부는 구현자 몫이라 4점이다.",
+        "takeaway": "모멘텀 팩터를 쓸 때 어느 정의를 골랐는지 명시하고 하방 위험까지 따로 재야 한다."
+      },
+      "relevance": 4
+    },
+    "summary_version": "2026-09-01",
+    "title": "Which Momentum? Examining ten Published definitions on Indian Equities and How Little they Agree"
+  },
+  "ssrn-7395038": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7395038",
+    "abstract": "We propose and test a theory-first framework for modelling the conditional mean of currency-pair returns, applied to USD/CHF at monthly frequency over 1999-2025. Five signals-purchasing-power-parity deviation, mean-reversion of past 12-month spot changes, the real 10-year yield differential, a short-end funding-basis proxy for safe-haven stress, and the raw nominal carry-are extracted from public data. Univariate in-sample regressions, walk-forward out-of-sample validation against a random-walk benchmark, and a two-state hidden Markov model on joint FX-and-rate dynamics are estimated. Three results emerge. First, PPP deviation dominates every other single signal at the 12-month horizon, delivering out-of-sample R² of +9.9% versus a random walk. Second, an OLS combination of all five signals delivers essentially zero out-of-sample explanatory power, whereas a minimal composite of PPP, mean-reversion, and real-rate differentials generates a Sharpe ratio of +0.40 over 2005-2025 versus-0.24 for buy-and-hold USD. Third, a two-state Markov model identifies a persistent stress state occupying 27% of the sample in which USD/CHF depreciates at an annualized rate of-4.5%, and this state has been near-continuously active since 2022. The overall picture is consistent with the exchange-rate literature: theorymotivated single signals beat kitchen-sink combinations, and regime awareness is essential.",
+    "affiliations": "Andreas Steiner Consulting GmbH",
+    "authors": [
+      "Andreas Steiner"
+    ],
+    "categories": [
+      "Capital Markets: Asset Pricing & Valuation",
+      "Capital Markets: Market Efficiency"
+    ],
+    "downloads": 6,
+    "ext_id": "7395038",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7395038",
+    "journals": [
+      "Capital Markets: Asset Pricing & Valuation",
+      "Capital Markets: Market Efficiency"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 9,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7395038.pdf?abstractid=7395038&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "APV",
+      "MEF"
+    ],
+    "summarized_at": "2026-09-04T09:52:33+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Tests whether FX signals beat the random-walk benchmark",
+          "PPP, mean-reversion, real-rate gap, funding basis, carry",
+          "PPP alone hits +9.9% out-of-sample R² at 12 months",
+          "Kitchen-sink OLS of all five gives near-zero OOS power"
+        ],
+        "data": "Monthly USD/CHF from public sources, 1999-2025; strategy Sharpe measured over 2005-2025.",
+        "method": "Univariate regressions plus walk-forward validation, with a two-state hidden Markov model on FX and rates.",
+        "one_liner": "Five theory-motivated signals forecast monthly USD/CHF returns, 1999-2025.",
+        "relevance_why": "Score 4: spot rates, CPI, 10-year and short-end yields are all free and standard, but position sizing and rebalancing rules are left open.",
+        "takeaway": "Trade a three-signal composite (PPP, mean-reversion, real-rate gap) and cut USD longs when the HMM flags the stress state."
+      },
+      "keywords": [
+        "FX",
+        "USD/CHF",
+        "purchasing power parity",
+        "regime switching",
+        "hidden Markov model",
+        "carry"
+      ],
+      "ko": {
+        "bullets": [
+          "환율 예측은 랜덤워크를 못 이긴다는 통념을 다시 검증",
+          "PPP·평균회귀·실질금리차 등 5개 신호를 개별·결합 검정",
+          "PPP 단독이 12개월 표본외 R² +9.9%로 최고",
+          "5개 전부 넣은 OLS는 표본외 설명력이 사실상 0"
+        ],
+        "data": "공개 데이터로 만든 USD/CHF 월간 시계열 1999~2025년, 전략 성과는 2005~2025년 구간",
+        "method": "단변량 회귀와 워크포워드 표본외 검증에 2상태 은닉 마코프 모형을 붙였다",
+        "one_liner": "USD/CHF 월간 수익률을 이론 기반 5개 신호로 예측한다",
+        "relevance_why": "필요한 데이터가 환율·CPI·10년 금리·단기 금리라 전부 공짜로 구할 수 있고 신호 정의도 명확하지만, 리밸런싱 규칙과 포지션 크기는 직접 정해야 해서 4점이다",
+        "takeaway": "PPP 괴리·12개월 평균회귀·실질금리차 세 개만 묶어 통화 포지션을 잡고, HMM 스트레스 국면에서는 달러 롱을 줄인다"
+      },
+      "relevance": 4
+    },
+    "summary_version": "2026-09-01",
+    "title": "Predicting USD/CHF: A Theory-first Signal Approach with Regime-switching Extensions"
+  },
   "ssrn-7395059": {
     "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7395059",
     "abstract": "We develop a dynamic equilibrium model of a tokenized platform with endogenous decentralized verification. The framework distinguishes miners, who incur mining costs to validate transactions, from non-mining participants, who hold tokens only for transactional benefits. Competition and subsidy-financed mining rewards generate a dual regime: with a small miner base, rents attract all entrants into mining; with a large base, rent dissipation channels entry toward non-mining participation. The model predicts a doubleS shaped adoption trajectory and a discrete upward shift in user-base volatility at the switching point. Using on-chain data, we find robust empirical support that the miner base is the primary fundamental determinant of token adoption and valuation.",
@@ -11291,7 +12720,7 @@
     "categories": [
       "Capital Markets: Asset Pricing & Valuation"
     ],
-    "downloads": 9,
+    "downloads": 13,
     "ext_id": "7395059",
     "first_seen": "2026-09-03T15:17:52+09:00",
     "id": "ssrn-7395059",
@@ -11345,5 +12774,1214 @@
     },
     "summary_version": "2026-09-01",
     "title": "Dynamic Adoption and Valuation with Decentralized Mining"
+  },
+  "ssrn-7395399": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7395399",
+    "abstract": "This study examines how China's Medium-Term Lending Facility (MLF) transmits to financial asset prices, focusing on asymmetric responses in bond and stock markets. Using monthly data from September 2014 to May 2025, we analyze changes in the outstanding balance of the MLF together with one-year government bond yield changes, the term spread, credit spread changes, and Shanghai Composite Index returns. A vector autoregression model is used to estimate average dynamic relationships, while a time-varying parameter VAR with stochastic volatility captures changes in transmission across market regimes. The results show that MLF shocks are transmitted most directly through the government bond market. An expansion in MLF liquidity generally lowers the one-year government bond yield and affects the term spread mainly through short-rate movements. By contrast, credit spreads respond weakly and briefly, and stock returns show only a short-lived positive reaction. Time-varying estimates confirm that the bond-market channel is more stable than the credit-spread or stock-market channels, although the strength of transmission differs during periods such as the 2015 stock market turbulence, the COVID-19 shock, and the post-pandemic policy transition. These findings suggest that the MLF affects financial asset prices primarily through the government bond yield structure, while its effects on credit spreads and stock returns are weaker, less direct, and less persistent.",
+    "affiliations": "Pukyong National University and Pukyong National University",
+    "authors": [
+      "Yonghas Yu",
+      "Seryoong Ahn"
+    ],
+    "categories": [
+      "Capital Markets: Asset Pricing & Valuation"
+    ],
+    "downloads": 4,
+    "ext_id": "7395399",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7395399",
+    "journals": [
+      "Capital Markets: Asset Pricing & Valuation"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 37,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/c3d24f7f-96e2-4832-8200-e93b5883f967-MECA.pdf?abstractid=7395399&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "APV"
+    ],
+    "summarized_at": "2026-09-04T09:52:36+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Unclear which market absorbs MLF shocks first",
+          "VAR plus TVP-VAR with stochastic volatility",
+          "Government bonds respond; credit and equity barely do",
+          "Stock reaction is positive but short-lived"
+        ],
+        "data": "Monthly data, September 2014 to May 2025: MLF outstanding balance, one-year government bond yield, term spread, credit spread, Shanghai Composite returns.",
+        "method": "A VAR for average dynamics, plus a time-varying parameter VAR with stochastic volatility for regime shifts.",
+        "one_liner": "Traces how China's MLF liquidity moves bond and stock prices.",
+        "relevance_why": "Policy transmission study with no entry or exit rules; the data (PBoC releases, monthly quotes) is easy to get, but there is nothing to automate.",
+        "takeaway": "Use it as a macro overlay for China rates — treat MLF balance releases as context for short-end yield direction."
+      },
+      "keywords": [
+        "MLF",
+        "monetary policy transmission",
+        "China bond market",
+        "TVP-VAR",
+        "credit spread",
+        "term spread"
+      ],
+      "ko": {
+        "bullets": [
+          "MLF 충격이 어느 시장에 먼저 닿는지 불분명했다",
+          "VAR와 확률변동성 TVP-VAR로 시기별 차이를 봤다",
+          "국채금리로는 곧장 가고 신용스프레드·주식은 약했다",
+          "주가 반응은 양(+)이지만 금세 사라졌다"
+        ],
+        "data": "2014년 9월부터 2025년 5월까지 월간 자료로 MLF 잔액, 1년 국채금리, 기간스프레드, 신용스프레드, 상하이종합지수 수익률을 쓴다.",
+        "method": "VAR로 평균 동학을 잡고, 확률변동성을 붙인 시변모수 VAR로 국면별 전달 강도를 추정한다.",
+        "one_liner": "중국 MLF 유동성이 채권·주식 가격에 어떻게 번지는지 따졌다.",
+        "relevance_why": "매매 규칙이 없는 정책 전달경로 분석이라 자동화할 게 없다. 데이터 자체는 인민은행 공시와 월간 시세라 구하기 쉽다.",
+        "takeaway": "중국 금리 포지션의 거시 오버레이 정도로만 쓸 만하다. MLF 잔액 발표를 단기 국채금리 방향의 참고 변수로 두는 식이다."
+      },
+      "relevance": 1
+    },
+    "summary_version": "2026-09-01",
+    "title": "China’s Medium-Term Lending Facility and Monetary Policy Transmission: Evidence from Bond and Stock Markets"
+  },
+  "ssrn-7395738": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7395738",
+    "abstract": "When risk must be transferred immediately, fire-sale data rarely reveal who absorbs it, at what price, or where the risk goes. On Hyperliquid, a perpetual-futures venue, a $29.76 billion bilateral census links forced sellers to recipients and post-trade outcomes, while a nested panel adds contemporaneously active nonrecipients. Receipt appears dispersed across accounts but is concentrated among incumbent market-making groups. Within the same forced sale, persistently active makers are more likely to receive, whereas temporary balance-sheet changes have weaker, less stable, and weighting-sensitive associations with receipt. Large market-making groups reduce their same-asset positions within hours. Time-zero execution costs average 18 basis points when the prior midpoint is less than five seconds old, and rise with its age. After a small positive first minute, prices move against recipients at five minutes and then recover. From thirty minutes onward, recipient-direction price paths are more favorable than those following comparable voluntary trades. Private makers normally supply immediacy; institutional backstops become important when aggregate forced flow peaks.",
+    "affiliations": "and The Chinese University of Hong Kong (CUHK)",
+    "authors": [
+      "Xiaojian Li",
+      "Jian Yuan"
+    ],
+    "categories": [
+      "Capital Markets: Market Microstructure"
+    ],
+    "downloads": 6,
+    "ext_id": "7395738",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7395738",
+    "journals": [
+      "Capital Markets: Market Microstructure"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 53,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7395738.pdf?abstractid=7395738&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "MMS"
+    ],
+    "summarized_at": "2026-09-04T09:52:40+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Fire-sale data hides the buy side identity",
+          "$29.76bn bilateral census of forced sales",
+          "Incumbent market-making groups dominate receipt",
+          "Recipient-side prices beat voluntary trades after 30 minutes"
+        ],
+        "data": "$29.76 billion of forced-sale trades on the Hyperliquid perpetual-futures venue.",
+        "method": "Bilateral census matching forced sellers to recipients, nested in a panel with contemporaneous nonrecipients.",
+        "one_liner": "Traces who absorbs forced-liquidation flow on Hyperliquid and what they earn.",
+        "relevance_why": "Scores 2 because account-linked trade-level liquidation data is not publicly sourceable and absorbing forced flow demands low-latency quoting infrastructure.",
+        "takeaway": "Size the holding window past 30 minutes when quoting into liquidation cascades, budgeting 18bp entry cost and a five-minute adverse move."
+      },
+      "keywords": [
+        "immediacy provision",
+        "forced liquidation",
+        "market making",
+        "perpetual futures",
+        "execution cost",
+        "crypto microstructure"
+      ],
+      "ko": {
+        "bullets": [
+          "화재판매 연구는 매수 측 정체를 못 밝혔다",
+          "하이퍼리퀴드 297.6억 달러 양자 체결을 전수 연결",
+          "상시 마켓메이커가 수취를 독식한다",
+          "30분 뒤부터 수취자 방향 가격이 자발적 거래보다 유리하다"
+        ],
+        "data": "하이퍼리퀴드 무기한 선물의 강제청산 체결 297.6억 달러 규모 전수 자료다",
+        "method": "강제 매도자와 수취자를 짝지은 양자 전수 자료에 동시점 비수취자를 붙인 중첩 패널 회귀다",
+        "one_liner": "강제청산 물량을 누가 받아가고 얼마를 버는지 체결 단위로 추적했다",
+        "relevance_why": "체결 단위 계정 연결 자료를 개인이 구할 수 없고 청산 물량을 받으려면 저지연 인프라까지 필요해 2점이다",
+        "takeaway": "청산 캐스케이드 구간에서 유동성 공급 호가를 넣을 때 5초 이내 중간가 기준 18bp 비용과 5분 역행을 감안해 홀딩 구간을 30분 이상으로 잡는다"
+      },
+      "relevance": 2
+    },
+    "summary_version": "2026-09-01",
+    "title": "Who Supplies Immediacy? Evidence from the Other Side of Forced Sales"
+  },
+  "ssrn-7395760": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7395760",
+    "abstract": "Using a time-varying vector autoregressive model, we analyze daily return predictability of U.S.-dollar-hedged global green and conventional bond indices. Long-run return predictability rises slightly after the Paris Agreement for the two bond markets as a whole and, in particular, in the component of returns that moves jointly across the two markets. It rises more sharply during the COVID-19 period and declines afterward. By contrast, the relative return between green and conventional bonds shows no comparable pattern. We interpret these findings using a two-bond asset pricing model of beauty contests. The Paris Agreement provides an imprecise public signal about a small latent change in institutional participation; later public evidence gradually aligns beliefs, and persistent institutional rebalancing interacts with resale-price expectations. Positive payoff covariance gives a green-originating order a larger common-return loading than green-relative loading. The response is initially weak and gradually strengthens. Normalized calculations illustrate this mechanism. A separate extension shows that lower intermediary risk tolerance can amplify an existing response during later stress.",
+    "affiliations": "and",
+    "authors": [
+      "Keiichi Morimoto",
+      "Akihiko Noda"
+    ],
+    "categories": [
+      "Capital Markets: Asset Pricing & Valuation",
+      "Capital Markets: Market Efficiency",
+      "Capital Markets: Market Microstructure"
+    ],
+    "downloads": 10,
+    "ext_id": "7395760",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7395760",
+    "journals": [
+      "Capital Markets: Asset Pricing & Valuation",
+      "Capital Markets: Market Efficiency",
+      "Capital Markets: Market Microstructure"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 43,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7395760.pdf?abstractid=7395760&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "APV",
+      "MEF",
+      "MMS"
+    ],
+    "summarized_at": "2026-09-04T09:52:53+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Whether green bond markets price as efficiently as conventional ones is open",
+          "Time-varying VAR measures daily return predictability across regimes",
+          "Long-run predictability rises slightly post-Paris, mostly in the common component",
+          "It spikes during COVID, then falls back; the green-minus-conventional spread shows no such pattern"
+        ],
+        "data": "Daily returns on USD-hedged global green and conventional bond indices, spanning the Paris Agreement and COVID periods.",
+        "method": "A time-varying VAR estimates long-run predictability period by period; a two-bond beauty-contest asset pricing model supplies the interpretation.",
+        "one_liner": "Tracks how return predictability in green vs conventional bonds shifted after the Paris Agreement.",
+        "relevance_why": "No entry or exit rules, interpretation leans on a theory model, and commercial green bond indices need a paid subscription — hence 2.",
+        "takeaway": "Discount relative-value green-minus-conventional spread trades, since the predictability sits in the common return component, not the green-specific one."
+      },
+      "keywords": [
+        "green bonds",
+        "return predictability",
+        "time-varying VAR",
+        "market efficiency",
+        "beauty contest",
+        "Paris Agreement"
+      ],
+      "ko": {
+        "bullets": [
+          "그린본드 시장이 일반채권만큼 효율적인지 아직 답이 없다",
+          "시변 VAR로 두 지수의 일간 수익률 예측력을 시기별로 측정",
+          "공통 수익률 성분의 장기 예측력만 파리협정 뒤 소폭 상승",
+          "코로나 국면에서 더 크게 올랐다가 이후 되돌림"
+        ],
+        "data": "달러 헤지된 글로벌 그린본드·일반채권 지수의 일간 수익률을 파리협정과 코로나 국면을 포함한 구간에서 썼다.",
+        "method": "시변 벡터자기회귀(time-varying VAR)로 장기 예측력을 시점별로 추정하고, 두 채권을 다룬 미인투표(beauty contest) 자산가격 모형으로 해석했다.",
+        "one_liner": "그린본드와 일반채권의 수익률 예측 가능성이 파리협정 후 어떻게 변했는지 추적했다.",
+        "relevance_why": "매매 규칙이 없고 해석은 이론 모형에 기대며, 상용 그린본드 지수는 구독 없이 구하기 어려워 2점을 줬다.",
+        "takeaway": "그린본드 단독 알파보다 두 시장의 공통 성분에 예측력이 몰린다는 점을 감안해, 상대가치(그린 마이너스 일반) 스프레드 전략의 기대치를 낮춰 잡겠다."
+      },
+      "relevance": 2
+    },
+    "summary_version": "2026-09-01",
+    "title": "Green Bonds and Market Efficiency: A Beauty Contest Approach"
+  },
+  "ssrn-7395980": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7395980",
+    "abstract": "Adaptive liquidity systems may have identical observable composition while differing in the redistributions that are feasible from their current states. This paper develops a constructive minimal model to examine when a mathematical representation of redistribution capability is dynamically sufficient for a specified problem. The model contains reserve, working, buffer, and strategic liquidity components and compares alternative redistribution architectures from a common initial state. Three results are established. First, a scalar aggregation of immediately admissible transfer capacity is dynamically insufficient for an urgent one-step liquidity-shock problem because it can identify systems with different immediate response capabilities. Second, a weighted directed graph is dynamically sufficient for a restricted two-step thresholdreachability problem when the initial state and transition rules are fixed across the system class, because it preserves the channel directions, nominal capacities, and path structure required to determine the relevant response. Third, the same graph representation becomes insufficient when systems with different transition operators are admitted. Two systems with identical initial states, admissible nominal actions, and weighted graphs may produce different one-step responses when the effective contribution of a transfer depends on its transition mechanism. In that context, an operator-based representation is dynamically sufficient. The construction distinguishes nominal channel capacity, immediately admissible transfer capacity, and effective dynamic contribution, and shows how information discarded by a representation may become dynamically relevant. The results demonstrate that no scalar, graph, or operator representation is universally adequate. A representation is dynamically sufficient only when it preserves the distinctions that determine the relevant future response for the specified system class, time horizon, and dynamic context. The paper therefore provides a constructive illustration of task-relative dynamic sufficiency within adaptive liquidity systems and Wave Liquidity Redistribution Theory (WLRT).",
+    "affiliations": "",
+    "authors": [
+      "Petr Popov"
+    ],
+    "categories": [
+      "Capital Markets: Market Microstructure"
+    ],
+    "downloads": 5,
+    "ext_id": "7395980",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7395980",
+    "journals": [
+      "Capital Markets: Market Microstructure"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 48,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7395980.pdf?abstractid=7395980&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "MMS"
+    ],
+    "summarized_at": "2026-09-04T09:52:54+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Same observable composition, different feasible redistributions",
+          "Toy model with reserve, working, buffer, strategic pools",
+          "Scalar capacity fails a one-step shock; graph works only conditionally",
+          "Differing transition operators force an operator-level representation"
+        ],
+        "data": "Theory only",
+        "method": "A constructive four-component liquidity model compares scalar, weighted-directed-graph, and operator representations from one shared initial state.",
+        "one_liner": "Builds a minimal model asking when a liquidity-capability representation is dynamically sufficient.",
+        "relevance_why": "Score 1: no signal, no rules, and the internal channel-level liquidity data the model assumes is not obtainable from any standard source.",
+        "takeaway": "Use it as an argument for tracking liquidity limits per channel and per conversion mechanism rather than as one headroom number."
+      },
+      "keywords": [
+        "liquidity redistribution",
+        "dynamic sufficiency",
+        "state representation",
+        "market microstructure",
+        "graph representation",
+        "theoretical model"
+      ],
+      "ko": {
+        "bullets": [
+          "겉보기 구성이 같아도 재배분 여력은 다를 수 있다",
+          "준비·운용·완충·전략 4개 유동성 요소로 최소 모형을 짰다",
+          "스칼라는 1단계 충격에 부족하고 그래프도 조건부다",
+          "전이 연산자가 다르면 연산자 표현까지 가야 한다"
+        ],
+        "data": "이론 연구",
+        "method": "재배분 구조를 스칼라, 가중 방향 그래프, 전이 연산자 세 방식으로 표현해 같은 초기 상태에서 비교하는 구성적 최소 모형이다",
+        "one_liner": "유동성 재배분 능력을 어떤 표현으로 담아야 충분한지 따진 이론 논문이다",
+        "relevance_why": "매매 규칙도 신호도 없는 순수 이론이고 모형이 요구하는 내부 유동성 채널 데이터는 외부에서 구할 방법이 없어 1점이다",
+        "takeaway": "실무에선 유동성 한도를 총액 하나로 관리하지 말고 채널 방향과 실제 전환 효율까지 나눠 기록하라는 정도로 쓸 만하다"
+      },
+      "relevance": 1
+    },
+    "summary_version": "2026-09-01",
+    "title": "Dynamic Sufficiency in a Minimal Adaptive Liquidity System: A Constructive Study of Redistribution-capability Representations"
+  },
+  "ssrn-7396954": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7396954",
+    "abstract": "This paper—the fourth and unifying installment of a four-paper arc—identifies the VIX-of-VIX index (VVIX), observed at minute frequency, as the temperature of the volatility quantum field introduced in Paper III. Whereas Papers I–III constructed, respectively, an equilibrium thermodynamic description (entropy S, enthalpy H, Gibbs free energy G), a single-particle quantum-mechanical description (wavefunction Ψ, Schrödinger dynamics, entanglement), and a quantum-field-theoretic description (deviation field \\varphi \\left(T,t\\right), Karhunen–Loève/Fock decomposition, propagators, renormalization-group flows, Kramers tunneling), each framework carried its own independently constructed ”second-order uncertainty” variable: Paper I’s effective temperature T_eff, Paper II’s kinetic-energy scale σ (drawn from VVIX), and VVIX itself. We define an effective field temperature T_eff from the VIX-of-VIX index (VVIX), and use it to condition every construct from Paper III — the mode mass, the propagator, the renormalization-group flow, and the effective potential — on the thermal state of the market. Doing so yields four falsifiable predictions: (P1) the field’s effective mass obeys m²(T)=m₀²-γ·T_eff with γ>0, so that elevated volatility-of-volatility measurably weakens mean reversion (mode lifetimes lengthen with temperature); (P2) the barrier-crossing (tunneling) rate follows a thermal Kramers law with high R² across temperature bins, quantitatively upgrading Paper II’s ”visual evidence of tunneling” into a predictive formula; (P3) the double-well effective potential (contango/backwardation attractors) degrades toward a single well as temperature crosses a critical threshold T*, defining a phase boundary for market anarchy in which the term structure loses both attractors; (P4) higher-order (curvature-and-above) modes, otherwise irrelevant under coarse-graining, regain energy share as temperature approaches T*. The framework is operationalized as a six-layer confirmation system (adding a Temperature layer L6) and a candidate tradeable Kramers transition probability.We test these four predictions, plus a thermodynamic–field unification claim and the tradeable-probability construct, across all overlapping windows spanning May 2023 to September 2026, using seven VVIX-sorted temperature bins per window. The results are mixed, and we report them as such rather than as confirmations. P2: mean Kramers-law R² across windows is 0.816 (range 0.721–0.867); P3: mean T* ≈ -0.85 (z-units). P4 runs in the opposite direction from the prediction in three windows — higher-order modes lose, not regain, energy share as temperature rises; and the claimed thermodynamic–field unification correlates weakly, unstable and inconsistently in sign (one of four windows negative). The tradeable Kramers transition probability shows an inverted hit-rate pattern (its nominally ”high-probability” bucket transitions less often than its ”low-probability” bucket) in three of four windows. We present the empirical section as an honest audit rather than a validation.",
+    "affiliations": "",
+    "authors": [
+      "Huzi Sun"
+    ],
+    "categories": [
+      "Capital Markets: Market Microstructure"
+    ],
+    "downloads": 11,
+    "ext_id": "7396954",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7396954",
+    "journals": [
+      "Capital Markets: Market Microstructure"
+    ],
+    "listed_date": "2026-09-02",
+    "page_count": 22,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/26bca45c-14a1-45c2-9767-74e02acb0ec4-MECA.pdf?abstractid=7396954&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "MMS"
+    ],
+    "summarized_at": "2026-09-04T09:52:59+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Physics analogies for VIX term structure lack tests",
+          "VVIX-derived temperature conditions a field model",
+          "Kramers law fits at R² 0.816; P4 flips sign",
+          "Tradeable transition probability inverts hit rates"
+        ],
+        "data": "Minute-frequency VIX and VVIX, May 2023 to September 2026, split into seven VVIX-sorted temperature bins per overlapping window.",
+        "method": "An effective temperature from VVIX conditions the mode mass, propagator, RG flow and double-well potential of a quantum-field model.",
+        "one_liner": "Treats VVIX as the temperature of a volatility field, then audits four predictions and reports most as failures.",
+        "relevance_why": "Minute VIX and VVIX are paid but easy to source; the author reports three of four predictions failing and an inverted signal, so nothing survives as a rule.",
+        "takeaway": "At most a regime filter: bucket by VVIX and check whether contango-backwardation flips cluster in hot buckets."
+      },
+      "keywords": [
+        "VVIX",
+        "volatility of volatility",
+        "VIX term structure",
+        "Kramers escape rate",
+        "regime transition",
+        "replication audit"
+      ],
+      "ko": {
+        "bullets": [
+          "VIX 미시구조를 물리 모형으로 묶으려는 시도",
+          "VVIX 분위로 나눈 유효온도가 장의 상태 변수",
+          "P2만 R² 0.816, P4는 예측과 반대로 나왔다",
+          "매매 가능 전이확률은 적중률이 뒤집혔다"
+        ],
+        "data": "2023년 5월부터 2026년 9월까지 분 단위 VIX·VVIX를 겹치는 구간마다 VVIX 기준 7개 온도 구간으로 나눠 검증했다",
+        "method": "VVIX에서 뽑은 유효온도로 장론의 질량·전파자·유효퍼텐셜을 조건화하고 크레이머스 탈출률을 적합한다",
+        "one_liner": "VVIX를 변동성 장의 온도로 놓고 네 가설을 검증했는데 대부분 빗나갔다",
+        "relevance_why": "VIX·VVIX 분 데이터는 유료지만 구하기 어렵지 않은 반면 저자 스스로 네 예측 중 셋이 실패했다고 적어 매매 규칙으로 옮길 게 없다",
+        "takeaway": "VVIX 구간별로 콘탱고-백워데이션 전환 빈도가 달라지는지 보는 레짐 필터 정도로만 쓸 만하다"
+      },
+      "relevance": 2
+    },
+    "summary_version": "2026-09-01",
+    "title": "VVIX as the Temperature of the Volatility Field: A Preliminary Thermal Unification of Thermodynamic, Quantum, and Field-Theoretic Frameworks for VIX Microstructure Systemic Risk Management System"
+  },
+  "ssrn-7396955": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7396955",
+    "abstract": "The verdict paper (Sun, 2026e) established which claims of the VVIX-temperature program survive: the sign of the thermal Kramers law, the priced NEI state variable, and a striking unexamined fact — two independent operationalizations of market temperature, a Boltzmann VIX microstructure-implied temperature T_C and a VVIX-based kinetic temperature T_K, correlate at 0.8277 (0.8288 in trading hours, 0.8286 in event time) while differing radically in observability: T_C is measurable only when the Boltzmann VIX microstructure fit gate is valid (38.4% of trading hours), whereas T_K is continuous. This paper promotes that fact to theory. We model the VIX microstructure field as coupled to two weakly coupled heat baths — the direct analogue of the two-temperature electron–phonon systems of laser physics — with coupling estimated by the measured 0.8277, and we show that (i) the unification ceiling observed in Paper V (corr(G,G_field) = 0.6718 ≤ corr(T_C,T_K) = 0.8277) is a structural consequence of two-thermometer statistics; (ii) the thermometer coverage k(t) — the fraction of time the curve carries identifiable critical dynamics — is not a nuisance but an order parameter for the single-mode absorbing state identified in Paper V; (iii) the live regime ({T*_B = -0.0009, VVIX* = 142.94, ΔU = 5.7106) is exactly the flat-barrier state the theory predicts under thermometer divergence. We derive five falsifiable predictions (Q1–Q5), pre-register their evaluation thresholds for the next twelve months of live data, and specify the kill conditions under which the dual-temperature theory joins P1 and P4 in the refuted column.",
+    "affiliations": "",
+    "authors": [
+      "Huzi Sun"
+    ],
+    "categories": [
+      "Capital Markets: Market Microstructure"
+    ],
+    "downloads": 6,
+    "ext_id": "7396955",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7396955",
+    "journals": [
+      "Capital Markets: Market Microstructure"
+    ],
+    "listed_date": "2026-09-02",
+    "page_count": 13,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/92d48c6f-7cc4-4140-ac0b-9b676a5946a5-MECA.pdf?abstractid=7396955&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "MMS"
+    ],
+    "summarized_at": "2026-09-04T09:53:10+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Two temperature proxies correlate at 0.8277 with no theory",
+          "Borrows the electron-phonon two-temperature model from lasers",
+          "Paper V's 0.6718 unification ceiling falls out of the math",
+          "Pre-registers five predictions and explicit kill conditions"
+        ],
+        "data": "VIX and VVIX series yielding T_C and T_K; T_C is observable in only 38.4% of trading hours, with 12 months of live data pre-registered.",
+        "method": "Dual-temperature field theory with two weakly coupled baths, coupling fixed by the measured 0.8277.",
+        "one_liner": "Models VIX microstructure as a field coupled to two heat baths.",
+        "relevance_why": "VIX and VVIX are public, but T_C depends on an unpublished Boltzmann fit gate and five prior papers, so replication stalls — hence 2.",
+        "takeaway": "Treat thermometer coverage k(t) as a regime order parameter and cut short-vol exposure in the flat-barrier state (ΔU = 5.7106)."
+      },
+      "keywords": [
+        "VIX microstructure",
+        "VVIX",
+        "two-temperature model",
+        "regime detection",
+        "falsifiable predictions",
+        "order parameter"
+      ],
+      "ko": {
+        "bullets": [
+          "온도 지표 두 개가 0.8277로 붙는데 이유가 없었다",
+          "레이저 물리의 전자-포논 이중온도계를 VIX에 이식했다",
+          "Paper V의 통합 한계 0.6718이 두 온도계 통계의 결과다",
+          "예측 다섯 개와 12개월 기각 조건을 미리 등록했다"
+        ],
+        "data": "VIX·VVIX 시계열에서 뽑은 T_C와 T_K이며 T_C는 거래시간의 38.4%에서만 측정된다",
+        "method": "VIX 미시구조 장을 약하게 결합한 열욕 두 개에 붙인 이중온도 장이론이다",
+        "one_liner": "VIX 미시구조 온도 두 개를 이중 열욕 모형으로 묶었다",
+        "relevance_why": "VIX·VVIX 자체는 공개 데이터지만 T_C를 만드는 볼츠만 적합 게이트와 선행 논문 다섯 편의 정의가 없으면 재현이 막혀 2점이다",
+        "takeaway": "온도계 커버리지 k(t)를 레짐 상태 변수로 써서 평평한 장벽 구간(ΔU=5.7106)에 변동성 매도를 줄인다"
+      },
+      "relevance": 2
+    },
+    "summary_version": "2026-09-01",
+    "title": "Two Thermometers, One Field: A Dual-Temperature Field Theory of the VIX Microstructure"
+  },
+  "ssrn-7397158": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7397158",
+    "abstract": "Funding rates on perpetual futures are directional transfers, yet empirical work often enters them as absolute values. That convention can hide an economically relevant asymmetry. This paper returns to the frozen Binance BTCUSDT and ETHUSDT tape from 2020-2026 and separates lagged positive funding from the magnitude of negative funding, while leaving the increment-variance and pre-averaged apparent-H estimators unchanged. In the signed-basis specification, a one-standard-deviation increase in positive funding is associated with coefficients of-0.0058 and-0.0052 for Bitcoin and-0.0042 and-0.0041 for Ether; each remains significant after Holm adjustment. The corresponding negative-side 90% confidence intervals fall within approximately ±0.0013. Two one-sided tests also establish equivalence to zero at the disclosed, sensitivity-tested ±0.0015 benchmark. The asymmetry persists in raw units, under equal state weighting and conditional-state estimation, across alternative HAC bandwidths, and in a 499-replication 28-day moving-block bootstrap. Signed basis controls do not absorb it, and the 2020-2022 and 2023-2026 estimates show no formal break. By contrast, signed funding-by-settlement interactions and signed block-extreme coefficients fail to survive familywise-error correction. The evidence places the positive-funding result inside the increment-variance measurement family: it is a persistent observation-state association, rather than evidence about latent spot regularity, long-side inventory, causal leverage, transition information, or a trading rule.",
+    "affiliations": "",
+    "authors": [
+      "Fuli Yang"
+    ],
+    "categories": [
+      "Quantitative Methods in Investing & Financial Statement Analysis"
+    ],
+    "downloads": 5,
+    "ext_id": "7397158",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7397158",
+    "journals": [
+      "Quantitative Methods in Investing & Financial Statement Analysis"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 9,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7397158.pdf?abstractid=7397158&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "QM"
+    ],
+    "summarized_at": "2026-09-04T09:53:15+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Prior work enters funding as absolute value, erasing direction",
+          "Regresses apparent H on lagged positive and negative funding separately",
+          "BTC -0.0058/-0.0052, ETH -0.0042/-0.0041; only positive side survives",
+          "Negative side tests equivalent to zero at the ±0.0015 benchmark"
+        ],
+        "data": "Frozen Binance BTCUSDT and ETHUSDT perpetual tape, 2020-2026, split into 2020-2022 and 2023-2026 subsamples with no formal break.",
+        "method": "Increment-variance and pre-averaged apparent-Hurst estimators, regressed on sign-separated funding, with Holm correction, varied HAC bandwidths, and a 499-replication 28-day moving-block bootstrap.",
+        "one_liner": "Splitting funding rates by sign reveals an asymmetric link to apparent roughness.",
+        "relevance_why": "Binance funding and trade data are free via public API, but the author explicitly disclaims any trading rule or causal channel, so it is a feature-design hint, not a strategy.",
+        "takeaway": "Feed funding into vol features as signed components, not absolute value, and expect the effect only when longs pay."
+      },
+      "keywords": [
+        "perpetual futures",
+        "funding rate asymmetry",
+        "rough volatility",
+        "Bitcoin",
+        "Ether",
+        "multiple testing correction"
+      ],
+      "ko": {
+        "bullets": [
+          "기존 연구는 펀딩비를 절댓값으로 넣어 방향성을 지운다",
+          "양(+) 펀딩 시차항과 음(-) 펀딩 크기를 따로 회귀에 넣었다",
+          "BTC -0.0058·-0.0052, ETH -0.0042·-0.0041로 양수 쪽만 유의하다",
+          "음수 쪽은 ±0.0015 기준에서 0과 동등하다는 결과가 나왔다"
+        ],
+        "data": "바이낸스 BTCUSDT·ETHUSDT 무기한선물 2020~2026년 고정 테이프를 쓰고 2020~2022와 2023~2026으로 나눠 구조변화를 확인했다",
+        "method": "증분분산과 사전평균화로 겉보기 H(apparent Hurst)를 추정하고 부호를 나눈 펀딩비로 회귀한 뒤 Holm 보정, HAC 대역폭 변경, 28일 이동블록 부트스트랩 499회로 검증했다",
+        "one_liner": "펀딩비를 부호별로 나눠 겉보기 거칠기와의 비대칭 연관을 잡아냈다",
+        "relevance_why": "바이낸스 펀딩비와 체결 데이터는 공개 API로 쉽게 받지만 저자가 매매 규칙이 아니라 관측 상태의 연관일 뿐이라고 못 박아 3점이다",
+        "takeaway": "펀딩비를 쓰는 피처는 절댓값 대신 양·음을 갈라 넣는 편이 낫고 롱 프리미엄 국면의 실현변동성 추정 보정에 참고할 만하다"
+      },
+      "relevance": 3
+    },
+    "summary_version": "2026-09-01",
+    "title": "Apparent Roughness and Funding-Rate Asymmetry: Evidence from Bitcoin and Ether Perpetuals"
+  },
+  "ssrn-7397256": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7397256",
+    "abstract": "The low-carbon transition depends on both critical minerals and financial capital, yet it remains unclear whether green financial markets reflect developments in underlying physical material markets. This study examines the relationship between neodymium–praseodymium (NdPr) and dysprosium prices and green financial assets using weekly data from 2016 to 2026. The analysis includes a rare-earth equity fund, two clean-energy funds, Brent crude oil and the MSCI World Index, combining correlation-based networks with a time-varying parameter vector autoregressive (TVP-VAR) connectedness framework. The results reveal a persistent separation between the physical and financial dimensions of the energy transition. Rare-earth markets form a largely self-contained subsystem, whereas green financial assets are strongly interconnected and influenced by broader equity-market conditions. Shocks from critical minerals explain less than 3% of the forecast error variance of green financial assets. REMX, in particular, behaves more like a financial asset than a proxy for physical rare-earth markets, suggesting limited alignment between financial valuations and material dependencies.",
+    "affiliations": "Complutense University of Madrid",
+    "authors": [
+      "Pilar Grau-Carles"
+    ],
+    "categories": [
+      "Global Equities, Exchanges & Investment Indices",
+      "Capital Markets: Asset Pricing & Valuation"
+    ],
+    "downloads": 7,
+    "ext_id": "7397256",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7397256",
+    "journals": [
+      "Global Equities, Exchanges & Investment Indices",
+      "Capital Markets: Asset Pricing & Valuation"
+    ],
+    "listed_date": "2026-09-02",
+    "page_count": 24,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/238c2320-64cb-4b28-861c-240cd7795405-MECA.pdf?abstractid=7397256&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "GEX",
+      "APV"
+    ],
+    "summarized_at": "2026-09-04T09:53:18+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Tests whether green markets price physical critical-mineral risk",
+          "NdPr and dysprosium prices vs. REMX, clean-energy funds, Brent, MSCI World",
+          "TVP-VAR connectedness plus correlation networks on 2016-2026 weekly data",
+          "Mineral shocks explain under 3% of green assets' forecast error variance"
+        ],
+        "data": "Weekly 2016-2026: NdPr and dysprosium prices, a rare-earth equity fund, two clean-energy funds, Brent, MSCI World.",
+        "method": "Time-varying parameter VAR connectedness, paired with correlation-based networks.",
+        "one_liner": "Rare-earth prices barely move green financial assets, over a decade of weekly data.",
+        "relevance_why": "Score 2: no tradable rules, and NdPr/dysprosium spot prices sit behind paid commodity feeds, though killing the REMX-as-proxy belief earns the bonus.",
+        "takeaway": "Stop treating REMX as physical rare-earth exposure; model it as an equity-beta holding in the risk system."
+      },
+      "keywords": [
+        "rare earth prices",
+        "TVP-VAR connectedness",
+        "clean energy ETFs",
+        "critical minerals",
+        "spillover networks"
+      ],
+      "ko": {
+        "bullets": [
+          "저탄소 전환은 광물과 자본에 함께 기대는데 둘의 연결은 미검증",
+          "네오디뮴·프라세오디뮴(NdPr)과 디스프로슘 가격 대 그린 자산 비교",
+          "TVP-VAR 연결성으로 예측오차분산 분해, 상관 네트워크 병행",
+          "광물 충격은 그린 자산 분산의 3% 미만만 설명한다"
+        ],
+        "data": "2016~2026년 주간 데이터로 NdPr·디스프로슘 가격, 희토류 ETF(REMX), 청정에너지 펀드 2종, 브렌트유, MSCI World를 묶었다",
+        "method": "시변모수 벡터자기회귀(TVP-VAR) 연결성 지수와 상관 네트워크를 함께 쓴다",
+        "one_liner": "희토류 가격과 친환경 금융자산이 서로 거의 안 움직인다는 실증",
+        "relevance_why": "매매 규칙이 없고 NdPr·디스프로슘 현물 가격은 유료 상품 데이터라 확보가 까다로워 2점, 다만 REMX=희토류 대용이라는 통념을 깬 점은 인정한다",
+        "takeaway": "REMX를 희토류 실물 익스포저로 쓰는 헤지는 접고, 주식 베타 자산으로 분류해 리스크 모델에 넣는다"
+      },
+      "relevance": 2
+    },
+    "summary_version": "2026-09-01",
+    "title": "Do Green Financial Markets Reflect Critical Mineral Risks? Evidence from Rare Earth Markets and Energy-Transition Assets"
+  },
+  "ssrn-7397641": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7397641",
+    "abstract": "A growing literature reports that machine-learning (ML) models deliver large cross-sectional stock-selection gains, yet whether those gains are implementable rather than merely statistical remains contested. We revisit tree-ensemble stock selection in Taiwan, an Asia-Pacific market sharply segmented between liquid Taiwan Stock Exchange (TWSE) large-caps and thinly traded Taipei Exchange (TPEx/OTC) small-caps. To limit survivorship bias, we reconstruct the investable universe at each annual May formation from official exchange files, retaining firms that later delist. Over 2011–2024, tree ensembles predict top-quintile next-year returns, and we form equal- and value-weighted top-ten portfolios. Unconstrained, the random forest earns 44.6% per year against 7.9% for the Yuanta Taiwan Top-50 ETF (0050) and 6.4% for the index (TAIEX). This advantage is confined to the hard-to-trade segment. A modest NT$100 million liquidity floor turns the random-forest return negative (−1.3%); value-weighting lowers but does not remove it, so the binding constraint is the selectable universe, not the weighting scheme. Within the tradable universe the ranking skill (AUC) falls to about 0.50 and the monthly-based annualized Sharpe ratio is 0.02 against 1.29 unconstrained. Restricting selection to the main board roughly halves the return (44.6% to 23.5%), and economic capacity is only about NT$0.2–0.4 million. The collapse survives higher-capacity gradient boosting, a wide neural network, and an enriched feature set, so it reflects the investable opportunity set rather than an underpowered model: we read the evidence as liquidity-confined predictive structure rather than investable alpha.",
+    "affiliations": "Shih Chien University and affiliation not provided to SSRN",
+    "authors": [
+      "LIANG-CHENG CHANG",
+      "Hsiu Hsing Chiu"
+    ],
+    "categories": [
+      "Global Equities, Exchanges & Investment Indices",
+      "Capital Markets: Market Microstructure"
+    ],
+    "downloads": 9,
+    "ext_id": "7397641",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7397641",
+    "journals": [
+      "Global Equities, Exchanges & Investment Indices",
+      "Capital Markets: Market Microstructure"
+    ],
+    "listed_date": "2026-09-02",
+    "page_count": 27,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/311a8df8-79e9-45b4-9ad7-c635676313eb-MECA.pdf?abstractid=7397641&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "GEX",
+      "MMS"
+    ],
+    "summarized_at": "2026-09-04T09:53:29+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Tests whether reported ML alpha is tradable, not just statistical",
+          "Rebuilds the investable universe yearly, keeping later delistings",
+          "Unconstrained random forest: 44.6%/yr vs 7.9% for the 0050 ETF",
+          "A NT$100m liquidity floor flips the return to -1.3%"
+        ],
+        "data": "Taiwan TWSE and TPEx official exchange files, 2011-2024, annual May formation.",
+        "method": "Tree ensembles, gradient boosting and a wide neural net predict top-quintile next-year returns; top-ten equal- and value-weighted portfolios.",
+        "one_liner": "ML stock-selection gains in Taiwan vanish once you can only buy liquid names.",
+        "relevance_why": "Reproducible from prices, turnover and listing files with a stated May rebalance, but you must assemble historical Taiwan delisting records yourself.",
+        "takeaway": "Use it as a screening protocol: impose liquidity floors and capacity caps on any ML signal before believing the backtest."
+      },
+      "keywords": [
+        "machine learning stock selection",
+        "liquidity constraints",
+        "random forest",
+        "Taiwan equities",
+        "capacity",
+        "survivorship bias"
+      ],
+      "ko": {
+        "bullets": [
+          "ML 종목선택 성과가 실제로 체결 가능한지 검증",
+          "대만 상장·상장폐지 종목으로 투자 가능 유니버스 복원",
+          "무제약 랜덤포레스트 연 44.6%, ETF 0050은 7.9%",
+          "거래대금 1억 대만달러 하한을 걸면 연 -1.3%"
+        ],
+        "data": "2011~2024년 대만 TWSE·TPEx 공식 거래소 파일, 매년 5월 리밸런싱",
+        "method": "트리 앙상블(랜덤포레스트, 그래디언트 부스팅)과 넓은 신경망으로 다음 해 수익률 상위 5분위를 예측하고 상위 10종목을 동일가중·시가총액가중으로 담는다",
+        "one_liner": "머신러닝 종목선택의 초과수익이 유동성 제약을 걸면 사라진다",
+        "relevance_why": "가격·거래대금·거래소 상장 파일만 있으면 재현되고 리밸런싱 시점도 명확하지만 대만 과거 상장폐지 종목 파일을 직접 모아야 해서 데이터 준비에 손이 간다",
+        "takeaway": "ML 신호를 백테스트할 때 유동성 하한과 용량 한도를 먼저 걸어보고 알파가 남는지 확인하는 절차로 쓴다"
+      },
+      "relevance": 4
+    },
+    "summary_version": "2026-09-01",
+    "title": "Untradable Alpha? Machine-Learning Stock Selection under Investability Constraints: Evidence from Taiwan"
+  },
+  "ssrn-7397642": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7397642",
+    "abstract": "Large language models (LLMs) are increasingly being adopted for a wide range of financial analysis tasks. This paper asks whether an LLM treats references to artificial intelligence (AI) as economically informative disclosure or as a favorable narrative cue. We construct a panel of 14,336 Chinese A-share firm-years from 2021–2023. A frozen DeepSeek model evaluates anonymized Management Discussion and Analysis (MD&A) text along five dimensions: overall outlook, growth outlook, profitability outlook, implementation risk, and downside risk. AI disclosure is measured with a 73-term dictionary in both the complete MD&A and the text visible to the model. Within firms, more intensive AI language is associated with higher overall, growth, and profitability assessments and lower perceived downside risk. The association is strongest for growth and downside risk; profitability and implementation risk are less stable across specifications. Section-level tests locate the tilt primarily in operating discussions and forward-looking passages, rather than in risk disclosures.The scores are not merely rhetorical: favorable assessments predict higher next-year profitability, whereas growth and profitability optimism predict lower subsequent stock returns and risk scores forecast higher volatility. LLMs thus appear informative but not neutral. They extract signals about future operations while systematically rewarding AI-related narratives, raising a measurement and governance concern as machine readers become part of financial analysis.",
+    "affiliations": "Renmin University of China and Renmin University of China - School of Information",
+    "authors": [
+      "qilin qin",
+      "Yueguo Chen"
+    ],
+    "categories": [
+      "Capital Markets: Market Efficiency"
+    ],
+    "downloads": 10,
+    "ext_id": "7397642",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7397642",
+    "journals": [
+      "Capital Markets: Market Efficiency"
+    ],
+    "listed_date": "2026-09-02",
+    "page_count": 25,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/85237828-f8a3-4924-9b82-1954c1319632-MECA.pdf?abstractid=7397642&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "MEF"
+    ],
+    "summarized_at": "2026-09-04T09:53:33+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Gap: nobody checks if LLM readers carry narrative bias",
+          "Frozen DeepSeek scores anonymized MD&A on five dimensions",
+          "Heavier AI language lifts growth scores, cuts downside risk",
+          "Growth and profitability optimism predicts lower next-year returns"
+        ],
+        "data": "14,336 Chinese A-share firm-years of MD&A text, 2021-2023.",
+        "method": "A frozen DeepSeek model rates anonymized MD&A text on outlook, growth, profitability, implementation risk and downside risk; a 73-term dictionary measures AI disclosure intensity.",
+        "one_liner": "Tests whether an LLM rewards AI mentions in filings as good news.",
+        "relevance_why": "Score 2: needs Chinese A-share MD&A corpora plus bulk LLM inference, so data is costly, but the optimism-predicts-lower-returns reversal earns a bonus for telling you what not to trade.",
+        "takeaway": "Use LLM text scores as a signal but orthogonalize against AI-word density, and trade growth optimism as a contrarian input."
+      },
+      "keywords": [
+        "LLM sentiment",
+        "AI disclosure",
+        "MD&A text",
+        "China A-shares",
+        "narrative bias",
+        "return predictability"
+      ],
+      "ko": {
+        "bullets": [
+          "LLM을 재무 텍스트 판독에 쓸 때 편향이 생기는지 물었다",
+          "익명화한 MD&A를 DeepSeek이 5개 항목으로 점수화했다",
+          "AI 단어가 많을수록 성장 점수는 높고 하방위험 점수는 낮다",
+          "성장·수익성 낙관 점수가 높은 종목의 이듬해 수익률은 낮았다"
+        ],
+        "data": "2021~2023년 중국 A주 기업-연도 14,336건의 MD&A 텍스트",
+        "method": "고정한 DeepSeek 모델이 익명 MD&A를 전망·성장·수익성·실행위험·하방위험 5개 축으로 채점하고, AI 관련 73개 단어 사전으로 공시 강도를 잰다",
+        "one_liner": "LLM이 AI 언급을 호재로 과대평가하는지 검증했다",
+        "relevance_why": "중국 A주 MD&A 원문과 LLM 대량 추론이 필요해 데이터 확보 비용이 크지만, 낙관 점수가 수익률을 낮추는 역전 결과가 기존 통념을 뒤집어 점수를 올렸다",
+        "takeaway": "LLM 텍스트 점수를 알파로 쓰되 AI 단어 빈도를 따로 빼서 중화하고, 성장 낙관 점수는 오히려 역방향 신호로 다룬다"
+      },
+      "relevance": 2
+    },
+    "summary_version": "2026-09-01",
+    "title": "Do Large Language Models Overvalue AI Narratives?"
+  },
+  "ssrn-7397644": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7397644",
+    "abstract": "Using unique account-level data covering all investors who traded through the Shanghai-Hong Kong Stock Connect (Stock Connect), this paper constructs a daily cross-border trading ratio for the first three years after the program's launch and examines the association between the cross-border stock trading and pricing efficiency in China's A-share market. The findings show that a larger share of cross-border trading is significantly associated with a lower A-H share premium, and that the association is stronger when institutional investors or northbound investors account for a larger share of Stock Connect trades. The results are qualitatively robust across several alternative specifications and robustness checks. Further analyses show that the association is stronger among A-share firms with greater information asymmetry and lower A-share liquidity relative to H-share liquidity. However, no comparable association is found for trading conducted through the QFII or RQFII programs. Altogether, the findings suggest that China’s stock market liberalization is associated with greater pricing efficiency in the underlying stock market.",
+    "affiliations": "University of International Business and Economics, Shanghai Stock Exchange, Fudan University - Fanhai International School of Finance (FISF) and affiliation not provided to SSRN",
+    "authors": [
+      "A BB",
+      "Wei Liu",
+      "Donghui Shi",
+      "qiangsong wang"
+    ],
+    "categories": [
+      "Global Equities, Exchanges & Investment Indices",
+      "Capital Markets: Market Efficiency",
+      "Capital Markets: Market Microstructure"
+    ],
+    "downloads": 6,
+    "ext_id": "7397644",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7397644",
+    "journals": [
+      "Global Equities, Exchanges & Investment Indices",
+      "Capital Markets: Market Efficiency",
+      "Capital Markets: Market Microstructure"
+    ],
+    "listed_date": "2026-09-02",
+    "page_count": 28,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/f7920e8c-30c4-43c7-96da-4a43096d72e4-MECA.pdf?abstractid=7397644&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "GEX",
+      "MEF",
+      "MMS"
+    ],
+    "summarized_at": "2026-09-04T09:53:35+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Few studies link liberalization directly to A-share pricing efficiency",
+          "Account-level Connect data yields a daily cross-border trading ratio",
+          "Higher cross-border share, lower A-H premium; stronger for institutions",
+          "QFII and RQFII flows show no comparable effect"
+        ],
+        "data": "All investor accounts trading via Shanghai-Hong Kong Stock Connect over the program's first three years.",
+        "method": "Regress the A-H premium on a daily cross-border trading ratio, split by investor type and direction.",
+        "one_liner": "Heavier Stock Connect cross-border trading coincides with a smaller A-H premium.",
+        "relevance_why": "Account-level exchange data is not obtainable outside the exchange, capping the score at 2; public daily Connect flows are only a rough proxy.",
+        "takeaway": "Use northbound flow intensity to time A-H premium convergence trades."
+      },
+      "keywords": [
+        "Stock Connect",
+        "A-H share premium",
+        "market liberalization",
+        "pricing efficiency",
+        "cross-border trading",
+        "information asymmetry"
+      ],
+      "ko": {
+        "bullets": [
+          "시장 개방이 가격 효율성을 높이는지 직접 검증한 연구가 부족했다",
+          "계좌 단위 데이터로 일별 교차거래 비중을 만들어 회귀로 검정했다",
+          "교차거래 비중이 클수록 A-H 프리미엄이 낮았다",
+          "QFII·RQFII 경로에서는 같은 관계가 나타나지 않았다"
+        ],
+        "data": "상하이-홍콩 교차거래 시행 첫 3년의 전체 투자자 계좌 단위 거래 데이터다",
+        "method": "일별 교차거래 비중을 설명변수로 놓고 A-H 프리미엄에 회귀한 뒤 투자자 유형별로 쪼개 봤다",
+        "one_liner": "후강퉁 교차거래 비중이 높을수록 A-H 프리미엄이 줄었다",
+        "relevance_why": "계좌 단위 거래 데이터는 거래소 내부 자료라 외부에서 못 구한다. 공개되는 후강퉁 일별 순매수로 근사할 수는 있지만 논문 신호를 그대로 재현하긴 어렵다",
+        "takeaway": "북향 자금 유입 강도를 A-H 프리미엄 수렴 트레이드의 타이밍 지표로 써볼 만하다"
+      },
+      "relevance": 2
+    },
+    "summary_version": "2026-09-01",
+    "title": "China's Stock Connect and the A-H Share Premium"
+  },
+  "ssrn-7397741": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7397741",
+    "abstract": "This paper examines the effect of corporate digital washing on retail investor sentiment, using data from China's A-share listed companies spanning 2010–2023. The baseline results indicate that digital washing significantly boosts retail investors' optimistic sentiment. Mechanism tests show that this effect operates primarily by attracting retail investor attention, as reflected in increased inquiries on interactive platforms, the key communication channels between retail investors and listed firms. Furthermore, media coverage of digital topics amplifies this effect, whereas analyst attention mitigates it. Heterogeneity analysis reveals that the effect is more pronounced in traditional firms, non-leading firms and firms with lower information disclosure quality. Finally, we show that digital washing impairs market pricing efficiency. By examining how corporate digital information manipulation affects retail investors, this study calls for regulatory action and contributes to disclosure and behavioral finance research.",
+    "affiliations": "Tianjin University of Finance and Economics, Tianjin University of Finance and Economics, Guangdong University of Foreign Studies and Guangdong University of Foreign Studies",
+    "authors": [
+      "Jianmei Liu",
+      "Jingjing Ma",
+      "Qianru Liu",
+      "Shanshan Zhang"
+    ],
+    "categories": [
+      "Capital Markets: Market Efficiency"
+    ],
+    "downloads": 8,
+    "ext_id": "7397741",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7397741",
+    "journals": [
+      "Capital Markets: Market Efficiency"
+    ],
+    "listed_date": "2026-09-02",
+    "page_count": 40,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/e5413110-2ea7-42a6-86b8-e4acf18ecefe-MECA.pdf?abstractid=7397741&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "MEF"
+    ],
+    "summarized_at": "2026-09-04T09:53:48+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Targets a gap: how hollow digital talk in disclosures moves retail sentiment",
+          "Panel regressions on A-share firms, plus mechanism and heterogeneity tests",
+          "Digital washing lifts retail optimism and degrades market pricing efficiency",
+          "Media digital coverage amplifies the effect; analyst attention dampens it"
+        ],
+        "data": "China A-share listed firms, 2010–2023, plus retail inquiries on investor interactive platforms.",
+        "method": "Panel regression of retail sentiment on a digital-washing measure, with mechanism, moderation and heterogeneity tests.",
+        "one_liner": "Corporate digital washing raises retail investors' optimism in China's A-share market.",
+        "relevance_why": "Score 2: the direction is clear but there are no trading rules, and the washing measure and interactive-platform inquiry data must be constructed from sources that are hard to obtain outside China.",
+        "takeaway": "Build a digital-talk-versus-actual-investment gap score from filings to screen out or short hyped names."
+      },
+      "keywords": [
+        "digital washing",
+        "retail investor sentiment",
+        "China A-shares",
+        "information manipulation",
+        "pricing efficiency",
+        "investor attention"
+      ],
+      "ko": {
+        "bullets": [
+          "기업이 디지털 전환을 말로만 포장할 때 개인투자자가 어떻게 반응하는지 따진다",
+          "중국 A주 2010~2023년 패널로 기준 회귀와 메커니즘·이질성 검정을 돌린다",
+          "디지털 포장은 개인 낙관을 키우고 시장 가격효율을 떨어뜨린다",
+          "언론의 디지털 보도가 효과를 키우고 애널리스트 관심은 줄인다"
+        ],
+        "data": "중국 A주 상장사 2010~2023년 패널과 개인투자자 상호작용 플랫폼 질의 데이터를 썼다.",
+        "method": "디지털 포장 지표를 설명변수로 둔 패널 회귀에 메커니즘·조절·이질성 검정을 붙였다.",
+        "one_liner": "기업의 디지털 포장이 개인투자자 낙관을 키운다는 실증",
+        "relevance_why": "방향성은 뚜렷하나 매매 규칙이 없고 상호작용 플랫폼 질의와 디지털 포장 지표를 직접 만들어야 해서 데이터 확보가 까다롭다.",
+        "takeaway": "공시 텍스트에서 디지털 언급과 실제 투자의 괴리를 뽑아 과열 종목 회피나 숏 후보 스크리닝에 쓴다."
+      },
+      "relevance": 2
+    },
+    "summary_version": "2026-09-01",
+    "title": "Digital Washing and Retail Investor Sentiment: Evidence from China"
+  },
+  "ssrn-7398058": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7398058",
+    "abstract": "This paper asks whether stock markets predict the economy or shape it. Markets called the 2009 and 2020 recoveries before data confirmed them, which looks like strong evidence for market efficiency. But the Dot-Com bubble and the pandemic-era gap between rising indices and struggling households show markets can price sentiment as easily as fundamentals. Through the wealth effect, corporate investment, and policy responses, market movements feed back into the outcomes they're forecasting, making prediction and causation hard to separate.",
+    "affiliations": "Safa Community School",
+    "authors": [
+      "Riti Heda"
+    ],
+    "categories": [
+      "Capital Markets: Asset Pricing & Valuation",
+      "Capital Markets: Market Efficiency"
+    ],
+    "downloads": 4,
+    "ext_id": "7398058",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7398058",
+    "journals": [
+      "Capital Markets: Asset Pricing & Valuation",
+      "Capital Markets: Market Efficiency"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 8,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7398058.pdf?abstractid=7398058&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "APV",
+      "MEF"
+    ],
+    "summarized_at": "2026-09-04T09:53:49+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Targets the gap between market prediction and market causation",
+          "Contrasts the 2009 and 2020 recoveries with the Dot-Com bubble",
+          "Wealth effect, corporate investment and policy form a feedback loop",
+          "Pandemic indices rose while households struggled"
+        ],
+        "data": "theory only",
+        "method": "Narrative argument from selected historical episodes, no empirical model.",
+        "one_liner": "An essay asking whether stock markets forecast the economy or cause it.",
+        "relevance_why": "Score 1: no rules, no estimates, nothing to automate. Data availability is not the binding constraint — the index history it cites is free and public.",
+        "takeaway": "A caution that equity-based recession signals may be partly self-fulfilling through policy and investment channels."
+      },
+      "keywords": [
+        "market efficiency",
+        "wealth effect",
+        "reflexivity",
+        "recession forecasting",
+        "asset price feedback"
+      ],
+      "ko": {
+        "bullets": [
+          "주가의 예측력과 인과성을 가르기 어렵다는 문제를 짚는다",
+          "2009년·2020년 회복과 닷컴 버블 사례를 비교한다",
+          "부의 효과, 기업 투자, 정책 대응이 되먹임 고리를 만든다",
+          "지수가 오르는 동안 가계는 힘들었던 팬데믹 시기를 든다"
+        ],
+        "data": "이론 연구",
+        "method": "실증 모형 없이 과거 사례를 골라 논증하는 서술 연구다",
+        "one_liner": "주가가 경기를 예측하는지 바꾸는지 따져본 에세이다",
+        "relevance_why": "규칙도 데이터도 없는 서술형 논의라 자동화할 게 없다. 데이터 확보 난이도는 무관하다. 쓰인 지수 자료 자체는 공개 데이터다.",
+        "takeaway": "주가 기반 경기 신호를 쓸 때 정책·투자 되먹임 탓에 자기실현 위험이 있다는 점만 참고한다"
+      },
+      "relevance": 1
+    },
+    "summary_version": "2026-09-01",
+    "title": "Are Stock Markets Predicting the Economy - or Distorting It?"
+  },
+  "ssrn-7398632": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7398632",
+    "abstract": "The emergence of digital assets has challenged conventional theories of monetary evolution, raising fundamental questions regarding the long-run sustainability of blockchain-based monetary standards. This study develops a new monetarist framework to examine whether asset tokenization can facilitate the transition of Bitcoin from a constrained legacy blockchain architecture toward an advanced digital financial standard. The model integrates monetary search frictions, network externalities, congestion costs, and endogenous security deterioration to characterize the dynamic competition between a legacy cryptocurrency system and its tokenized successor. The theoretical analysis demonstrates that, under a closed technological environment, declining mining-based security incentives generate a terminal loss of monetary value as rational agents anticipate the erosion of transaction reliability. However, introducing a tokenization pathway fundamentally alters the equilibrium outcome by allowing the monetary asset to migrate onto a more scalable and programmable infrastructure while preserving its underlying scarcity characteristics.Numerical simulations reveal a delayed but inevitable transition process driven by the interaction between incumbent network advantages and declining legacy-system efficiency. Although strong historical adoption initially sustains the original blockchain through network effects, rising congestion and deteriorating security eventually shift economic incentives toward the tokenized monetary standard, generating a tipping-point migration equilibrium. The framework further explains why current Bitcoin",
+    "affiliations": "Zhengzhou University",
+    "authors": [
+      "Yuanyuan Wang"
+    ],
+    "categories": [
+      "Capital Markets: Asset Pricing & Valuation"
+    ],
+    "downloads": 5,
+    "ext_id": "7398632",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7398632",
+    "journals": [
+      "Capital Markets: Asset Pricing & Valuation"
+    ],
+    "listed_date": "2026-09-02",
+    "page_count": 36,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/a608a5c6-ef9b-44e0-ba2d-cc9867558499-MECA.pdf?abstractid=7398632&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "APV"
+    ],
+    "summarized_at": "2026-09-04T09:53:51+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Does falling mining security kill Bitcoin's monetary value?",
+          "Search frictions, network effects, congestion, security decay in one model",
+          "Closed system: terminal value loss. Tokenization path: migration equilibrium",
+          "Incumbent network effects delay migration until a tipping point"
+        ],
+        "data": "Theory only.",
+        "method": "New monetarist model with endogenous security deterioration, solved by numerical simulation.",
+        "one_liner": "A monetary model of Bitcoin migrating from legacy chain to tokenized infrastructure.",
+        "relevance_why": "Pure theory with no price data or testable rule; nothing to source or backtest.",
+        "takeaway": "At most a lens on long-horizon Bitcoin security-budget risk, not a signal."
+      },
+      "keywords": [
+        "Bitcoin",
+        "tokenization",
+        "new monetarist model",
+        "network externalities",
+        "mining security",
+        "tipping point"
+      ],
+      "ko": {
+        "bullets": [
+          "채굴 보상이 줄면 비트코인 가치가 결국 소멸하는가",
+          "탐색 마찰·네트워크 외부성·혼잡비용·보안 약화를 한 모형에",
+          "폐쇄 환경에서는 가치가 소멸, 토큰화 경로가 열리면 이전 균형",
+          "선점 효과 탓에 이전은 늦어지지만 임계점을 넘으면 급격히 진행"
+        ],
+        "data": "이론 연구",
+        "method": "화폐 탐색 마찰과 내생적 보안 저하를 결합한 신화폐주의(new monetarist) 모형에 수치 시뮬레이션을 붙였다",
+        "one_liner": "비트코인이 토큰화 인프라로 옮겨가는 과정을 화폐이론 모형으로 푼다",
+        "relevance_why": "가격 데이터가 아니라 모형 파라미터만 다루는 순수 이론이라 자동화할 규칙이 없다",
+        "takeaway": "당장 매매 규칙으로 쓸 건 없고 비트코인 장기 보유의 보안 예산 리스크를 점검하는 정도다"
+      },
+      "relevance": 1
+    },
+    "summary_version": "2026-09-01",
+    "title": "Beyond the Blockchain Constraint: Tokenized Monetary Transition and the Future Valuation of Digital Assets"
+  },
+  "ssrn-7398824": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7398824",
+    "abstract": "How do residential real estate markets value large-scale climate policies? We study how Germany's coal phase-out affects residential property values near decommissioned coal-fired power plants. Combining detailed residential property listing data from 2007 to 2023 with the staggered timing of plant closures, we estimate dynamic spatial difference-in-differences (DiD) models that account for the geographic proximity. Nearby residential property values decline by 8.2%, implying aggregate homeowner wealth losses of approximately €1.9 billion. To distinguish economic from environmental adjustment, we examine changes in local employment, population, purchasing power, and local air pollution. Declines in population, employment and purchasing power coincide with falling residential property values, whereas improvements in air quality do not seem to offset these losses. Our findings show that residential real estate markets primarily capitalize the deterioration of local economic fundamentals rather than improvements in environmental quality, implying that climate policy generates substantial localized household wealth effects through residential real estate markets - a distributional channel that complements conventional evaluations focused on aggregate environmental benefits and macroeconomic adjustment.",
+    "affiliations": "Leibniz Universität Hannover and Leibniz Universität Hannover - Institute of Economics",
+    "authors": [
+      "Daniel Bruns",
+      "Stephan L. Thomsen"
+    ],
+    "categories": [
+      "Capital Markets: Asset Pricing & Valuation"
+    ],
+    "downloads": 5,
+    "ext_id": "7398824",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7398824",
+    "journals": [
+      "Capital Markets: Asset Pricing & Valuation"
+    ],
+    "listed_date": "2026-09-02",
+    "page_count": 56,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/2597ff48-cad5-47b5-9637-e951a792c36e-MECA.pdf?abstractid=7398824&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "APV"
+    ],
+    "summarized_at": "2026-09-04T09:54:04+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Nobody has priced the local household wealth cost of climate policy",
+          "Spatial dynamic DiD exploiting staggered plant shutdown dates",
+          "Prices fall 8.2%; homeowners lose roughly €1.9 billion in total",
+          "Jobs, population and purchasing power drive it, not cleaner air"
+        ],
+        "data": "German residential listings, 2007-2023, merged with closure dates plus local employment, population, purchasing power and air pollution.",
+        "method": "Dynamic spatial difference-in-differences on staggered plant closures, keyed to distance from the plant.",
+        "one_liner": "Germany's coal plant closures cut nearby home values by 8.2%.",
+        "relevance_why": "Ex-post policy evaluation with no tradable rule, and German listing microdata is hard to source.",
+        "takeaway": "At most, trim regional housing or REIT exposure around plants scheduled to close."
+      },
+      "keywords": [
+        "coal phase-out",
+        "climate policy",
+        "housing prices",
+        "difference-in-differences",
+        "hedonic capitalization",
+        "Germany"
+      ],
+      "ko": {
+        "bullets": [
+          "기후정책의 지역별 가계 부의 효과는 거의 측정된 적이 없다",
+          "폐쇄 시점이 엇갈리는 점을 쓴 공간 이중차분 추정",
+          "인근 주택 가치 8.2% 하락, 총 19억 유로 손실",
+          "대기질 개선보다 고용·인구·구매력 악화가 가격을 지배한다"
+        ],
+        "data": "2007~2023년 독일 주택 매물 데이터에 발전소 폐쇄 일정, 고용·인구·구매력·대기오염 지표를 붙였다.",
+        "method": "발전소 폐쇄 시점이 서로 다른 점을 이용해 거리별 동태 이중차분(DiD)을 추정했다.",
+        "one_liner": "독일 석탄발전 폐쇄가 인근 집값을 8.2% 떨어뜨렸다.",
+        "relevance_why": "정책 효과를 사후 추정한 연구라 매매 규칙이 없고 독일 매물 미시 데이터도 구하기 어렵다.",
+        "takeaway": "폐쇄 예정 발전소 반경의 지역 리츠나 주택 관련 익스포저를 미리 줄이는 정도로만 쓸 만하다."
+      },
+      "relevance": 1
+    },
+    "summary_version": "2026-09-01",
+    "title": "The Capitalization of Coal Phase-Outs into Residential Property Values"
+  },
+  "ssrn-7399938": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7399938",
+    "abstract": "Does the global financial cycle still dominate capital flows to emerging markets? Leveraging granular investor-level data, this paper examines a structural shift in the drivers of global equity flows. Using a dynamic factor model to decompose flows into global (push) and country-specific (pull) components, we show that while global factors historically dominated, local factors have emerged as the primary driver of capital allocation, particularly in the post-COVID period. Local projections reveal the mechanism behind this shift as a resurgence of active return chasing: investors have become increasingly sensitive to local excess returns, re-coupling flows to domestic price discovery. We trace this shift to greater portfolio concentration among emerging markets within investors and improved macroeconomic resilience in emerging market economies. Our findings suggest that global investors increasingly differentiate across emerging markets based on local return factors rather than responding uniformly to common global factors. This deepening sensitivity to domestic conditions may expand the scope for domestic policy frameworks and, in turn, enhance the developmental benefits of financial integration by better aligning capital with local investment opportunities in emerging and developing economies.",
+    "affiliations": "World Bank, North Carolina State University and Bank of Korea",
+    "authors": [
+      "Jongrim Ha",
+      "Daisoon Kim",
+      "Inhwan So"
+    ],
+    "categories": [
+      "Capital Markets: Market Efficiency"
+    ],
+    "downloads": 2,
+    "ext_id": "7399938",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7399938",
+    "journals": [
+      "Capital Markets: Market Efficiency"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 55,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7399938.pdf?abstractid=7399938&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "MEF"
+    ],
+    "summarized_at": "2026-09-04T09:54:06+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Tests whether the global financial cycle still dominates EM flows",
+          "Dynamic factor model splits flows into push and pull components",
+          "Post-COVID, local factors lead and return chasing revives",
+          "Driver: EM portfolio concentration plus stronger EM macro resilience"
+        ],
+        "data": "Granular investor-level global equity flow data, compared across pre-COVID and post-COVID periods.",
+        "method": "A dynamic factor model decomposes investor-level flows into global and country components; local projections trace flow sensitivity to local excess returns.",
+        "one_liner": "Local country factors, not global push factors, now drive equity flows into emerging markets.",
+        "relevance_why": "Score 2: investor-level flow data is proprietary (EPFR-class) and hard to source, and the paper states no entry or exit rules.",
+        "takeaway": "Weight country-level return momentum over a common risk-on signal when allocating across EM equity markets."
+      },
+      "keywords": [
+        "emerging markets",
+        "capital flows",
+        "push-pull factors",
+        "dynamic factor model",
+        "return chasing",
+        "local projections"
+      ],
+      "ko": {
+        "bullets": [
+          "글로벌 금융사이클이 여전히 신흥국 자금흐름을 지배하는가",
+          "투자자별 미시 데이터를 동적요인모형으로 글로벌·국가 성분 분해",
+          "코로나 이후 현지 요인이 주도, 초과수익 추종이 되살아났다",
+          "신흥국 내 포트폴리오 집중도와 거시 체력 개선이 배경"
+        ],
+        "data": "투자자 단위 글로벌 주식 펀드 자금흐름 데이터를 쓰며, 코로나 이전과 이후를 갈라 비교한다",
+        "method": "동적요인모형(dynamic factor model)으로 자금흐름을 푸시·풀 요인으로 나누고, 국소투영(local projections)으로 초과수익에 대한 민감도를 추정한다",
+        "one_liner": "신흥국 자금흐름의 주도권이 글로벌 요인에서 현지 요인으로 넘어갔다",
+        "relevance_why": "투자자 단위 자금흐름 데이터가 EPFR 등 유료 소스라 개인이 재현하기 어렵고, 매매 규칙도 없어 2점이다",
+        "takeaway": "신흥국 배분에서 공통 리스크온 신호 대신 국가별 초과수익 모멘텀에 더 무게를 두는 근거로 삼을 만하다"
+      },
+      "relevance": 2
+    },
+    "summary_version": "2026-09-01",
+    "title": "Local Factors and Return Chasing: A New Phase in Emerging Equity Markets"
+  },
+  "ssrn-7403099": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7403099",
+    "abstract": "We propose a new methodology to estimate the equity term structure. Instead of using realized returns of dividend assets, we generalize the implied cost of capital approach and imply the term structure of ex-ante expected returns from the cross-section of observed stock prices and projected firm-level cash flows. Using US data for 1980-2024, we find an unconditionally upward sloping term structure of risk premia with rich cross-sectional patterns in the size, value and credit risk dimensions. Strikingly, value firms and speculative-grade firms have flat or even downward-sloping term structures. We also detect that the term structure flattens out in recessions.",
+    "affiliations": "Tilburg University - Department of Finance, Tilburg University - Tilburg University School of Economics and Management and",
+    "authors": [
+      "Lieven Baele",
+      "Joost Driessen",
+      "Tomas Jankauskas"
+    ],
+    "categories": [
+      "Capital Markets: Asset Pricing & Valuation",
+      "Capital Markets: Market Efficiency"
+    ],
+    "downloads": 3,
+    "ext_id": "7403099",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7403099",
+    "journals": [
+      "Capital Markets: Asset Pricing & Valuation",
+      "Capital Markets: Market Efficiency"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 64,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7403099.pdf?abstractid=7403099&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "APV",
+      "MEF"
+    ],
+    "summarized_at": "2026-09-04T09:54:08+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Dividend-strip realized returns give noisy term structure estimates",
+          "Generalize implied cost of capital across horizons instead",
+          "Unconditional curve slopes up; value and junk-rated firms flat or inverted",
+          "The curve flattens in recessions"
+        ],
+        "data": "US equities, 1980-2024.",
+        "method": "A horizon-generalized implied cost of capital model that solves for ex-ante expected returns matching observed prices and firm-level cash flow projections.",
+        "one_liner": "The authors back out a maturity-by-maturity expected return curve from stock prices.",
+        "relevance_why": "Prices are public but firm-level cash flow forecasts need paid analyst data (IBES-type), and no trading rule is specified, so 3.",
+        "takeaway": "Use the slope of the term structure by value and credit bucket as a risk-premium signal for sizing exposure and reading recessions."
+      },
+      "keywords": [
+        "equity term structure",
+        "implied cost of capital",
+        "dividend strips",
+        "risk premia",
+        "credit risk",
+        "cross-section"
+      ],
+      "ko": {
+        "bullets": [
+          "배당 자산 실현수익률로는 기간구조 추정이 불안정하다",
+          "내재자본비용을 만기별로 확장해 주가 단면에서 역산했다",
+          "무조건부 곡선은 우상향, 가치주와 투기등급은 평탄하거나 우하향",
+          "불황에서는 곡선이 평탄해진다"
+        ],
+        "data": "미국 주식 1980~2024년 자료를 썼다.",
+        "method": "기업별 현금흐름 전망과 관측 주가 단면을 맞춰 만기별 사전 기대수익률을 역산하는 내재자본비용(implied cost of capital) 확장 모형이다.",
+        "one_liner": "주가와 현금흐름 전망으로 만기별 기대수익률 곡선을 뽑아냈다.",
+        "relevance_why": "주가는 공개 자료지만 기업별 현금흐름 전망은 IBES 같은 유료 애널리스트 데이터가 필요하고 매매 규칙도 없어 3점이다.",
+        "takeaway": "가치·신용등급별 기간구조 기울기를 위험 프리미엄 지표로 삼아 익스포저를 조절하고, 불황 국면 판단에 쓸 만하다."
+      },
+      "relevance": 3
+    },
+    "summary_version": "2026-09-01",
+    "title": "The Implied Equity Term Structure"
+  },
+  "ssrn-7404780": {
+    "abs_url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7404780",
+    "abstract": "The public pays close attention to Federal Reserve communications about future monetary policy, but it remains an open question how those communications shape the public's expectations for the path of policy rates. We explore how market expectations adjust to the information provided in the \"dot plot\" of the Summary of Economic Projections, which contains the Federal Open Market Committee's assessment of the appropriate future path of the federal funds rate. The results shed light on the market interpretation of forward guidance and its efficacy as a communication tool. We find that financial markets respond to the Federal Reserve's \"dot plot\" projections by adjusting their expectations for future interest rates, but only partially and gradually, reflecting the understanding that these projections are conditional forecasts rather than firm commitments. Over time, both market expectations and FOMC projections for interest rates tend to converge, showing that the dot plot is informative to market participants. This gradual adjustment highlights the dot plot's role as a communication tool that shapes, but does not dictate, market expectations.",
+    "affiliations": ", Federal Reserve Bank of Chicago and Federal Reserve Banks - Federal Reserve Bank of New York",
+    "authors": [
+      "Stefania D'Amico",
+      "Thomas B. King",
+      "Francisco Torralba"
+    ],
+    "categories": [
+      "Capital Markets: Asset Pricing & Valuation"
+    ],
+    "downloads": 3,
+    "ext_id": "7404780",
+    "first_seen": "2026-09-04T09:48:03+09:00",
+    "id": "ssrn-7404780",
+    "journals": [
+      "Capital Markets: Asset Pricing & Valuation"
+    ],
+    "listed_date": "2026-09-03",
+    "page_count": 13,
+    "pdf_url": "https://papers.ssrn.com/sol3/Delivery.cfm/7404780.pdf?abstractid=7404780&mirid=1",
+    "src": "ssrn",
+    "src_cats": [
+      "APV"
+    ],
+    "summarized_at": "2026-09-04T09:54:21+09:00",
+    "summary": {
+      "en": {
+        "bullets": [
+          "Open question: how Fed communication moves rate expectations",
+          "Tracks expectation shifts around SEP dot plot releases",
+          "Markets adjust only partially and gradually, not one-for-one",
+          "Market and FOMC rate paths converge over time"
+        ],
+        "data": "Dot plots from the FOMC Summary of Economic Projections plus market rate expectations; the abstract names no sample window.",
+        "method": "Compares the dot plot's projected funds rate path against market-implied expectations around release dates.",
+        "one_liner": "Measures how far market rate expectations move when the FOMC publishes its dot plot.",
+        "relevance_why": "Dots and rate futures are free public data, but the paper gives no entry or exit rules — it reads as policy analysis.",
+        "takeaway": "At most, fade the gap between post-FOMC market-implied rates and the dots, betting on the documented convergence."
+      },
+      "keywords": [
+        "FOMC dot plot",
+        "forward guidance",
+        "monetary policy expectations",
+        "interest rate path",
+        "central bank communication"
+      ],
+      "ko": {
+        "bullets": [
+          "연준 소통이 정책금리 기대를 어떻게 바꾸는지 불분명했다",
+          "SEP 점도표 공표 전후로 시장 기대 조정폭을 추적했다",
+          "시장은 부분적으로, 그것도 천천히만 기대를 옮겼다",
+          "시간이 지나면 시장 기대와 FOMC 전망이 서로 수렴한다"
+        ],
+        "data": "FOMC 경제전망요약(SEP)의 점도표와 시장 금리 기대치를 쓰지만 표본 구간은 초록에 없다.",
+        "method": "점도표에 담긴 금리 경로 정보와 시장이 반영한 기대 금리를 비교하는 이벤트 분석이다.",
+        "one_liner": "점도표 발표에 시장 금리 기대가 얼마나 움직이는지 측정했다.",
+        "relevance_why": "점도표와 금리 선물은 공개 데이터라 구하기 쉽지만 진입·청산 규칙이 없어 정책 해석 연구에 가깝다.",
+        "takeaway": "FOMC 회의 직후 금리 선물이 점도표를 덜 반영한 상태로 남는다면 수렴 방향으로 캐리를 잡는 정도로만 쓸 만하다."
+      },
+      "relevance": 2
+    },
+    "summary_version": "2026-09-01",
+    "title": "How Do Market Expectations React to the FOMC Dot Plot?"
   }
 }

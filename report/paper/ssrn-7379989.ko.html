@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Momentum Strategies in ETFs under Simple Operational Rules: Economic Value and Conditional Predictability — 상세 리포트</title>
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --panel-2:#fbfcfd; --ink:#16191d; --muted:#5c6672;
+  --line:#e2e6ea; --accent:#3b6ef0; --accent-soft:#eaf0fe;
+  --pm:#3b6ef0; --st:#0f9d76; --tr:#d4791f; --ssrn:#8b5cf6; --other:#7a68c9;
+  --qp:#c0392b; --man:#0f766e; --aa:#1d4ed8; --ms:#a16207; --qc:#6d28d9;
+  --star:#f0a91b; --shadow:0 1px 2px rgba(16,24,40,.06),0 4px 14px rgba(16,24,40,.05);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#101317; --panel:#181c22; --panel-2:#1e232a; --ink:#e7ebf0; --muted:#98a3b0;
+    --line:#2a3038; --accent:#7ea3ff; --accent-soft:#1d2637;
+    --pm:#7ea3ff; --st:#4bd6a8; --tr:#f0ad5e; --ssrn:#b18cff; --other:#b0a0f0;
+    --qp:#f08a7c; --man:#3fc4b4; --aa:#8fb2ff; --ms:#e3b341; --qc:#c4a6ff;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.25);
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:15px/1.65 -apple-system,"Segoe UI","Malgun Gothic",Roboto,"Helvetica Neue",sans-serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:32px 20px 140px}
+a{color:var(--accent)}
+
+/* language switching: only the active language is displayed */
+[data-l]{display:none}
+html[data-lang="ko"] [data-l="ko"]{display:revert}
+html[data-lang="en"] [data-l="en"]{display:revert}
+
+header.top{margin-bottom:24px}
+h1{font-size:26px;margin:0 0 6px;letter-spacing:-.02em}
+.sub{color:var(--muted);font-size:13.5px;margin:0}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:9px 13px;font-size:13px;box-shadow:var(--shadow)}
+.stat b{font-size:16px;margin-right:5px}
+
+.controls{position:sticky;top:0;z-index:20;background:var(--bg);
+  padding:12px 0 10px;margin:20px 0 8px;border-bottom:1px solid var(--line)}
+.row{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:7px}
+.row:last-child{margin-bottom:0}
+.rowlabel{font-size:11.5px;color:var(--muted);font-weight:700;letter-spacing:.06em;min-width:38px}
+.chip{border:1px solid var(--line);background:var(--panel);color:var(--muted);
+  border-radius:999px;padding:5px 12px;font-size:12.5px;cursor:pointer;
+  font-family:inherit;transition:.12s;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);
+  color:var(--accent);font-weight:600}
+.chip:hover{border-color:var(--accent)}
+.langsel{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.langsel button{border:0;background:var(--panel);color:var(--muted);padding:5px 13px;
+  font:inherit;font-size:12.5px;cursor:pointer;transition:.12s}
+.langsel button[aria-pressed="true"]{background:var(--accent);color:#fff;font-weight:700}
+#q{flex:1;min-width:180px;padding:7px 12px;border:1px solid var(--line);border-radius:8px;
+  background:var(--panel);color:var(--ink);font:inherit;font-size:13.5px}
+#q:focus{outline:2px solid var(--accent);outline-offset:-1px}
+select{padding:7px 10px;border:1px solid var(--line);border-radius:8px;
+  background:var(--panel);color:var(--ink);font:inherit;font-size:13.5px}
+.count{color:var(--muted);font-size:12.5px;margin-left:auto}
+
+h2.day{font-size:15px;margin:30px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--line);
+  color:var(--muted);font-weight:600;letter-spacing:.02em}
+h2.day span.d{color:var(--ink)}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow)}
+.card.hide{display:none}
+.badges{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+.badge{font-size:11px;font-weight:700;letter-spacing:.04em;padding:2.5px 8px;
+  border-radius:5px;color:#fff}
+.b-PM{background:var(--pm)} .b-ST{background:var(--st)} .b-TR{background:var(--tr)}
+.b-ssrn{background:var(--ssrn)} .b-qp{background:var(--qp)} .b-man{background:var(--man)}
+.b-aa{background:var(--aa)} .b-ms{background:var(--ms)} .b-qc{background:var(--qc)}
+.b-XX{background:var(--other)}
+.badge.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);font-weight:600}
+.stars{color:var(--star);font-size:12.5px;letter-spacing:1px;margin-left:auto}
+.stars i{color:var(--line);font-style:normal}
+
+.title{font-size:16.5px;font-weight:650;line-height:1.4;margin:0 0 6px;letter-spacing:-.01em}
+.title a{color:var(--ink);text-decoration:none}
+.title a:hover{color:var(--accent)}
+.oneliner{margin:0 0 8px;font-size:14.5px;color:var(--ink)}
+.oneliner::before{content:"\25B8 ";color:var(--accent)}
+.authors{margin:0;color:var(--muted);font-size:12.5px}
+
+.detail{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+.detail[hidden]{display:none}
+.detail ul{margin:0 0 12px;padding-left:19px}
+.detail li{margin-bottom:4px}
+.kv{display:grid;grid-template-columns:92px 1fr;gap:5px 10px;font-size:13.5px;margin-bottom:12px}
+.kv dt{color:var(--muted);font-weight:600}
+.kv dd{margin:0}
+.keys{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.key{font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);
+  border-radius:5px;padding:2px 7px;color:var(--muted)}
+.abs{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;
+  padding:11px 13px;font-size:13px;color:var(--muted);line-height:1.7}
+.abs b{color:var(--ink);display:block;margin-bottom:4px;font-size:12px;letter-spacing:.03em}
+
+.actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;align-items:center}
+.actions .sep{width:1px;height:18px;background:var(--line);margin:0 2px}
+.btn{border:1px solid var(--line);background:var(--panel);color:var(--muted);
+  border-radius:7px;padding:5.5px 12px;font-size:12.5px;cursor:pointer;
+  font-family:inherit;text-decoration:none;display:inline-block;transition:.12s}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{filter:brightness(1.08);color:#fff}
+.btn.queued{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);
+  font-weight:600}
+.btn.done{border-color:var(--st);color:var(--st)}
+.btn.failed{border-color:var(--tr);color:var(--tr)}
+#livebadge{font-size:11.5px;color:var(--st);font-weight:700;letter-spacing:.03em;
+  display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+#livebadge::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--st);
+  animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--panel);
+  border-top:1px solid var(--line);box-shadow:0 -4px 20px rgba(0,0,0,.10);
+  padding:12px 20px;display:none}
+.bar.on{display:block}
+.bar-in{max-width:1000px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.bar pre{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;
+  padding:6px 9px;font-size:12px;flex:1;min-width:200px;overflow:auto;margin:0;
+  white-space:pre;line-height:1.5}
+.empty{color:var(--muted);text-align:center;padding:50px 0}
+footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);
+  color:var(--muted);font-size:12px}
+@media print{.controls,.bar,.actions{display:none!important}.detail{display:block!important}
+  .card{break-inside:avoid;box-shadow:none}}
+
+.doc{max-width:780px}
+.doc h1{font-size:24px;line-height:1.35;margin:0 0 10px}
+.doc h2{font-size:19px;margin:38px 0 12px;padding-bottom:7px;border-bottom:2px solid var(--accent);
+  letter-spacing:-.01em}
+.doc h3{font-size:15.5px;margin:22px 0 8px;color:var(--accent)}
+.doc p{margin:0 0 14px}
+.doc ul,.doc ol{margin:0 0 16px;padding-left:22px}
+.doc li{margin-bottom:7px}
+.doc blockquote{margin:0 0 18px;padding:14px 18px;border-left:3px solid var(--accent);
+  background:var(--accent-soft);border-radius:0 8px 8px 0;font-size:15.5px}
+.doc blockquote p:last-child{margin-bottom:0}
+.doc table{width:100%;border-collapse:collapse;margin:0 0 18px;font-size:13.5px;
+  display:block;overflow-x:auto}
+.doc th,.doc td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+.doc th{background:var(--panel-2);font-weight:650;white-space:nowrap}
+.doc code{background:var(--panel-2);border:1px solid var(--line);border-radius:4px;
+  padding:1px 5px;font-size:13px}
+.doc mjx-container[display="true"]{margin:16px 0;overflow-x:auto;overflow-y:hidden;padding:2px 0}
+.doc .meta-head{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;margin:18px 0 26px;box-shadow:var(--shadow)}
+.doc .meta-head .sub{margin-bottom:4px}
+.doc .langlinks{float:right;font-size:12.5px}
+</style>
+
+<script>
+window.MathJax={
+  tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]'],['$$','$$']],processEscapes:true},
+  options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']},
+  chtml:{scale:0.98}
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+</head>
+<body>
+<div class="wrap doc">
+  <p class="sub"><span class="langlinks"></span>
+     <a href="javascript:history.back()">← 돌아가기</a></p>
+  <h1>Momentum Strategies in ETFs under Simple Operational Rules: Economic Value and Conditional Predictability</h1>
+  <div class="meta-head">
+    <p class="sub">Nicolás Magner, Aliro  Joel Sanhueza</p>
+    <p class="sub">SSRN abstract_id 7379989 · Global Equities, Exchanges &amp; Investment Indices, Capital Markets: Asset Pricing &amp; Valuation</p>
+    <p class="sub">본문 출처: SSRN PDF full text (truncated)</p>
+    <div class="actions">
+      <a class="btn" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7379989" target="_blank" rel="noopener">원문 페이지</a>
+      <a class="btn" href="https://papers.ssrn.com/sol3/Delivery.cfm/0d64fc07-ff6e-4dfb-8990-16d13f49f608-MECA.pdf?abstractid=7379989&amp;mirid=1" target="_blank" rel="noopener">원문 PDF</a>
+    </div>
+  </div>
+  <blockquote><p>ETF 모멘텀은 운용 규칙을 씌워야 돈이 된다.</p></blockquote>
+  <h2>1. 한눈에 보기</h2>
+
+<blockquote>
+<p>3,215개 미국 ETF 전체에 고전적 횡단면 모멘텀을 그대로 옮기면 샤프지수 −0.17~+0.22, 최대낙폭 69~82%로 패시브보다 못한 결과가 나온다. 반면 기술적 진입 필터, 슈퍼카테고리 의무 분산, 동적 청산 규칙이라는 세 겹의 운용 규칙을 얹으면 샤프지수 1.3 이상에 최대낙폭 −7%로 뒤집히는데, 알파의 원천은 신호가 아니라 그 신호를 둘러싼 관리 규칙이다.</p>
+</blockquote>
+
+<ul>
+<li>순수 모멘텀은 ETF 유니버스에서 값을 만들지 못한다. Tse(2015)가 좁은 표본에서 보고한 부진이 광범위 유니버스에서 더 나빠진다. 표본 편의가 아니라 모멘텀 자체의 문제다.</li>
+<li>진입 신호 6개의 조합 63가지를 전수 검증했더니 샤프지수가 딱 두 값(0.945와 0.881)으로 수렴한다. 골든크로스냐 52주 신고가냐를 놓고 벌이는 논쟁은 이 설계에서 정보량이 없다.</li>
+<li>알파는 초과수익 확대가 아니라 꼬리위험 축소에서 나온다. SPY 대비 CAGR 차이는 유의하지 않고 최대낙폭만 40~50%p 줄어든다.</li>
+<li>유일한 약점은 VIX 25 초과 국면이다. 전체 기간의 17.8%인 이 구간에서 조건부 샤프지수가 −0.83~−1.20으로 뒤집힌다. 2008년이나 2020년 한 사건의 잔재가 아니라 519개 롤링 윈도우 중 80~92%에서 재현되는 구조적 성질이다.</li>
+</ul>
+
+<h2>2. 문제의식과 배경</h2>
+
+<p>모멘텀은 개별주식, 지수, 자산군 단위에서 30년 넘게 확인된 이상현상이다. Jegadeesh–Titman(1993)의 횡단면, Moskowitz 외(2012)의 시계열, Asness 외(2013)의 국제 검증까지 증거는 두텁다. 그런데 실제 투자자가 쓰는 도구인 ETF로 옮기면 결과가 흐려진다.</p>
+
+<p>Andreu 외(2013)는 좁은 상품군에서 연 5% 수준 초과수익을 찾았지만 Tse(2015)는 국제 iShares와 미국 섹터 ETF로 표본을 2008년 이후까지 늘리자 횡단면·시계열 모멘텀 모두 유의성이 사라지고 매수후보유보다 뒤처진다고 보고했다. Zaremba–Andreu(2018)는 42개 국가지수에서 120개 이상현상을 복제해 ETF 스프레드를 넣자 수익성 대부분이 사라진다는 결과를 냈다.</p>
+
+<p>저자들은 이 부정적 결론에 네 가지 빈틈이 있다고 본다. 표본이 5개에서 수십 개 수준의 광범위 ETF에 그쳐 결과가 모멘텀의 성질인지 표본의 산물인지 구분할 수 없다는 점, 진입 필터·분산 제약·청산 규칙 같은 실제 투자자가 쓰는 보완 규칙 없이 모멘텀만 떼어 평가했다는 점, 거래비용을 사후 조정으로 처리하거나 아예 빼고 총수익 기준으로 보고했다는 점, 성과를 거시 국면별로 조건화하지 않았다는 점이다.</p>
+
+<p>그래서 논문이 던지는 질문은 "모멘텀이 작동하는가"가 아니라 "어떤 조건에서 어떤 운용 규칙을 통해 값을 뽑아낼 수 있는가"로 바뀐다. 해석 틀로는 Lo(2004, 2017)의 적응적 시장 가설을 쓴다. 예측 가능성이 환경에 따라 변하므로 평균 알파가 양수여도 특정 국면에서 부호가 뒤집힐 수 있다는 관점이다.</p>
+
+<h2>3. 방법론</h2>
+
+<h3>3.1 세 겹 구조</h3>
+
+<p>설계는 기저(순수 모멘텀) 위에 세 층을 쌓는 방식이다. 각 층은 개인투자자도 실행할 수 있는 수준의 규칙으로 제한한다.</p>
+
+<h3>3.2 1층 — 기술적 진입 필터</h3>
+
+<p>매주 금요일 종가 기준으로 6개 이진 신호를 평가한다.</p>
+
+<table>
+<thead><tr><th>기호</th><th>조건</th><th>정의</th></tr></thead>
+<tbody>
+<tr><td>C1</td><td>MA50 상회</td><td>\( P_{i,t} > MA50(P_{i,t}) \)</td></tr>
+<tr><td>C2</td><td>골든크로스</td><td>\( MA50 > MA200 \)</td></tr>
+<tr><td>C3</td><td>MA50 기울기 양</td><td>최근 10주 선형 기울기 > 0</td></tr>
+<tr><td>C4</td><td>MA200 기울기 양</td><td>최근 10주 선형 기울기 > 0</td></tr>
+<tr><td>C5</td><td>상승 구조</td><td>최근 13주 고점·저점 동반 상승</td></tr>
+<tr><td>C6</td><td>52주 신고가 돌파</td><td>\( P_{i,t} > \max_{d \in [-252,-1]} P_{i,d} \)</td></tr>
+</tbody>
+</table>
+
+<p>필터를 사전에 고정하지 않는다. \( 2^6 - 1 = 63 \)개 비공집합 부분집합 \(S\)에 대해 적격 규칙을 교집합 \( \bigcap_{C_k \in S} C_k \)로 정의하고 전수 평가한 뒤 결과를 보고 고른다.</p>
+
+<h3>3.3 2층 — 다기간 모멘텀 순위와 의무 분산</h3>
+
+<p>적격 종목이 슬롯보다 많으므로 순위가 필요하다. 포트폴리오는 8슬롯, 각 12.5% 동일 비중이다. 점수는 다음과 같이 계산한다.</p>
+
+\[ score_{i,t} = 0.35\,\mathrm{rank}^{cs}_t\!\left(r^{26}_{i,t}\right) + 0.35\,\mathrm{rank}^{cs}_t\!\left(r^{13}_{i,t}\right) + 0.20\,\mathrm{rank}^{cs}_t\!\left(d^{MA30}_{i,t}\right) + 0.10\,\mathrm{rank}^{cs}_t\!\left(r^{4}_{i,t}\right) \]
+
+<p>\( r^{26}, r^{13}, r^{4} \)는 각각 26주·13주·4주 수익률, \( d^{MA30} \)는 30주 이동평균 대비 정규화 거리, \( \mathrm{rank}^{cs}_t(\cdot) \in [0,1] \)는 \(t\) 시점 횡단면 백분위다. 가중치 0.35/0.35는 3~12개월 표준 구간에 무게를 싣는 관행을 따른다.</p>
+
+<p>점수만 쓰면 SPY·IVV·VOO가 상위 3위를 차지해 S&P 500 한 팩터에 슬롯 세 개가 몰릴 수 있다. 이를 막으려고 Refinitiv 섹터 분류를 자산군 수준으로 묶은 11개 슈퍼카테고리를 정의하고 카테고리별 동시 보유 상한을 건다. US_LARGE_CAP과 US_SECTORAL만 2개, 나머지 9개는 1개다. 상한 합계 13은 슬롯 수 8을 넘어서 최악의 경우에도 최소 4개 카테고리에 노출되도록 보장한다.</p>
+
+<h3>3.4 3층 — 동적 청산</h3>
+
+<p>포지션 보호는 두 갈래다. 먼저 기저 규칙에 내장된 기술적 청산이 있다. 가격이 MA50 아래로 내려가면(C1 붕괴) 비중을 50%로 줄이는 부분청산(SP), 골든크로스가 뒤집히면(C2 붕괴, 데드크로스) 전량 청산하는 완전청산(ST)이다. SP는 되돌릴 수 있어 가격이 MA50을 회복하면 비용 없이 100%로 복귀하고 ST는 SP보다 우선한다.</p>
+
+<p>여기에 손절·익절 신호군을 곱한다. 손절 23개 설정을 다섯 계열로 나눈다. 고정 손절 5개(SL05~SL20), 추적 손절 4개(TSL07~TSL20), 롤링 주간 저점 3개(LOW10/20/40), 샹들리에 ATR 3개(주간 ATR 14주 창, 배수 2·3·4), 동적 이동평균 8개(EMA5W와 SMA50/100/200 각각 SP·ST와 병행하는 overlay와 대체하는 replace)다. 익절은 진입가 대비 +30%, +50%, +60%, +100%, +200% 다섯 수준이며 발동 시 전량 청산한다.</p>
+
+<p>조합 수는 \( 23 \times 6 + 5 + 1 = 144 \)다. 손절 23개에 익절 6가지(무익절 포함)를 곱하고, 익절 단독 5개와 손절·익절 모두 없는 기준 규칙 1개를 더한 값이다.</p>
+
+<h3>3.5 비대칭 리밸런싱</h3>
+
+<p>매도와 매수의 주기를 다르게 둔다. 청산 신호(SP, ST, SL, TP)는 매주 금요일 점검하고 조건이 깨지면 그 주에 정리한다. 신규 편입은 격주 금요일에만 한다. 주간 모멘텀의 허위 신호를 걸러내면서 손절 규율은 유지하려는 설계다. 여덟 슬롯을 다 채우지 못하면 남은 자금은 현금으로 두고 3개월 T-Bill(FRED DTB3) 금리를 받는다. 현금에는 거래비용이 붙지 않는다.</p>
+
+<h3>3.6 유의성 검정</h3>
+
+<p>샤프지수 차이는 Jobson–Korkie 통계량에 Memmel 보정을 적용한다.</p>
+
+\[ Z = \frac{\hat S(A) - \hat S(B)}{\sqrt{\hat\theta}}, \quad \hat\theta = \frac{1}{n}\left[2 - 2\hat\rho_{AB} + \tfrac{1}{2}\left(\hat S(A)^2 + \hat S(B)^2 - 2\hat S(A)\hat S(B)\hat\rho^2_{AB}\right)\right] \]
+
+<p>\( \hat\rho_{AB} \)는 두 전략 주간 수익률의 표본 상관이고 귀무가설 아래 \(Z\)는 점근적으로 \(N(0,1)\)을 따른다. CAGR은 주간 로그수익률에 Newey–West HAC(시차 5) t검정을 쓰고, 최대낙폭과 CVaR95는 평균 블록 12주짜리 정상 블록 부트스트랩(Politis–Romano)으로 5,000회 재표본한다.</p>
+
+<p>거시 국면 민감도는 다음 회귀로 본다.</p>
+
+\[ r^{rule}_t = \alpha + \beta_1 \mathbb{1}_{VIX>25} + \beta_2 \mathbb{1}_{NBER} + \beta_3 \mathbb{1}_{TERM<1pp} + \beta_4 \mathbb{1}_{CREDIT>Q_{75}} + \varepsilon_t \]
+
+<p>\( \alpha \)는 어떤 국면도 켜지지 않은 기저 상태의 주간 평균 수익률이고 각 \( \beta_k \)는 해당 국면이 켜졌을 때의 증분이다. 추정은 OLS에 Newey–West HAC 표준오차(시차 5)를 쓴다.</p>
+
+<h2>4. 데이터와 실험 설계</h2>
+
+<table>
+<thead><tr><th>항목</th><th>내용</th></tr></thead>
+<tbody>
+<tr><td>데이터 출처</td><td>Refinitiv DataStream — 배당·분할 조정 일별 가격, 섹터 분류, 레버리지/인버스 표식</td></tr>
+<tr><td>유니버스</td><td>미국 ETF 3,215개(운용 가능성 필터 통과 후)</td></tr>
+<tr><td>평가 기간</td><td>2001-08-31 ~ 2026-05-15, 1,289주(24.7년)</td></tr>
+<tr><td>주기</td><td>일별 → 주간(금요일 종가) 집계, 미래 정보 차단</td></tr>
+<tr><td>거래비용</td><td>편도 20bp를 수익률에 직접 반영(사후 조정 아님)</td></tr>
+<tr><td>무위험 이자율</td><td>연 3% 가정, 연율화 계수 \( \sqrt{52} \)</td></tr>
+<tr><td>성과지표</td><td>샤프지수(Lo 2002 신뢰구간), 소르티노, 최대낙폭, 칼마, CVaR95, 오메가, 왜도</td></tr>
+<tr><td>회전율 지표</td><td>trades/yr, SlotChg/yr(연간 양방향 슬롯 교체)</td></tr>
+</tbody>
+</table>
+
+<p>유니버스 필터는 네 가지다. 연속 이력 52주 이상, 일거래량 13주 롤링 중위값 10만 달러 초과, 252일 창에서 결측 없는 종가 90% 이상, 그리고 레버리지·인버스 상품 제외다. 마지막 항목은 77개(Trading–Inverse Equity 27, Trading–Leveraged Equity 22 등)를 걷어낸다. 2배·3배 상품은 보유 기간이 하루를 넘으면 변동성 감쇠 때문에 약속한 배수에서 벗어나므로 주기적 리밸런싱 전략과 맞지 않는다는 이유다.</p>
+
+<p>시작일 2001년 8월 31일은 252일 이력을 갖춘 ETF 수가 8슬롯을 채울 만큼 늘어난 첫 시점이다. 개별 시계열은 1990년대 초까지 거슬러 올라가기도 하지만 이 구간은 이동평균 워밍업 계산에만 쓰고 매매 규칙은 작동시키지 않는다.</p>
+
+<p>벤치마크는 네 개다. SPY 매수후보유, IEF 매수후보유(7~10년 국채), VTI+EFA 50/50 연간 리밸런싱, 60/40 SPY+AGG 연간 리밸런싱이다. 벤치마크는 초기 매수와 연간 리밸런싱 비용을 0으로 가정한다. IEF는 2002년 8월, AGG는 2003년 10월 상장이므로 샤프지수 차이 검정은 각 벤치마크와의 공통 표본에서 계산한다.</p>
+
+<p>거시 국면 지표 4종은 FRED 일별 시계열을 금요일 종가로 집계해 만든다. VIX>25가 기간의 17.8%, NBER 경기침체가 7.4%, 기간 스프레드(T10Y3M) 1%p 미만이 36.3%, 신용 스프레드(BAA10Y) 역사적 75분위 초과가 30.3%를 차지한다.</p>
+
+<h2>5. 주요 결과</h2>
+
+<h3>5.1 진입 신호는 정보량이 거의 없다</h3>
+
+<p>63개 규칙이 만들어낸 샤프지수는 소수점 넷째 자리까지 딱 두 값이다. C5를 포함한 32개 조합은 0.9450, 제외한 31개는 0.8810이다. C1·C2·C3·C4·C6는 장기 추세라는 같은 현상을 다르게 재는 도구여서 필터 통과 후 선택 종목이 99% 주간에서 겹친다(쌍별 자카드 지수 0.99 초과, 원 유니버스에서는 0.50~0.78). C5만 13주 창의 고점·저점 구조를 보므로 자카드 지수가 0.88 근처에 머문다.</p>
+
+<table>
+<thead><tr><th>규칙</th><th>샤프</th><th>CAGR%</th><th>MaxDD%</th><th>CVaR95%</th><th>SlotChg/yr</th></tr></thead>
+<tbody>
+<tr><td>C1~C4, C6 (개별)</td><td>0.8810</td><td>11.56</td><td>−13.81</td><td>2.80</td><td>8.1</td></tr>
+<tr><td>C5 단독</td><td>0.9430</td><td>11.97</td><td>−14.07</td><td>2.72</td><td>8.3</td></tr>
+<tr><td>C4∩C5 (그리드 최고)</td><td>0.9450</td><td>11.98</td><td>−14.07</td><td>2.72</td><td>8.3</td></tr>
+<tr><td>C2∩C6 (채택)</td><td>0.8810</td><td>11.56</td><td>−13.81</td><td>2.80</td><td>8.1</td></tr>
+<tr><td>T6 (6개 전부)</td><td>0.9450</td><td>11.98</td><td>−14.07</td><td>2.72</td><td>8.3</td></tr>
+</tbody>
+</table>
+
+<p>그리드 내부 비교는 어느 지표에서도 유의하지 않다. C4∩C5 대 C2∩C6의 샤프 차이는 +0.056(p=0.30), CAGR 차이 +0.42%p(p=0.49), 최대낙폭 차이 −0.26%p(p=0.90)다. 저자들은 세 가지 이유로 C2∩C6를 채택했다. 업계 관행상 추적하기 쉬운 조합이라는 점, 62개 대안 각각에 144개 청산 규칙을 곱하면 9,072개 조합이 되는데 정보 증분이 없다는 점, 그리고 샤프지수가 낮은 쪽 그룹이라 보수적 선택이라는 점이다.</p>
+
+<h3>5.2 순수 모멘텀 복제 — 논문의 대조군</h3>
+
+<p>Tse(2015) 방식을 그대로 3,215개 유니버스에 적용한다. 상위 8종목 선택, 룩백 1·3·6·12개월, 격주 리밸런싱, 편도 20bp. 의무 분산도 기술적 필터도 손절·익절도 없다.</p>
+
+<table>
+<thead><tr><th>규칙</th><th>샤프</th><th>CAGR%</th><th>MaxDD%</th><th>CVaR95%</th><th>SlotChg/yr</th><th>TSL07 대비 Δ샤프</th></tr></thead>
+<tbody>
+<tr><td>횡단면 룩백 1개월</td><td>+0.215</td><td>+6.51</td><td>−69.52</td><td>4.32</td><td>35.7</td><td>−0.988 (p&lt;0.001)</td></tr>
+<tr><td>횡단면 룩백 3개월</td><td>−0.008</td><td>+2.87</td><td>−76.75</td><td>4.51</td><td>35.7</td><td>−1.203 (p&lt;0.001)</td></tr>
+<tr><td>횡단면 룩백 6개월</td><td>−0.043</td><td>+2.32</td><td>−75.76</td><td>4.49</td><td>35.7</td><td>−1.238 (p&lt;0.001)</td></tr>
+<tr><td>횡단면 룩백 12개월</td><td>−0.167</td><td>+0.39</td><td>−81.88</td><td>4.49</td><td>35.9</td><td>−1.362 (p&lt;0.001)</td></tr>
+<tr><td>SPY 매수후보유</td><td>+0.459</td><td>+9.81</td><td>−54.44</td><td>5.66</td><td>0</td><td>—</td></tr>
+<tr><td>TSL07 (완성형)</td><td>+1.336</td><td>+13.26</td><td>−6.98</td><td>1.83</td><td>16.8</td><td>—</td></tr>
+</tbody>
+</table>
+
+<p>룩백이 길어질수록 CAGR이 단조 감소해 12개월에서 겨우 양수에 걸친다. 시계열 모멘텀도 거의 같은 결과라 논문은 지면상 생략했다. 광범위 유니버스로 확장하면 결과가 나아지는 게 아니라 오히려 나빠진다는 뜻이다.</p>
+
+<h3>5.3 실행 가능한 프론티어</h3>
+
+<p>144개 조합 중 SlotChg/yr가 20을 넘는 70개는 제외한다. 평균 2.5주보다 빠르게 슬롯을 갈아치우면 격주 의사결정 체계와 맞지 않고 과최적화 신호로 본다는 기준이다. 이 문턱을 넘는 규칙 중에는 샹들리에 ATR2(샤프 1.42, 연 40슬롯)와 5주 지수이동평균(샤프 1.39, 연 51슬롯)처럼 명목 성과가 더 높은 것도 있다.</p>
+
+<table>
+<thead><tr><th>규칙</th><th>샤프 [95% CI]</th><th>CAGR%</th><th>MaxDD%</th><th>CVaR95%</th><th>왜도</th><th>SlotChg/yr</th><th>현금%</th></tr></thead>
+<tbody>
+<tr><td>TSL07</td><td>1.336 [1.26, 1.41]</td><td>13.26</td><td>−6.98</td><td>1.83</td><td>+1.22</td><td>16.8</td><td>19.0</td></tr>
+<tr><td>TSL07_TP50</td><td>1.336 [1.26, 1.41]</td><td>13.20</td><td>−6.98</td><td>1.84</td><td>+1.04</td><td>17.0</td><td>19.0</td></tr>
+<tr><td>MA_SMA200_OV_TP100</td><td>1.320 [1.25, 1.39]</td><td>14.84</td><td>−11.04</td><td>2.33</td><td>+0.57</td><td>12.5</td><td>16.4</td></tr>
+<tr><td>MA_SMA200_OV</td><td>1.291 [1.22, 1.36]</td><td>14.57</td><td>−11.40</td><td>2.36</td><td>+0.53</td><td>12.1</td><td>16.5</td></tr>
+</tbody>
+</table>
+
+<p>추적 손절 위에 익절을 얹으면 효과가 사라진다. TSL07_TP{30,50,60,100,200} 다섯 변형이 순수 TSL07과 셋째 자리까지 같다(샤프 1.316~1.336). 7% 추적 손절이 이미 고점 대비 하락 시점에 청산하므로 고정 익절이 정적으로 잡으려던 오른쪽 꼬리 이익을 동적으로 실현해버리기 때문이다.</p>
+
+<p>두 선두 규칙은 서로 대체 관계다. TSL07은 최대낙폭(−6.98% 대 −11.04%)과 CVaR95(1.83% 대 2.33%)가 낫고 MA_SMA200_OV_TP100은 CAGR(14.84% 대 13.26%)과 회전율(12.5 대 16.8)이 낫다. 어느 쪽도 전 차원에서 우위를 갖지 않는다.</p>
+
+<h3>5.4 알파의 구성</h3>
+
+<p>SPY와 VTI+EFA 상대로는 최대낙폭이 43~50%p 줄고 주간 CVaR95가 3.5%p 가까이 떨어지지만(모두 p&lt;0.001) ΔCAGR은 5% 수준에서 유의하지 않다. IEF 상대로는 반대로 CAGR이 10~12%p 앞서고(p&lt;0.001) 꼬리는 국채와 비슷하거나 약간 나쁘다. 가장 까다로운 60/40 SPY+AGG 상대로는 MA_SMA200_OV_TP100이 샤프·CAGR·최대낙폭 세 차원 모두에서 p&lt;0.01로 앞선다.</p>
+
+<p>기준 규칙(손절·익절 없음) 대비로도 같은 구조가 나온다. TSL07은 샤프 +0.299(p&lt;0.01), 최대낙폭 +7.10%p(p=0.02), CVaR95 −1.02%p(p&lt;0.001)로 개선되지만 CAGR 개선 +0.34%p는 유의하지 않다. 청산 규칙 층이 더하는 값은 왼쪽 꼬리에만 쌓인다.</p>
+
+<p>운용 비용도 계산했다. cost_bp × trades/yr × 10⁻²로 보면 TSL07이 연 0.7~0.9%p, MA_SMA200_OV_TP100이 0.5~0.6%p다. CAGR 개선 폭 3.5~11.6%p에 비하면 작다.</p>
+
+<h3>5.5 거시 국면 조건부 성과</h3>
+
+<p>다섯 개 규칙 모두에서 절편이 양이고 강하게 유의하다. TSL07은 \( \alpha = +0.320 \)%p/주(t=6.24), MA_SMA200_OV_TP100은 +0.348%p/주(t=5.72, 연 약 18%)다. 유의한 국면 계수는 VIX>25 하나뿐이다.</p>
+
+<table>
+<thead><tr><th>규칙</th><th>α</th><th>β₁ (VIX&gt;25)</th><th>β₂ (NBER)</th><th>β₃ (TERM&lt;1pp)</th><th>β₄ (CREDIT&gt;Q75)</th><th>R²</th></tr></thead>
+<tbody>
+<tr><td>BASELINE</td><td>+0.288 (t=4.23)</td><td>−0.621 (t=−4.50)</td><td>+0.023</td><td>+0.097</td><td>+0.096</td><td>0.027</td></tr>
+<tr><td>TSL07</td><td>+0.320 (t=6.24)</td><td>−0.457 (t=−4.88)</td><td>+0.132</td><td>+0.023</td><td>−0.040</td><td>0.026</td></tr>
+<tr><td>MA_SMA200_OV_TP100</td><td>+0.348 (t=5.72)</td><td>−0.524 (t=−4.33)</td><td>+0.025</td><td>+0.053</td><td>−0.007</td><td>0.027</td></tr>
+<tr><td>TSL10</td><td>+0.297 (t=5.43)</td><td>−0.500 (t=−4.51)</td><td>+0.095</td><td>+0.061</td><td>+0.019</td><td>0.028</td></tr>
+<tr><td>ATR4</td><td>+0.328 (t=5.44)</td><td>−0.585 (t=−4.54)</td><td>+0.101</td><td>+0.042</td><td>+0.005</td><td>0.029</td></tr>
+</tbody>
+</table>
+
+<p>TSL07 기준으로 평시 +0.32%p였던 주간 수익률이 VIX 25 초과 구간에서 −0.14%p로 떨어진다. \( \beta_1 \) 크기가 규칙별로 다른 것도 해석이 된다. 7% 추적 손절이 조정 국면에서 빨리 빠져나오는 TSL07이 −0.457로 가장 덜 취약하고 동적 청산 장치가 없는 BASELINE이 −0.621로 가장 취약하다.</p>
+
+<p>시간 안정성 검정 세 가지가 이 결과를 뒷받침한다. 표본을 643주와 646주로 반으로 갈라 재추정해도 "양의 α + 음의 β₁" 구조가 다섯 규칙 모두에서 유지된다. 게다가 두 번째 구간에서 β₁이 −0.556~−0.800으로 첫 구간(−0.404~−0.567)보다 더 나빠진다. 취약성이 완화되는 게 아니라 심해진다는 뜻이다. 260주 창 롤링 회귀 519회에서는 VIX>25가 규칙에 따라 80~92%의 창에서 유의한 반면 NBER·기간 스프레드·신용 스프레드는 우연이 만들 5% 근처에 머문다.</p>
+
+<p>조건부 샤프지수로 옮기면 크기가 뚜렷해진다. 전체 표본 샤프지수가 1.27~1.66인 다섯 규칙이 VIX>25 구간에서는 −0.83(TSL07)에서 −1.20(ATR4)까지 떨어진다. NBER 구간(7.4%)에서는 0 근처를 오가고 TERM<1pp(36.3%)와 CREDIT>Q75(30.3%)에서는 1.5~2.0으로 양수를 유지한다.</p>
+
+<p>메커니즘은 분산의 한계다. 카테고리 간 분산은 한 섹터가 빠질 때 다른 섹터가 오르는 개별 위험에는 통하지만 상관이 1로 수렴하는 시스템 스트레스에서는 통하지 않는다. 2002년, 2008년, 2011년, 2020년, 2022년에 11개 슈퍼카테고리가 하나로 수렴하면서 여덟 포지션이 동시에 빠졌다. 25년 평균 알파를 만든 설계가 최악의 국면에서 그 알파를 내주는 설계이기도 하다.</p>
+
+<h2>6. 한계와 주의점</h2>
+
+<p>저자들이 밝힌 한계는 넷이다.</p>
+
+<ul>
+<li><strong>지역 일반화</strong> — 미국 ETF만 다뤘다. 상품 공급 깊이와 비용 구조가 다른 시장은 별도 검증이 필요하다.</li>
+<li><strong>운용 규율 의존</strong> — 주기별 강건성 검정에서 월간 리밸런싱부터는 어떤 능동 규칙도 패시브를 이기지 못한다. 1~2주 간격으로 포트폴리오를 점검할 수 있어야 성립한다.</li>
+<li><strong>비용 가정</strong> — 편도 20bp를 전제한다. 실효 비용이 이보다 높으면 한계 규칙들이 무너진다. 다만 샤프 1.3 이상 핵심 규칙은 우위를 유지한다는 게 저자들의 판단이다.</li>
+<li><strong>고변동성 국면 취약성</strong> — 의무 분산 설계에 내재한 성질이며 실험 안에 헤지 장치가 없다.</li>
+</ul>
+
+<p>여기에 재현·실전 적용에서 걸릴 지점을 더한다.</p>
+
+<p>먼저 표 사이 수치가 어긋난다. 표 2 패널 A는 손절·익절 없는 C2∩C6의 샤프지수를 0.881로 적었는데 표 3 패널 B는 TSL07(1.336) 대비 BASELINE 차이를 +0.299로 적어 BASELINE이 1.037이 된다. 표 4 각주는 다섯 규칙 전체 샤프지수 범위를 1.27~1.66으로 쓴다. SPY 샤프지수도 표 2에서는 0.398(0.881−0.483) 또는 0.473(0.881−0.408)으로 역산되는데 표 3에서는 0.459다. 벤치마크별 공통 표본이 다르다는 각주로 일부는 설명되지만 BASELINE 불일치는 그렇지 않다. 복제 전에 원저자 확인이 필요하다.</p>
+
+<p>다음으로 진입 필터를 사후에 골랐다는 점이다. 논문은 C2∩C6를 "ex post로 식별"했다고 명시한다. 63개가 사실상 두 값으로 붕괴하므로 선택 자유도가 실질적으로 2에 가깝다는 방어는 성립하지만, 144개 청산 규칙 중 프론티어 상위를 골라 이후 모든 분석을 돌린 구조는 다르다. SlotChg/yr ≤ 20이라는 문턱도 사후 기준이다. 워크포워드나 표본외 검증이 없다.</p>
+
+<p>생존 편의도 남는다. Refinitiv에서 받은 3,215개가 상장폐지 ETF를 포함하는지 본문에 명시되지 않았다. ETF는 폐지율이 낮지 않은 상품군이라 이 구분이 결과를 흔들 수 있다.</p>
+
+<p>거래비용 20bp를 유니버스 전체에 균일 적용한 점도 낙관적이다. 일거래량 중위값 10만 달러라는 필터는 상당히 느슨해서 대형 ETF와 소형 ETF의 실효 스프레드 차이를 20bp 하나로 덮기 어렵다. 다만 이 방향의 편의는 논문 결론을 강화하는 게 아니라 약화하는 쪽이다.</p>
+
+<p>마지막으로 −7% 최대낙폭이라는 숫자는 평균 현금 비중 19%와 8종목 동일비중이라는 낮은 순노출에서 나온 값이다. 레버리지를 걸어 노출을 맞추면 낙폭도 함께 커진다. 샤프지수 비교는 유효하지만 낙폭 수치를 그대로 옮겨 읽으면 안 된다.</p>
+
+<h2>7. 시스템 트레이딩 적용 아이디어</h2>
+
+<h3>7.1 데이터 파이프라인</h3>
+
+<p>Refinitiv 없이도 재현 가능한 대체 경로가 있다. 배당·분할 조정 종가는 Norgate Data나 Sharadar SFP, 거래량과 상장일은 같은 소스, ETF 분류는 별도 매핑 테이블이 필요하다. Refinitiv의 11개 슈퍼카테고리는 Morningstar 카테고리나 ETF.com 분류로 근사할 수 있다. 레버리지·인버스는 티커명 정규식(Ultra, Bear, 2x, 3x 등)만으로는 놓치는 게 많으니 발행사 팩트시트 기반 플래그를 만드는 편이 안전하다.</p>
+
+<p>워밍업 252거래일을 확보하고 금요일 종가로 리샘플링한다. 휴장으로 금요일이 없는 주는 직전 영업일로 대체하는 규칙을 명시해 둬야 한다. 무위험 이자율은 FRED DTB3, 국면 지표는 VIXCLS·USREC·T10Y3M·BAA10Y를 쓴다. USREC은 후행 발표라 실시간 운용에는 못 쓰지만 사후 분석용으로는 문제없다.</p>
+
+<h3>7.2 신호 계산</h3>
+
+<p>진입은 C2∩C6 하나면 충분하다. MA50 > MA200이고 종가가 최근 252일 최고가를 넘는 조건이다. 논문 결과대로라면 여기에 C1·C3·C4를 더해도 종목 집합이 99% 겹치므로 계산만 늘어난다. C5를 넣고 싶다면 13주 창에서 고점·저점이 동반 상승하는지를 따로 구현해야 하는데 샤프 차이 +0.056은 유의하지 않다.</p>
+
+<p>모멘텀 점수는 매주 전 유니버스 횡단면 백분위로 계산한다. 26주·13주·4주 수익률과 30주 이동평균 대비 정규화 거리를 각각 순위화한 뒤 0.35/0.35/0.20/0.10으로 섞는다. 순위 계산은 그 주 적격 종목이 아니라 전체 투자 가능 유니버스 기준이어야 백분위 해석이 유지된다.</p>
+
+<h3>7.3 실행 로직</h3>
+
+<ol>
+<li><strong>매주 금요일 종가 후</strong> — 보유 포지션에 대해 ST(데드크로스, 전량), SL(TSL07 기준 포지션 내 최고가 대비 −7%), SP(MA50 이탈, 50%로 축소)를 순서대로 평가한다. ST가 SP보다 우선한다. SP는 되돌릴 수 있으니 MA50 회복 시 100% 복귀시키되 이 복귀에 비용을 물릴지는 실전에서 재검토해야 한다. 논문은 무비용으로 처리한다.</li>
+<li><strong>격주 금요일에만</strong> — 빈 슬롯을 채운다. 점수 내림차순으로 후보를 훑되 슈퍼카테고리 상한이 찬 후보는 건너뛴다. 8개를 못 채우면 억지로 채우지 않고 현금으로 남긴다.</li>
+<li><strong>주문</strong> — 금요일 종가 신호를 다음 영업일 시가에 체결하는 것이 현실적이다. 논문은 금요일 종가 체결을 가정하므로 이 지연이 성과를 얼마나 깎는지 먼저 측정하는 게 좋다.</li>
+</ol>
+
+<p>추적 손절 상태값은 포지션별로 진입 이후 최고가를 들고 있어야 하므로 상태 저장이 필요하다. 백테스트 코드에서 이 부분이 미래 정보를 흘리기 쉬운 지점이다. 주간 종가 기준 최고가인지 일중 고가 기준인지에 따라 결과가 달라진다. 논문은 주간 종가 평가를 쓴다.</p>
+
+<h3>7.4 검증 순서</h3>
+
+<p>구현 후 먼저 표 3 패널 D의 순수 모멘텀 대조군부터 맞춰본다. 샤프 −0.17~+0.22, 최대낙폭 69~82%가 재현되면 유니버스와 비용 처리가 대체로 맞았다는 신호다. 그다음 BASELINE(C2∩C6, 손절·익절 없음)을 돌려 표 2와 표 3 중 어느 쪽 수치가 나오는지 확인한다. 마지막으로 TSL07을 붙인다.</p>
+
+<p>층별 기여도를 따로 뽑아 두면 쓸모가 크다. 순수 모멘텀 → 진입 필터 추가 → 의무 분산 추가 → 추적 손절 추가 순으로 샤프지수와 최대낙폭이 어떻게 변하는지 보면 어느 층에 값이 몰려 있는지 알 수 있다. 논문은 이 분해를 명시적으로 제시하지 않는다.</p>
+
+<h3>7.5 확장 후보</h3>
+
+<ul>
+<li><strong>변동성 국면 스위치</strong> — VIX 25 초과에서 조건부 샤프지수가 −0.83까지 떨어지므로 이 구간에 신규 편입을 중단하거나 슬롯 수를 줄이는 규칙을 얹어볼 만하다. 다만 VIX 25는 사후에 고른 문턱이므로 문턱값 민감도를 반드시 같이 본다.</li>
+<li><strong>꼬리 헤지 오버레이</strong> — 저자들이 후속 연구로 지목한 방향이다. VIX 선물이나 풋옵션 비용이 보호하는 알파보다 싼지를 계산하면 된다.</li>
+<li><strong>주기 저하 대응</strong> — 월간 이상 주기에서 알파가 사라진다는 게 이 설계의 제약이다. 매수만 월간으로 늦추고 청산 점검은 주간으로 유지하는 절충안이 얼마나 버티는지 볼 수 있다. 논문의 주기 검정은 진입과 청산을 함께 늦추는 "완전 이산" 방식이라 이 조합은 검증되지 않았다.</li>
+<li><strong>슬롯 수 민감도</strong> — N=8은 고정값이다. 카테고리 상한 합계가 13이므로 N을 12~13까지 늘릴 여지가 있고 이때 낙폭과 회전율이 어떻게 움직이는지가 실전 규모 결정에 직결된다.</li>
+</ul>
+
+<h2>8. 함께 볼 만한 개념</h2>
+
+<ul>
+<li>횡단면 모멘텀과 시계열 모멘텀 — Jegadeesh–Titman(1993), Moskowitz–Ooi–Pedersen(2012), Asness–Moskowitz–Pedersen(2013)</li>
+<li>추세추종의 조건부 성과 열화 — Babu 외(2020) "You can't always trend when you want", Hurst–Ooi–Pedersen(2017)</li>
+<li>손절 규칙의 이론 — Kaminski–Lo(2014), 기초자산의 모멘텀 동학에 따라 손절이 값을 더하기도 없애기도 한다는 결과</li>
+<li>전술적 자산배분 — Faber(2007)의 5자산군 추세추종, Antonacci(2014)의 듀얼 모멘텀</li>
+<li>기술적 분석의 통계적 평가 — Brock–Lakonishok–LeBaron(1992), Lo–Mamaysky–Wang(2000), Han–Yang–Zhou(2013), Avramov–Kaplanski–Subrahmanyam(2021)의 이동평균 거리</li>
+<li>샤프지수 차이 검정 — Jobson–Korkie(1981), Memmel(2003) 보정, Lo(2002)의 샤프지수 표본분포</li>
+<li>블록 부트스트랩 — Politis–Romano(1994) 정상 블록 부트스트랩, 낙폭·CVaR 같은 경로 의존 지표의 유의성 판정</li>
+<li>스트레스 국면 상관 붕괴 — Longin–Solnik(2001), Forbes–Rigobon(2002), Christoffersen 외(2012) 동적 코퓰라, Page–Panariello(2018)</li>
+<li>적응적 시장 가설 — Lo(2004, 2017), 예측 가능성의 환경 의존성</li>
+<li>예측변수 재검증 — Goyal–Welch(2008), Goyal–Welch–Zafirov(2024)에서 29개 예측변수 중 3분의 1 이상이 유의성을 잃는다는 결과</li>
+<li>ETF의 시장 효과 — Ben-David–Franzoni–Moussawi(2018) 변동성, Brown–Davies–Ringgenberg(2021) 자금흐름과 수익률 예측, Easley 외(2021) 액티브성 지수</li>
+<li>비용을 반영한 이상현상 재검증 — Zaremba–Andreu(2018)</li>
+</ul>
+  <div class="abs" style="margin-top:32px"><b>ORIGINAL ABSTRACT</b>The relevant empirical question about momentum in exchange-traded funds (ETFs) is not whether it works, but whether simple operational rules can extract value from it. We show that pure momentum over a broad ETF universe creates no value: replicated across 3,215 investable U.S. ETFs, it delivers Sharpe ratios between −0.17 and +0.22 with drawdowns of 69% to 82%, systematically below passive investing. Yet three layers of rules available to any investor fully reverse that conclusion. We evaluate the 2001–2026 period (1,289 weeks) across the investable universe, charging a 20-basis-point transaction cost per side at every stage of the analysis. On top of replicating classic cross-sectional momentum, we add technical entry signals, a multi-horizon momentum ranking with mandatory diversification across super-categories within an eight-position portfolio, and an expanded family of 144 dynamic stop-loss and take-profit exit rules, all under an asymmetric rebalancing regime of biweekly purchases and weekly exit monitoring. The complete strategy delivers a Sharpe ratio above 1.3 and a maximum drawdown of −7%, beating passive investing by close to a full Sharpe point; the alpha concentrates in tail-risk reduction and is impaired only during the high-implied-volatility regime. The central implication for researchers and practitioners is that the value comes not from the technical signal but from the operational management layer that surrounds it.</div>
+  <footer><p>로컬 Claude Code 로 생성한 요약 리포트입니다. 인용 전 반드시 원문을 확인하세요.</p></footer>
+</div>
+</body>
+</html>
